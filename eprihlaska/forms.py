@@ -68,12 +68,6 @@ class StudyProgrammeForm(FlaskForm):
 class AddressSK(FlaskForm):
     street = StringField('Ulica', validators=[validators.DataRequired()])
     street_no = StringField('Číslo', validators=[validators.DataRequired()])
-    city = StringField('Mesto', validators=[validators.DataRequired()])
-    psc = StringField('PSČ', validators=[validators.DataRequired()])
-
-class AddressSK(FlaskForm):
-    street = StringField('Ulica', validators=[validators.DataRequired()])
-    street_no = StringField('Číslo', validators=[validators.DataRequired()])
     city = SelectField('Mesto',
                        choices=choices_from_csv('eprihlaska/data/obce.csv',
                                                 ['kód', 'názov']),
