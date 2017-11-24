@@ -1,0 +1,18 @@
+
+{% extends "index.html" %}
+
+{% block append_title %} - Študijný program{% endblock %}
+
+{% block form %}
+  {{ wtf.quick_form(form,
+                    form_type='horizontal',
+                    button_map={'submit': 'primary'}) }}
+{% endblock %}
+
+{% block inlinescript %}
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function(){
+        $('#study_programme').chosen({max_selected_options: 3});
+      });
+    </script>
+{% endblock %}
