@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
-                     DateField)
+                     DateField, BooleanField)
 
 from .utils import choices_from_csv
 
@@ -58,10 +58,28 @@ class FurtherPersonalDataForm(FlaskForm):
 
 class StudyProgrammeForm(FlaskForm):
     study_programme = SelectMultipleField(label='Študijný program',
-                                          choices=[('inf', 'Informatika'),
-                                                   ('ain', 'Aplikovaná informatika'),
-                                                   ('bin', 'Bioinformatika'),
-                                                   ('efm', 'Ekonomická a finančná matematika')])
+                                          choices=[('MAT', 'Matematika'),
+                                                   ('PMA', 'Poistná matematika'),
+                                                   ('EFM', 'Ekonomická a finančná matematika'),
+                                                   ('MMN', 'Manažérska matematika'),
+                                                   ('FYZ', 'Fyzika'),
+                                                   ('BMF', 'Biomedicínska fyzika'),
+                                                   ('OZE', 'Obnoviteľné zdroje energie a environmentálna fyzika'),
+                                                   ('INF', 'Informatika'),
+                                                   ('AIN', 'Aplikovaná informatika'),
+                                                   ('BIN', 'Bioinformatika'),
+                                                   ('upMAFY', 'Učiteľstvo matematiky a fyziky'),
+                                                   ('upMAIN', 'Učiteľstvo matematiky a informatiky'),
+                                                   ('upFYIN', 'učiteľstvo fyziky a informatiky'),
+                                                   ('upMATV', 'učiteľstvo matematiky a telesnej výchovy'),
+                                                   ('upMADG', 'učiteľstvo matematiky a deskriptívnej geometrie'),
+                                                   ('upINBI', 'učiteľstvo informatiky a biológie'),
+                                                   ('upINAN', 'učiteľstvo informatiky a anglického jazyka a literatúry')],
+                                            description='Vyberte si aspoň jeden a najviac tri študijné programy')
+    matura_year = StringField('Rok maturity', validators=[validators.DataRequired()])
+    dean_invitation_letter = BooleanField('Dostal som list od dekana')
+    dean_invitation_letter_no = StringField('Číslo listu od dekana',
+                                            description='Prosím, vyplňte číslo listu od dekana, ktorý ste dostali')
     submit = SubmitField()
 
 
