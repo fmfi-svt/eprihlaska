@@ -1,105 +1,173 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
-                     DateField, BooleanField)
+                     DateField, FieldList, IntegerField)
 
 from .utils import choices_from_csv
+from . import consts as c
 
 class FatherNameForm(FlaskForm):
-    name = StringField('Meno otca')
-    surname = StringField('Priezvisko otca')
-    born_with_surname = StringField('Rodné priezvisko otca')
+    name = StringField(label=c.FATHER_NAME)
+    surname = StringField(label=c.FATHER_SURNAME)
+    born_with_surname = StringField(label=c.FATHER_BORNWITH_SURNAME)
 
 class MotherNameForm(FlaskForm):
-    name = StringField('Meno matky')
-    surname = StringField('Priezvisko matky')
-    born_with_surname = StringField('Rodné priezvisko matky')
+    name = StringField(label=c.MOTHER_NAME)
+    surname = StringField(label=c.MOTHER_SURNAME)
+    born_with_surname = StringField(label=c.MOTHER_BORNWITH_SURNAME)
 
 
 class BasicPersonalDataForm(FlaskForm):
-    nationality = SelectField('Občianstvo',
+    nationality = SelectField(label=c.NATIONALITY,
                               choices=choices_from_csv('eprihlaska/data/krajiny-osn.csv',
                                                        ['kód', 'názov']),
                               validators=[validators.DataRequired()])
 
-    name = StringField('Meno', validators=[validators.DataRequired()])
-    surname = StringField('Priezvisko', validators=[validators.DataRequired()])
-    born_with_surname = StringField('Rodné priezvisko')
+    name = StringField(label=c.NAME,
+                       validators=[validators.DataRequired()])
+    surname = StringField(label=c.SURNAME,
+                          validators=[validators.DataRequired()])
+    born_with_surname = StringField(c.BORNWITH_SURNAME)
 
-    rodinny_stav = SelectField('Rodinný stav',
+    rodinny_stav = SelectField(label=c.MARITAL_STATUS,
                                choices=choices_from_csv('eprihlaska/data/rodinne-stavy.csv',
                                                        ['kód', 'názov']))
-    sex = SelectField(label='Pohlavie',
-                     choices=[('male', 'muž'), ('female', 'žena')],
-                     validators=[validators.DataRequired()])
+    sex = SelectField(label=c.SEX,
+                      choices=[('male', c.MALE),
+                               ('female', c.FEMALE)],
+                      validators=[validators.DataRequired()])
     submit = SubmitField()
 
 class MoreDetailPersonalDataForm(FlaskForm):
-    birth_no = StringField('Rodné číslo')
-    date_of_birth = DateField('Dátum narodenia',
+    birth_no = StringField(label=c.BIRTH_NO)
+    date_of_birth = DateField(label=c.BIRTH_DATE,
                               validators=[validators.DataRequired()],
                               format='%d.%m.%Y')
-    place_of_birth = SelectField('Miesto narodenia',
+    place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv('eprihlaska/data/obce.csv',
                                                        ['kód', 'názov']),
                                  validators=[validators.DataRequired()])
 
-    email = StringField('Email', validators=[validators.DataRequired(),
-                                             validators.Email()])
-    phone = StringField('Telefónny kontakt', validators=[validators.DataRequired()])
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.DataRequired(),
+                                    validators.Email()])
+    phone = StringField(label=c.PHONE_CONTACT)
 
 class FurtherPersonalDataForm(FlaskForm):
-    basic_personal_data = FormField(MoreDetailPersonalDataForm, label='Ďalšie osobné údaje')
-    father_name = FormField(FatherNameForm, label='Informácie o otcovi')
-    mother_name = FormField(MotherNameForm, label='Informácie o matke')
+    basic_personal_data = FormField(MoreDetailPersonalDataForm,
+                                    label=c.FURTHER_PERSONAL_DATA)
+    father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
+    mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 
     submit = SubmitField()
 
 
 class StudyProgrammeForm(FlaskForm):
-    study_programme = SelectMultipleField(label='Študijný program',
-                                          choices=[('MAT', 'Matematika'),
-                                                   ('PMA', 'Poistná matematika'),
-                                                   ('EFM', 'Ekonomická a finančná matematika'),
-                                                   ('MMN', 'Manažérska matematika'),
-                                                   ('FYZ', 'Fyzika'),
-                                                   ('BMF', 'Biomedicínska fyzika'),
-                                                   ('OZE', 'Obnoviteľné zdroje energie a environmentálna fyzika'),
-                                                   ('INF', 'Informatika'),
-                                                   ('AIN', 'Aplikovaná informatika'),
-                                                   ('BIN', 'Bioinformatika'),
-                                                   ('upMAFY', 'Učiteľstvo matematiky a fyziky'),
-                                                   ('upMAIN', 'Učiteľstvo matematiky a informatiky'),
-                                                   ('upFYIN', 'učiteľstvo fyziky a informatiky'),
-                                                   ('upMATV', 'učiteľstvo matematiky a telesnej výchovy'),
-                                                   ('upMADG', 'učiteľstvo matematiky a deskriptívnej geometrie'),
-                                                   ('upINBI', 'učiteľstvo informatiky a biológie'),
-                                                   ('upINAN', 'učiteľstvo informatiky a anglického jazyka a literatúry')],
-                                            description='Vyberte si aspoň jeden a najviac tri študijné programy')
-    matura_year = StringField('Rok maturity', validators=[validators.DataRequired()])
-    dean_invitation_letter = BooleanField('Dostal som list od dekana')
-    dean_invitation_letter_no = StringField('Číslo listu od dekana',
-                                            description='Prosím, vyplňte číslo listu od dekana, ktorý ste dostali')
+    study_programme = SelectMultipleField(label=c.STUDY_PROGRAMME,
+                                          choices=c.STUDY_PROGRAMME_CHOICES,
+                                          description=c.STUDY_PROGRAMME_DESC)
+    matura_year = IntegerField(c.MATURA_YEAR, validators=[validators.DataRequired()])
+    dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
+    dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
+                                            description=c.DEAN_INV_LIST_NO_DESC)
     submit = SubmitField()
 
 
-class AddressSK(FlaskForm):
-    street = StringField('Ulica', validators=[validators.DataRequired()])
-    street_no = StringField('Číslo', validators=[validators.DataRequired()])
-    city = SelectField('Mesto',
+class Address(FlaskForm):
+    country = StringField(label=c.ADDRESS_COUNTRY,
+                          validators=[validators.DataRequired()])
+    street = StringField(label=c.ADDRESS_STREET,
+                         validators=[validators.DataRequired()])
+    street_no = StringField(label=c.ADDRESS_NO,
+                            validators=[validators.DataRequired()])
+    city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv('eprihlaska/data/obce.csv',
                                                 ['kód', 'názov']),
                        validators=[validators.DataRequired()])
-    psc = SelectField('PSČ',
+    psc = SelectField(label=c.ADDRESS_POSTAL_NO,
                       choices=choices_from_csv('eprihlaska/data/psc-obci-sr.csv',
                                                 ['Kód obce', 'PSČ']),
                       validators=[validators.DataRequired()])
 
+class AddressNonRequired(FlaskForm):
+    country = StringField(label=c.ADDRESS_COUNTRY)
+    street = StringField(label=c.ADDRESS_STREET)
+    street_no = StringField(label=c.ADDRESS_NO)
+    city = SelectField(label=c.ADDRESS_CITY,
+                       choices=choices_from_csv('eprihlaska/data/obce.csv',
+                                                ['kód', 'názov']))
+    psc = SelectField(label=c.ADDRESS_POSTAL_NO,
+                      choices=choices_from_csv('eprihlaska/data/psc-obci-sr.csv',
+                                                ['Kód obce', 'PSČ']))
+
+
 class AddressForm(FlaskForm):
-    address = FormField(AddressSK, label='Adresa trvalého bydliska')
-    corresponding_address = FormField(AddressSK,
-                                      label='Korešpondenčnná adresa')
+    address = FormField(Address, label=c.PERMANENT_ADDRESS)
+    has_correspondence_address = BooleanField(label=c.HAS_CORRESPONDENCE_ADDRESS)
+    correspondence_address = FormField(AddressNonRequired,
+                                       label=c.CORRESPONDENCE_ADDRESS)
     submit = SubmitField()
 
+class PreviousStudiesForm(FlaskForm):
+    has_previously_studied = BooleanField(label=c.HAS_PREVIOUSLY_STUDIED)
+    finished_highschool = RadioField(label=c.FINISHED_HIGHSCHOOL,
+                                     choices=[('SR', c.IN_SR),
+                                              ('OUTSIDE', c.OUTSIDE_OF_SR)],
+                                     validators=[validators.DataRequired()])
+    submit = SubmitField()
+
+class CompetitionSuccessFormItem(FlaskForm):
+    competition = SelectField(label=c.COMPETITION_NAME,
+                              choices=c.COMPETITION_CHOICES)
+    year = IntegerField(label=c.COMPETITION_YEAR,
+                        validators=[validators.Optional()])
+    further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
+                               description=c.COMPETITION_FURTHER_INFO_DESC)
 
 
+class FurtherStudyInfoForm(FlaskForm):
+    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
+    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
+
+    matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE, validators=[validators.Optional()])
+    matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE, validators=[validators.Optional()])
+    matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE, validators=[validators.Optional()])
+    matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE, validators=[validators.Optional()])
+    matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE, validators=[validators.Optional()])
+
+    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+
+    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
+    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
+    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
+    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
+    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
+
+class FurtherGradesInfoForm(FlaskForm):
+    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
+                                    validators=[validators.Optional()])
+    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
+                                     validators=[validators.Optional()])
+    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
+                                    validators=[validators.Optional()])
+
+class AdmissionWaversForm(FlaskForm):
+    further_study_info = FormField(FurtherStudyInfoForm,
+                                   label=c.FURTHER_STUDY_INFO)
+
+    grades_mat = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_MAT)
+    grades_fyz = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_FYZ)
+    grades_bio = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_BIO)
+
+    competition_1 = FormField(CompetitionSuccessFormItem,
+                              label=c.COMPETITION_FIRST)
+    competition_2 = FormField(CompetitionSuccessFormItem,
+                              label=c.COMPETITION_SECOND)
+    competition_3 = FormField(CompetitionSuccessFormItem,
+                              label=c.COMPETITION_THIRD)
+
+    submit = SubmitField()

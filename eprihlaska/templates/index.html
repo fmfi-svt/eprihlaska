@@ -1,6 +1,6 @@
 
 {% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
 {% import "bootstrap/utils.html" as util %}
 
@@ -9,9 +9,16 @@
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+   .footer {
+     height: 60px;
+     line-height: 60px;
+     background-color: #f5f5f5;
+   }
+    </style>
 {%- endblock styles %}
 
-{% block title %}ePrihlaska{% block append_title %}{% endblock %}{% endblock title %}
+
 
 {% block navbar %}
 {{nav.top.render()}}
@@ -19,7 +26,7 @@
 
 {% block content %}
 <div class="container">
-<h1>ePrihlaska</h1>
+<h1>{% block title %}ePrihlaska{% block append_title %}{% endblock %}{% endblock title %}</h1>
 
 {{util.flashed_messages(dismissible=True)}}
 
@@ -35,6 +42,14 @@
 {% endblock %}
 
 {% block scripts %}
+    <footer class="footer">
+      <div class="container">
+        {% if session['study_programme'] %}
+        <span class="text-muted">Prihlasujete sa na študijné programy {{session['study_programme']|join(', ')}}</span>
+        {% endif %}
+      </div>
+    </footer>
+
     <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
 		<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>

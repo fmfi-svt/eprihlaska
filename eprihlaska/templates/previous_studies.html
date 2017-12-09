@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block append_title %} - Predchádzajúce vzdelanie{% endblock %}
+
+{% block form %}
+  {{ wtf.quick_form(form,
+                    form_type='horizontal',
+                    button_map={'submit': 'primary'}) }}
+{% endblock %}
+
+{% block inlinescript %}
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function(){
+      });
+    </script>
+{% endblock %}

@@ -10,6 +10,8 @@ nav.register_element('top', Navbar(
     View('Osobné údaje', 'personal_info'),
     View('Ďalšie osobné údaje', 'further_personal_info'),
     View('Adresa', 'address'),
+    View('Predchádzajúce štúdium', 'previous_studies'),
+    View('Prijatie bez prijímacích pohovorov', 'admissions_wavers'),
 ))
 
 app = Flask(__name__)

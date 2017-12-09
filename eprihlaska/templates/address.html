@@ -12,6 +12,16 @@
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
         $('select.form-control').chosen();
+        var correspondence_address_fieldset = $('fieldset')[1];
+
+        $(correspondence_address_fieldset).hide()
+        $('#has_correspondence_address').click(function(e){
+          if (this.checked) {
+            $(correspondence_address_fieldset).show();
+          } else {
+            $(correspondence_address_fieldset).hide();
+          }
+        });
       });
     </script>
 {% endblock %}
