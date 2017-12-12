@@ -75,7 +75,10 @@ class StudyProgrammeForm(FlaskForm):
     study_programme = SelectMultipleField(label=c.STUDY_PROGRAMME,
                                           choices=c.STUDY_PROGRAMME_CHOICES,
                                           description=c.STUDY_PROGRAMME_DESC)
-    matura_year = IntegerField(c.MATURA_YEAR, validators=[validators.DataRequired()])
+    matura_year = IntegerField(c.MATURA_YEAR,
+                               validators=[validators.DataRequired(),
+                                           validators.NumberRange(min=1900,
+                                                                  max=2018)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
