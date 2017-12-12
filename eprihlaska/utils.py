@@ -1,7 +1,7 @@
 import csv
 
 def choices_from_csv(csv_file, keys, delimiter=';'):
-    reader = csv.DictReader(open(csv_file, 'r'),
+    reader = csv.DictReader(open(csv_file, 'r', encoding='utf-8'),
                             delimiter=delimiter)
     choices = []
     for line in reader:
