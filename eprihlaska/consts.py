@@ -79,6 +79,7 @@ ADDRESS_COUNTRY = _('Krajina')
 ADDRESS_STREET = _('Ulica')
 ADDRESS_NO = _('Číslo')
 ADDRESS_CITY = _('Mesto')
+ADDRESS_CITY_FOREIGN = _('Mesto (v zahraniči)')
 ADDRESS_POSTAL_NO = _('PSČ')
 
 PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
