@@ -8,6 +8,7 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None):
         choice = [line[k] for k in reader.fieldnames if k in keys]
         if fmt:
             choice = [line[keys[0]]]
-            choice.append(fmt.format(*line.values()))
+            vals = [line[f] for f in reader.fieldnames]
+            choice.append(fmt.format(*vals))
         choices.append(tuple(choice))
     return choices
