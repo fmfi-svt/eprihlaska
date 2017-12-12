@@ -56,7 +56,7 @@ PRG_upINAN = _('Učiteľstvo informatiky a anglického jazyka a literatúry')
 MATURA_YEAR = _('Rok maturity')
 
 STUDY_PROGRAMME = _('Študijný program')
-STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy')
+STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na 2 študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')
 STUDY_PROGRAMME_CHOICES = [('MAT', PRG_MAT),
                             ('PMA', PRG_PMA),
                             ('EFM', PRG_EFM),
