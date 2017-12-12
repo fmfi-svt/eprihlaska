@@ -6,8 +6,10 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
 from .utils import choices_from_csv
 from . import consts as c
 import os
+import datetime
 
 DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_DATE = datetime.datetime.now() - datetime.timedelta(days=17 * 365)
 
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
@@ -22,9 +24,10 @@ class MotherNameForm(FlaskForm):
 
 class BasicPersonalDataForm(FlaskForm):
     nationality = SelectField(label=c.NATIONALITY,
-                              choices=choices_from_csv(DIR + '/data/krajiny-osn.csv',
-                                                       ['kód', 'názov']),
-                              validators=[validators.DataRequired()])
+                              choices=choices_from_csv(DIR + '/data/staty.csv',
+                                                       ['id', 'Štát']),
+                              validators=[validators.DataRequired()],
+                              default='703')
 
     name = StringField(label=c.NAME,
                        validators=[validators.DataRequired()])
@@ -34,7 +37,7 @@ class BasicPersonalDataForm(FlaskForm):
 
     rodinny_stav = SelectField(label=c.MARITAL_STATUS,
                                choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
-                                                       ['kód', 'názov']))
+                                                       ['id', 'Rodinný stav']))
     sex = SelectField(label=c.SEX,
                       choices=[('male', c.MALE),
                                ('female', c.FEMALE)],
@@ -45,10 +48,12 @@ class MoreDetailPersonalDataForm(FlaskForm):
     birth_no = StringField(label=c.BIRTH_NO)
     date_of_birth = DateField(label=c.BIRTH_DATE,
                               validators=[validators.DataRequired()],
-                              format='%d.%m.%Y')
+                              format='%d.%m.%Y',
+                              default=DEFAULT_DATE)
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                       ['kód', 'názov']),
+                                                          ['id', 'Názov obce'],
+                                                          fmt='{2} ({3})'),
                                  validators=[validators.DataRequired()])
 
     email = StringField(label=c.EMAIL,
@@ -77,31 +82,33 @@ class StudyProgrammeForm(FlaskForm):
 
 
 class Address(FlaskForm):
-    country = StringField(label=c.ADDRESS_COUNTRY,
-                          validators=[validators.DataRequired()])
+    country = SelectField(label=c.ADDRESS_COUNTRY,
+                              choices=choices_from_csv(DIR + '/data/staty.csv',
+                                                       ['id', 'Štát']),
+                              validators=[validators.DataRequired()],
+                              default='703')
     street = StringField(label=c.ADDRESS_STREET,
                          validators=[validators.DataRequired()])
     street_no = StringField(label=c.ADDRESS_NO,
                             validators=[validators.DataRequired()])
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                ['kód', 'názov']),
+                                                ['id', 'Názov obce'],
+                                                fmt='{2} ({3})'),
                        validators=[validators.DataRequired()])
-    psc = SelectField(label=c.ADDRESS_POSTAL_NO,
-                      choices=choices_from_csv(DIR + '/data/psc-obci-sr.csv',
-                                                ['Kód obce', 'PSČ']),
-                      validators=[validators.DataRequired()])
 
 class AddressNonRequired(FlaskForm):
-    country = StringField(label=c.ADDRESS_COUNTRY)
+    country = SelectField(label=c.ADDRESS_COUNTRY,
+                              choices=choices_from_csv(DIR + '/data/staty.csv',
+                                                       ['id', 'Štát']),
+                              validators=[validators.DataRequired()],
+                              default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                ['kód', 'názov']))
-    psc = SelectField(label=c.ADDRESS_POSTAL_NO,
-                      choices=choices_from_csv(DIR + '/data/psc-obci-sr.csv',
-                                                ['Kód obce', 'PSČ']))
+                                                ['id', 'Názov obce'],
+                                                fmt='{2} ({3})'))
 
 
 class AddressForm(FlaskForm):

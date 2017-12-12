@@ -1,0 +1,250 @@
+,id,Štát
+0,524,Nepálská federatívna demokratická republika
+1,528,Holandské kráľovstvo
+4,533,Aruba
+5,534,Svätý Martin (holandská časť)
+6,535,"Bonaire, Svätý Eustach a Saba"
+8,540,Nová Kaledónia
+9,548,Vanuatská republika
+10,554,Nový Zéland
+11,558,Nikaragujská republika
+12,562,Nigerská republika
+13,566,Nigérijská federatívna republika
+14,570,Niue
+15,574,Teritórium ostrova Norfolk
+16,578,Nórske kráľovstvo
+17,580,Spoločenstvo ostrovov Severné Mariány
+18,581,Menšie odľahlé ostrovy Spojených štátov
+19,583,Mikronézske federatívne štáty
+20,584,Republika Marshallových ostrovov
+21,585,Palauská republika
+22,586,Pakistanská islamská republika
+23,591,Panamská republika
+24,598,Papua-Nová Guinea
+25,600,Paraguajská republika
+26,604,Peruánska republika
+27,608,Filipínska republika
+28,612,Pitcairnove ostrovy
+29,616,Poľská republika
+30,620,Portugalská republika
+31,624,Guinejsko-bissauská republika
+32,626,Východotimorská demokratická republika
+33,630,Portorické spoločenstvo
+34,634,Katarský štát
+35,638,Réunion
+36,642,Rumunsko
+37,643,Ruská federácia
+38,646,Rwandská republika
+39,652,Svätý Bartolomej
+40,654,"Svätá Helena, Ascension a Tristan da Cunha"
+41,659,Federácia Svätého Krištofa a Nevisu
+42,660,Anguilla
+43,662,Svätá Lucia
+44,663,Svätý Martin
+45,666,Saint Pierre a Miquelon
+46,670,Svätý Vincent a Grenadíny
+47,674,Sanmarínska republika
+48,678,Demokratická republika Svätého Tomáša a Princovho ostrova
+49,682,Saudskoarabské kráľovstvo
+50,686,Senegalská republika
+51,688,Srbská republika
+52,690,Seychelská republika
+53,694,Sierraleonská republika
+54,702,Singapurská republika
+55,703,Slovenská republika
+56,704,Vietnamská socialistická republika
+57,705,Slovinská republika
+58,706,Somálska federatívna republika
+59,710,Juhoafrická republika
+60,716,Zimbabwianska republika
+61,724,Španielske kráľovstvo
+62,728,Juhosudánska republika
+63,729,Sudánska republika
+64,732,Západná Sahara
+66,740,Surinamská republika
+67,744,Svalbard a Jan Mayen
+68,748,Svazijské kráľovstvo
+69,752,Švédske kráľovstvo
+70,756,Švajčiarska konfederácia
+71,760,Sýrska arabská republika
+72,762,Tadžická republika
+73,764,Thajské kráľovstvo
+74,768,Togská republika
+75,772,Tokelauské ostrovy
+76,776,Tongské kráľovstvo
+77,780,Republika Trinidadu a Tobaga
+78,784,Spojené arabské emiráty
+79,788,Tuniská republika
+80,792,Turecká republika
+81,795,Turkménsko
+82,796,Ostrovy Turks a Caicos
+83,798,Tuvalu
+84,800,Ugandská republika
+85,804,Ukrajina
+86,807,Macedónska republika
+88,818,Egyptská arabská republika
+89,826,Spojené kráľovstvo Veľkej Británie a Severného ĺrska
+90,831,Guernsey
+91,832,Jernsey
+92,833,"Ostrov Man, korunná dependencia"
+93,834,Tanzánijská zjednotená republika
+94,840,Spojené štáty americké
+95,850,Panenské ostrovy Spojených štátov
+96,854,Burkina Faso
+97,858,Uruguajská východná republika
+98,860,Uzbecká republika
+99,862,Venezuelská bolívarovská republika
+100,876,Wallis a Futuna
+101,882,Samojský nezávislý štát
+102,887,Jemenská republika
+104,894,Zambijská republika
+106,4,Afganská islamská republika
+107,8,Albánska republika
+108,10,Antarktída
+109,12,Alžírska demokratická ľudová republika
+110,16,Teritórium Americkej Samoy
+111,20,Andorrské kniežatstvo
+112,24,Angolská republika
+113,28,Antigua a Barbuda
+114,31,Azerbajdžanská republika
+115,32,Argentínska republika
+116,36,Austrálsky zväz
+117,40,Rakúska republika
+118,44,Bahamské spoločenstvo
+119,48,Bahrajnské kráľovstvo
+120,50,Bangladéšska ľudová republika
+121,51,Arménska republika
+122,52,Barbados
+123,56,Belgické kráľovstvo
+124,60,Bermudy
+125,64,Bhutánske kráľovstvo
+126,68,Bolívijský mnohonárodný štát
+127,70,Bosna a Hercegovina
+128,72,Botswanská republika
+129,74,Bouvetov ostrov
+130,76,Brazílska federatívna republika
+131,84,Belize
+132,86,Britské indickooceánske územie
+133,90,Šalamúnove ostrovy
+134,92,Britské Panenské ostrovy
+135,96,Brunejsko-darussalamský štát
+136,100,Bulharská republika
+137,104,Mjanmarská zväzová republika
+138,108,Burundská republika
+139,112,Bieloruská republika
+140,116,Kambodžské kráľovstvo
+141,120,Kamerunská republika
+142,124,Kanada
+143,132,Kapverdská republika
+144,136,Kajmanie ostrovy
+145,140,Stredoafrická republika
+146,144,Srílanská demokratická socialistická republika
+147,148,Čadská republika
+148,152,Čilská republika
+149,156,Čínska ľudová republika
+150,158,Čínska republika
+151,162,Teritórium Vianočného ostrova
+152,166,Teritórium Kokosových ostrovov
+153,170,Kolumbijská republika
+154,174,Komorský zväz
+155,175,Mayotte
+156,178,Konžská republika
+157,180,Konžská demokratická republika
+158,184,Cookove ostrovy
+159,188,Kostarická republika
+160,191,Chorvátska republika
+161,192,Kubánska republika
+162,196,Cyperská republika
+164,203,Česká republika
+165,204,Beninská republika
+166,208,Dánske kráľovstvo
+167,212,Dominické spoločenstvo
+168,214,Dominikánska republika
+169,218,Ekvádorská republika
+170,222,Salvádorská republika
+171,226,Republika Rovníkovej Guiney
+173,231,Etiópska federatívna demokratická republika
+174,232,Eritrejský štát
+175,233,Estónska republika
+176,234,Faerské ostrovy
+177,238,Falklandské ostrovy
+178,239,Južná Georgia a Južné Sandwichove ostrovy
+179,242,Fidžijská republika
+180,246,Fínska republika
+181,248,Alandy
+183,250,Francúzska republika
+184,254,Francúzska Guyana
+185,258,Francúzska Polynézia
+186,260,Francúzske južné a antarktické územia
+187,262,Džibutská republika
+188,266,Gabonská republika
+189,268,Gruzínsko
+190,270,Gambijská republika
+191,275,Palestínska národná samospráva
+192,276,Nemecká spolková republika
+193,288,Ghanská republika
+194,292,Gibraltár
+195,296,Kiribatská republika
+196,300,Grécka republika
+197,304,Grónsko
+198,308,Grenada
+199,312,Guadeloup
+200,316,Guamské teritórium
+201,320,Guatemalská republika
+202,324,Guinejská republika
+203,328,Guyanská kooperatívna republika
+204,332,Haitská republika
+205,334,Teritórium Heardovho ostrova a Macdonaldových ostrovov
+206,336,Svätá Stolica (Vatikánsky mestský štát)
+207,340,Honduraská republika
+208,344,Hongkong
+209,348,Maďarsko
+210,352,Islandská republika
+211,356,Indická republika
+212,360,Indonézska republika
+213,364,Iránska islamská republika
+214,368,Iracká republika
+215,372,Írsko
+216,376,Izraelský štát
+217,380,Talianska republika
+218,384,Republika Pobrežia slonoviny
+219,388,Jamajka
+220,392,Japonsko
+221,398,Kazašská republika
+222,400,Jordánske hášimovské kráľovstvo
+223,404,Kenská republika
+224,408,Kórejská ľudovodemokratická republika
+225,410,Kórejská republika
+226,414,Kuvajtský štát
+227,417,Kirgizská republika
+228,418,Laoská ľudovodemokratická republika
+229,422,Libanonská republika
+230,426,Lesothské kráľovstvo
+231,428,Lotyšská republika
+232,430,Libérijská republika
+233,434,Líbya
+234,438,Lichtenštajnské kniežatstvo
+235,440,Litovská republika
+236,442,Luxemburské veľkovojvodstvo
+237,446,Macao
+238,450,Madagaskarská republika
+239,454,Malawijská republika
+240,458,Malajzia
+241,462,Maldivská republika
+242,466,Malijská republika
+243,470,Maltská republika
+244,474,Martinik
+245,478,Mauritánska islamská republika
+246,480,Maurícijská republika
+247,484,Spojené štáty mexické
+248,492,Monacké kniežatstvo
+249,496,Mongolsko
+250,498,Moldavská republika
+251,499,Čierna Hora
+252,500,Montserrat
+253,504,Marocké kráľovstvo
+254,508,Mozambická republika
+255,512,Ománsky sultanát
+256,516,Namíbijská republika
+257,520,Nauruská republika
+258,531,Curacao
