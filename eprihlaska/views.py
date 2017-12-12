@@ -153,11 +153,5 @@ def admissions_wavers():
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
 
-    for subform in form:
-        if subform.id.startswith('com'):
-            choices = subform.competition.choices
-            new_choices = filter_competitions(choices, session['study_programme'])
-            subform.competition.choices = new_choices
-
     return render_template('admission_wavers.html', form=form, session=session)
 
