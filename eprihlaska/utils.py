@@ -5,7 +5,7 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None):
                             delimiter=delimiter)
     choices = []
     for line in reader:
-        choice = [v for k, v in line.items() if k in keys]
+        choice = [v for k, v in sorted(line.items()) if k in keys]
         if fmt:
             choice = [line[keys[0]]]
             choice.append(fmt.format(*line.values()))
