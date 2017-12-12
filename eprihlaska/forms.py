@@ -35,9 +35,10 @@ class BasicPersonalDataForm(FlaskForm):
                           validators=[validators.DataRequired()])
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
-    rodinny_stav = SelectField(label=c.MARITAL_STATUS,
+    marital_status = SelectField(label=c.MARITAL_STATUS,
                                choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
-                                                       ['id', 'Rodinný stav']))
+                                                       ['id', 'Rodinný stav']),
+                               default='1')
     sex = SelectField(label=c.SEX,
                       choices=[('male', c.MALE),
                                ('female', c.FEMALE)],
