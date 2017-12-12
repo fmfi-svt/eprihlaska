@@ -5,6 +5,9 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
 
 from .utils import choices_from_csv
 from . import consts as c
+import os
+
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
@@ -19,7 +22,7 @@ class MotherNameForm(FlaskForm):
 
 class BasicPersonalDataForm(FlaskForm):
     nationality = SelectField(label=c.NATIONALITY,
-                              choices=choices_from_csv('eprihlaska/data/krajiny-osn.csv',
+                              choices=choices_from_csv(DIR + '/data/krajiny-osn.csv',
                                                        ['kód', 'názov']),
                               validators=[validators.DataRequired()])
 
@@ -30,7 +33,7 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     rodinny_stav = SelectField(label=c.MARITAL_STATUS,
-                               choices=choices_from_csv('eprihlaska/data/rodinne-stavy.csv',
+                               choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                                        ['kód', 'názov']))
     sex = SelectField(label=c.SEX,
                       choices=[('male', c.MALE),
@@ -44,7 +47,7 @@ class MoreDetailPersonalDataForm(FlaskForm):
                               validators=[validators.DataRequired()],
                               format='%d.%m.%Y')
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
-                                 choices=choices_from_csv('eprihlaska/data/obce.csv',
+                                 choices=choices_from_csv(DIR + '/data/obce.csv',
                                                        ['kód', 'názov']),
                                  validators=[validators.DataRequired()])
 
@@ -81,11 +84,11 @@ class Address(FlaskForm):
     street_no = StringField(label=c.ADDRESS_NO,
                             validators=[validators.DataRequired()])
     city = SelectField(label=c.ADDRESS_CITY,
-                       choices=choices_from_csv('eprihlaska/data/obce.csv',
+                       choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['kód', 'názov']),
                        validators=[validators.DataRequired()])
     psc = SelectField(label=c.ADDRESS_POSTAL_NO,
-                      choices=choices_from_csv('eprihlaska/data/psc-obci-sr.csv',
+                      choices=choices_from_csv(DIR + '/data/psc-obci-sr.csv',
                                                 ['Kód obce', 'PSČ']),
                       validators=[validators.DataRequired()])
 
@@ -94,10 +97,10 @@ class AddressNonRequired(FlaskForm):
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
-                       choices=choices_from_csv('eprihlaska/data/obce.csv',
+                       choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['kód', 'názov']))
     psc = SelectField(label=c.ADDRESS_POSTAL_NO,
-                      choices=choices_from_csv('eprihlaska/data/psc-obci-sr.csv',
+                      choices=choices_from_csv(DIR + '/data/psc-obci-sr.csv',
                                                 ['Kód obce', 'PSČ']))
 
 
@@ -129,11 +132,16 @@ class FurtherStudyInfoForm(FlaskForm):
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
 
-    matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE, validators=[validators.Optional()])
-    matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE, validators=[validators.Optional()])
-    matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE, validators=[validators.Optional()])
-    matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE, validators=[validators.Optional()])
-    matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE, validators=[validators.Optional()])
+    matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
+                                    validators=[validators.Optional()])
+    matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE,
+                                    validators=[validators.Optional()])
+    matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE,
+                                    validators=[validators.Optional()])
+    matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE,
+                                    validators=[validators.Optional()])
+    matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE,
+                                    validators=[validators.Optional()])
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
     will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
