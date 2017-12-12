@@ -98,8 +98,10 @@ class Address(FlaskForm):
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'),
-                       validators=[validators.DataRequired()])
+                                                fmt='{2} ({3})'))
+    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
+    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
+
 
 class AddressNonRequired(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
@@ -113,6 +115,8 @@ class AddressNonRequired(FlaskForm):
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
                                                 fmt='{2} ({3})'))
+    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
+    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
 
 class AddressForm(FlaskForm):
@@ -122,12 +126,44 @@ class AddressForm(FlaskForm):
                                        label=c.CORRESPONDENCE_ADDRESS)
     submit = SubmitField()
 
+class StudiesInSRForm(FlaskForm):
+    highschool = SelectField(label=c.HIGHSCHOOL,
+                             validators=[validators.DataRequired()],
+                             choices=choices_from_csv(DIR + '/data/skoly.csv',
+                                                ['St. šk.', 'Obec',
+                                                 'Stredná škola',
+                                                 'Ulica'],
+                                                fmt='{2}, {3}, {4}'))
+    study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
+                             validators=[validators.DataRequired()],
+                             default='7902J00',
+                             choices=choices_from_csv(DIR + '/data/odbory.csv',
+                                                ['Odbor - kod',
+                                                 'Odbor stred. školy'],
+                                                fmt='{1} - {2}'))
+
+    education_level = SelectField(label=c.HS_EDUCATION_LEVEL,
+                             validators=[validators.DataRequired()],
+                             default='J',
+                             choices=choices_from_csv(DIR + '/data/vzdelanie.csv',
+                                                ['Kód',
+                                                 'Skrát. popis'],
+                                                fmt='({1}) - {3}'))
+
+class ForeignStudiesForm(FlaskForm):
+    finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL,
+                                       validators=[validators.DataRequired()])
+
+
 class PreviousStudiesForm(FlaskForm):
     has_previously_studied = BooleanField(label=c.HAS_PREVIOUSLY_STUDIED)
-    finished_highschool = RadioField(label=c.FINISHED_HIGHSCHOOL,
-                                     choices=[('SR', c.IN_SR),
+    finished_highschool_check = RadioField(label=c.FINISHED_HIGHSCHOOL,
+                                     choices=[('SK', c.IN_SR),
                                               ('OUTSIDE', c.OUTSIDE_OF_SR)],
+                                     default='SK',
                                      validators=[validators.DataRequired()])
+    studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
+    foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     submit = SubmitField()
 
 class CompetitionSuccessFormItem(FlaskForm):

@@ -79,6 +79,7 @@ ADDRESS_COUNTRY = _('Krajina')
 ADDRESS_STREET = _('Ulica')
 ADDRESS_NO = _('Číslo')
 ADDRESS_CITY = _('Mesto')
+ADDRESS_CITY_FOREIGN = _('Mesto (v zahraniči)')
 ADDRESS_POSTAL_NO = _('PSČ')
 
 PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
@@ -90,6 +91,13 @@ FINISHED_HIGHSCHOOL = _('Absolvovaná stredná škola')
 IN_SR = _('v Slovenskej Republike')
 OUTSIDE_OF_SR = _('mimo Slovenskej Republiky')
 
+HIGHSCHOOL = _('Navštevovaná stredná škola')
+STUDY_PROGRAMME_CODE = _('Kód študijného programu')
+HS_EDUCATION_LEVEL = _('Dosiahnuté stredoškolské vzdelanie')
+FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som strednú školu s maturitou mimo SR')
+
+FOREIGN_STUDIES = _('Štúdium mimo SR')
+STUDIES_IN_SR = _('Štúdium na Slovensku')
 
 COMPETITION_CHOICES = [
     ('MAT', _('úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo celoštátne kolo')),

@@ -11,6 +11,23 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
+        $('select.form-control').chosen({search_contains: true});
+        if ($('#finished_highschool_check-0').is(":checked")) {
+            $('#studies_in_sr').show();
+            $('#foreign_studies').hide();
+        } else {
+            $('#studies_in_sr').hide();
+            $('#foreign_studies').show();
+        }
+        $('#finished_highschool_check-0').on('click', function(e) {
+            $('#studies_in_sr').show();
+            $('#foreign_studies').hide();
+        });
+        $('#finished_highschool_check-1').on('click', function(e) {
+            $('#studies_in_sr').hide();
+            $('#foreign_studies').show();
+        });
+
       });
     </script>
 {% endblock %}

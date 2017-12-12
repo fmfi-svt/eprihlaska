@@ -11,8 +11,31 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-        $('select.form-control').chosen();
+        $('#address-city_foreign').closest('.form-group').hide()
+        $('#correspondence_address-city_foreign').closest('.form-group').hide()
+
+        $('select.form-control').chosen({search_contains: true});
         var correspondence_address_fieldset = $('#correspondence_address');
+
+        $('#correspondence_address-country').on('change', function(e){
+          if ($(this).find(":selected").val() !== '703') {
+            $('#correspondence_address-city_foreign').closest('.form-group').show();
+            $('#correspondence_address-city').closest('.form-group').hide();
+          } else {
+            $('#correspondence_address-city_foreign').closest('.form-group').hide();
+            $('#correspondence_address-city').closest('.form-group').show();
+          }
+        });
+
+        $('#address-country').on('change', function(e){
+          if ($(this).find(":selected").val() !== '703') {
+            $('#address-city_foreign').closest('.form-group').show();
+            $('#address-city').closest('.form-group').hide();
+          } else {
+            $('#address-city_foreign').closest('.form-group').hide();
+            $('#address-city').closest('.form-group').show();
+          }
+        });
 
         $(correspondence_address_fieldset).hide()
         $('#has_correspondence_address').click(function(e){
