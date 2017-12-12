@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, BooleanField, RadioField, SubmitField,
+from wtforms import (TextField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
                      DateField, FieldList, IntegerField)
 
@@ -12,14 +12,14 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DATE = datetime.datetime.now() - datetime.timedelta(days=17 * 365)
 
 class FatherNameForm(FlaskForm):
-    name = StringField(label=c.FATHER_NAME)
-    surname = StringField(label=c.FATHER_SURNAME)
-    born_with_surname = StringField(label=c.FATHER_BORNWITH_SURNAME)
+    name = TextField(label=c.FATHER_NAME)
+    surname = TextField(label=c.FATHER_SURNAME)
+    born_with_surname = TextField(label=c.FATHER_BORNWITH_SURNAME)
 
 class MotherNameForm(FlaskForm):
-    name = StringField(label=c.MOTHER_NAME)
-    surname = StringField(label=c.MOTHER_SURNAME)
-    born_with_surname = StringField(label=c.MOTHER_BORNWITH_SURNAME)
+    name = TextField(label=c.MOTHER_NAME)
+    surname = TextField(label=c.MOTHER_SURNAME)
+    born_with_surname = TextField(label=c.MOTHER_BORNWITH_SURNAME)
 
 
 class BasicPersonalDataForm(FlaskForm):
@@ -29,11 +29,11 @@ class BasicPersonalDataForm(FlaskForm):
                               validators=[validators.DataRequired()],
                               default='703')
 
-    name = StringField(label=c.NAME,
+    name = TextField(label=c.NAME,
                        validators=[validators.DataRequired()])
-    surname = StringField(label=c.SURNAME,
+    surname = TextField(label=c.SURNAME,
                           validators=[validators.DataRequired()])
-    born_with_surname = StringField(c.BORNWITH_SURNAME)
+    born_with_surname = TextField(c.BORNWITH_SURNAME)
 
     marital_status = SelectField(label=c.MARITAL_STATUS,
                                choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
@@ -46,21 +46,19 @@ class BasicPersonalDataForm(FlaskForm):
     submit = SubmitField()
 
 class MoreDetailPersonalDataForm(FlaskForm):
-    birth_no = StringField(label=c.BIRTH_NO)
+    birth_no = TextField(label=c.BIRTH_NO)
     date_of_birth = DateField(label=c.BIRTH_DATE,
-                              validators=[validators.DataRequired()],
                               format='%d.%m.%Y',
                               default=DEFAULT_DATE)
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
                                                           ['id', 'Názov obce'],
-                                                          fmt='{2} ({3})'),
-                                 validators=[validators.DataRequired()])
+                                                          fmt='{2} ({3})'))
 
-    email = StringField(label=c.EMAIL,
+    email = TextField(label=c.EMAIL,
                         validators=[validators.DataRequired(),
                                     validators.Email()])
-    phone = StringField(label=c.PHONE_CONTACT)
+    phone = TextField(label=c.PHONE_CONTACT)
 
 class FurtherPersonalDataForm(FlaskForm):
     basic_personal_data = FormField(MoreDetailPersonalDataForm,
@@ -80,7 +78,7 @@ class StudyProgrammeForm(FlaskForm):
                                            validators.NumberRange(min=1900,
                                                                   max=2018)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
-    dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
+    dean_invitation_letter_no = TextField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
     submit = SubmitField()
 
@@ -89,34 +87,30 @@ class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
                                                        ['id', 'Štát']),
-                              validators=[validators.DataRequired()],
                               default='703')
-    street = StringField(label=c.ADDRESS_STREET,
-                         validators=[validators.DataRequired()])
-    street_no = StringField(label=c.ADDRESS_NO,
-                            validators=[validators.DataRequired()])
+    street = TextField(label=c.ADDRESS_STREET)
+    street_no = TextField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
                                                 fmt='{2} ({3})'))
-    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
-    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
+    city_foreign = TextField(label=c.ADDRESS_CITY_FOREIGN)
+    postal_no = TextField(label=c.ADDRESS_POSTAL_NO)
 
 
 class AddressNonRequired(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
                                                        ['id', 'Štát']),
-                              validators=[validators.DataRequired()],
                               default='703')
-    street = StringField(label=c.ADDRESS_STREET)
-    street_no = StringField(label=c.ADDRESS_NO)
+    street = TextField(label=c.ADDRESS_STREET)
+    street_no = TextField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
                                                 fmt='{2} ({3})'))
-    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
-    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
+    city_foreign = TextField(label=c.ADDRESS_CITY_FOREIGN)
+    postal_no = TextField(label=c.ADDRESS_POSTAL_NO)
 
 
 class AddressForm(FlaskForm):
@@ -128,14 +122,12 @@ class AddressForm(FlaskForm):
 
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
-                             validators=[validators.DataRequired()],
                              choices=choices_from_csv(DIR + '/data/skoly.csv',
                                                 ['St. šk.', 'Obec',
                                                  'Stredná škola',
                                                  'Ulica'],
                                                 fmt='{2}, {3}, {4}'))
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
-                             validators=[validators.DataRequired()],
                              default='7902J00',
                              choices=choices_from_csv(DIR + '/data/odbory.csv',
                                                 ['Odbor - kod',
@@ -143,7 +135,6 @@ class StudiesInSRForm(FlaskForm):
                                                 fmt='{1} - {2}'))
 
     education_level = SelectField(label=c.HS_EDUCATION_LEVEL,
-                             validators=[validators.DataRequired()],
                              default='J',
                              choices=choices_from_csv(DIR + '/data/vzdelanie.csv',
                                                 ['Kód',
@@ -151,8 +142,7 @@ class StudiesInSRForm(FlaskForm):
                                                 fmt='({1}) - {3}'))
 
 class ForeignStudiesForm(FlaskForm):
-    finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL,
-                                       validators=[validators.DataRequired()])
+    finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL)
 
 
 class PreviousStudiesForm(FlaskForm):
@@ -171,13 +161,13 @@ class CompetitionSuccessFormItem(FlaskForm):
                               choices=c.COMPETITION_CHOICES)
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional()])
-    further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
+    further_info = TextField(label=c.COMPETITION_FURTHER_INFO,
                                description=c.COMPETITION_FURTHER_INFO_DESC)
 
 
 class FurtherStudyInfoForm(FlaskForm):
-    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
-    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
+    external_matura_percentile = TextField(label=c.EXTERNAL_MATURA_PERCENTILE)
+    scio_percentile = TextField(label=c.SCIO_PERCENTILE)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
                                     validators=[validators.Optional()])
