@@ -19,6 +19,20 @@ vysvedčenia na adresu:
 
 {% endif %}
 
+{% if session['grades_mat'] or session['grades_fyz'] or session['grades_bio']  %}
+
+<h3>Výpis vybraných známok</h3>
+
+<p>
+  Do dvoch týždňov nám prosím zašlite nasledujúci dokument, na ktorom nesmie
+  chýbať potvrdenie školy:<br /><br />
+
+  <a target="_blank" href="{{ url_for('grades_control') }}">Výpis vybraných známok</a>
+</p>
+
+{% endif %}
+
+
 
 <h3>Čo ďalej?</h3>
 

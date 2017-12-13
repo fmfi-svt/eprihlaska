@@ -1,4 +1,5 @@
-from flask import render_template, flash, redirect, session, request, url_for
+from flask import (render_template, flash, redirect, session, request, url_for,
+                   make_response)
 from eprihlaska import app
 from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
@@ -8,7 +9,7 @@ from functools import wraps
 
 from .consts import MENU
 
-def require_form(form_key):
+def require_filled_form(form_key):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -33,7 +34,7 @@ def index():
 
 
 @app.route('/personal_info', methods=('GET', 'POST'))
-@require_form('index')
+@require_filled_form('index')
 def personal_info():
     form = BasicPersonalDataForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -44,7 +45,7 @@ def personal_info():
     return render_template('personal_info.html', form=form, session=session)
 
 @app.route('/further_personal_info', methods=('GET', 'POST'))
-@require_form('personal_info')
+@require_filled_form('personal_info')
 def further_personal_info():
     form = FurtherPersonalDataForm(obj=munchify(dict(session)))
 
@@ -62,7 +63,7 @@ def further_personal_info():
                            session=session)
 
 @app.route('/address', methods=('GET', 'POST'))
-@require_form('further_personal_info')
+@require_filled_form('further_personal_info')
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -73,7 +74,7 @@ def address():
     return render_template('address.html', form=form, session=session)
 
 @app.route('/previous_studies', methods=('GET', 'POST'))
-@require_form('address')
+@require_filled_form('address')
 def previous_studies():
     form = PreviousStudiesForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -107,7 +108,7 @@ def filter_competitions(competition_list, study_programme_list):
     return result_list
 
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
-@require_form('previous_studies_form')
+@require_filled_form('previous_studies')
 def admissions_wavers():
     form = AdmissionWaversForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -177,7 +178,18 @@ def admissions_wavers():
     return render_template('admission_wavers.html', form=form, session=session)
 
 @app.route('/final', methods=['GET'])
-@require_form('admissions_wavers')
+@require_filled_form('admissions_wavers')
 def final():
     return render_template('final.html', session=session)
+
+@app.route('/grades_control', methods=['GET'])
+def grades_control():
+    rendered = render_template('grade_listing.html', session=session)
+    # pdf = pdfkit.from_string(rendered, False)
+
+    # response = make_response(pdf)
+    # response.headers['Content-Type'] = 'application/pdf'
+    # response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
+
+    return rendered
 
