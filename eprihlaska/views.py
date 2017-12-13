@@ -6,7 +6,6 @@ from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               PreviousStudiesForm, AdmissionWaversForm)
 from munch import munchify
 from functools import wraps
-import pdfkit
 
 from .consts import MENU
 
