@@ -116,6 +116,11 @@ def admissions_wavers():
             session[k] = form.data[k]
         return redirect('/final')
 
+    if session['dean_invitation_letter']:
+        if session['dean_invitation_letter_no'] is not None:
+            flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
+                  'odpustené.')
+            return redirect('/final')
 
     # Filter out competitions based on selected study programmes.
     for subform in form:
