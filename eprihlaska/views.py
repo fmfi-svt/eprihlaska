@@ -111,9 +111,9 @@ def filter_competitions(competition_list, study_programme_list):
 @require_filled_form('previous_studies')
 def admissions_wavers():
     if session['dean_invitation_letter'] and session['dean_invitation_letter_no'] is not None:
-            flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
-                  'odpustené.')
-            return redirect('/final')
+        flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
+              'odpustené.')
+        return redirect('/final')
 
     form = AdmissionWaversForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
