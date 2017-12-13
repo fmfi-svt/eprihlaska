@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% block append_title %} - Záverečné pokyny{% endblock %}
+
+{% block form %}
+
+<h3>Poplatok</h3>
+
+Bude treba zaplatiť poplatok, zrejme prevodom.
+
+{% if session['matura_year'] < 2018 %}
+
+<h3>Overená kópia maturitného vysvedčenia</h3>
+
+<p>
+Pre komplenté ukončenie prihlášky nám prosím zašlite overenú kópiu maturitného
+vysvedčenia na adresu:
+</p>
+
+{% endif %}
+
+
+<h3>Čo ďalej?</h3>
+
+<p>
+Ak budeme potrebovať ďalšie informácie, ozveme sa e-mailom.
+</p>
+
+{% endblock %}

@@ -11,7 +11,7 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-        $('#address-city_foreign').closest('.form-group').hide()
+        $('#address_form-city_foreign').closest('.form-group').hide()
         $('#correspondence_address-city_foreign').closest('.form-group').hide()
 
         $('select.form-control').chosen({search_contains: true});
@@ -27,13 +27,13 @@
           }
         });
 
-        $('#address-country').on('change', function(e){
+        $('#address_form-country').on('change', function(e){
           if ($(this).find(":selected").val() !== '703') {
-            $('#address-city_foreign').closest('.form-group').show();
-            $('#address-city').closest('.form-group').hide();
+            $('#address_form-city_foreign').closest('.form-group').show();
+            $('#address_form-city').closest('.form-group').hide();
           } else {
-            $('#address-city_foreign').closest('.form-group').hide();
-            $('#address-city').closest('.form-group').show();
+            $('#address_form-city_foreign').closest('.form-group').hide();
+            $('#address_form-city').closest('.form-group').show();
           }
         });
 
