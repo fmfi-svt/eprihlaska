@@ -1,9 +1,25 @@
-from flask import render_template, flash, redirect, session
+from flask import render_template, flash, redirect, session, request, url_for
 from eprihlaska import app
 from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm)
 from munch import munchify
+from functools import wraps
+
+from .consts import MENU
+
+def require_form(form_key):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if request.method == 'GET' and form_key not in session:
+                flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
+                for _, endpoint in MENU:
+                    if endpoint not in session:
+                        return redirect(url_for(endpoint))
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
@@ -17,6 +33,7 @@ def index():
 
 
 @app.route('/personal_info', methods=('GET', 'POST'))
+@require_form('index')
 def personal_info():
     form = BasicPersonalDataForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -27,6 +44,7 @@ def personal_info():
     return render_template('personal_info.html', form=form, session=session)
 
 @app.route('/further_personal_info', methods=('GET', 'POST'))
+@require_form('personal_info')
 def further_personal_info():
     form = FurtherPersonalDataForm(obj=munchify(dict(session)))
 
@@ -44,6 +62,7 @@ def further_personal_info():
                            session=session)
 
 @app.route('/address', methods=('GET', 'POST'))
+@require_form('further_personal_info')
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -54,6 +73,7 @@ def address():
     return render_template('address.html', form=form, session=session)
 
 @app.route('/previous_studies', methods=('GET', 'POST'))
+@require_form('address')
 def previous_studies():
     form = PreviousStudiesForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -87,12 +107,13 @@ def filter_competitions(competition_list, study_programme_list):
     return result_list
 
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
+@require_form('previous_studies_form')
 def admissions_wavers():
     form = AdmissionWaversForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         for k in form.data:
             session[k] = form.data[k]
-        return redirect('/success')
+        return redirect('/final')
 
 
     # Filter out competitions based on selected study programmes.
@@ -154,4 +175,9 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     return render_template('admission_wavers.html', form=form, session=session)
+
+@app.route('/final', methods=['GET'])
+@require_form('admissions_wavers')
+def final():
+    return render_template('final.html', session=session)
 

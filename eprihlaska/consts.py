@@ -147,3 +147,13 @@ GRADE_THIRD_YEAR = _('koncoročná známka v 3. ročníku / septíme')
 GRADES_MAT = _('Známky z matematiky')
 GRADES_FYZ = _('Známky z fyziky')
 GRADES_BIO = _('Známky z biológie')
+
+MENU = [
+    (_('Úvod'), 'index'),
+    (_('Osobné údaje'), 'personal_info'),
+    (_('Ďalšie osobné údaje'), 'further_personal_info'),
+    (_('Adresa'), 'address'),
+    (_('Predchádzajúce štúdium'), 'previous_studies'),
+    (_('Prijatie bez prijímacích pohovorov'), 'admissions_wavers'),
+    (_('Záverečné pokyny'), 'final')
+]

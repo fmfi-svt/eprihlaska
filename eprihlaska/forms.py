@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
-                     DateField, FieldList, IntegerField)
+                     DateField, FieldList, IntegerField, HiddenField)
 
 from .utils import choices_from_csv
 from . import consts as c
@@ -43,6 +43,7 @@ class BasicPersonalDataForm(FlaskForm):
                       choices=[('male', c.MALE),
                                ('female', c.FEMALE)],
                       validators=[validators.DataRequired()])
+    personal_info = HiddenField()
     submit = SubmitField()
 
 class MoreDetailPersonalDataForm(FlaskForm):
@@ -66,6 +67,7 @@ class FurtherPersonalDataForm(FlaskForm):
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
     mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 
+    further_personal_info = HiddenField()
     submit = SubmitField()
 
 
@@ -80,6 +82,7 @@ class StudyProgrammeForm(FlaskForm):
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
+    index = HiddenField()
     submit = SubmitField()
 
 
@@ -114,10 +117,11 @@ class AddressNonRequired(FlaskForm):
 
 
 class AddressForm(FlaskForm):
-    address = FormField(Address, label=c.PERMANENT_ADDRESS)
+    address_form = FormField(Address, label=c.PERMANENT_ADDRESS)
     has_correspondence_address = BooleanField(label=c.HAS_CORRESPONDENCE_ADDRESS)
     correspondence_address = FormField(AddressNonRequired,
                                        label=c.CORRESPONDENCE_ADDRESS)
+    address = HiddenField()
     submit = SubmitField()
 
 class StudiesInSRForm(FlaskForm):
@@ -154,6 +158,7 @@ class PreviousStudiesForm(FlaskForm):
                                      validators=[validators.DataRequired()])
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
+    previous_studies = HiddenField()
     submit = SubmitField()
 
 class CompetitionSuccessFormItem(FlaskForm):
@@ -214,5 +219,5 @@ class AdmissionWaversForm(FlaskForm):
                               label=c.COMPETITION_SECOND)
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
-
+    admissions_wavers = HiddenField()
     submit = SubmitField()

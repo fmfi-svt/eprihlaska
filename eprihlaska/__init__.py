@@ -4,17 +4,12 @@ from flask_nav import Nav
 from flask_nav.elements import *
 from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
+from .consts import MENU
 
 nav = Nav()
+items = [View(*x) for x in MENU]
+nav.register_element('top', Navbar(*items))
 
-nav.register_element('top', Navbar(
-    View('Úvod', 'index'),
-    View('Osobné údaje', 'personal_info'),
-    View('Ďalšie osobné údaje', 'further_personal_info'),
-    View('Adresa', 'address'),
-    View('Predchádzajúce štúdium', 'previous_studies'),
-    View('Prijatie bez prijímacích pohovorov', 'admissions_wavers'),
-))
 csrf = CSRFProtect()
 app = Flask(__name__)
 app.config.from_object('config')
