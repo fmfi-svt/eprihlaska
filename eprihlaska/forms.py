@@ -46,9 +46,21 @@ class BasicPersonalDataForm(FlaskForm):
     personal_info = HiddenField()
     submit = SubmitField()
 
+class ePrihlaskaDateField(DateField):
+    def __init__(self, label=None, validators=None, format='%Y-%m-%d',
+                 **kwargs):
+        super(ePrihlaskaDateField, self).__init__(label, validators, format,
+                                                  **kwargs)
+
+    def process_formdata(self, valuelist):
+        # Use DateField's parent's (DateTimeField) process_formdata to get
+        # datetime.datetime rather than datetime.datetime.date which is
+        # dificult to serialize for Flask.
+        super(DateField, self).process_formdata(valuelist)
+
 class MoreDetailPersonalDataForm(FlaskForm):
     birth_no = StringField(label=c.BIRTH_NO)
-    date_of_birth = DateField(label=c.BIRTH_DATE,
+    date_of_birth = ePrihlaskaDateField(label=c.BIRTH_DATE,
                               format='%d.%m.%Y',
                               default=DEFAULT_DATE)
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
@@ -76,6 +88,7 @@ class StudyProgrammeForm(FlaskForm):
                                           choices=c.STUDY_PROGRAMME_CHOICES,
                                           description=c.STUDY_PROGRAMME_DESC)
     matura_year = IntegerField(c.MATURA_YEAR,
+                               default=2018,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
                                                                   max=2018)])

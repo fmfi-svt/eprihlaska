@@ -1,10 +1,12 @@
-from flask import render_template, flash, redirect, session, request, url_for
+from flask import (render_template, flash, redirect, session, request, url_for,
+                   make_response)
 from eprihlaska import app
 from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm)
 from munch import munchify
 from functools import wraps
+import pdfkit
 
 from .consts import MENU
 
@@ -107,7 +109,7 @@ def filter_competitions(competition_list, study_programme_list):
     return result_list
 
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
-@require_filled_form('previous_studies_form')
+@require_filled_form('previous_studies')
 def admissions_wavers():
     form = AdmissionWaversForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -180,4 +182,15 @@ def admissions_wavers():
 @require_filled_form('admissions_wavers')
 def final():
     return render_template('final.html', session=session)
+
+@app.route('/grades_control', methods=['GET'])
+def grades_control():
+    rendered = render_template('grade_listing.html', session=session)
+    # pdf = pdfkit.from_string(rendered, False)
+
+    # response = make_response(pdf)
+    # response.headers['Content-Type'] = 'application/pdf'
+    # response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
+
+    return rendered
 
