@@ -2,7 +2,8 @@ from flask import render_template, flash, redirect, session, request, url_for
 from eprihlaska import app
 from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaversForm)
+                              PreviousStudiesForm, AdmissionWaversForm,
+                              AdmissionWaverFreeForm)
 from munch import munchify
 from functools import wraps
 
@@ -115,7 +116,6 @@ def admissions_wavers():
             session[k] = form.data[k]
         return redirect('/final')
 
-
     # Filter out competitions based on selected study programmes.
     for subform in form:
         if subform.id.startswith('competition_'):
@@ -174,6 +174,15 @@ def admissions_wavers():
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
 
+    if session['dean_invitation_letter']:
+        return redirect('/admission_waver_free')
+    return render_template('admission_wavers.html', form=form, session=session)
+
+@app.route('/admission_waver_free', methods=('GET', 'POST'))
+def admission_waver_free():
+    form = AdmissionWaverFreeForm(obj=munchify(dict(session)))
+
+    flash('Nie je potrebné zadávať tieto údaje. Pokračujte ďalej.')
     return render_template('admission_wavers.html', form=form, session=session)
 
 @app.route('/final', methods=['GET'])

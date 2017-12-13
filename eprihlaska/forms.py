@@ -221,3 +221,6 @@ class AdmissionWaversForm(FlaskForm):
                               label=c.COMPETITION_THIRD)
     admissions_wavers = HiddenField()
     submit = SubmitField()
+
+class AdmissionWaverFreeForm(FlaskForm):
+    submit = SubmitField()
