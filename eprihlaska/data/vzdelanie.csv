@@ -1,22 +1,6 @@
 ,Kód,Typ vzdel.,Skrát. popis
-11,A,predprimárne vzdelanie,predprimárne vzdelanie
-12,B,primárne vzdelanie,primárne vzdelanie
-13,D,nižšie sekundárne vzdelanie,nižšie sekundárne vzdelanie
-14,E,"nižšie sekundárne vzdelanie - absolventi praktických škôl,  žiaci OU s MP zaškolení alebo zaučení","absolventi praktických škôl,  žiaci OU s MP zaškolení alebo zaučení"
-15,F,nižšie sekundárne vzdelanie - odborné vzdelanie,odborné vzdelanie
-16,G,vyššie sekundárne vzdelanie - odborné vzdelanie s výučným listom,odborné vzdelanie s výučným listom
-17,H,vyššie sekundárne vzdelanie - stredné odborné vzdelanie s výučným listom,stredné odborné vzdelanie s výučným listom
-18,I,vyššie sekundárne vzdelanie - stredné  odborné vzdelanie bez maturity a výučného listu,stredné  odborné vzdelanie bez maturity a výučného listu
 19,J,vyššie sekundárne vzdelanie - úplné stredné všeobecné vzdelanie s maturitou,úplné stredné všeobecné vzdelanie s maturitou
 20,K,vyššie sekundárne vzdelanie - úplné stredné odborné vzdelanie s maturitou a výučným listom,úplné stredné odborné vzdelanie s maturitou a výučným listom
 21,L,vyššie sekundárne vzdelanie - úplné stredné odborné vzdelanie s maturitou bez výučného listu,úplné stredné odborné vzdelanie s maturitou bez výučného listu
 22,M,vyššie sekundárne vzdelanie - úplné stredné odborné vzdelanie s maturitou (bez výučného listu),úplné stredné odborné vzdelanie s maturitou (bez výučného listu)
-23,N,postsekundárne vzdelanie,postsekundárne vzdelanie
 24,Q,terciárne vzdelanie - vyššie odborné vzdelanie (absolventský diplom),vyššie odborné vzdelanie (absolventský diplom)
-25,P,terciárne vzdelanie - vysokoškolské vzdelanie I. stupeň - bakalárske,vysokoškolské vzdelanie I. stupeň - bakalárske
-26,R,terciárne vzdelanie - vysokoškolské vzdelanie I. stupeň - bakalárske,vysokoškolské vzdelanie I. stupeň - bakalárske
-27,S,terciárne vzdelanie - vysokoškolské vzdelanie II. stupeň,vysokoškolské vzdelanie II. stupeň
-28,T,terciárne vzdelanie - vysokoškolské vzdelanie II. stupeň,vysokoškolské vzdelanie II. stupeň
-29,U,terciárne vzdelanie - vysokoškolské vzdelanie II. stupeň,vysokoškolské vzdelanie II. stupeň
-30,V,terciárne vzdelanie - vysokoškolské vzdelanie III. stupeň - doktorandské,vysokoškolské vzdelanie III. stupeň - doktorandské
-31,X,vzdelanie ukončené na zahraničnej škole,vzdelanie ukončené na zahraničnej škole
