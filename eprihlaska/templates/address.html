@@ -37,7 +37,11 @@
           }
         });
 
-        $(correspondence_address_fieldset).hide()
+
+        if (!$('#has_correspondence_address').is(":checked")) {
+          $(correspondence_address_fieldset).hide();
+        }
+
         $('#has_correspondence_address').click(function(e){
           if (this.checked) {
             $(correspondence_address_fieldset).show();
