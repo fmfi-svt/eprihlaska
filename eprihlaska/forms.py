@@ -3,6 +3,7 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
                      DateField, FieldList, IntegerField, HiddenField)
 
+from .validators import BirthNoValidator
 from .utils import choices_from_csv
 from . import consts as c
 import os
@@ -59,10 +60,11 @@ class ePrihlaskaDateField(DateField):
         super(DateField, self).process_formdata(valuelist)
 
 class MoreDetailPersonalDataForm(FlaskForm):
-    birth_no = StringField(label=c.BIRTH_NO)
+    birth_no = StringField(label=c.BIRTH_NO,
+                           validators=[BirthNoValidator()])
     date_of_birth = ePrihlaskaDateField(label=c.BIRTH_DATE,
-                              format='%d.%m.%Y',
-                              default=DEFAULT_DATE)
+                                        format='%d.%m.%Y',
+                                        default=DEFAULT_DATE)
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
                                                           ['id', 'Názov obce'],
