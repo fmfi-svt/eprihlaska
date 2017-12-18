@@ -13,7 +13,9 @@ FEMALE = _('žena')
 
 BIRTH_NO = _('Rodné číslo')
 BIRTH_DATE = _('Dátum narodenia')
+BIRTH_COUNTRY = _('Krajina narodenia')
 BIRTH_PLACE = _('Miesto narodenia')
+BIRTH_PLACE_FOREIGN = _('Miesto narodenia (v zahraničí)')
 
 EMAIL = _('Email')
 PHONE_CONTACT = _('Telefónny kontakt')

@@ -65,11 +65,17 @@ class MoreDetailPersonalDataForm(FlaskForm):
     date_of_birth = ePrihlaskaDateField(label=c.BIRTH_DATE,
                                         format='%d.%m.%Y',
                                         default=DEFAULT_DATE)
+    country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
+                                   choices=choices_from_csv(DIR + '/data/staty.csv',
+                                                            ['id', 'Štát']),
+                                   default='703')
+
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
                                                           ['id', 'Názov obce'],
                                                           fmt='{2} ({3})'))
 
+    place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
     email = StringField(label=c.EMAIL,
                         validators=[validators.DataRequired(),
                                     validators.Email()])
