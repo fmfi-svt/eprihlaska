@@ -1,10 +1,11 @@
 from flask import Flask, request
 from flask_bootstrap import Bootstrap
-from flask_nav import Nav
+from flask_nav import Nav, register_renderer
 from flask_nav.elements import *
 from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from .consts import MENU
+from .renderer import ePrihlaskaNavRenderer
 
 nav = Nav()
 items = [View(*x) for x in MENU]
@@ -15,6 +16,8 @@ app = Flask(__name__)
 app.config.from_object('config')
 Bootstrap(app)
 nav.init_app(app)
+register_renderer(app, 'eprihlaska_nav_renderer', ePrihlaskaNavRenderer)
+
 csrf.init_app(app)
 babel = Babel(app)
 app.config['BABEL_DEFAULT_LOCALE'] = 'sk'
