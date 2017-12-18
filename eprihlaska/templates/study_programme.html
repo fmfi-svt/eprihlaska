@@ -14,7 +14,10 @@
       $(document).ready(function(){
         $('#study_programme').chosen({max_selected_options: 3});
         /* Show or hide dean's invitation letter field */
-        $('#dean_invitation_letter_no').closest('.form-group').hide();
+        if (!$('#dean_invitation_letter').is(":checked")) {
+          $('#dean_invitation_letter_no').closest('.form-group').hide();
+        }
+
         $('#dean_invitation_letter').change(function(e) {
           if (this.checked) {
             $('#dean_invitation_letter_no').closest('.form-group').show();
