@@ -4,7 +4,7 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      DateField, FieldList, IntegerField, HiddenField)
 
 from .validators import BirthNoValidator
-from .utils import choices_from_csv
+from .utils import choices_from_csv, city_formatter
 from . import consts as c
 import os
 import datetime
@@ -160,7 +160,11 @@ class StudiesInSRForm(FlaskForm):
                                                 ['St. šk.', 'Obec',
                                                  'Stredná škola',
                                                  'Ulica'],
-                                                fmt='{2}, {3}, {4}'))
+                                                fmt='{2}, {3}, {4}',
+                                                sortby=1,
+                                                prepend=['XXXXXXX'],
+                                                post_fmt=city_formatter),
+                             default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
                              default='7902J00',
                              choices=choices_from_csv(DIR + '/data/odbory.csv',
