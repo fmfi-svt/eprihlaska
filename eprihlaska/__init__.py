@@ -22,7 +22,7 @@ register_renderer(app, 'eprihlaska_nav_renderer', ePrihlaskaNavRenderer)
 csrf.init_app(app)
 babel = Babel(app)
 app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
-locale.setlocale(locale.LC_ALL, 'sk_SK')
+locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
 
 @babel.localeselector
 def get_locale():
