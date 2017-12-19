@@ -5,7 +5,7 @@
 
     $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/573-staty.xlsx --filter-NaT='Platnosť do' convert --out-file staty.csv id Štát
 
-    $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/244-obce-nove.xlsx --filter-NaT='Do dátumu' convert --out-file obce.csv 'id' 'Názov obce' 'PSČ'
+    $ python3 ciselnik_obce_to_csv.py  --file ../eprihlaska/data/244-obce-nove.xlsx --filter-NaT='Do dátumu' convert --out-file obce.csv 'id' 'Názov obce' 'PSČ'
 
     $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/109-stredne-skoly.xlsx --filter-NaT='Do dátumu' convert --out-file='skoly.csv' 'St. šk.' 'Obec' 'Stredná škola' 'Ulica'
 
