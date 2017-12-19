@@ -102,6 +102,7 @@ FOREIGN_STUDIES = _('Štúdium mimo SR')
 STUDIES_IN_SR = _('Štúdium na Slovensku')
 
 COMPETITION_CHOICES = [
+    ('_', _('neuvádzam výsledok zo súťaže')),
     ('MAT', _('úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo celoštátne kolo')),
     ('FYZ', _('úspešný riešiteľ - Fyzikálna olympiáda A alebo B - krajské alebo celoštátne kolo')),
     ('INF', _('úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo celoštátne kolo')),

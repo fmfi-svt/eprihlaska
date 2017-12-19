@@ -184,7 +184,8 @@ class PreviousStudiesForm(FlaskForm):
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
-                              choices=c.COMPETITION_CHOICES)
+                              choices=c.COMPETITION_CHOICES,
+                              default='_')
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional()])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,

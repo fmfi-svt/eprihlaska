@@ -7,7 +7,8 @@ from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
 from munch import munchify
 from functools import wraps
 
-from .consts import MENU
+from .consts import MENU, STUDY_PROGRAMME_CHOICES
+STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
 def require_filled_form(form_key):
     def decorator(func):
@@ -95,7 +96,8 @@ def filter_competitions(competition_list, study_programme_list):
         'SVOC_INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'SVOC_BIO': ['BIN', 'BMF'],
         'SVOC_CHM': ['BIN', 'BMF'],
-        'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY']
+        'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        '_': STUDY_PROGRAMMES
     }
 
     for comp, desc in competition_list:
