@@ -26,7 +26,9 @@ class MotherNameForm(FlaskForm):
 class BasicPersonalDataForm(FlaskForm):
     nationality = SelectField(label=c.NATIONALITY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               validators=[validators.DataRequired()],
                               default='703')
 
@@ -67,13 +69,16 @@ class MoreDetailPersonalDataForm(FlaskForm):
                                         default=DEFAULT_DATE)
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
                                    choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                            ['id', 'Štát']),
+                                                            ['id', 'Štát'],
+                                                            sortby=1,
+                                                            prepend=['703', '203']),
                                    default='703')
 
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
                                                           ['id', 'Názov obce'],
-                                                          fmt='{2} ({3})'))
+                                                          fmt='{2} ({3})',
+                                                          sortby=1))
 
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
     email = StringField(label=c.EMAIL,
@@ -110,7 +115,9 @@ class StudyProgrammeForm(FlaskForm):
 class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
@@ -125,7 +132,9 @@ class Address(FlaskForm):
 class AddressNonRequired(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)

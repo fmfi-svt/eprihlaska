@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from .consts import MENU
 from .renderer import ePrihlaskaNavRenderer
+import locale
 
 nav = Nav()
 items = [View(*x) for x in MENU]
@@ -20,10 +21,11 @@ register_renderer(app, 'eprihlaska_nav_renderer', ePrihlaskaNavRenderer)
 
 csrf.init_app(app)
 babel = Babel(app)
-app.config['BABEL_DEFAULT_LOCALE'] = 'sk'
+app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
+locale.setlocale(locale.LC_ALL, 'sk_SK')
 
 @babel.localeselector
 def get_locale():
-    return request.accept_languages.best_match(['sk', 'en'])
+    return request.accept_languages.best_match(['sk_SK', 'en'])
 
 from eprihlaska import views
