@@ -4,7 +4,7 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      DateField, FieldList, IntegerField, HiddenField)
 
 from .validators import BirthNoValidator
-from .utils import choices_from_csv
+from .utils import choices_from_csv, city_formatter
 from . import consts as c
 import os
 import datetime
@@ -26,7 +26,9 @@ class MotherNameForm(FlaskForm):
 class BasicPersonalDataForm(FlaskForm):
     nationality = SelectField(label=c.NATIONALITY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               validators=[validators.DataRequired()],
                               default='703')
 
@@ -67,13 +69,16 @@ class MoreDetailPersonalDataForm(FlaskForm):
                                         default=DEFAULT_DATE)
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
                                    choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                            ['id', 'Štát']),
+                                                            ['id', 'Štát'],
+                                                            sortby=1,
+                                                            prepend=['703', '203']),
                                    default='703')
 
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
                                                           ['id', 'Názov obce'],
-                                                          fmt='{2} ({3})'))
+                                                          fmt='{2} ({3})',
+                                                          sortby=1))
 
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
     email = StringField(label=c.EMAIL,
@@ -110,7 +115,9 @@ class StudyProgrammeForm(FlaskForm):
 class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
@@ -125,7 +132,9 @@ class Address(FlaskForm):
 class AddressNonRequired(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát']),
+                                                       ['id', 'Štát'],
+                                                       sortby=1,
+                                                       prepend=['703', '203']),
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
@@ -151,7 +160,11 @@ class StudiesInSRForm(FlaskForm):
                                                 ['St. šk.', 'Obec',
                                                  'Stredná škola',
                                                  'Ulica'],
-                                                fmt='{2}, {3}, {4}'))
+                                                fmt='{2}, {3}, {4}',
+                                                sortby=1,
+                                                prepend=['XXXXXXX'],
+                                                post_fmt=city_formatter),
+                             default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
                              default='7902J00',
                              choices=choices_from_csv(DIR + '/data/odbory.csv',
@@ -184,7 +197,8 @@ class PreviousStudiesForm(FlaskForm):
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
-                              choices=c.COMPETITION_CHOICES)
+                              choices=c.COMPETITION_CHOICES,
+                              default='_')
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional()])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,

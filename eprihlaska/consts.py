@@ -96,12 +96,13 @@ OUTSIDE_OF_SR = _('mimo Slovenskej Republiky')
 HIGHSCHOOL = _('Navštevovaná stredná škola')
 STUDY_PROGRAMME_CODE = _('Kód študijného programu')
 HS_EDUCATION_LEVEL = _('Dosiahnuté / očakávané stredoškolské vzdelanie')
-FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som strednú školu s maturitou mimo SR')
+FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som / absolvujem strednú školu s maturitou mimo SR')
 
 FOREIGN_STUDIES = _('Štúdium mimo SR')
 STUDIES_IN_SR = _('Štúdium na Slovensku')
 
 COMPETITION_CHOICES = [
+    ('_', _('neuvádzam výsledok zo súťaže')),
     ('MAT', _('úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo celoštátne kolo')),
     ('FYZ', _('úspešný riešiteľ - Fyzikálna olympiáda A alebo B - krajské alebo celoštátne kolo')),
     ('INF', _('úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo celoštátne kolo')),
