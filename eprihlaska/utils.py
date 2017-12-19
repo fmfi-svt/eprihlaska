@@ -34,4 +34,4 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
     return choices
 
 def city_formatter(x):
-    return re.sub(r'^([^-]+)-[^,]+', r'\1', x)
+    return re.sub(r'^([^- ,]+)-[^,]+', r'\1', x)
