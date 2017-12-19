@@ -65,7 +65,8 @@ class MoreDetailPersonalDataForm(FlaskForm):
     birth_no = StringField(label=c.BIRTH_NO,
                            validators=[BirthNoValidator()])
     date_of_birth = StringField(label=c.BIRTH_DATE,
-                                validators=[DateValidator()])
+                                validators=[DateValidator()],
+                                default='DD.MM.RRRR')
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
                                    choices=choices_from_csv(DIR + '/data/staty.csv',
                                                             ['id', 'Štát'],
@@ -75,6 +76,8 @@ class MoreDetailPersonalDataForm(FlaskForm):
 
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
                                  choices=choices_from_csv(DIR + '/data/obce.csv',
+                                                          ['id', 'Názov obce'],
+                                                          ['id', 'Názov obce'],
                                                           ['id', 'Názov obce'],
                                                           fmt='{2} ({3})',
                                                           sortby=1))
@@ -220,8 +223,6 @@ class FurtherStudyInfoForm(FlaskForm):
                                     validators=[validators.Optional()])
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
-    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
-
     will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
     will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
     will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
