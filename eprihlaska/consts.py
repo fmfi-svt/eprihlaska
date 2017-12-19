@@ -96,7 +96,7 @@ OUTSIDE_OF_SR = _('mimo Slovenskej Republiky')
 HIGHSCHOOL = _('Navštevovaná stredná škola')
 STUDY_PROGRAMME_CODE = _('Kód študijného programu')
 HS_EDUCATION_LEVEL = _('Dosiahnuté / očakávané stredoškolské vzdelanie')
-FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som strednú školu s maturitou mimo SR')
+FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som / absolvujem strednú školu s maturitou mimo SR')
 
 FOREIGN_STUDIES = _('Štúdium mimo SR')
 STUDIES_IN_SR = _('Štúdium na Slovensku')
