@@ -175,9 +175,10 @@ def admissions_wavers():
     }
 
     study_programme_set = set(session['study_programme'])
+    matura_year = session['study_programme_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           session['matura_year'] not in [2015, 2016, 2017, 2018]:
+            matura_year not in [2015, 2016, 2017, 2018]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -186,7 +187,7 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     for k, v in relevant_years.items():
-        if not session['matura_year'] in v:
+        if not matura_year in v:
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
 
