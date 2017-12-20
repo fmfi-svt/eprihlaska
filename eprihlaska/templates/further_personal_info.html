@@ -11,7 +11,6 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-        $('#basic_personal_data-date_of_birth').flatpickr({dateFormat: 'd.m.Y'})
         $('#basic_personal_data-place_of_birth').chosen({search_contains: true});
         $('#basic_personal_data-country_of_birth').chosen({search_contains: true});
         $('#basic_personal_data-place_of_birth_foreign').closest('.form-group').hide();

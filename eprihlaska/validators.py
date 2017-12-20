@@ -1,4 +1,5 @@
 import re
+import datetime
 from wtforms import validators
 
 
@@ -32,3 +33,30 @@ class BirthNoValidator(object):
         birth_no = int(mo.group(1) + mo.group(2))
         if birth_no % 11 != 0:
             raise validators.ValidationError(self.message + ' ' + self.mod_err)
+
+
+class DateValidator:
+    def __init__(self, date=None, message=None, val_err_msg=None):
+        self.date = date
+
+        if not message:
+            message = 'Správny formát je DD.MM.RRRR'
+        self.message = message
+
+        if not val_err_msg:
+            val_err_msg = 'Neexistujúci dátum.'
+        self.val_err_msg = val_err_msg
+
+    def __call__(self, form, field):
+        date_reg = re.compile(r'^(\d\d)\.(\d\d)\.(\d\d\d\d)$')
+        mo = date_reg.search(field.data)
+
+        try:
+            mo.group(0)
+        except AttributeError:
+            raise validators.ValidationError(self.message)
+
+        try:
+            datetime.datetime.strptime(mo.group(0), '%d.%m.%Y')
+        except ValueError:
+            raise ValueError(self.val_err_msg)
