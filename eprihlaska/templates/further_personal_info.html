@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block append_title %} - Ďalšie osobné údaje {% endblock %}
+{% block append_title %} - Informácie o rodičoch {% endblock %}
 
 {% block form %}
   {{ wtf.quick_form(form,
@@ -11,19 +11,6 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-        $('#basic_personal_data-place_of_birth').chosen({search_contains: true});
-        $('#basic_personal_data-country_of_birth').chosen({search_contains: true});
-        $('#basic_personal_data-place_of_birth_foreign').closest('.form-group').hide();
-        $('#basic_personal_data-country_of_birth').on('change', function(e){
-          if (this.value === '703') {
-            $('#basic_personal_data-place_of_birth_foreign').closest('.form-group').hide();
-            $('#basic_personal_data-place_of_birth').closest('.form-group').show();
-          } else {
-            $('#basic_personal_data-place_of_birth_foreign').closest('.form-group').show();
-            $('#basic_personal_data-place_of_birth').closest('.form-group').hide();
-          }
-        });
-
       });
     </script>
 {% endblock %}
