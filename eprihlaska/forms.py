@@ -66,7 +66,7 @@ class MoreDetailPersonalDataForm(FlaskForm):
                            validators=[BirthNoValidator()])
     date_of_birth = StringField(label=c.BIRTH_DATE,
                                 validators=[DateValidator()],
-                                default='DD.MM.RRRR')
+                                render_kw={"placeholder": 'DD.MM.RRRR'})
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
                                    choices=choices_from_csv(DIR + '/data/staty.csv',
                                                             ['id', 'Štát'],
