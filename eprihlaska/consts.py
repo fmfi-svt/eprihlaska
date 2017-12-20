@@ -1,5 +1,7 @@
 from flask_babel import gettext as _
 
+SUBMIT = _('Odoslať')
+
 NATIONALITY = _('Občianstvo')
 NAME = _('Meno')
 SURNAME = _('Priezvisko')

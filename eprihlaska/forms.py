@@ -47,7 +47,7 @@ class BasicPersonalDataForm(FlaskForm):
                                ('female', c.FEMALE)],
                       validators=[validators.DataRequired()])
     personal_info = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
 
 class ePrihlaskaDateField(DateField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d',
@@ -93,7 +93,7 @@ class FurtherPersonalDataForm(FlaskForm):
     mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 
     further_personal_info = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
 
 
 class StudyProgrammeForm(FlaskForm):
@@ -109,7 +109,7 @@ class StudyProgrammeForm(FlaskForm):
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
     index = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
 
 
 class Address(FlaskForm):
@@ -152,7 +152,7 @@ class AddressForm(FlaskForm):
     correspondence_address = FormField(AddressNonRequired,
                                        label=c.CORRESPONDENCE_ADDRESS)
     address = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
 
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
@@ -193,7 +193,7 @@ class PreviousStudiesForm(FlaskForm):
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
@@ -255,4 +255,4 @@ class AdmissionWaversForm(FlaskForm):
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
     admissions_wavers = HiddenField()
-    submit = SubmitField()
+    submit = SubmitField(label=c.SUBMIT)
