@@ -31,23 +31,6 @@ class BasicPersonalDataForm(FlaskForm):
                                                        prepend=['703', '203']),
                               validators=[validators.DataRequired()],
                               default='703')
-
-    personal_info = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
-
-class ePrihlaskaDateField(DateField):
-    def __init__(self, label=None, validators=None, format='%Y-%m-%d',
-                 **kwargs):
-        super(ePrihlaskaDateField, self).__init__(label, validators, format,
-                                                  **kwargs)
-
-    def process_formdata(self, valuelist):
-        # Use DateField's parent's (DateTimeField) process_formdata to get
-        # datetime.datetime rather than datetime.datetime.date which is
-        # dificult to serialize for Flask.
-        super(DateField, self).process_formdata(valuelist)
-
-class MoreDetailPersonalDataForm(FlaskForm):
     birth_no = StringField(label=c.BIRTH_NO,
                            validators=[BirthNoValidator()])
     date_of_birth = StringField(label=c.BIRTH_DATE,
@@ -72,9 +55,10 @@ class MoreDetailPersonalDataForm(FlaskForm):
                                     validators.Email()])
     phone = StringField(label=c.PHONE_CONTACT)
 
+    personal_info = HiddenField()
+    submit = SubmitField(label=c.SUBMIT)
+
 class FurtherPersonalDataForm(FlaskForm):
-    basic_personal_data = FormField(MoreDetailPersonalDataForm,
-                                    label=c.FURTHER_PERSONAL_DATA)
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
     mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 

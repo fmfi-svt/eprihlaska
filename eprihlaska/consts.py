@@ -162,7 +162,7 @@ GRADES_BIO = _('Známky z biológie')
 MENU = [
     (_('Úvod'), 'index'),
     (_('Osobné údaje'), 'personal_info'),
-    (_('Ďalšie osobné údaje'), 'further_personal_info'),
+    (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
     (_('Prijatie bez prijímacích pohovorov'), 'admissions_wavers'),
