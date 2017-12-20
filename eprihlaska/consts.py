@@ -1,5 +1,7 @@
 from flask_babel import gettext as _
 
+SUBMIT = _('Odoslať')
+
 NATIONALITY = _('Občianstvo')
 NAME = _('Meno')
 SURNAME = _('Priezvisko')
@@ -19,6 +21,8 @@ BIRTH_PLACE_FOREIGN = _('Miesto narodenia (v zahraničí)')
 
 EMAIL = _('Email')
 PHONE_CONTACT = _('Telefónny kontakt')
+
+PERSONAL_DATA = _('Osobné údaje')
 
 FURTHER_PERSONAL_DATA = _('Ďalšie osobné údaje')
 INFO_FATHER = _('Informácie o otcovi')
@@ -57,9 +61,13 @@ PRG_upINAN = _('Učiteľstvo informatiky a anglického jazyka a literatúry')
 
 MATURA_YEAR = _('Rok maturity')
 
-STUDY_PROGRAMME = _('Študijný program')
+STUDY_PROGRAMMES = _('Študijné programy')
+STUDY_PROGRAMME_1 = _('Prvý študijný program')
+STUDY_PROGRAMME_2 = _('Druhý študijný program')
+STUDY_PROGRAMME_3 = _('Tretí študijný program')
 STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na dva študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')
-STUDY_PROGRAMME_CHOICES = [('MAT', PRG_MAT),
+STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
+                            ('MAT', PRG_MAT),
                             ('PMA', PRG_PMA),
                             ('EFM', PRG_EFM),
                             ('MMN', PRG_MNN),
