@@ -34,7 +34,7 @@ def index():
         study_programme = []
         for sp in ['study_programme_1', 'study_programme_2',
                    'study_programme_3']:
-            study_programme.append(session[sp])
+            study_programme.append(session['study_programme_data'][sp])
         session['study_programme'] = study_programme
 
         flash('Vaše dáta boli uložené!')
@@ -120,7 +120,8 @@ def filter_competitions(competition_list, study_programme_list):
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
 @require_filled_form('previous_studies')
 def admissions_wavers():
-    if session['dean_invitation_letter'] and session['dean_invitation_letter_no'] is not None:
+    sp_data = session['study_programme_data']
+    if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
         flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
               'odpustené.')
         return redirect('/final')
