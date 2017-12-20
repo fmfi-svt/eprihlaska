@@ -1,0 +1,79 @@
+$gap: 15px;
+
+body {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 25px;
+  font-weight: 300;
+}
+
+.footer {
+  height: 60px;
+  line-height: 60px;
+  background-color: #535250;
+  color: white;
+}
+
+.main-wrap {
+  background-color: white;
+  padding-top: $gap;
+}
+
+.navbar {
+  font-size: 14px;
+  background: #b3231b;
+  background: linear-gradient(#dc3f36, #b3231b);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+  padding: 4px;
+  margin: 4px;
+}
+
+.navbar-default .navbar-brand {
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: white;
+
+  &[href="#"] {
+    color: #b5a4a4;
+    cursor: no-drop;
+  }
+}
+
+.navbar-default .navbar-nav>.active>a {
+  background-color: #e7e7e7;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #dfdfdf;
+  }
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: $gap * 2;
+}
+
+.btn {
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 14px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, .09);
+  background: #b3231b;
+  border-radius: 4px;
+  border: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover, &:focus {
+    background-color: #9c342f;
+  }
+}
