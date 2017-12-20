@@ -12,18 +12,18 @@
 {% block inlinescript %}
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function(){
-        $('#study_programme').chosen({max_selected_options: 3});
+        $('select').chosen({search_contains: true});
         /* Show or hide dean's invitation letter field */
-        if (!$('#dean_invitation_letter').is(":checked")) {
-          $('#dean_invitation_letter_no').closest('.form-group').hide();
+        if (!$('#study_programme_data-dean_invitation_letter').is(":checked")) {
+          $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').hide();
         }
 
-        $('#dean_invitation_letter').change(function(e) {
+        $('#study_programme_data-dean_invitation_letter').change(function(e) {
           if (this.checked) {
-            $('#dean_invitation_letter_no').closest('.form-group').show();
-            $('#dean_invitation_letter_no').focus();
+            $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').show();
+            $('#study_programme_data-dean_invitation_letter_no').focus();
           } else {
-            $('#dean_invitation_letter_no').closest('.form-group').hide();
+            $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').hide();
           }
         })
       });

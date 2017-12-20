@@ -29,6 +29,14 @@ def index():
     if form.validate_on_submit():
         for k in form.data:
             session[k] = form.data[k]
+
+        # Save study programmes into a list
+        study_programme = []
+        for sp in ['study_programme_1', 'study_programme_2',
+                   'study_programme_3']:
+            study_programme.append(session[sp])
+        session['study_programme'] = study_programme
+
         flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
