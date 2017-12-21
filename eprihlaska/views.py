@@ -29,6 +29,14 @@ def index():
     if form.validate_on_submit():
         for k in form.data:
             session[k] = form.data[k]
+
+        # Save study programmes into a list
+        study_programme = []
+        for sp in ['study_programme_1', 'study_programme_2',
+                   'study_programme_3']:
+            study_programme.append(session['study_programme_data'][sp])
+        session['study_programme'] = study_programme
+
         flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
@@ -112,7 +120,8 @@ def filter_competitions(competition_list, study_programme_list):
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
 @require_filled_form('previous_studies')
 def admissions_wavers():
-    if session['dean_invitation_letter'] and session['dean_invitation_letter_no'] is not None:
+    sp_data = session['study_programme_data']
+    if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
         flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
               'odpustené.')
         return redirect('/final')
@@ -166,9 +175,10 @@ def admissions_wavers():
     }
 
     study_programme_set = set(session['study_programme'])
+    matura_year = session['study_programme_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           session['matura_year'] not in [2015, 2016, 2017, 2018]:
+            matura_year not in [2015, 2016, 2017, 2018]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -177,7 +187,7 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     for k, v in relevant_years.items():
-        if not session['matura_year'] in v:
+        if not matura_year in v:
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
 
