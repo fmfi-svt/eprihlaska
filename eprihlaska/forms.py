@@ -227,12 +227,21 @@ class FurtherStudyInfoForm(FlaskForm):
     will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
 
 class FurtherGradesInfoForm(FlaskForm):
+    g_min = 1
+    g_max = 5
+    msg = 'Zle zadaná známka'
     grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=msg)])
     grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
-                                     validators=[validators.Optional()])
+                                     validators=[validators.NumberRange(min=g_min,
+                                                                        max=g_max,
+                                                                        message=msg)])
     grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=msg)])
 
 class AdmissionWaversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
