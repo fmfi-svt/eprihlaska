@@ -229,19 +229,18 @@ class FurtherStudyInfoForm(FlaskForm):
 class FurtherGradesInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
-    msg = 'Zle zadaná známka'
     grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
                                     validators=[validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=msg)])
+                                                                       message=c.GRADE_ERR)])
     grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
                                      validators=[validators.NumberRange(min=g_min,
                                                                         max=g_max,
-                                                                        message=msg)])
+                                                                        message=c.GRADE_ERR)])
     grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
                                     validators=[validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=msg)])
+                                                                       message=c.GRADE_ERR)])
 
 class AdmissionWaversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,

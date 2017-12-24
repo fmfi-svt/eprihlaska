@@ -159,6 +159,8 @@ GRADES_MAT = _('Známky z matematiky')
 GRADES_FYZ = _('Známky z fyziky')
 GRADES_BIO = _('Známky z biológie')
 
+GRADE_ERR = _('Zle zadaná známka')
+
 MENU = [
     (_('Úvod'), 'index'),
     (_('Osobné údaje'), 'personal_info'),
