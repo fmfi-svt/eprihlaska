@@ -203,19 +203,31 @@ class CompetitionSuccessFormItem(FlaskForm):
 
 
 class FurtherStudyInfoForm(FlaskForm):
+    g_min = 1
+    g_max = 5
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
     will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
