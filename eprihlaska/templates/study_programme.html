@@ -3,6 +3,19 @@
 {% set section_title = 'Študijný program' %}
 
 {% block form %}
+
+<p>
+Vitajte v systéme elektronickej prihlášky Fakulty matematiky, fyziky a
+informatiky Univerzity Komenského v Bratislave. Pomocou tohto systému sa môžete
+prihlásať na bakalárske štúdium. Informácie o študijných programoch nájdete na
+stránke <a href="https://fmph.uniba.sk/studium/programy/">https://fmph.uniba.sk/studium/programy/</a>
+</p>
+
+<p>
+Osobné údaje na tejto stránke sú spracúvané za účelom prijímacieho konania na fakultu na základe
+zákona č. 131/2002 o vysokých školách v znení neskorších predpisov.
+</p>
+
   {{ wtf.quick_form(form,
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
