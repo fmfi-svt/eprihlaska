@@ -10,12 +10,18 @@
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
     <style>
     </style>
 {%- endblock styles %}
 
-
+{% block title %}
+ {% if section_title %}
+  ePrihlaska &middot; {{ section_title }}
+ {% else %}
+  ePrihlaska
+ {% endif %}
+{% endblock title %}
 
 {% block navbar %}
 {{nav.top.render(renderer='eprihlaska_nav_renderer')}}
@@ -24,7 +30,7 @@
 {% block content %}
 <div class="main-wrap">
   <div class="container">
-    <h1 class="section-title">{% block title %}{% block section_title %}{% endblock %}{% endblock title %}</h1>
+    <h1 class="section-title">{{ section_title }}</h1>
 
     {{util.flashed_messages(dismissible=True)}}
 

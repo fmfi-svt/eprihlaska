@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block section_title %}Predchádzajúce vzdelanie{% endblock %}
+{% set section_title = 'Predchádzajúce vzdelanie' %}
 
 {% block form %}
   {{ wtf.quick_form(form,
