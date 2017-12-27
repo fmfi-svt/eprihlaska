@@ -4,6 +4,7 @@
   background: #861d24;
   background: linear-gradient(#8e2128, #861d24);
   border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
   margin-bottom: 0;
   padding: 4px;
   border-radius: 0;
@@ -13,13 +14,18 @@
   font-size: 14px;
   color: white;
   height: auto;
-  padding: 10px 15px; }
+  font-weight: 500;
+  padding: 10px 15px;
+  transition: color 0.3s ease; }
+  .navbar-default .navbar-brand:hover {
+    color: #de4e58; }
 
 .navbar-default .navbar-nav > li > a {
   color: white;
   padding: 10px 10px 10px 26px;
   border: 1px solid transparent;
-  transition: color 0.3s ease; }
+  transition: color 0.3s ease;
+  transition: background-color 0.3s ease; }
   .navbar-default .navbar-nav > li > a:before {
     position: absolute;
     top: 12px;
@@ -40,16 +46,19 @@
     transition: color 0.3s ease;
     transition: border-color 0.3s ease; }
   .navbar-default .navbar-nav > li > a:hover {
-    color: #f1e2e3; }
+    color: #f1e2e3;
+    background-color: rgba(255, 255, 255, 0.1); }
     .navbar-default .navbar-nav > li > a:hover:before {
       color: #f1e2e3;
       border-color: #f1e2e3; }
   .navbar-default .navbar-nav > li > a[href="#"] {
-    color: #de4e58;
+    color: #c0c0c0;
     cursor: default; }
     .navbar-default .navbar-nav > li > a[href="#"]:before {
-      border-color: #de4e58;
-      color: #de4e58; }
+      border-color: #c0c0c0;
+      color: #c0c0c0; }
+    .navbar-default .navbar-nav > li > a[href="#"]:hover {
+      background-color: transparent; }
 
 .navbar-default .navbar-nav > .active > a {
   background-color: transparent;
@@ -64,6 +73,13 @@
       color: white;
       border-color: white; }
 
+.navbar-default .navbar-toggle {
+  transition: background-color 0.3s ease; }
+  .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:active {
+    background-color: #de4e58; }
+  .navbar-default .navbar-toggle .icon-bar {
+    background-color: white; }
+
 .control-label {
   font-weight: 100;
   padding-bottom: 5px; }
@@ -73,7 +89,7 @@
   height: 36px;
   line-height: 32px;
   padding: 0 14px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.09);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
   background-color: transparent;
   border: 3px solid #de4e58;
   border-radius: 2px;
@@ -248,7 +264,8 @@ body {
 
 .main-wrap {
   background-color: white;
-  padding-top: 15px; }
+  padding-top: 15px;
+  padding-bottom: 15px; }
 
 .help-block {
   font-size: 13px; }
@@ -257,7 +274,8 @@ body {
   height: 60px;
   line-height: 60px;
   background-color: #4e2d2f;
-  color: white; }
+  color: white;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2); }
 
 .study-programme {
   border-bottom: 2px solid #de4e58;

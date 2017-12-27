@@ -4,6 +4,7 @@
   background: $red2;
   background: linear-gradient($red, $red2);
   border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   margin-bottom: 0;
   padding: 4px;
   border-radius: 0;
@@ -14,7 +15,13 @@
   font-size: 14px;
   color: white;
   height: auto;
+  font-weight: 500;
   padding: 10px 15px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $red3;
+  }
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -22,6 +29,7 @@
   padding: 10px 10px 10px 26px;
   border: 1px solid transparent;
   transition: color 0.3s ease;
+  transition: background-color 0.3s ease;
 
   &:before {
     position: absolute;
@@ -46,6 +54,7 @@
 
   &:hover {
     color: $gray2;
+    background-color: rgba(255, 255, 255, .1);
 
     &:before {
       color: $gray2;
@@ -54,12 +63,16 @@
   }
 
   &[href="#"] {
-    color: $red3;
+    color: #c0c0c0;
     cursor: default;
 
     &:before {
-      border-color: $red3;
-      color: $red3;
+      border-color: #c0c0c0;
+      color: #c0c0c0;
+    }
+
+    &:hover {
+      background-color: transparent;
     }
   }
 }
@@ -79,5 +92,19 @@
       color: white;
       border-color: white;
     }
+  }
+}
+
+// Navbar - mobile
+
+.navbar-default .navbar-toggle {
+  transition: background-color 0.3s ease;
+
+  &:hover, &:focus, &:active {
+    background-color: $red3;
+  }
+
+  .icon-bar {
+    background-color: white;
   }
 }
