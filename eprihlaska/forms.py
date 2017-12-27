@@ -56,14 +56,14 @@ class BasicPersonalDataForm(FlaskForm):
     phone = StringField(label=c.PHONE_CONTACT)
 
     personal_info = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class FurtherPersonalDataForm(FlaskForm):
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
     mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 
     further_personal_info = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 
 class FirstPersonalDataForm(FlaskForm):
@@ -106,7 +106,7 @@ class StudyProgrammeForm(FlaskForm):
                                      label=c.STUDY_PROGRAMMES)
 
     index = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 
 class Address(FlaskForm):
@@ -149,7 +149,7 @@ class AddressForm(FlaskForm):
     correspondence_address = FormField(AddressNonRequired,
                                        label=c.CORRESPONDENCE_ADDRESS)
     address = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
@@ -190,7 +190,7 @@ class PreviousStudiesForm(FlaskForm):
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
@@ -252,4 +252,4 @@ class AdmissionWaversForm(FlaskForm):
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
     admissions_wavers = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
