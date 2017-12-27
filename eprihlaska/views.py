@@ -23,8 +23,12 @@ def require_filled_form(form_key):
         return wrapper
     return decorator
 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/')
 def index():
+    return render_template('intro.html', session=session)
+
+@app.route('/study_programme', methods=('GET', 'POST'))
+def study_programme():
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         for k in form.data:
