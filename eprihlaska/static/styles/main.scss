@@ -1,0 +1,37 @@
+@import 'variables';
+@import 'navbar';
+@import 'form';
+@import 'chosen';
+
+body {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  background-color: $gray2;
+}
+
+.main-wrap {
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.help-block {
+  font-size: 13px;
+}
+
+.footer {
+  height: 60px;
+  line-height: 60px;
+  background-color: #4e2d2f;
+  color: white;
+  box-shadow: $box-shadow;
+}
+
+.study-programme {
+  border-bottom: 2px solid $red3;
+  font-weight: 700;
+  margin-left: 2px;
+  padding: 2px 4px;
+}

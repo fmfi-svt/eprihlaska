@@ -56,14 +56,14 @@ class BasicPersonalDataForm(FlaskForm):
     phone = StringField(label=c.PHONE_CONTACT)
 
     personal_info = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class FurtherPersonalDataForm(FlaskForm):
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
     mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
 
     further_personal_info = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 
 class FirstPersonalDataForm(FlaskForm):
@@ -106,7 +106,7 @@ class StudyProgrammeForm(FlaskForm):
                                      label=c.STUDY_PROGRAMMES)
 
     index = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 
 class Address(FlaskForm):
@@ -149,7 +149,7 @@ class AddressForm(FlaskForm):
     correspondence_address = FormField(AddressNonRequired,
                                        label=c.CORRESPONDENCE_ADDRESS)
     address = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
@@ -190,7 +190,7 @@ class PreviousStudiesForm(FlaskForm):
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
@@ -203,19 +203,31 @@ class CompetitionSuccessFormItem(FlaskForm):
 
 
 class FurtherStudyInfoForm(FlaskForm):
+    g_min = 1
+    g_max = 5
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
     will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
@@ -227,12 +239,20 @@ class FurtherStudyInfoForm(FlaskForm):
     will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
 
 class FurtherGradesInfoForm(FlaskForm):
+    g_min = 1
+    g_max = 5
     grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
     grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
-                                     validators=[validators.Optional()])
+                                     validators=[validators.NumberRange(min=g_min,
+                                                                        max=g_max,
+                                                                        message=c.GRADE_ERR)])
     grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
-                                    validators=[validators.Optional()])
+                                    validators=[validators.NumberRange(min=g_min,
+                                                                       max=g_max,
+                                                                       message=c.GRADE_ERR)])
 
 class AdmissionWaversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
@@ -252,4 +272,4 @@ class AdmissionWaversForm(FlaskForm):
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
     admissions_wavers = HiddenField()
-    submit = SubmitField(label=c.SUBMIT)
+    submit = SubmitField(label=c.NEXT)

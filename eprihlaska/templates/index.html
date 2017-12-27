@@ -5,33 +5,38 @@
 {% import "bootstrap/utils.html" as util %}
 
 {%- block styles %}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700&amp;subset=latin-ext" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
     <style>
-   .footer {
-     height: 60px;
-     line-height: 60px;
-     background-color: #f5f5f5;
-   }
     </style>
 {%- endblock styles %}
 
-
+{% block title %}
+ {% if section_title %}
+  ePrihlaska &middot; {{ section_title }}
+ {% else %}
+  ePrihlaska
+ {% endif %}
+{% endblock title %}
 
 {% block navbar %}
 {{nav.top.render(renderer='eprihlaska_nav_renderer')}}
 {% endblock %}
 
 {% block content %}
-<div class="container">
-<h1>{% block title %}ePrihlaska{% block append_title %}{% endblock %}{% endblock title %}</h1>
+<div class="main-wrap">
+  <div class="container">
+    <h1 class="section-title">{{ section_title }}</h1>
 
-{{util.flashed_messages(dismissible=True)}}
+    {{util.flashed_messages(dismissible=True)}}
 
-{% block form %}
-{% endblock %}
+    {% block form %}
+    {% endblock %}
+  </div>
 </div>
 {% endblock %}
 
@@ -45,7 +50,10 @@
     <footer class="footer">
       <div class="container">
         {% if session['study_programme'] %}
-        <span class="text-muted">Prihlasujete sa na študijné programy {{session['study_programme']|join(', ')}}</span>
+        <span>Prihlasujete sa na študijné programy:
+          {% for item in session['study_programme'] %}
+            <span class="study-programme">{{item}}</span>
+          {% endfor %}</span>
         {% endif %}
       </div>
     </footer>

@@ -1,6 +1,7 @@
 from flask_babel import gettext as _
 
 SUBMIT = _('Odoslať')
+NEXT = _('Ďalej')
 
 NATIONALITY = _('Občianstvo')
 NAME = _('Meno')
@@ -158,6 +159,8 @@ GRADE_THIRD_YEAR = _('koncoročná známka v 3. ročníku / septíme')
 GRADES_MAT = _('Známky z matematiky')
 GRADES_FYZ = _('Známky z fyziky')
 GRADES_BIO = _('Známky z biológie')
+
+GRADE_ERR = _('Zle zadaná známka. Akceptované známky sú 1 až 5.')
 
 MENU = [
     (_('Úvod'), 'index'),
