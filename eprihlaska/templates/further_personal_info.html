@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block append_title %} - Informácie o rodičoch {% endblock %}
+{% set section_title = 'Informácie o rodičoch' %}
 
 {% block form %}
   {{ wtf.quick_form(form,

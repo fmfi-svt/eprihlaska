@@ -10,4 +10,8 @@ You can then start the local version of this app by running
 
 - `python3 run.py`
 
+If you are changing styles, recompile them by running
+- `sass --watch main.scss:main.css`
+inside /eprihlaska/static/styles folder
+
 Note that this application requires Python 3.

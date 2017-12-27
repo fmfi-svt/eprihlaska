@@ -1,7 +1,6 @@
-
 {% extends "index.html" %}
 
-{% block append_title %} - Študijný program{% endblock %}
+{% set section_title = 'Študijný program' %}
 
 {% block form %}
   {{ wtf.quick_form(form,
