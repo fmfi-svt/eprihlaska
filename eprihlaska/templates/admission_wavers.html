@@ -3,6 +3,15 @@
 {% set section_title = 'Prijatie bez prijímacích pohovorov' %}
 
 {% block form %}
+<p>
+
+Na tejto stránke uvádzate vybrané výsledky dosiahnuté počas strednej školy,
+ktoré majú vplyv na možné prijatie bez prijímacích pohovorov. Úplné podmienky
+prijatia bez prijímacích pohovorov nájdete na stránke
+<a href="https://fmph.uniba.sk/prihlasky/">https://fmph.uniba.sk/prihlasky/</a>
+
+</p>
+
   {{ wtf.quick_form(form,
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}

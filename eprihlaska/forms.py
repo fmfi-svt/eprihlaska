@@ -161,9 +161,11 @@ class StudiesInSRForm(FlaskForm):
                                                 sortby=1,
                                                 prepend=['XXXXXXX'],
                                                 post_fmt=city_formatter),
+                             description=c.HIGHSCHOOL_DESC,
                              default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
                              default='7902J00',
+                             description=c.STUDY_PROGRAMME_CODE_DESC,
                              choices=choices_from_csv(DIR + '/data/odbory.csv',
                                                 ['Odbor - kod',
                                                  'Odbor stred. školy'],

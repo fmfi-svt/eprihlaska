@@ -103,7 +103,9 @@ IN_SR = _('v Slovenskej Republike')
 OUTSIDE_OF_SR = _('mimo Slovenskej Republiky')
 
 HIGHSCHOOL = _('Navštevovaná stredná škola')
+HIGHSCHOOL_DESC = _('V prípade, že vaša stredná škola nie je v zozname, zvoľte možnosť "Moja stredná škola nie je v zozname" (na začiatku zoznamu)')
 STUDY_PROGRAMME_CODE = _('Kód študijného programu')
+STUDY_PROGRAMME_CODE_DESC = _('Kód študijného programu je uvedený na vašom vysvedčení. V prípade, že na vysvedčení nemáte uvedený jeden z týchto študijných kódov, zvoľte "nemám kód študiného odboru" (na začiatku zoznamu)')
 HS_EDUCATION_LEVEL = _('Dosiahnuté / očakávané stredoškolské vzdelanie')
 FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval som / absolvujem strednú školu s maturitou mimo SR')
 
