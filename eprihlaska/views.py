@@ -122,15 +122,13 @@ def filter_competitions(competition_list, study_programme_list):
 def admissions_wavers():
     sp_data = session['study_programme_data']
     if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
+        # Pretend the admission_wavers form has been filled in
+        session['admissions_wavers'] = ''
         flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
               'odpustené.')
         return redirect('/final')
 
     form = AdmissionWaversForm(obj=munchify(dict(session)))
-    if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
-        return redirect('/final')
 
     # Filter out competitions based on selected study programmes.
     for subform in form:
@@ -190,6 +188,11 @@ def admissions_wavers():
         if not matura_year in v:
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
+
+    if form.validate_on_submit():
+        for k in form.data:
+            session[k] = form.data[k]
+        return redirect('/final')
 
     return render_template('admission_wavers.html', form=form, session=session)
 
