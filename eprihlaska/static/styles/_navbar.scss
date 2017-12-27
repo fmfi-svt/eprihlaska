@@ -1,0 +1,83 @@
+.navbar {
+  min-height: 30px;
+  font-size: 13px;
+  background: $red2;
+  background: linear-gradient($red, $red2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+  padding: 4px;
+  border-radius: 0;
+  counter-reset: menuItemNumber;
+}
+
+.navbar-default .navbar-brand {
+  font-size: 14px;
+  color: white;
+  height: auto;
+  padding: 10px 15px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: white;
+  padding: 10px 10px 10px 26px;
+  border: 1px solid transparent;
+  transition: color 0.3s ease;
+
+  &:before {
+    position: absolute;
+    top: 12px;
+    left: 6px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    font-size: 11px;
+    line-height: 14px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    border: 1px solid white;
+    border-radius: 50%;
+    color: white;
+    content: counter(menuItemNumber);
+    counter-increment: menuItemNumber;
+    transition: color 0.3s ease;
+    transition: border-color 0.3s ease;
+  }
+
+  &:hover {
+    color: $gray2;
+
+    &:before {
+      color: $gray2;
+      border-color: $gray2;
+    }
+  }
+
+  &[href="#"] {
+    color: $red3;
+    cursor: default;
+
+    &:before {
+      border-color: $red3;
+      color: $red3;
+    }
+  }
+}
+
+.navbar-default .navbar-nav > .active > a {
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  border: 1px solid $red3;
+  border-radius: 2px;
+  color: white;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, .1);
+    color: white;
+
+    &:before {
+      color: white;
+      border-color: white;
+    }
+  }
+}

@@ -24,7 +24,7 @@
 {% block content %}
 <div class="main-wrap">
   <div class="container">
-    <h1 class="section-title">{% block title %}ePrihlaska{% block append_title %}{% endblock %}{% endblock title %}</h1>
+    <h1 class="section-title">{% block title %}{% block section_title %}{% endblock %}{% endblock title %}</h1>
 
     {{util.flashed_messages(dismissible=True)}}
 
@@ -44,7 +44,10 @@
     <footer class="footer">
       <div class="container">
         {% if session['study_programme'] %}
-        <span>Prihlasujete sa na študijné programy {{session['study_programme']|join(', ')}}</span>
+        <span>Prihlasujete sa na študijné programy:
+          {% for item in session['study_programme'] %}
+            <span class="study-programme">{{item}}</span>
+          {% endfor %}</span>
         {% endif %}
       </div>
     </footer>
