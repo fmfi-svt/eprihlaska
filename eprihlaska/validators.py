@@ -25,6 +25,7 @@ class BirthNoValidator(object):
         bno_reg = re.compile(r'^([0-9][0-9][0156][0-9][0-3][0-9])/(\d\d\d\d)$')
         mo = bno_reg.search(field.data)
 
+        # If someone doesn't have a birth number, empty field is also accepted.
         if field.data is not '':
             try:
                 mo.group(0)
