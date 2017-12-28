@@ -26,7 +26,7 @@ class BirthNoValidator(object):
         mo = bno_reg.search(field.data)
 
         # If someone doesn't have a birth number, empty field is also accepted.
-        if field.data is not '':
+        if field.data:
             try:
                 mo.group(0)
             except AttributeError:
