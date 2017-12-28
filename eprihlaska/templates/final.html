@@ -4,6 +4,8 @@
 
 {% block form %}
 
+{% if not (session['study_programme_data']['dean_invitation_letter'] and session['study_programme_data']['dean_invitation_letter_no']) %}
+
 <h3>Poplatok</h3>
 
 Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
@@ -19,6 +21,8 @@ variabilný symbol: <strong>800</strong> <br>
 Potvrdenie o zaplatení si odložte pre
 prípad, že by sa vyskytol problém pri spárovaní vašej platby
 s prihláškou.
+
+{% endif %}
 
 <h3>Overená kópia maturitného vysvedčenia</h3>
 {% if session['study_programme_data']['matura_year'] == 2018 %}
@@ -54,17 +58,20 @@ Mlynská dolina, <br>
 <h3>Výpis vybraných známok</h3>
 
 <p>
-
 Najneskôr do 14 dní nám pošlite poštou potvrdený formulár s výpisom známok
 alebo overené kópie príslušných koncoročných vysvedčení na adresu:<br />
+</p>
 
+<p>
 <em>
 Fakulta matematiky, fyziky a informatiky UK, <br />
 Mlynská dolina, <br>
 842 48 Bratislava
 </em>
+</p>
 
-  <a target="_blank" href="{{ url_for('grades_control') }}">Výpis vybraných známok</a>
+<p>
+Samotný formulár môžete nájsť na nasledujúcom linku: <strong><a target="_blank" href="{{ url_for('grades_control') }}">Výpis vybraných známok</a></strong>
 </p>
 
 {% endif %}
