@@ -25,14 +25,15 @@ class BirthNoValidator(object):
         bno_reg = re.compile(r'^([0-9][0-9][0156][0-9][0-3][0-9])/(\d\d\d\d)$')
         mo = bno_reg.search(field.data)
 
-        try:
-            mo.group(0)
-        except AttributeError:
-            raise validators.ValidationError(self.message + ' ' + self.form_err)
+        if field.data is not '':
+            try:
+                mo.group(0)
+            except AttributeError:
+                raise validators.ValidationError(self.message + ' ' + self.form_err)
 
-        birth_no = int(mo.group(1) + mo.group(2))
-        if birth_no % 11 != 0:
-            raise validators.ValidationError(self.message + ' ' + self.mod_err)
+            birth_no = int(mo.group(1) + mo.group(2))
+            if birth_no % 11 != 0:
+                raise validators.ValidationError(self.message + ' ' + self.mod_err)
 
 
 class DateValidator:
