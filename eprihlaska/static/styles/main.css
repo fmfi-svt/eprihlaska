@@ -52,11 +52,11 @@
       color: #f1e2e3;
       border-color: #f1e2e3; }
   .navbar-default .navbar-nav > li > a[href="#"] {
-    color: #c0c0c0;
+    color: #de4e58;
     cursor: default; }
     .navbar-default .navbar-nav > li > a[href="#"]:before {
-      border-color: #c0c0c0;
-      color: #c0c0c0; }
+      border-color: #de4e58;
+      color: #de4e58; }
     .navbar-default .navbar-nav > li > a[href="#"]:hover {
       background-color: transparent; }
 

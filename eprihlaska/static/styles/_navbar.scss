@@ -63,12 +63,12 @@
   }
 
   &[href="#"] {
-    color: #c0c0c0;
+    color: $red3;
     cursor: default;
 
     &:before {
-      border-color: #c0c0c0;
-      color: #c0c0c0;
+      border-color: $red3;
+      color: $red3;
     }
 
     &:hover {
