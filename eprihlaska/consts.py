@@ -166,7 +166,7 @@ GRADE_ERR = _('Zle zadaná známka. Akceptované známky sú 1 až 5.')
 
 MENU = [
     (_('ePrihlaska'), 'index'),
-    (_('Úvod'), 'study_programme'),
+    (_('Študijné programy'), 'study_programme'),
     (_('Osobné údaje'), 'personal_info'),
     (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
