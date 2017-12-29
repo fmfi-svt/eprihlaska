@@ -3,6 +3,8 @@
 {% set section_title = 'Úvodná stránka' %}
 
 {% block form %}
+
+<hr>
 <p>
 Toto je testovacia verzia elektronickej prihlášky, ktorá nie je v prevádzke.
 </p>
@@ -11,4 +13,10 @@ Toto je testovacia verzia elektronickej prihlášky, ktorá nie je v prevádzke.
 Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
 <a href="https://e-prihlaska.uniba.sk/">https://e-prihlaska.uniba.sk/</a>
 </p>
+
+<hr>
+<p>
+  Pre vyplnenie prihlášky sa prosím najprv <a href="{{ url_for('signup') }}">zaregistrujte</a>.
+</p>
+
 {% endblock %}

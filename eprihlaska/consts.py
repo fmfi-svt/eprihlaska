@@ -174,3 +174,10 @@ MENU = [
     (_('Prijatie bez prijímacích pohovorov'), 'admissions_wavers'),
     (_('Záverečné pokyny'), 'final')
 ]
+
+USERNAME = _('Používateľské meno')
+PASSWORD = _('Heslo')
+LOGIN = _('Prihlásiť')
+SIGNUP = _('Zaregistrovať')
+LOGOUT = _('Odhlásiť')
+WELCOME = _('Vitajte {}')

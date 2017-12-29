@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
-                     DateField, FieldList, IntegerField, HiddenField)
+                     DateField, FieldList, IntegerField, HiddenField,
+                     PasswordField)
 
 from .validators import BirthNoValidator, DateValidator
 from .utils import choices_from_csv, city_formatter
@@ -275,3 +276,18 @@ class AdmissionWaversForm(FlaskForm):
                               label=c.COMPETITION_THIRD)
     admissions_wavers = HiddenField()
     submit = SubmitField(label=c.NEXT)
+
+class LoginForm(FlaskForm):
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.Email()])
+    password = PasswordField(label=c.PASSWORD,
+                             validators=[validators.Length(min=8, max=80)])
+    submit = SubmitField(label=c.LOGIN)
+
+
+class SignupForm(FlaskForm):
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.Email()])
+    password = PasswordField(label=c.PASSWORD,
+                             validators=[validators.Length(min=8, max=80)])
+    submit = SubmitField(label=c.SIGNUP)

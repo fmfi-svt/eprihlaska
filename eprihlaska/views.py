@@ -1,14 +1,21 @@
 from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response)
-from eprihlaska import app
+import flask.json
+from eprihlaska import app, db
 from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaversForm)
+                              PreviousStudiesForm, AdmissionWaversForm,
+                              LoginForm, SignupForm)
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
+
 from munch import munchify
 from functools import wraps
 
+from .models import User, ApplicationForm
 from .consts import MENU, STUDY_PROGRAMME_CHOICES
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
+
 
 def require_filled_form(form_key):
     def decorator(func):
@@ -23,16 +30,43 @@ def require_filled_form(form_key):
         return wrapper
     return decorator
 
+def save_form(form):
+    ignored_keys = ['csrf_token', 'submit']
+    for k in form.data:
+        if k not in ignored_keys:
+            session[k] = form.data[k]
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    app.application = flask.json.dumps(dict(session))
+    db.session.commit()
+
+@app.before_request
+def load_session():
+    global session
+    # Only load the session form the DB if the current_user has an id (has been
+    # logged in)
+    if hasattr(current_user, 'id'):
+        app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+
+        # If the session in the DB is not set (is None), do not try  to load it
+        if app.application is None:
+            return
+
+        d = flask.json.loads(app.application)
+        for k in d:
+            session[k] = d[k]
+        session.modified = True
+
 @app.route('/')
 def index():
     return render_template('intro.html', session=session)
 
 @app.route('/study_programme', methods=('GET', 'POST'))
+@login_required
 def study_programme():
+
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
 
         # Save study programmes into a list
         study_programme = []
@@ -47,17 +81,19 @@ def study_programme():
 
 
 @app.route('/personal_info', methods=('GET', 'POST'))
+@login_required
 @require_filled_form('index')
 def personal_info():
     form = BasicPersonalDataForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
+
         flash('Vaše dáta boli uložené!')
         return redirect('/further_personal_info')
     return render_template('personal_info.html', form=form, session=session)
 
 @app.route('/further_personal_info', methods=('GET', 'POST'))
+@login_required
 @require_filled_form('personal_info')
 def further_personal_info():
     form = FurtherPersonalDataForm(obj=munchify(dict(session)))
@@ -68,31 +104,33 @@ def further_personal_info():
         form['basic_personal_data'].__delitem__('birth_no')
 
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
+
         flash('Vaše dáta boli uložené!')
         return redirect('/address')
     return render_template('further_personal_info.html', form=form,
                            session=session)
 
 @app.route('/address', methods=('GET', 'POST'))
+@login_required
 @require_filled_form('further_personal_info')
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
+
         flash('Vaše dáta boli uložené!')
         return redirect('/previous_studies')
     return render_template('address.html', form=form, session=session)
 
 @app.route('/previous_studies', methods=('GET', 'POST'))
+@login_required
 @require_filled_form('address')
 def previous_studies():
     form = PreviousStudiesForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
+
         flash('Vaše dáta boli uložené!')
         return redirect('/admissions_wavers')
     return render_template('previous_studies.html', form=form, session=session)
@@ -122,8 +160,10 @@ def filter_competitions(competition_list, study_programme_list):
     return result_list
 
 @app.route('/admissions_wavers', methods=('GET', 'POST'))
+@login_required
 @require_filled_form('previous_studies')
 def admissions_wavers():
+
     sp_data = session['study_programme_data']
     if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
         # Pretend the admission_wavers form has been filled in
@@ -194,18 +234,21 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
-        for k in form.data:
-            session[k] = form.data[k]
+        save_form(form)
+
         return redirect('/final')
 
     return render_template('admission_wavers.html', form=form, session=session)
 
 @app.route('/final', methods=['GET'])
+@login_required
 @require_filled_form('admissions_wavers')
 def final():
+
     return render_template('final.html', session=session)
 
 @app.route('/grades_control', methods=['GET'])
+@login_required
 def grades_control():
     rendered = render_template('grade_listing.html', session=session)
     # pdf = pdfkit.from_string(rendered, False)
@@ -216,3 +259,43 @@ def grades_control():
 
     return rendered
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user, remember=True)
+                flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
+                return redirect(url_for('study_programme'))
+        flash('Nesprávne prihlasovacie údaje', 'error')
+
+    return render_template('login.html', form=form, session=session)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        hashed_pass = generate_password_hash(form.password.data,
+                                             method='sha256')
+
+        new_user = User(email=form.email.data,
+                        password=hashed_pass)
+        db.session.add(new_user)
+        db.session.commit()
+
+        new_application_form = ApplicationForm(user_id=new_user.id)
+        db.session.add(new_application_form)
+        db.session.commit()
+
+        flash('Nový používateľ bol zaregistrovaný. Prosím, prihláste sa.')
+        return redirect('/login')
+
+    return render_template('signup.html', form=form, session=session)
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
