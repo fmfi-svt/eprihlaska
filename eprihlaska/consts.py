@@ -181,3 +181,5 @@ LOGIN = _('Prihlásiť')
 SIGNUP = _('Zaregistrovať')
 LOGOUT = _('Odhlásiť')
 WELCOME = _('Vitajte {}')
+
+YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')
