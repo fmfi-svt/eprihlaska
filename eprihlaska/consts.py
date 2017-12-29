@@ -95,7 +95,7 @@ ADDRESS_POSTAL_NO = _('PSČ')
 
 PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
 HAS_CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska')
-CORRESPONDENCE_ADDRESS = _('Korešpondenčnná adresa')
+CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa')
 
 HAS_PREVIOUSLY_STUDIED = _('V minulosti som študoval na vysokej škole v SR v I. stupni štúdia alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)')
 FINISHED_HIGHSCHOOL = _('Absolvovaná stredná škola')
