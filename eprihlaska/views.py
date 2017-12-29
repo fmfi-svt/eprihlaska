@@ -285,6 +285,10 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
+        # pre-populate the email field in the form using the email provided at
+        # signup time
+        session['email'] = form.email.data
+
         new_application_form = ApplicationForm(user_id=new_user.id)
         db.session.add(new_application_form)
         db.session.commit()
