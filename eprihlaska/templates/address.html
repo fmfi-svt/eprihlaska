@@ -49,6 +49,9 @@
             $(correspondence_address_fieldset).hide();
           }
         });
+
+        $('#correspondence_address-country').trigger('change');
+        $('#address_form-country').trigger('change');
       });
     </script>
 {% endblock %}
