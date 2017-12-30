@@ -37,6 +37,18 @@
           }
         });
 
+        $('#address_form-city').on('change', function(e) {
+          var psc = $('#address_form-city option:selected').text().replace(/.*?\(([^)]+)\).*?/, '$1');
+          $('#address_form-postal_no').val(psc);
+          setTimeout(function(){$('#address_form-postal_no').focus();}, 150);
+        });
+
+        $('#correspondence_address-city').on('change', function(e) {
+          var psc = $('#correspondence_address-city option:selected').text().replace(/.*?\(([^)]+)\).*?/, '$1');
+          $('#correspondence_address-postal_no').val(psc);
+          setTimeout(function(){$('#correspondence_address-postal_no').focus();}, 150);
+        });
+
 
         if (!$('#has_correspondence_address').is(":checked")) {
           $(correspondence_address_fieldset).hide();
