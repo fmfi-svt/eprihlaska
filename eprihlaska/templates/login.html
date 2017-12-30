@@ -3,6 +3,9 @@
 {% set section_title = 'Prihlásenie' %}
 
 {% block form %}
+
+<a href="{{ url_for('google_login') }}">Prihlásiť sa pomocou Google účtu</a><br /><br />
+
   {{ wtf.quick_form(form,
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}

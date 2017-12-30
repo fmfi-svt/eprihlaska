@@ -6,6 +6,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin
+from authlib.flask.client import OAuth
+from authlib.client.apps import google, facebook
 
 from .consts import MENU
 from .renderer import (ePrihlaskaNavRenderer, ExtendedNavbar, UserGreeting,
@@ -41,10 +43,14 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-from .models import User
+from .models import User, fetch_token
 @login_manager.user_loader
 def loader(user_id):
     return User.query.get(int(user_id))
 
+oauth = OAuth(fetch_token=fetch_token)
+oauth.init_app(app)
+google.register_to(oauth)
+facebook.register_to(oauth)
 
 from eprihlaska import views
