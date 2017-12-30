@@ -320,9 +320,9 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         # pre-populate the email field in the form using the email obtained
         # from `site`
         session['email'] = email
-        session['first_personal_data'] = {}
-        session['first_personal_data']['name'] = name
-        session['first_personal_data']['surname'] = surname
+        session['basic_personal_data'] = {}
+        session['basic_personal_data']['name'] = name
+        session['basic_personal_data']['surname'] = surname
 
         new_application_form = ApplicationForm(user_id=user.id)
         db.session.add(new_application_form)
