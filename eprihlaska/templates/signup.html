@@ -5,6 +5,7 @@
 {% block form %}
 
 <a href="{{ url_for('google_login') }}">Prihlásiť sa pomocou Google účtu</a><br /><br />
+<a href="{{ url_for('facebook_login') }}">Prihlásiť sa pomocou Facebook účtu</a><br /><br />
 
   {{ wtf.quick_form(form,
                     form_type='horizontal',

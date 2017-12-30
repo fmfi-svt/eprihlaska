@@ -8,7 +8,7 @@ from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               LoginForm, SignupForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-from authlib.client.apps import google
+from authlib.client.apps import google, facebook
 
 from munch import munchify
 from functools import wraps
@@ -310,6 +310,27 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+def create_or_get_user_and_login(site, token, name, surname, email):
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = User(email=email)
+        db.session.add(user)
+        db.session.commit()
+
+        # pre-populate the email field in the form using the email obtained
+        # from `site`
+        session['email'] = email
+        session['first_personal_data'] = {}
+        session['first_personal_data']['name'] = name
+        session['first_personal_data']['surname'] = surname
+
+        new_application_form = ApplicationForm(user_id=user.id)
+        db.session.add(new_application_form)
+        db.session.commit()
+
+    login_user(user, remember=True)
+    TokenModel.save(site, token, user)
+
 @app.route('/google/login', methods=['GET'])
 def google_login():
     callback_uri = url_for('google_authorize', _external=True)
@@ -320,23 +341,25 @@ def google_authorize():
     token = google.authorize_access_token()
     profile = google.parse_openid(token)
 
-    user = User.query.filter_by(email=profile.email).first()
-    if not user:
-        user = User(email=profile.email)
-        db.session.add(user)
-        db.session.commit()
+    create_or_get_user_and_login('google', token, profile.data['given_name'],
+                                 profile.data['family_name'], profile.email)
 
-        # pre-populate the email field in the form using the email obtained
-        # from Google
-        session['email'] = profile.email
-        session['first_personal_data'] = {}
-        session['first_personal_data']['name'] = profile.data['given_name']
-        session['first_personal_data']['surname'] = profile.data['family_name']
+    return redirect(url_for('study_programme'))
 
-        new_application_form = ApplicationForm(user_id=user.id)
-        db.session.add(new_application_form)
-        db.session.commit()
+@app.route('/facebook/login', methods=['GET'])
+def facebook_login():
+    callback_uri = url_for('facebook_authorize', _external=True)
+    return facebook.authorize_redirect(callback_uri)
 
-    login_user(user, remember=True)
-    TokenModel.save('google', token, user)
+@app.route('/facebook/auth', methods=['GET'])
+def facebook_authorize():
+    token = facebook.authorize_access_token()
+    profile = facebook.fetch_user()
+
+    data = profile.data['name'].split(' ')
+    name = '' if not len(data) else data[0]
+    surname = '' if len(data) <= 1 else data[-1]
+
+    create_or_get_user_and_login('facebook', token, name, surname, profile.email)
+
     return redirect(url_for('study_programme'))
