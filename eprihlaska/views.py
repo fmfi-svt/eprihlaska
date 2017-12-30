@@ -8,11 +8,12 @@ from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
                               LoginForm, SignupForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
+from authlib.client.apps import google
 
 from munch import munchify
 from functools import wraps
 
-from .models import User, ApplicationForm
+from .models import User, ApplicationForm, TokenModel
 from .consts import MENU, STUDY_PROGRAMME_CHOICES
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
@@ -308,3 +309,34 @@ def logout():
 
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/google/login', methods=['GET'])
+def google_login():
+    callback_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(callback_uri)
+
+@app.route('/google/auth', methods=['GET'])
+def google_authorize():
+    token = google.authorize_access_token()
+    profile = google.parse_openid(token)
+
+    user = User.query.filter_by(email=profile.email).first()
+    if not user:
+        user = User(email=profile.email)
+        db.session.add(user)
+        db.session.commit()
+
+        # pre-populate the email field in the form using the email obtained
+        # from Google
+        session['email'] = profile.email
+        session['first_personal_data'] = {}
+        session['first_personal_data']['name'] = profile.data['given_name']
+        session['first_personal_data']['surname'] = profile.data['family_name']
+
+        new_application_form = ApplicationForm(user_id=user.id)
+        db.session.add(new_application_form)
+        db.session.commit()
+
+    login_user(user, remember=True)
+    TokenModel.save('google', token, user)
+    return redirect(url_for('study_programme'))
