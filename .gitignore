@@ -3,3 +3,5 @@ eprihlaska/__pycache__
 eprihlaska/static/styles/.sass-cache
 .v/
 .venv/
+*.swp
+eprihlaska/database.db
