@@ -9,6 +9,7 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
+import datetime
 
 from munch import munchify
 from functools import wraps
@@ -67,16 +68,17 @@ def study_programme():
 
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        # Save study programmes into a list
-        study_programme = []
-        for sp in ['study_programme_1', 'study_programme_2',
-                   'study_programme_3']:
-            study_programme.append(session['study_programme_data'][sp])
-        session['study_programme'] = study_programme
+            # Save study programmes into a list
+            study_programme = []
+            for sp in ['study_programme_1', 'study_programme_2',
+                       'study_programme_3']:
+                study_programme.append(session['study_programme_data'][sp])
+            session['study_programme'] = study_programme
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
 
@@ -105,9 +107,10 @@ def further_personal_info():
         form['basic_personal_data'].__delitem__('birth_no')
 
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/address')
     return render_template('further_personal_info.html', form=form,
                            session=session)
@@ -118,9 +121,10 @@ def further_personal_info():
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/previous_studies')
     return render_template('address.html', form=form, session=session)
 
@@ -130,9 +134,10 @@ def address():
 def previous_studies():
     form = PreviousStudiesForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/admissions_wavers')
     return render_template('previous_studies.html', form=form, session=session)
 
@@ -235,8 +240,10 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
+            flash('Vaše dáta boli uložené!')
         return redirect('/final')
 
     return render_template('admission_wavers.html', form=form, session=session)
@@ -247,6 +254,18 @@ def admissions_wavers():
 def final():
 
     return render_template('final.html', session=session)
+
+
+@app.route('/submit_app')
+@login_required
+def submit_app():
+    session['application_submitted'] = True
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    app.application = flask.json.dumps(dict(session))
+    app.submitted = True
+    app.submitted_at = datetime.datetime.now()
+    db.session.commit()
+    return redirect(url_for('final'))
 
 @app.route('/grades_control', methods=['GET'])
 @login_required
