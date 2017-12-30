@@ -4,7 +4,7 @@
 
 {% block form %}
 
-{% if not (session['study_programme_data']['dean_invitation_letter'] and session['study_programme_data']['dean_invitation_letter_no']) %}
+{% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
 <h3>Poplatok</h3>
 
@@ -25,7 +25,7 @@ s prihláškou.
 {% endif %}
 
 <h3>Overená kópia maturitného vysvedčenia</h3>
-{% if session['study_programme_data']['matura_year'] == 2018 %}
+{% if session['basic_personal_data']['matura_year'] == 2018 %}
 
 <p>
 Po skončení maturity nám bezodkladne pošlite overenú kópiu maturitného

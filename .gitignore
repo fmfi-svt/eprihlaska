@@ -1,3 +1,5 @@
 __pycache__
 eprihlaska/__pycache__
 eprihlaska/static/styles/.sass-cache
+.v/
+.venv/

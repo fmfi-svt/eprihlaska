@@ -2,7 +2,7 @@ from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response)
 import flask.json
 from eprihlaska import app, db
-from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
+from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
                               LoginForm, SignupForm)
@@ -85,7 +85,7 @@ def study_programme():
 @login_required
 @require_filled_form('index')
 def personal_info():
-    form = BasicPersonalDataForm(obj=munchify(dict(session)))
+    form = PersonalDataForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         save_form(form)
 
@@ -165,8 +165,8 @@ def filter_competitions(competition_list, study_programme_list):
 @require_filled_form('previous_studies')
 def admissions_wavers():
 
-    sp_data = session['study_programme_data']
-    if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
+    basic_data = session['basic_personal_data']
+    if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_wavers form has been filled in
         session['admissions_wavers'] = ''
         flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
@@ -218,7 +218,7 @@ def admissions_wavers():
     }
 
     study_programme_set = set(session['study_programme'])
-    matura_year = session['study_programme_data']['matura_year']
+    matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
             matura_year not in [2015, 2016, 2017, 2018]:
@@ -330,6 +330,7 @@ def create_or_get_user_and_login(site, token, name, surname, email):
 
     login_user(user, remember=True)
     TokenModel.save(site, token, user)
+    flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
 
 @app.route('/google/login', methods=['GET'])
 def google_login():
