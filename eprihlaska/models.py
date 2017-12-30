@@ -21,6 +21,8 @@ class ApplicationForm(db.Model):
     last_updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now)
     submitted = db.Column(db.Boolean, default=False)
     submitted_at = db.Column(db.DateTime)
+    processed = db.Column(db.Boolean, default=False)
+    processed_at = db.Column(db.DateTime)
 
 
 class TokenModel(db.Model):

@@ -4,6 +4,45 @@
 
 {% block form %}
 
+{% if not session['application_submitted'] %}
+
+<h3>Podanie prihlášky</h3>
+
+<p>
+Ďakujeme za vyplnenie údajov. Pomocou nasledujúcej linky si skontrolujte , že
+všetky údaje boli vyplnené správne: Formulár elektronickej prihlášky (PDF).
+</p>
+
+<p>
+Podaním prihlášky potvrdzujete správnosť vyplnených údajov. Po podaní prihlášky
+už nie je možné údaje modifikovať.
+</p>
+
+<a href="{{ url_for('submit_app') }}" class="btn btn-info" role="button">PODAŤ PRIHLÁŠKU</a>
+
+{% else %}
+
+<h3>Stav prihlášky</h3>
+
+<p>
+Vaša elektronická prihláška bola podaná. V prípade, že ste prihlášku podali
+omylom alebo je nevyhnutné zmeniť údaje v prihláške, kontaktujte prosím
+študijné oddelenie FMFI UK
+</p>
+
+<p>
+e-mail: <a href="mailto:so@fmph.uniba.sk">so@fmph.uniba.sk</a> <br />
+telefón 02/602 95 152
+</p>
+
+<p>
+{% if not session['application_processed'] %}
+Vaša prihláška je v stave: <strong>prijatá</strong>
+{% else %}
+Vaša prihláška je v stave: <strong>spracovaná</strong>
+{% endif %}
+</p>
+
 {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
 <h3>Poplatok</h3>
@@ -94,7 +133,5 @@ telefón 02/602 95 152
 </p>
 
 
-
-
-
+{% endif %}
 {% endblock %}
