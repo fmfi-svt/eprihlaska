@@ -73,8 +73,15 @@
       color: white;
       border-color: white; }
 
+.navbar-default .navbar-right > li > a {
+  padding: 10px; }
+  .navbar-default .navbar-right > li > a:before {
+    display: none; }
+
 .navbar-default .navbar-toggle {
-  transition: background-color 0.3s ease; }
+  transition: background-color 0.3s ease;
+  margin-top: 3px;
+  margin-bottom: 3px; }
   .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:active {
     background-color: #de4e58; }
   .navbar-default .navbar-toggle .icon-bar {
