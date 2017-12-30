@@ -177,6 +177,8 @@ MENU = [
 
 USERNAME = _('Používateľské meno')
 PASSWORD = _('Heslo')
+REPEAT_PASSWORD = _('Zopakujte heslo')
+REPEAT_PASSWORD_ERR = _('Zadané heslá sa nezhodujú')
 LOGIN = _('Prihlásiť')
 SIGNUP = _('Zaregistrovať')
 LOGOUT = _('Odhlásiť')

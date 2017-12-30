@@ -301,5 +301,10 @@ def signup():
 @app.route('/logout', methods=['GET'])
 @login_required
 def logout():
+    # Clear out the session
+    keys = list(session.keys()).copy()
+    for k in keys:
+        session.pop(k)
+
     logout_user()
     return redirect(url_for('index'))
