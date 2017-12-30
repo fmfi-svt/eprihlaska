@@ -23,7 +23,7 @@ BIRTH_PLACE_FOREIGN = _('Miesto narodenia (v&nbsp;zahraničí)')
 EMAIL = _('Email')
 PHONE_CONTACT = _('Telefónny kontakt')
 
-PERSONAL_DATA = _('Osobné údaje')
+BASIC_PERSONAL_DATA = _('Základné údaje')
 
 FURTHER_PERSONAL_DATA = _('Ďalšie osobné údaje')
 INFO_FATHER = _('Informácie o otcovi')

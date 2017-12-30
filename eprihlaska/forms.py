@@ -24,7 +24,12 @@ class MotherNameForm(FlaskForm):
     born_with_surname = StringField(label=c.MOTHER_BORNWITH_SURNAME)
 
 
-class BasicPersonalDataForm(FlaskForm):
+class PersonalDataForm(FlaskForm):
+    sex = SelectField(label=c.SEX,
+                      choices=[('male', c.MALE),
+                               ('female', c.FEMALE)],
+                      validators=[validators.DataRequired()])
+
     nationality = SelectField(label=c.NATIONALITY,
                               choices=choices_from_csv(DIR + '/data/staty.csv',
                                                        ['id', 'Štát'],
@@ -51,6 +56,12 @@ class BasicPersonalDataForm(FlaskForm):
                                                           sortby=1))
 
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
+
+    marital_status = SelectField(label=c.MARITAL_STATUS,
+                               choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
+                                                       ['id', 'Rodinný stav']),
+                               default='1')
+
     email = StringField(label=c.EMAIL,
                         validators=[validators.DataRequired(),
                                     validators.Email()])
@@ -67,29 +78,13 @@ class FurtherPersonalDataForm(FlaskForm):
     submit = SubmitField(label=c.NEXT)
 
 
-class FirstPersonalDataForm(FlaskForm):
+class BasicPersonalDataForm(FlaskForm):
     name = StringField(label=c.NAME,
                        validators=[validators.DataRequired()])
     surname = StringField(label=c.SURNAME,
                           validators=[validators.DataRequired()])
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
-    marital_status = SelectField(label=c.MARITAL_STATUS,
-                               choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
-                                                       ['id', 'Rodinný stav']),
-                               default='1')
-    sex = SelectField(label=c.SEX,
-                      choices=[('male', c.MALE),
-                               ('female', c.FEMALE)],
-                      validators=[validators.DataRequired()])
-
-class SelectStudyProgrammeForm(FlaskForm):
-    study_programme_1 = SelectField(label=c.STUDY_PROGRAMME_1,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
-    study_programme_2 = SelectField(label=c.STUDY_PROGRAMME_2,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
-    study_programme_3 = SelectField(label=c.STUDY_PROGRAMME_3,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
     matura_year = IntegerField(c.MATURA_YEAR,
                                default=2018,
                                validators=[validators.DataRequired(),
@@ -100,9 +95,17 @@ class SelectStudyProgrammeForm(FlaskForm):
                                             description=c.DEAN_INV_LIST_NO_DESC)
 
 
+class SelectStudyProgrammeForm(FlaskForm):
+    study_programme_1 = SelectField(label=c.STUDY_PROGRAMME_1,
+                                    choices=c.STUDY_PROGRAMME_CHOICES)
+    study_programme_2 = SelectField(label=c.STUDY_PROGRAMME_2,
+                                    choices=c.STUDY_PROGRAMME_CHOICES)
+    study_programme_3 = SelectField(label=c.STUDY_PROGRAMME_3,
+                                    choices=c.STUDY_PROGRAMME_CHOICES)
+
 class StudyProgrammeForm(FlaskForm):
-    first_personal_data = FormField(FirstPersonalDataForm,
-                                    label=c.PERSONAL_DATA)
+    basic_personal_data = FormField(BasicPersonalDataForm,
+                                    label=c.BASIC_PERSONAL_DATA)
     study_programme_data = FormField(SelectStudyProgrammeForm,
                                      label=c.STUDY_PROGRAMMES)
 

@@ -2,13 +2,14 @@ from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response)
 import flask.json
 from eprihlaska import app, db
-from eprihlaska.forms import (StudyProgrammeForm, BasicPersonalDataForm,
+from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
                               LoginForm, SignupForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-from authlib.client.apps import google
+from authlib.client.apps import google, facebook
+import datetime
 
 from munch import munchify
 from functools import wraps
@@ -67,16 +68,17 @@ def study_programme():
 
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        # Save study programmes into a list
-        study_programme = []
-        for sp in ['study_programme_1', 'study_programme_2',
-                   'study_programme_3']:
-            study_programme.append(session['study_programme_data'][sp])
-        session['study_programme'] = study_programme
+            # Save study programmes into a list
+            study_programme = []
+            for sp in ['study_programme_1', 'study_programme_2',
+                       'study_programme_3']:
+                study_programme.append(session['study_programme_data'][sp])
+            session['study_programme'] = study_programme
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
 
@@ -85,7 +87,7 @@ def study_programme():
 @login_required
 @require_filled_form('index')
 def personal_info():
-    form = BasicPersonalDataForm(obj=munchify(dict(session)))
+    form = PersonalDataForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         save_form(form)
 
@@ -105,9 +107,10 @@ def further_personal_info():
         form['basic_personal_data'].__delitem__('birth_no')
 
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/address')
     return render_template('further_personal_info.html', form=form,
                            session=session)
@@ -118,9 +121,10 @@ def further_personal_info():
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/previous_studies')
     return render_template('address.html', form=form, session=session)
 
@@ -130,9 +134,10 @@ def address():
 def previous_studies():
     form = PreviousStudiesForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+            flash('Vaše dáta boli uložené!')
         return redirect('/admissions_wavers')
     return render_template('previous_studies.html', form=form, session=session)
 
@@ -165,8 +170,8 @@ def filter_competitions(competition_list, study_programme_list):
 @require_filled_form('previous_studies')
 def admissions_wavers():
 
-    sp_data = session['study_programme_data']
-    if sp_data['dean_invitation_letter'] and sp_data['dean_invitation_letter_no'] is not None:
+    basic_data = session['basic_personal_data']
+    if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_wavers form has been filled in
         session['admissions_wavers'] = ''
         flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
@@ -218,7 +223,7 @@ def admissions_wavers():
     }
 
     study_programme_set = set(session['study_programme'])
-    matura_year = session['study_programme_data']['matura_year']
+    matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
             matura_year not in [2015, 2016, 2017, 2018]:
@@ -235,8 +240,10 @@ def admissions_wavers():
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
-        save_form(form)
+        if 'application_submitted' not in session:
+            save_form(form)
 
+            flash('Vaše dáta boli uložené!')
         return redirect('/final')
 
     return render_template('admission_wavers.html', form=form, session=session)
@@ -247,6 +254,18 @@ def admissions_wavers():
 def final():
 
     return render_template('final.html', session=session)
+
+
+@app.route('/submit_app')
+@login_required
+def submit_app():
+    session['application_submitted'] = True
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    app.application = flask.json.dumps(dict(session))
+    app.submitted = True
+    app.submitted_at = datetime.datetime.now()
+    db.session.commit()
+    return redirect(url_for('final'))
 
 @app.route('/grades_control', methods=['GET'])
 @login_required
@@ -310,6 +329,28 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+def create_or_get_user_and_login(site, token, name, surname, email):
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = User(email=email)
+        db.session.add(user)
+        db.session.commit()
+
+        # pre-populate the email field in the form using the email obtained
+        # from `site`
+        session['email'] = email
+        session['basic_personal_data'] = {}
+        session['basic_personal_data']['name'] = name
+        session['basic_personal_data']['surname'] = surname
+
+        new_application_form = ApplicationForm(user_id=user.id)
+        db.session.add(new_application_form)
+        db.session.commit()
+
+    login_user(user, remember=True)
+    TokenModel.save(site, token, user)
+    flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
+
 @app.route('/google/login', methods=['GET'])
 def google_login():
     callback_uri = url_for('google_authorize', _external=True)
@@ -320,23 +361,25 @@ def google_authorize():
     token = google.authorize_access_token()
     profile = google.parse_openid(token)
 
-    user = User.query.filter_by(email=profile.email).first()
-    if not user:
-        user = User(email=profile.email)
-        db.session.add(user)
-        db.session.commit()
+    create_or_get_user_and_login('google', token, profile.data['given_name'],
+                                 profile.data['family_name'], profile.email)
 
-        # pre-populate the email field in the form using the email obtained
-        # from Google
-        session['email'] = profile.email
-        session['first_personal_data'] = {}
-        session['first_personal_data']['name'] = profile.data['given_name']
-        session['first_personal_data']['surname'] = profile.data['family_name']
+    return redirect(url_for('study_programme'))
 
-        new_application_form = ApplicationForm(user_id=user.id)
-        db.session.add(new_application_form)
-        db.session.commit()
+@app.route('/facebook/login', methods=['GET'])
+def facebook_login():
+    callback_uri = url_for('facebook_authorize', _external=True)
+    return facebook.authorize_redirect(callback_uri)
 
-    login_user(user, remember=True)
-    TokenModel.save('google', token, user)
+@app.route('/facebook/auth', methods=['GET'])
+def facebook_authorize():
+    token = facebook.authorize_access_token()
+    profile = facebook.fetch_user()
+
+    data = profile.data['name'].split(' ')
+    name = '' if not len(data) else data[0]
+    surname = '' if len(data) <= 1 else data[-1]
+
+    create_or_get_user_and_login('facebook', token, name, surname, profile.email)
+
     return redirect(url_for('study_programme'))
