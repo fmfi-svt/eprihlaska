@@ -26,16 +26,16 @@ zákona č. 131/2002 o vysokých školách v znení neskorších predpisov.
       $(document).ready(function(){
         $('select').chosen({search_contains: true});
         /* Show or hide dean's invitation letter field */
-        if (!$('#study_programme_data-dean_invitation_letter').is(":checked")) {
-          $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').hide();
+        if (!$('#basic_personal_data-dean_invitation_letter').is(":checked")) {
+          $('#basic_personal_data-dean_invitation_letter_no').closest('.form-group').hide();
         }
 
-        $('#study_programme_data-dean_invitation_letter').change(function(e) {
+        $('#basic_personal_data-dean_invitation_letter').change(function(e) {
           if (this.checked) {
-            $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').show();
-            $('#study_programme_data-dean_invitation_letter_no').focus();
+            $('#basic_personal_data-dean_invitation_letter_no').closest('.form-group').show();
+            $('#basic_personal_data-dean_invitation_letter_no').focus();
           } else {
-            $('#study_programme_data-dean_invitation_letter_no').closest('.form-group').hide();
+            $('#basic_personal_data-dean_invitation_letter_no').closest('.form-group').hide();
           }
         })
       });
