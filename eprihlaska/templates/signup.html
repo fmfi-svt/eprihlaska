@@ -4,10 +4,20 @@
 
 {% block form %}
 
-<a href="{{ url_for('google_login') }}">Prihlásiť sa pomocou Google účtu</a><br /><br />
-<a href="{{ url_for('facebook_login') }}">Prihlásiť sa pomocou Facebook účtu</a><br /><br />
-
   {{ wtf.quick_form(form,
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
+
+  <div class="social-login__wrap">
+    <div class="social-login col-lg-10 col-lg-offset-2">
+      <div class="social-login__separator">alebo</div>
+      <a href="{{ url_for('google_login') }}" class="btn btn-block btn-social btn-google ">
+        <span class="fa fa-google"></span> Prihlásiť cez Google
+      </a>
+      <a href="{{ url_for('facebook_login') }}" class="btn btn-block btn-social btn-facebook ">
+        <span class="fa fa-facebook"></span> Prihlásiť cez Facebook
+      </a>
+    </div>
+  </div>
+
 {% endblock %}
