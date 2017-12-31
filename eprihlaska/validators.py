@@ -1,6 +1,8 @@
 import re
 import datetime
+from .models import User
 from wtforms import validators
+from eprihlaska import db
 
 
 class BirthNoValidator(object):
@@ -62,3 +64,16 @@ class DateValidator:
             datetime.datetime.strptime(mo.group(0), '%d.%m.%Y')
         except ValueError:
             raise ValueError(self.val_err_msg)
+
+
+class EmailDuplicateValidator:
+    def __init__(self, message=None):
+        if not message:
+            message = 'Zadaný email už bol zaregistrovaný.'
+        self.message = message
+
+    def __call__(self, form, field):
+        emails = [email[0] for email in db.session.query(User.email)]
+
+        if field.data in emails:
+            raise validators.ValidationError(self.message)
