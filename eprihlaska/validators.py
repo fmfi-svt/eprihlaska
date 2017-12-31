@@ -73,7 +73,7 @@ class EmailDuplicateValidator:
         self.message = message
 
     def __call__(self, form, field):
-        emails = [email[0] for email in db.session.query(User.email)]
+        user = User.query.filter_by(email=field.data).first()
 
-        if field.data in emails:
+        if user:
             raise validators.ValidationError(self.message)
