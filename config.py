@@ -13,7 +13,13 @@ GOOGLE_CLIENT_SECRET = 'sgjDA1TDgkdJg3wMg-B3XqZT'
 FACEBOOK_CLIENT_KEY = '200369757178909'
 FACEBOOK_CLIENT_SECRET = 'b370c3062b5dedc66755126db531ebae'
 
+<<<<<<< HEAD
 MAIL_SERVER = 'smtp.mailgun.org'
 MAIL_USERNAME = 'prihlaska@mg.shu.io'
 MAIL_PASSWORD = 'prihlaska'
+=======
+MAIL_SERVER = ''
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+>>>>>>> 3c44395679c0becb9195f0ad471ac71c62a8fdc9
 MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
