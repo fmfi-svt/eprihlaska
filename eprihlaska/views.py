@@ -72,6 +72,8 @@ def study_programme():
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         if 'application_submitted' not in session:
+            save_form(form)
+
             # Save study programmes into a list
             study_programme = []
             for sp in ['study_programme_1', 'study_programme_2',
@@ -81,7 +83,6 @@ def study_programme():
             session['study_programme'] = study_programme
 
             save_form(form)
-
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
