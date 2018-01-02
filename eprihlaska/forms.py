@@ -125,7 +125,8 @@ class Address(FlaskForm):
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                                                fmt='{2} ({3})',
+                                                sortby=1))
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
@@ -142,7 +143,8 @@ class AddressNonRequired(FlaskForm):
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                                                fmt='{2} ({3})',
+                                                sortby=1))
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
