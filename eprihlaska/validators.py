@@ -2,7 +2,6 @@ import re
 import datetime
 from .models import User
 from wtforms import validators
-from eprihlaska import db
 
 
 class BirthNoValidator(object):
