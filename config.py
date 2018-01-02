@@ -16,4 +16,4 @@ FACEBOOK_CLIENT_SECRET = ''
 MAIL_SERVER = ''
 MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
-MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@mg.shu.io')
+MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
