@@ -4,7 +4,7 @@
   background: $red2;
   background: linear-gradient($red, $red2);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow-02;
   margin-bottom: 0;
   padding: 4px;
   border-radius: 0;
@@ -81,7 +81,7 @@
   background-color: transparent;
   transition: background-color 0.3s ease;
   border: 1px solid $red3;
-  border-radius: 2px;
+  border-radius: 3px;
   color: white;
 
   &:hover {

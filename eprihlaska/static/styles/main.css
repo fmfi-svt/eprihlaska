@@ -64,7 +64,7 @@
   background-color: transparent;
   transition: background-color 0.3s ease;
   border: 1px solid #de4e58;
-  border-radius: 2px;
+  border-radius: 3px;
   color: white; }
   .navbar-default .navbar-nav > .active > a:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -91,21 +91,21 @@
   font-weight: 100;
   padding-bottom: 5px; }
 
-.btn {
+.btn-red {
   display: inline-block;
   height: 36px;
   line-height: 32px;
   padding: 0 14px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
   background-color: transparent;
-  border: 3px solid #de4e58;
-  border-radius: 2px;
+  border: 2px solid #de4e58;
+  border-radius: 3px;
   font-weight: 600;
   text-transform: uppercase;
   color: #8e2128;
   text-decoration: none;
   transition: all 0.3s ease; }
-  .btn:hover, .btn:focus {
+  .btn-red:hover, .btn-red:focus {
     background-color: #8e2128;
     color: white;
     border-color: #de4e58; }
@@ -127,6 +127,21 @@ legend label {
   font-size: 16px;
   font-weight: 400;
   text-transform: uppercase; }
+
+.social-login__wrap {
+  margin-right: -15px;
+  margin-left: -15px; }
+
+.social-login__separator {
+  margin-bottom: 15px; }
+
+.btn-social {
+  max-width: 210px;
+  border-width: 2px;
+  border-radius: 3px;
+  transition: background-color 0.3s ease; }
+  .btn-social > :first-child {
+    border-width: 2px; }
 
 select.form-control + .chosen-container.chosen-container-single .chosen-single {
   display: block;
