@@ -290,6 +290,20 @@ class LoginForm(FlaskForm):
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
 
+class ForgottenPasswordForm(FlaskForm):
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.Email()])
+    submit = SubmitField(label=c.SUBMIT)
+
+class NewPasswordForm(FlaskForm):
+    password = PasswordField(label=c.PASSWORD,
+                             validators=[validators.Length(min=8, max=80)])
+    repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
+                                    validators=[validators.Length(min=8,
+                                                                  max=80),
+                                                validators.EqualTo('password',
+                                                                   message=c.REPEAT_PASSWORD_ERR)])
+    submit = SubmitField(label=c.SIGNUP)
 
 class SignupForm(FlaskForm):
     email = StringField(label=c.EMAIL,
