@@ -69,18 +69,18 @@ def index():
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
 def study_programme():
-
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         if 'application_submitted' not in session:
-            save_form(form)
-
             # Save study programmes into a list
             study_programme = []
             for sp in ['study_programme_1', 'study_programme_2',
                        'study_programme_3']:
                 study_programme.append(session['study_programme_data'][sp])
+
             session['study_programme'] = study_programme
+
+            save_form(form)
 
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')

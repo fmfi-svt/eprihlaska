@@ -20,3 +20,5 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = 'prihlaska@mg.shu.io'
 MAIL_PASSWORD = 'prihlaska'
 MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
+
+SESSION_TYPE = 'filesystem'
