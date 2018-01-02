@@ -290,7 +290,12 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
-                login_user(user, remember=True)
+                login_user(user)
+
+                # set the index endpoint as already visited (in order for the
+                # menu generation to work correctly)
+                session['index'] = ''
+
                 flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
                 return redirect(url_for('study_programme'))
         flash('Nesprávne prihlasovacie údaje', 'error')
@@ -395,7 +400,11 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         db.session.add(new_application_form)
         db.session.commit()
 
-    login_user(user, remember=True)
+    # set the index endpoint as already visited (in order for the menu
+    # generation to work correctly)
+    session['index'] = ''
+
+    login_user(user)
     TokenModel.save(site, token, user)
     flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
 
