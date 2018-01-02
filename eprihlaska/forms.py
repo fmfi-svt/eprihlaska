@@ -125,7 +125,8 @@ class Address(FlaskForm):
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                                                fmt='{2} ({3})',
+                                                sortby=1))
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
@@ -142,7 +143,8 @@ class AddressNonRequired(FlaskForm):
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=choices_from_csv(DIR + '/data/obce.csv',
                                                 ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                                                fmt='{2} ({3})',
+                                                sortby=1))
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
@@ -290,6 +292,20 @@ class LoginForm(FlaskForm):
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
 
+class ForgottenPasswordForm(FlaskForm):
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.Email()])
+    submit = SubmitField(label=c.SUBMIT)
+
+class NewPasswordForm(FlaskForm):
+    password = PasswordField(label=c.PASSWORD,
+                             validators=[validators.Length(min=8, max=80)])
+    repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
+                                    validators=[validators.Length(min=8,
+                                                                  max=80),
+                                                validators.EqualTo('password',
+                                                                   message=c.REPEAT_PASSWORD_ERR)])
+    submit = SubmitField(label=c.SIGNUP)
 
 class SignupForm(FlaskForm):
     email = StringField(label=c.EMAIL,

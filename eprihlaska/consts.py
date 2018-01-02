@@ -184,4 +184,6 @@ SIGNUP = _('Zaregistrovať')
 LOGOUT = _('Odhlásiť')
 WELCOME = _('Vitajte {}')
 
+FORGOTTEN_PASSWORD_MAIL = _('Ak ste žiadali o zmenu Vášho hesla, môžete tak urobiť na linke {}')
+
 YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')

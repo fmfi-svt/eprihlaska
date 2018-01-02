@@ -1,6 +1,7 @@
 asn1crypto==0.24.0
 Authlib==0.3
 Babel==2.5.1
+blinker==1.4
 certifi==2017.11.5
 cffi==1.11.2
 chardet==3.0.4
@@ -11,6 +12,7 @@ Flask==0.12.2
 Flask-Babel==0.11.2
 Flask-Bootstrap==3.3.7.1
 Flask-Login==0.4.1
+Flask-Mail==0.9.1
 flask-nav==0.6
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2

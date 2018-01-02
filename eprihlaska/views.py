@@ -1,21 +1,25 @@
 from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response)
 import flask.json
-from eprihlaska import app, db
+from flask_mail import Message
+from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
-                              LoginForm, SignupForm)
+                              LoginForm, SignupForm, ForgottenPasswordForm,
+                              NewPasswordForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
+import string
+import uuid
 
 from munch import munchify
 from functools import wraps
 
-from .models import User, ApplicationForm, TokenModel
-from .consts import MENU, STUDY_PROGRAMME_CHOICES
+from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
+from .consts import MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
 
@@ -328,6 +332,50 @@ def logout():
 
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/forgotten_password/<hash>', methods=['GET', 'POST'])
+def forgotten_password_hash(hash):
+    token = ForgottenPassworToken.query.filter_by(hash=hash).first()
+    if token and token.valid:
+        form = NewPasswordForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(id=token.user_id).first()
+            user.password = generate_password_hash(form.password.data,
+                                                   method='sha256')
+
+            # Invalidate the token so that it cannot be used another time
+            token.valid = False
+            db.session.add(user)
+            db.session.add(token)
+            db.session.commit()
+            flash('Vaše heslo bolo zmenené')
+            return redirect(url_for('login'))
+        return render_template('forgotten_password.html', form=form)
+
+    return redirect(url_for('index'))
+
+@app.route('/forgotten_password', methods=['GET', 'POST'])
+def forgotten_password():
+    form = ForgottenPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            hash = str(uuid.uuid4())
+            token = ForgottenPassworToken(hash=hash,
+                                          user_id=user.id)
+            db.session.add(token)
+            db.session.commit()
+
+            link = url_for('forgotten_password_hash', hash=hash, _external=True)
+            msg = Message('ePrihlaska - zabudnuté heslo')
+            msg.body = FORGOTTEN_PASSWORD_MAIL.format(link)
+            msg.recipients = [user.email]
+            mail.send(msg)
+
+        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe')
+
+    return render_template('forgotten_password.html', form=form, session=session)
+
 
 def create_or_get_user_and_login(site, token, name, surname, email):
     user = User.query.filter_by(email=email).first()
