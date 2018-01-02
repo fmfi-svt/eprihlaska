@@ -7,6 +7,8 @@ from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin
 from flask_mail import Mail
+from flask_session import Session
+
 from authlib.flask.client import OAuth
 from authlib.client.apps import google, facebook
 
@@ -55,5 +57,6 @@ google.register_to(oauth)
 facebook.register_to(oauth)
 
 mail = Mail(app)
+sess = Session(app)
 
 from eprihlaska import views
