@@ -191,8 +191,7 @@ def admissions_wavers():
     if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_wavers form has been filled in
         session['admissions_wavers'] = ''
-        flash('Na základe listu od dekana Vám bolo prijímacie konanie ' +
-              'odpustené.')
+        flash('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')
         return redirect('/final')
 
     form = AdmissionWaversForm(obj=munchify(dict(session)))
