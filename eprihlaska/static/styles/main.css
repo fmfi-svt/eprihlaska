@@ -7,8 +7,7 @@
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
   margin-bottom: 0;
   padding: 4px;
-  border-radius: 0;
-  counter-reset: menuItemNumber; }
+  border-radius: 0; }
 
 .navbar-default .navbar-brand {
   font-size: 14px;
@@ -22,11 +21,41 @@
 
 .navbar-default .navbar-nav > li > a {
   color: white;
-  padding: 10px 10px 10px 26px;
+  padding: 10px;
   border: 1px solid transparent;
   transition: color 0.3s ease;
   transition: background-color 0.3s ease; }
-  .navbar-default .navbar-nav > li > a:before {
+  .navbar-default .navbar-nav > li > a:hover {
+    color: #f1e2e3;
+    background-color: rgba(255, 255, 255, 0.1); }
+    .navbar-default .navbar-nav > li > a:hover:before {
+      color: #f1e2e3;
+      border-color: #f1e2e3; }
+  .navbar-default .navbar-nav > li > a[href="#"] {
+    color: #de4e58;
+    cursor: default; }
+    .navbar-default .navbar-nav > li > a[href="#"]:hover {
+      background-color: transparent; }
+
+.navbar-default .navbar-nav > .active > a {
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  border: 1px solid #de4e58;
+  border-radius: 3px;
+  color: white; }
+  .navbar-default .navbar-nav > .active > a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white; }
+
+.navbar-main {
+  counter-reset: menuItemNumber; }
+
+.navbar-default .navbar-main > li > a {
+  padding-left: 26px; }
+  .navbar-default .navbar-main > li > a[href="#"]:before {
+    border-color: #de4e58;
+    color: #de4e58; }
+  .navbar-default .navbar-main > li > a:before {
     position: absolute;
     top: 12px;
     left: 6px;
@@ -45,38 +74,12 @@
     counter-increment: menuItemNumber;
     transition: color 0.3s ease;
     transition: border-color 0.3s ease; }
-  .navbar-default .navbar-nav > li > a:hover {
-    color: #f1e2e3;
-    background-color: rgba(255, 255, 255, 0.1); }
-    .navbar-default .navbar-nav > li > a:hover:before {
-      color: #f1e2e3;
-      border-color: #f1e2e3; }
-  .navbar-default .navbar-nav > li > a[href="#"] {
-    color: #de4e58;
-    cursor: default; }
-    .navbar-default .navbar-nav > li > a[href="#"]:before {
-      border-color: #de4e58;
-      color: #de4e58; }
-    .navbar-default .navbar-nav > li > a[href="#"]:hover {
-      background-color: transparent; }
-
-.navbar-default .navbar-nav > .active > a {
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-  border: 1px solid #de4e58;
-  border-radius: 3px;
-  color: white; }
-  .navbar-default .navbar-nav > .active > a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white; }
-    .navbar-default .navbar-nav > .active > a:hover:before {
-      color: white;
-      border-color: white; }
-
-.navbar-default .navbar-right > li > a {
-  padding: 10px; }
-  .navbar-default .navbar-right > li > a:before {
-    display: none; }
+  .navbar-default .navbar-main > li > a:hover:before {
+    color: white;
+    border-color: white; }
+  .navbar-default .navbar-main > li > a:hover[href="#"]:before {
+    border-color: #de4e58;
+    color: #de4e58; }
 
 .navbar-default .navbar-toggle {
   transition: background-color 0.3s ease;
