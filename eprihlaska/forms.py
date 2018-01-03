@@ -4,9 +4,8 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      DateField, FieldList, IntegerField, HiddenField,
                      PasswordField)
 
-from .validators import BirthNoValidator, DateValidator
+from .validators import BirthNoValidator, DateValidator, EmailDuplicateValidator
 from . import consts as c
-import datetime
 
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
@@ -268,7 +267,8 @@ class NewPasswordForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     email = StringField(label=c.EMAIL,
-                        validators=[validators.Email()])
+                        validators=[validators.Email(),
+                                    EmailDuplicateValidator()])
     password = PasswordField(label=c.PASSWORD,
                              validators=[validators.Length(min=8, max=80)])
     repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
