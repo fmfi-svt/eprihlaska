@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    password = db.Column(db.String(80))
     registered_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
 class ApplicationForm(db.Model):
@@ -24,6 +24,10 @@ class ApplicationForm(db.Model):
     processed = db.Column(db.Boolean, default=False)
     processed_at = db.Column(db.DateTime)
 
+class ForgottenPassworToken(db.Model):
+    hash = db.Column(db.String(36), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    valid = db.Column(db.Boolean, default=True)
 
 class TokenModel(db.Model):
     __tablename__ = 'connect'

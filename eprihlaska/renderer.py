@@ -124,6 +124,16 @@ class ePrihlaskaNavRenderer(BootstrapRenderer):
         if endpoint and endpoint not in session:
             url = '#'
 
+        # Endpoints which are allowed once the application has been submitted.
+        #
+        # Note that 'admissions_wavers' refers to the endpoint that preceeds
+        # 'final' (which is what should only be allowed here).
+        allowed_endpoints = [None, 'admissions_wavers']
+
+        if 'application_submitted' in session \
+           and endpoint not in allowed_endpoints:
+            url = '#'
+
         item.add(tags.a(node.text, href=url))
         if node.active:
             item['class'] = 'active'

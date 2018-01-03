@@ -1,21 +1,29 @@
 from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response)
 import flask.json
-from eprihlaska import app, db
+from flask_mail import Message
+from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
-                              LoginForm, SignupForm)
+                              LoginForm, SignupForm, ForgottenPasswordForm,
+                              NewPasswordForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
+import string
+import uuid
 
 from munch import munchify
 from functools import wraps
 
-from .models import User, ApplicationForm, TokenModel
-from .consts import MENU, STUDY_PROGRAMME_CHOICES
+from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
+from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
+                     SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
+                     MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
+                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES)
+
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
 
@@ -23,6 +31,11 @@ def require_filled_form(form_key):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            if 'application_submitted' in session:
+                final = url_for('final')
+                if str(request.url_rule) != final:
+                    return redirect(final)
+
             if request.method == 'GET' and form_key not in session:
                 flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
                 for _, endpoint in MENU:
@@ -65,6 +78,8 @@ def index():
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
 def study_programme():
+    if 'application_submitted' in session:
+        return redirect(url_for('final'))
 
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -76,8 +91,10 @@ def study_programme():
             for sp in ['study_programme_1', 'study_programme_2',
                        'study_programme_3']:
                 study_programme.append(session['study_programme_data'][sp])
+
             session['study_programme'] = study_programme
 
+            save_form(form)
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
     return render_template('study_programme.html', form=form, session=session)
@@ -252,7 +269,6 @@ def admissions_wavers():
 @login_required
 @require_filled_form('admissions_wavers')
 def final():
-
     return render_template('final.html', session=session)
 
 
@@ -265,6 +281,8 @@ def submit_app():
     app.submitted = True
     app.submitted_at = datetime.datetime.now()
     db.session.commit()
+
+    flash('Gratulujeme, Vaša prihláška bola podaná!')
     return redirect(url_for('final'))
 
 @app.route('/grades_control', methods=['GET'])
@@ -279,6 +297,27 @@ def grades_control():
 
     return rendered
 
+@app.route('/application_form', methods=['GET'])
+@login_required
+def application_form():
+    lists = {
+        'sex': dict(SEX_CHOICES),
+        'marital_status': dict(MARITAL_STATUS_CHOICES),
+        'country': dict(COUNTRY_CHOICES),
+        'city': dict(CITY_CHOICES),
+        'highschool': dict(HIGHSCHOOL_CHOICES),
+        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
+        'education_level': dict(EDUCATION_LEVEL_CHOICES),
+        'study_programme': dict(STUDY_PROGRAMME_CHOICES)
+    }
+
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    rendered = render_template('application_form.html', session=session,
+                               lists=lists, id=app.id)
+
+    return rendered
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -286,7 +325,12 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
-                login_user(user, remember=True)
+                login_user(user)
+
+                # set the index endpoint as already visited (in order for the
+                # menu generation to work correctly)
+                session['index'] = ''
+
                 flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
                 return redirect(url_for('study_programme'))
         flash('Nesprávne prihlasovacie údaje', 'error')
@@ -329,6 +373,50 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/forgotten_password/<hash>', methods=['GET', 'POST'])
+def forgotten_password_hash(hash):
+    token = ForgottenPassworToken.query.filter_by(hash=hash).first()
+    if token and token.valid:
+        form = NewPasswordForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(id=token.user_id).first()
+            user.password = generate_password_hash(form.password.data,
+                                                   method='sha256')
+
+            # Invalidate the token so that it cannot be used another time
+            token.valid = False
+            db.session.add(user)
+            db.session.add(token)
+            db.session.commit()
+            flash('Vaše heslo bolo zmenené')
+            return redirect(url_for('login'))
+        return render_template('forgotten_password.html', form=form)
+
+    return redirect(url_for('index'))
+
+@app.route('/forgotten_password', methods=['GET', 'POST'])
+def forgotten_password():
+    form = ForgottenPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            hash = str(uuid.uuid4())
+            token = ForgottenPassworToken(hash=hash,
+                                          user_id=user.id)
+            db.session.add(token)
+            db.session.commit()
+
+            link = url_for('forgotten_password_hash', hash=hash, _external=True)
+            msg = Message('ePrihlaska - zabudnuté heslo')
+            msg.body = FORGOTTEN_PASSWORD_MAIL.format(link)
+            msg.recipients = [user.email]
+            mail.send(msg)
+
+        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe')
+
+    return render_template('forgotten_password.html', form=form, session=session)
+
+
 def create_or_get_user_and_login(site, token, name, surname, email):
     user = User.query.filter_by(email=email).first()
     if not user:
@@ -347,7 +435,11 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         db.session.add(new_application_form)
         db.session.commit()
 
-    login_user(user, remember=True)
+    # set the index endpoint as already visited (in order for the menu
+    # generation to work correctly)
+    session['index'] = ''
+
+    login_user(user)
     TokenModel.save(site, token, user)
     flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
 

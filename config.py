@@ -12,3 +12,13 @@ GOOGLE_CLIENT_SECRET = ''
 
 FACEBOOK_CLIENT_KEY = ''
 FACEBOOK_CLIENT_SECRET = ''
+
+MAIL_SERVER = ''
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
+
+SESSION_TYPE = 'filesystem'

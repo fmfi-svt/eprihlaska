@@ -1,5 +1,6 @@
 import re
 import datetime
+from .models import User
 from wtforms import validators
 
 
@@ -50,7 +51,7 @@ class DateValidator:
         self.val_err_msg = val_err_msg
 
     def __call__(self, form, field):
-        date_reg = re.compile(r'^(\d\d)\.(\d\d)\.(\d\d\d\d)$')
+        date_reg = re.compile(r'^(\d?\d)\.(\d?\d)\.(\d\d\d\d)$')
         mo = date_reg.search(field.data)
 
         try:
@@ -62,3 +63,16 @@ class DateValidator:
             datetime.datetime.strptime(mo.group(0), '%d.%m.%Y')
         except ValueError:
             raise ValueError(self.val_err_msg)
+
+
+class EmailDuplicateValidator:
+    def __init__(self, message=None):
+        if not message:
+            message = 'Zadaný email už bol zaregistrovaný.'
+        self.message = message
+
+    def __call__(self, form, field):
+        user = User.query.filter_by(email=field.data).first()
+
+        if user:
+            raise validators.ValidationError(self.message)

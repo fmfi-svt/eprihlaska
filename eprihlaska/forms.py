@@ -4,14 +4,8 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      DateField, FieldList, IntegerField, HiddenField,
                      PasswordField)
 
-from .validators import BirthNoValidator, DateValidator
-from .utils import choices_from_csv, city_formatter
+from .validators import BirthNoValidator, DateValidator, EmailDuplicateValidator
 from . import consts as c
-import os
-import datetime
-
-DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_DATE = datetime.datetime.now() - datetime.timedelta(days=17 * 365)
 
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
@@ -26,15 +20,11 @@ class MotherNameForm(FlaskForm):
 
 class PersonalDataForm(FlaskForm):
     sex = SelectField(label=c.SEX,
-                      choices=[('male', c.MALE),
-                               ('female', c.FEMALE)],
+                      choices=c.SEX_CHOICES,
                       validators=[validators.DataRequired()])
 
     nationality = SelectField(label=c.NATIONALITY,
-                              choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát'],
-                                                       sortby=1,
-                                                       prepend=['703', '203']),
+                              choices=c.COUNTRY_CHOICES,
                               validators=[validators.DataRequired()],
                               default='703')
     birth_no = StringField(label=c.BIRTH_NO,
@@ -43,23 +33,16 @@ class PersonalDataForm(FlaskForm):
                                 validators=[DateValidator()],
                                 render_kw={"placeholder": 'DD.MM.RRRR'})
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
-                                   choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                            ['id', 'Štát'],
-                                                            sortby=1,
-                                                            prepend=['703', '203']),
+                                   choices=c.COUNTRY_CHOICES,
                                    default='703')
 
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
-                                 choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                          ['id', 'Názov obce'],
-                                                          fmt='{2} ({3})',
-                                                          sortby=1))
+                                 choices=c.CITY_CHOICES)
 
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
 
     marital_status = SelectField(label=c.MARITAL_STATUS,
-                               choices=choices_from_csv(DIR + '/data/rodinne-stavy.csv',
-                                                       ['id', 'Rodinný stav']),
+                               choices=c.MARITAL_STATUS_CHOICES,
                                default='1')
 
     email = StringField(label=c.EMAIL,
@@ -115,34 +98,24 @@ class StudyProgrammeForm(FlaskForm):
 
 class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
-                              choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát'],
-                                                       sortby=1,
-                                                       prepend=['703', '203']),
+                              choices=c.COUNTRY_CHOICES,
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
-                       choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                       choices=c.CITY_CHOICES)
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
 
 class AddressNonRequired(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
-                              choices=choices_from_csv(DIR + '/data/staty.csv',
-                                                       ['id', 'Štát'],
-                                                       sortby=1,
-                                                       prepend=['703', '203']),
+                              choices=c.COUNTRY_CHOICES,
                               default='703')
     street = StringField(label=c.ADDRESS_STREET)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
-                       choices=choices_from_csv(DIR + '/data/obce.csv',
-                                                ['id', 'Názov obce'],
-                                                fmt='{2} ({3})'))
+                       choices=c.CITY_CHOICES)
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
@@ -157,30 +130,17 @@ class AddressForm(FlaskForm):
 
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
-                             choices=choices_from_csv(DIR + '/data/skoly.csv',
-                                                ['St. šk.', 'Obec',
-                                                 'Stredná škola',
-                                                 'Ulica'],
-                                                fmt='{2}, {3}, {4}',
-                                                sortby=1,
-                                                prepend=['XXXXXXX'],
-                                                post_fmt=city_formatter),
+                             choices=c.HIGHSCHOOL_CHOICES,
                              description=c.HIGHSCHOOL_DESC,
                              default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
                              default='7902J00',
                              description=c.STUDY_PROGRAMME_CODE_DESC,
-                             choices=choices_from_csv(DIR + '/data/odbory.csv',
-                                                ['Odbor - kod',
-                                                 'Odbor stred. školy'],
-                                                fmt='{1} - {2}'))
+                             choices=c.HS_STUDY_PROGRAMME_CHOICES)
 
     education_level = SelectField(label=c.HS_EDUCATION_LEVEL,
                              default='J',
-                             choices=choices_from_csv(DIR + '/data/vzdelanie.csv',
-                                                ['Kód',
-                                                 'Skrát. popis'],
-                                                fmt='({1}) - {3}'))
+                             choices=c.EDUCATION_LEVEL_CHOICES)
 
 class ForeignStudiesForm(FlaskForm):
     finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL)
@@ -290,10 +250,25 @@ class LoginForm(FlaskForm):
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
 
+class ForgottenPasswordForm(FlaskForm):
+    email = StringField(label=c.EMAIL,
+                        validators=[validators.Email()])
+    submit = SubmitField(label=c.SUBMIT)
+
+class NewPasswordForm(FlaskForm):
+    password = PasswordField(label=c.PASSWORD,
+                             validators=[validators.Length(min=8, max=80)])
+    repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
+                                    validators=[validators.Length(min=8,
+                                                                  max=80),
+                                                validators.EqualTo('password',
+                                                                   message=c.REPEAT_PASSWORD_ERR)])
+    submit = SubmitField(label=c.SIGNUP)
 
 class SignupForm(FlaskForm):
     email = StringField(label=c.EMAIL,
-                        validators=[validators.Email()])
+                        validators=[validators.Email(),
+                                    EmailDuplicateValidator()])
     password = PasswordField(label=c.PASSWORD,
                              validators=[validators.Length(min=8, max=80)])
     repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
