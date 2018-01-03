@@ -47,13 +47,18 @@ legend label {
   text-transform: uppercase;
 }
 
-.social-login__wrap {
+.account__wrap {
   margin-right: -15px;
   margin-left: -15px;
 }
 
-.social-login__separator {
+.account__separator {
   margin-bottom: 15px;
+}
+
+.account__forgot-password {
+  display: block;
+  margin-bottom: 30px;
 }
 
 .btn-social {

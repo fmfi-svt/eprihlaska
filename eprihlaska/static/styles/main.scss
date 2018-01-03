@@ -11,6 +11,14 @@ body {
   background-color: $gray2;
 }
 
+a {
+  color: $red3;
+
+  &:hover, &:active, &:focus {
+    color: $red2;
+  }
+}
+
 .main-wrap {
   background-color: white;
   padding-top: 15px;
@@ -34,4 +42,9 @@ body {
   font-weight: 700;
   margin-left: 2px;
   padding: 2px 4px;
+}
+
+.container .flashed-messages {
+  padding: 0;
+  width: auto;
 }

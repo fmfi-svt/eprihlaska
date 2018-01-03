@@ -8,11 +8,9 @@
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
 
-<a href="{{ url_for('forgotten_password') }}"> Zabudnuté heslo </a><br /><br />
-
-  <div class="social-login__wrap">
-    <div class="social-login col-lg-10 col-lg-offset-2">
-      <div class="social-login__separator">alebo</div>
+  <div class="account__wrap">
+    <div class="account col-lg-10 col-lg-offset-2">
+      <div class="account__separator">alebo</div>
       <a href="{{ url_for('google_login') }}" class="btn btn-block btn-social btn-google ">
         <span class="fa fa-google"></span> Prihlásiť cez Google
       </a>
