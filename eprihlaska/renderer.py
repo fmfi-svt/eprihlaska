@@ -104,7 +104,7 @@ class ePrihlaskaNavRenderer(BootstrapRenderer):
             _class='navbar-collapse collapse',
             id=node_id,
         ))
-        bar_list = bar.add(tags.ul(_class='nav navbar-nav'))
+        bar_list = bar.add(tags.ul(_class='nav navbar-nav navbar-main'))
         for item in node.items:
             bar_list.add(self.visit(item))
 
