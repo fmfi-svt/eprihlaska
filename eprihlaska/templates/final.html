@@ -43,6 +43,10 @@ Vaša prihláška je v stave: <strong>spracovaná</strong>
 {% endif %}
 </p>
 
+<br>
+
+<a href="{{ url_for('application_form') }}" target="_blank">Formulár elektronickej prihlášky (PDF)</a>.
+
 {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
 <h3>Poplatok</h3>
