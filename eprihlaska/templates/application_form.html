@@ -1,0 +1,239 @@
+{% extends "bootstrap/base.html" %}
+{% import "wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">{% block title %}ePrihlaska - Výpis prihlášky #{{ id }}{% endblock title %}</h1>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Študijné programy</div>
+    <div class="panel-body">
+      <div class="row">
+        <ol>
+          {% for sp in session['study_programme'] %}
+            {% if sp != '_' %}
+          <li>{{ lists['study_programme'][sp] }}</li>
+            {% endif %}
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Údaje o študentovi</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-4"> <strong>Meno:</strong> {{ session['basic_personal_data']['name'] }}</div>
+        <div class="col-sm-4"><strong>Priezvisko:</strong> {{ session['basic_personal_data']['surname'] }}</div>
+        <div class="col-sm-4"><strong>Rodinný stav:</strong> {{ lists['marital_status'][session['marital_status']] }}</div>
+      </div>
+       <div class="row">
+         <div class="col-sm-8"><strong>Rodné priezvisko:</strong> {{ session['basic_personal_data']['born_with_surname'] }}</div>
+         <div class="col-sm-4"><strong>Pohlavie:</strong> {{ lists['sex'][session['sex']] }}</div>
+       </div>
+
+       <hr>
+
+       <div class="row">
+         <div class="col-sm-4"><strong>Dátum narodenia:</strong> {{ session['date_of_birth'] }}</div>
+         <div class="col-sm-8"><strong>Rodné číslo:</strong> {{ session['birth_no'] }}</div>
+       </div>
+
+       <div class="row">
+         <div class="col-sm-4"><strong>Miesto narodenia:</strong> {{ lists['city'][session['place_of_birth']] }}</div>
+         <div class="col-sm-4"><strong>Štát:</strong> {{ lists['country'][session['country_of_birth']] }}</div>
+         <div class="col-sm-4"><strong>Občianstvo:</strong> {{ lists['country'][session['nationality']] }}</div>
+       </div>
+
+       <div class="row">
+         <div class="col-sm-4"><strong>Telefón:</strong> {{ session['phone'] }}</div>
+         <div class="col-sm-8"><strong>Email:</strong> {{ session['email'] }}</div>
+       </div>
+
+       <hr>
+
+       <div class="row">
+         <div class="col-sm-4"><strong>Matka:</strong> <small>(meno a priezvisko)</small> {{ session['mother_name'['name']] }} {{ session['mother_name'['surname']] }}</div>
+         <div class="col-sm-8"><small>(rodné priezvisko)</small>{{ session['mother_name'['born_with_surname']] }}</div>
+       </div>
+
+       <div class="row">
+         <div class="col-sm-4"><strong>Otec:</strong> <small>(meno a priezvisko)</small> {{ session['father_name'['name']] }} {{ session['father_name'['surname']] }}</div>
+         <div class="col-sm-8"><small>(rodné priezvisko)</small>{{ session['father_name'['born_with_surname']] }}</div>
+
+       </div>
+
+
+    </div>
+  </div>
+
+  <div class="panel panel-default" >
+    <div class="panel-heading">Adresa trvalého bydliska</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Ulica a číslo:</strong> {{ session['address_form']['street'] }} {{ session['address_form']['street_no'] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <strong>Mesto:</strong>  {{ lists['city'][session['address_form']['city']] }}
+        </div>
+        <div class="col-sm-6">
+          <strong>PSČ:</strong>  {{ session['address_form']['postal_no'] }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Štát:</strong> {{ lists['country'][session['address_form']['country']] }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if session['has_correspondence_address'] %}
+  <div class="panel panel-default" >
+    <div class="panel-heading">Korešpondenčná adresa:</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Ulica a číslo:</strong> {{ session['correspondence_address']['street'] }} {{ session['correspondence_address']['street_no'] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <strong>Mesto:</strong>  {{ lists['city'][session['correspondence_address']['city']] }}
+        </div>
+        <div class="col-sm-6">
+          <strong>PSČ:</strong>  {{ session['correspondence_address']['postal_no'] }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Štát:</strong> {{ lists['country'][session['correspondence_address']['country']] }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="panel panel-default" >
+    <div class="panel-heading">Stredná škola</div>
+    <div class="panel-body">
+
+      {% if session['has_previously_studied'] %}
+      <div class="row">
+        <div class="col-sm-12">
+         <input type="checkbox" name="" id="" checked /> V minulosti som študovala/študoval na vysokej škole v SR v I. stupni štúdia
+          alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne).
+        </div>
+      </div>
+      <hr>
+      {% endif %}
+
+      {% if session['finished_highschool_check'] == 'SK' %}
+      <div class="row">
+        <div class="col-sm-12">
+          <em>Stredná škola absolvovaná v Slovenskej republike</em>
+       </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-8">
+          <strong>Navštevovaná stredná škola:</strong>  {{ lists['highschool'][session['studies_in_sr']['highschool']] }}
+        </div>
+        <div class="col-sm-4">
+          <strong>Rok maturitnej skúšky:</strong>  {{ session['basic_personal_data']['matura_year'] }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Študijný odbor</strong>  {{ lists['hs_study_programme'][session['studies_in_sr']['study_programme_code']] }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>Dosiahnuté / očakávané stredoškolské vzdelanie:</strong> {{ lists['education_level'][session['studies_in_sr']['education_level']] }}
+        </div>
+      </div>
+
+      {% else %}
+      <div class="row">
+        <div class="col-sm-12">
+          <em>Stredná škola absolvovaná mimo Slovenskej republiky</em>
+       </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% if session['grades_mat'] or session['grades_fyz'] or session['grades_bio']  %}
+  <div class="panel panel-default">
+    <div class="panel-heading">Známky poskytnuté ako súčasť prihlášky</div>
+    <div class="panel-body">
+      <table  class="table" cellspacing="5" cellpadding="5">
+        <tr>
+          <th>Predmet</th>
+          <th>Známka 1. ročník / kvarta</th>
+          <th>Známka 2. ročník / kvinta</th>
+          <th>Známka 3. ročník / septima</th>
+        </tr>
+
+        {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
+        <tr>
+          <td>Matematika</td>
+          <td>{{ session['grades_mat']['grade_first_year'] }}</td>
+          <td>{{ session['grades_mat']['grade_second_year'] }}</td>
+          <td>{{ session['grades_mat']['grade_third_year'] }}</td>
+        </tr>
+        {% endif %}
+
+        {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
+        <tr>
+          <td>Fyzika</td>
+          <td>{{ session['grades_fyz']['grade_first_year'] }}</td>
+          <td>{{ session['grades_fyz']['grade_second_year'] }}</td>
+          <td>{{ session['grades_fyz']['grade_third_year'] }}</td>
+        </tr>
+        {% endif %}
+
+
+        {% if 'grades_bio' in session and 'grade_first_year' in session['grades_bio'] %}
+        <tr>
+          <td>Biológia</td>
+          <td>{{ session['grades_bio']['grade_first_year'] }}</td>
+          <td>{{ session['grades_bio']['grade_second_year'] }}</td>
+          <td>{{ session['grades_bio']['grade_third_year'] }}</td>
+        </tr>
+        {% endif %}
+
+      </table>
+    </div>
+  </div>
+
+{% endif %}
+
+</div>
+
+<style>
+@media print {
+    [class*="col-md"], [class*="col-sm"], [class*="col-xs"] {
+        float: none;
+    }
+}
+</style>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

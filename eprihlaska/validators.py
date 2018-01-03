@@ -51,7 +51,7 @@ class DateValidator:
         self.val_err_msg = val_err_msg
 
     def __call__(self, form, field):
-        date_reg = re.compile(r'^(\d\d)\.(\d\d)\.(\d\d\d\d)$')
+        date_reg = re.compile(r'^(\d?\d)\.(\d?\d)\.(\d\d\d\d)$')
         mo = date_reg.search(field.data)
 
         try:

@@ -19,7 +19,11 @@ from munch import munchify
 from functools import wraps
 
 from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
-from .consts import MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL
+from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
+                     SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
+                     MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
+                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES)
+
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
 
@@ -27,6 +31,11 @@ def require_filled_form(form_key):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            if 'application_submitted' in session:
+                final = url_for('final')
+                if str(request.url_rule) != final:
+                    return redirect(final)
+
             if request.method == 'GET' and form_key not in session:
                 flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
                 for _, endpoint in MENU:
@@ -69,6 +78,9 @@ def index():
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
 def study_programme():
+    if 'application_submitted' in session:
+        return redirect(url_for('final'))
+
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         if 'application_submitted' not in session:
@@ -257,7 +269,6 @@ def admissions_wavers():
 @login_required
 @require_filled_form('admissions_wavers')
 def final():
-
     return render_template('final.html', session=session)
 
 
@@ -270,6 +281,8 @@ def submit_app():
     app.submitted = True
     app.submitted_at = datetime.datetime.now()
     db.session.commit()
+
+    flash('Gratulujeme, Vaša prihláška bola podaná!')
     return redirect(url_for('final'))
 
 @app.route('/grades_control', methods=['GET'])
@@ -283,6 +296,27 @@ def grades_control():
     # response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
 
     return rendered
+
+@app.route('/application_form', methods=['GET'])
+@login_required
+def application_form():
+    lists = {
+        'sex': dict(SEX_CHOICES),
+        'marital_status': dict(MARITAL_STATUS_CHOICES),
+        'country': dict(COUNTRY_CHOICES),
+        'city': dict(CITY_CHOICES),
+        'highschool': dict(HIGHSCHOOL_CHOICES),
+        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
+        'education_level': dict(EDUCATION_LEVEL_CHOICES),
+        'study_programme': dict(STUDY_PROGRAMME_CHOICES)
+    }
+
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    rendered = render_template('application_form.html', session=session,
+                               lists=lists, id=app.id)
+
+    return rendered
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
