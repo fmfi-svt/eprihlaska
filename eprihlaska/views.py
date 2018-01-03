@@ -287,7 +287,9 @@ def submit_app():
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
-    rendered = render_template('grade_listing.html', session=session)
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    rendered = render_template('grade_listing.html', session=session,
+                               id=app.id)
     # pdf = pdfkit.from_string(rendered, False)
 
     # response = make_response(pdf)
