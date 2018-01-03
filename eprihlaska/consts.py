@@ -1,4 +1,8 @@
 from flask_babel import gettext as _
+from .utils import choices_from_csv, city_formatter
+import os
+
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 SUBMIT = _('Odoslať')
 NEXT = _('Ďalej')
@@ -97,7 +101,7 @@ PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
 HAS_CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska')
 CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa')
 
-HAS_PREVIOUSLY_STUDIED = _('V minulosti som študoval na vysokej škole v SR v I. stupni štúdia alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)')
+HAS_PREVIOUSLY_STUDIED = _('V minulosti som študovala/študoval na vysokej škole v SR v I. stupni štúdia alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)')
 FINISHED_HIGHSCHOOL = _('Absolvovaná stredná škola')
 IN_SR = _('v Slovenskej Republike')
 OUTSIDE_OF_SR = _('mimo Slovenskej Republiky')
@@ -187,3 +191,34 @@ WELCOME = _('Vitajte {}')
 FORGOTTEN_PASSWORD_MAIL = _('Ak ste žiadali o zmenu Vášho hesla, môžete tak urobiť na linke {}')
 
 YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')
+
+SEX_CHOICES = [('male', MALE),
+               ('female', FEMALE)]
+COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
+                                       ['id', 'Štát'],
+                                       sortby=1,
+                                       prepend=['703', '203'])
+CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
+                                ['id', 'Názov obce'],
+                                fmt='{2} ({3})',
+                                sortby=1)
+
+MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
+                                          ['id', 'Rodinný stav'])
+
+HIGHSCHOOL_CHOICES = choices_from_csv(DIR + '/data/skoly.csv',
+                                      ['St. šk.', 'Obec', 'Stredná škola',
+                                       'Ulica'],
+                                      fmt='{2}, {3}, {4}',
+                                      sortby=1,
+                                      prepend=['XXXXXXX'],
+                                      post_fmt=city_formatter)
+
+HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
+                                              ['Odbor - kod',
+                                               'Odbor stred. školy'],
+                                              fmt='{1} - {2}')
+
+EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
+                                           ['Kód', 'Skrát. popis'],
+                                           fmt='({1}) - {3}')
