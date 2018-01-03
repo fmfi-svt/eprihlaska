@@ -8,7 +8,6 @@
   margin-bottom: 0;
   padding: 4px;
   border-radius: 0;
-  counter-reset: menuItemNumber;
 }
 
 .navbar-default .navbar-brand {
@@ -26,10 +25,57 @@
 
 .navbar-default .navbar-nav > li > a {
   color: white;
-  padding: 10px 10px 10px 26px;
+  padding: 10px;
   border: 1px solid transparent;
   transition: color 0.3s ease;
   transition: background-color 0.3s ease;
+
+  &:hover {
+    color: $gray2;
+    background-color: rgba(255, 255, 255, .1);
+
+    &:before {
+      color: $gray2;
+      border-color: $gray2;
+    }
+  }
+
+  &[href="#"] {
+    color: $red3;
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.navbar-default .navbar-nav > .active > a {
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  border: 1px solid $red3;
+  border-radius: 3px;
+  color: white;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, .1);
+    color: white;
+  }
+}
+
+.navbar-main {
+  counter-reset: menuItemNumber;
+}
+
+.navbar-default .navbar-main > li > a {
+  padding-left: 26px;
+
+  &[href="#"] {
+    &:before {
+      border-color: $red3;
+      color: $red3;
+    }
+  }
 
   &:before {
     position: absolute;
@@ -53,53 +99,17 @@
   }
 
   &:hover {
-    color: $gray2;
-    background-color: rgba(255, 255, 255, .1);
-
-    &:before {
-      color: $gray2;
-      border-color: $gray2;
-    }
-  }
-
-  &[href="#"] {
-    color: $red3;
-    cursor: default;
-
-    &:before {
-      border-color: $red3;
-      color: $red3;
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-}
-
-.navbar-default .navbar-nav > .active > a {
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-  border: 1px solid $red3;
-  border-radius: 3px;
-  color: white;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, .1);
-    color: white;
-
     &:before {
       color: white;
       border-color: white;
     }
-  }
-}
 
-.navbar-default .navbar-right > li > a {
-  padding: 10px;
-
-  &:before {
-    display: none;
+    &[href="#"] {
+      &:before {
+        border-color: $red3;
+        color: $red3;
+      }
+    }
   }
 }
 
