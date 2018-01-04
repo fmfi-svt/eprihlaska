@@ -268,7 +268,8 @@ def admissions_wavers():
 @login_required
 @require_filled_form('admissions_wavers')
 def final():
-    return render_template('final.html', session=session)
+    uid = 9999 + current_user.id
+    return render_template('final.html', session=session, user_id=uid)
 
 
 @app.route('/submit_app')
