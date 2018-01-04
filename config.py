@@ -1,7 +1,7 @@
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'long-secret-key'
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://eprihlaska:ia5iiyoob6evool3Ahr8@localhost/eprihlaska'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 OAUTH_CLIENT_CACHE_TYPE = 'simple'

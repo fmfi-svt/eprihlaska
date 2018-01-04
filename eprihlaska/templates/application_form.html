@@ -127,7 +127,7 @@
         <div class="col-sm-6">
           {% if session['address_form']['city'] %}
           <strong>Mesto:</strong>  {{ lists['city'][session['address_form']['city']] }}
-          {% elseif session['address_form']['city_foreign'] %}
+          {% elif session['address_form']['city_foreign'] %}
           <strong>Mesto (v zahraničí):</strong>  {{ session['address_form']['city_foreign'] }}
           {% endif %}
         </div>
