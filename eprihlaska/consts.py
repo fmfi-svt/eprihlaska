@@ -140,7 +140,8 @@ COMPETITION_SECOND = _('Úspech na súťaži (2)')
 COMPETITION_THIRD = _('Úspech na súťaži (3)')
 
 EXTERNAL_MATURA_PERCENTILE = _('percentil externej maturity z matematiky')
-SCIO_PERCENTILE = _('percentil / dátum vykonania autorizovanej skúšky z matematiky (SCIO)')
+SCIO_PERCENTILE = _('percentil autorizovanej skúšky z matematiky (SCIO)')
+SCIO_DATE = _('dátum vykonania autorizovanej skúšky z matematiky (SCIO)')
 
 MATURA_MAT_GRADE = _('známka z maturity matematika')
 MATURA_FYZ_GRADE = _('známka z maturity fyzika')

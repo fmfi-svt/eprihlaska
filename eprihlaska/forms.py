@@ -176,6 +176,7 @@ class FurtherStudyInfoForm(FlaskForm):
     g_max = 5
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
+    scio_date = StringField(label=c.SCIO_DATE)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
                                     validators=[validators.Optional(),
