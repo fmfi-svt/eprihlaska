@@ -292,7 +292,7 @@
     </div>
     <div class="panel-body">
       {% if session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no'] %}
-      <input type="checkbox" name="" id="" checked /> {{ label }} <br /> {{ consts.DEAN_INV_LIST_YN }} <br />
+      <input type="checkbox" name="" id="" checked /> {{ consts.DEAN_INV_LIST_YN }} <br />
       <hr>
       <strong>{{ consts.DEAN_INV_LIST_NO }}:</strong> {{ session['basic_personal_data']['dean_invitation_letter_no'] }}
       {% endif %}
