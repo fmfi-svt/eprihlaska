@@ -291,6 +291,12 @@
       Skutočnosti dôležité pre prijatie bezprijímacích pohovorov
     </div>
     <div class="panel-body">
+      {% if session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no'] %}
+      <input type="checkbox" name="" id="" checked /> {{ label }} <br /> {{ consts.DEAN_INV_LIST_YN }} <br />
+      <hr>
+      <strong>{{ consts.DEAN_INV_LIST_NO }}:</strong> {{ session['basic_personal_data']['dean_invitation_letter_no'] }}
+      {% endif %}
+
       {{ further_study_field('external_matura_percentile', consts.EXTERNAL_MATURA_PERCENTILE) }}
       {{ further_study_field('matura_mat_grade', consts.MATURA_MAT_GRADE) }}
       {{ further_study_field('matura_fyz_grade', consts.MATURA_FYZ_GRADE) }}
