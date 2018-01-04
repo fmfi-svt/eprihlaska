@@ -5,7 +5,41 @@
 
 {% block content %}
 <div class="container">
-  <h1 class="section-title">{% block title %}ePrihlaska - Výpis prihlášky #{{ id }}{% endblock title %}</h1>
+  <h1 class="section-title">{% block title %}Prihláška na vysokoškolské štúdium{% endblock title %}</h1>
+  <h3>bakalárske štúdium - prvý stupeň</h3>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Údaje o prihláške</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-8">
+          <strong>Univerzita:</strong> Univerzita Komenského v Bratislave <br />
+          <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
+          <strong>Akademický rok:</strong> 2018/2019 <br />
+        </div>
+        <div class="col-sm-4 text-center">
+          <img src="{{ url_for('static', filename='img/fmfi-logo.jpg') }}" style="height: 150px; width: 150px" alt=""/>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-sm-12">
+
+          <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
+          {% if session['application_submitted'] %}
+          <strong>Stav prihlášky: </strong> podaná <br />
+          <strong>Dátum podania:</strong> {{ submitted_at.strftime('%d.%m.%Y') }} <br />
+          {% else %}
+          <strong>Stav prihlášky: </strong> nepodaná <br />
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 
   <div class="panel panel-default">
     <div class="panel-heading">Študijné programy</div>
@@ -46,7 +80,7 @@
        <div class="row">
          <div class="col-sm-4"><strong>Miesto narodenia:</strong> {{ lists['city'][session['place_of_birth']] }}</div>
          <div class="col-sm-4"><strong>Štát:</strong> {{ lists['country'][session['country_of_birth']] }}</div>
-         <div class="col-sm-4"><strong>Občianstvo:</strong> {{ lists['country'][session['nationality']] }}</div>
+         <div class="col-sm-4"><strong>Štátne občianstvo:</strong> {{ lists['country'][session['nationality']] }}</div>
        </div>
 
        <div class="row">
@@ -57,13 +91,23 @@
        <hr>
 
        <div class="row">
-         <div class="col-sm-4"><strong>Matka:</strong> <small>(meno a priezvisko)</small> {{ session['mother_name'['name']] }} {{ session['mother_name'['surname']] }}</div>
-         <div class="col-sm-8"><small>(rodné priezvisko)</small>{{ session['mother_name'['born_with_surname']] }}</div>
+         <div class="col-sm-4">
+           <strong>Matka:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
+           {{ session['mother_name']['name'] }} {{ session['mother_name']['surname'] }}
+         </div>
+         <div class="col-sm-8">
+           <small>(rodné priezvisko)&nbsp;&nbsp;</small> {{ session['mother_name']['born_with_surname'] }}
+         </div>
        </div>
 
        <div class="row">
-         <div class="col-sm-4"><strong>Otec:</strong> <small>(meno a priezvisko)</small> {{ session['father_name'['name']] }} {{ session['father_name'['surname']] }}</div>
-         <div class="col-sm-8"><small>(rodné priezvisko)</small>{{ session['father_name'['born_with_surname']] }}</div>
+         <div class="col-sm-4">
+           <strong>Otec:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
+           {{ session['father_name']['name'] }} {{ session['father_name']['surname'] }}
+         </div>
+         <div class="col-sm-8">
+           <small>(rodné priezvisko)&nbsp;&nbsp;</small>{{ session['father_name']['born_with_surname'] }}
+         </div>
 
        </div>
 
@@ -81,7 +125,11 @@
       </div>
       <div class="row">
         <div class="col-sm-6">
+          {% if session['address_form']['city'] %}
           <strong>Mesto:</strong>  {{ lists['city'][session['address_form']['city']] }}
+          {% else if session['address_form']['city_foreign'] %}
+          <strong>Mesto (v zahraničí):</strong>  {{ session['address_form']['city_foreign'] }}
+          {% endif %}
         </div>
         <div class="col-sm-6">
           <strong>PSČ:</strong>  {{ session['address_form']['postal_no'] }}
@@ -221,6 +269,64 @@
   </div>
 
 {% endif %}
+
+{% macro further_study_field(name, label) %}
+  {% if session['further_study_info'][name] %}
+  <strong>
+    {{ label }}:
+  </strong>
+  {{ session['further_study_info'][name] }} <br />
+  {% endif %}
+{% endmacro %}
+
+{% macro further_study_check_field(name, label) %}
+  {% if session['further_study_info'][name] %}
+  <input type="checkbox" name="" id="" checked /> {{ label }} <br />
+  {% endif %}
+{% endmacro %}
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Skutočnosti dôležité pre prijatie bezprijímacích pohovorov
+    </div>
+    <div class="panel-body">
+      {{ further_study_field('external_matura_percentile', consts.EXTERNAL_MATURA_PERCENTILE) }}
+      {{ further_study_field('matura_mat_grade', consts.MATURA_MAT_GRADE) }}
+      {{ further_study_field('matura_fyz_grade', consts.MATURA_FYZ_GRADE) }}
+      {{ further_study_field('matura_inf_grade', consts.MATURA_INF_GRADE) }}
+      {{ further_study_field('matura_bio_grade', consts.MATURA_BIO_GRADE) }}
+      {{ further_study_field('matura_che_grade', consts.MATURA_CHE_GRADE) }}
+
+
+      {{ further_study_check_field('will_take_external_mat_matura', consts.WILL_TAKE_EXT_MAT) }}
+      {{ further_study_check_field('will_take_scio', consts.WILL_TAKE_SCIO) }}
+      {{ further_study_check_field('will_take_mat_matura', consts.WILL_TAKE_MAT_MATURA) }}
+      {{ further_study_check_field('will_take_fyz_matura', consts.WILL_TAKE_FYZ_MATURA) }}
+      {{ further_study_check_field('will_take_inf_matura', consts.WILL_TAKE_INF_MATURA) }}
+      {{ further_study_check_field('will_take_che_matura', consts.WILL_TAKE_CHE_MATURA) }}
+      {{ further_study_check_field('will_take_bio_matura', consts.WILL_TAKE_BIO_MATURA) }}
+
+      {% for s in ['competition_1', 'competition_2', 'competition_3'] %}
+        {% if session[s]['competition'] != '_' %}
+      <hr>
+      <div class="row">
+        <div class="col-sm-4">
+          <strong>{{ consts.COMPETITION_NAME }}:</strong> {{ lists['competition'][session[s]['competition']] }}
+        </div>
+        <div class="col-sm-2">
+          <strong>{{ consts.COMPETITION_YEAR }}:</strong> {{ session[s]['year'] }}
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ consts.COMPETITION_FURTHER_INFO }}:</strong> {{ session[s]['further_info'] }}
+        </div>
+      </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+
 
 </div>
 

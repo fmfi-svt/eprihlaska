@@ -14,7 +14,7 @@
         $('#address_form-city_foreign').closest('.form-group').hide()
         $('#correspondence_address-city_foreign').closest('.form-group').hide()
 
-        $('select.form-control').chosen({search_contains: true});
+        $('#address_form select.form-control').chosen({search_contains: true});
         var correspondence_address_fieldset = $('#correspondence_address');
 
         $('#correspondence_address-country').on('change', function(e){
@@ -57,6 +57,7 @@
         $('#has_correspondence_address').click(function(e){
           if (this.checked) {
             $(correspondence_address_fieldset).show();
+            $('#correspondence_address select.form-control').chosen({search_contains: true});
           } else {
             $(correspondence_address_fieldset).hide();
           }
