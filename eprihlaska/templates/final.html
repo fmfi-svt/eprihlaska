@@ -6,6 +6,21 @@
 
 {% if not session['application_submitted'] %}
 
+{% if not session['address_form']['street'] %}
+<p class="bg-warning">
+  Neuviedli ste adresu trvalého bydliska. Nekompletné prihlášky nebudú môcť byť
+  akceptované. Pridať adresu je možné <a href="{{ url_for('address') }}">v časti Adresa</a>.
+</p>
+{% endif %}
+
+{% if not session['birth_no'] %}
+<p class="bg-warning">
+  Neuviedli ste rodné číslo. Rodné číslo je potrebné uviesť, ak vám bolo
+  pridelené. Pridať rodné číslo je možné
+  <a href="{{ url_for('personal_info') }}">v časti Osobné informácie</a>.
+</p>
+{% endif %}
+
 <h3>Podanie prihlášky</h3>
 
 <p>

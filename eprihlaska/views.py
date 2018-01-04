@@ -226,6 +226,7 @@ def admissions_wavers():
     relevant_years = {
         'external_matura_percentile': [2014, 2015, 2016, 2017],
         'scio_percentile': [2014, 2015, 2016, 2017],
+        'scio_date': [2014, 2015, 2016, 2017],
         'matura_mat_grade': [2015, 2016, 2017],
         'matura_fyz_grade': [2015, 2016, 2017],
         'matura_inf_grade': [2015, 2016, 2017],
