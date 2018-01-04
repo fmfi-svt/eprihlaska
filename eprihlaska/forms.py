@@ -178,23 +178,28 @@ class FurtherStudyInfoForm(FlaskForm):
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
     matura_fyz_grade = IntegerField(label=c.MATURA_FYZ_GRADE,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
     matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
     matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
     matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
@@ -211,15 +216,18 @@ class FurtherGradesInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
     grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
     grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
-                                     validators=[validators.NumberRange(min=g_min,
+                                     validators=[validators.Optional(),
+                                                 validators.NumberRange(min=g_min,
                                                                         max=g_max,
                                                                         message=c.GRADE_ERR)])
     grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
-                                    validators=[validators.NumberRange(min=g_min,
+                                    validators=[validators.Optional(),
+                                                validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
