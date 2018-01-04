@@ -22,7 +22,9 @@ from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
                      MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
-                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES)
+                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
+                     COMPETITION_CHOICES)
+from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
 
@@ -309,12 +311,15 @@ def application_form():
         'highschool': dict(HIGHSCHOOL_CHOICES),
         'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
         'education_level': dict(EDUCATION_LEVEL_CHOICES),
-        'study_programme': dict(STUDY_PROGRAMME_CHOICES)
+        'study_programme': dict(STUDY_PROGRAMME_CHOICES),
+        'competition': dict(COMPETITION_CHOICES)
     }
 
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_template('application_form.html', session=session,
-                               lists=lists, id=app.id)
+                               lists=lists, id=app.id,
+                               submitted_at=app.submitted_at,
+                               consts=consts)
 
     return rendered
 
