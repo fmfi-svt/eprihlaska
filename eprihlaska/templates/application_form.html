@@ -314,7 +314,7 @@
       {{ further_study_check_field('will_take_bio_matura', consts.WILL_TAKE_BIO_MATURA) }}
 
       {% for s in ['competition_1', 'competition_2', 'competition_3'] %}
-        {% if session[s]['competition'] != '_' %}
+        {% if s in session and session[s]['competition'] != '_' %}
       <hr>
       <div class="row">
         <div class="col-sm-4">
