@@ -271,7 +271,7 @@
 {% endif %}
 
 {% macro further_study_field(name, label) %}
-  {% if session['further_study_info'][name] %}
+  {% if 'further_info' in session and session['further_study_info'][name] %}
   <strong>
     {{ label }}:
   </strong>
@@ -280,7 +280,7 @@
 {% endmacro %}
 
 {% macro further_study_check_field(name, label) %}
-  {% if session['further_study_info'][name] %}
+  {% if 'further_info' in session and session['further_study_info'][name] %}
   <input type="checkbox" name="" id="" checked /> {{ label }} <br />
   {% endif %}
 {% endmacro %}
