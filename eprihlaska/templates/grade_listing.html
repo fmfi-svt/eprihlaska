@@ -9,13 +9,14 @@
     {% block title %}Potvrdenie ku prihláške na vysokoškolské štúdium{% endblock title %}
   </h1>
   <div class="panel panel-default">
-    <div class="panel-heading">Potvrdenie ku prihláške na vysokoškolské štúdium #{{ id }}</div>
+    <div class="panel-heading">Údaje o prihláške</div>
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-8">
           <strong>Univerzita:</strong> Univerzita Komenského v Bratislave <br />
           <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
           <strong>Akademický rok:</strong> 2018/2019 <br />
+          <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
         </div>
         <div class="col-sm-4 text-center">
           <img src="{{ url_for('static', filename='img/fmfi-logo.jpg') }}" style="height: 150px; width: 150px" alt=""/>
