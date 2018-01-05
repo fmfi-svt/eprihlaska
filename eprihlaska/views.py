@@ -295,11 +295,13 @@ def grades_control():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_template('grade_listing.html', session=session,
                                id=app.id)
-    # pdf = pdfkit.from_string(rendered, False)
+    import pdfkit
+    pdf = pdfkit.from_string(rendered, False)
 
-    # response = make_response(pdf)
-    # response.headers['Content-Type'] = 'application/pdf'
-    # response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
+    return response
 
     return rendered
 
