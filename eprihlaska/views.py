@@ -18,6 +18,7 @@ import uuid
 from munch import munchify
 from functools import wraps
 
+from .headless_pdfkit import generate_pdf
 from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
@@ -295,22 +296,12 @@ def grades_control():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_template('grade_listing.html', session=session,
                                id=app.id)
-    import pdfkit
-    class HeadlessPdfKit(pdfkit.PDFKit):
-        def command(self, path=None):
-            return ['xvfb-run', '--'] + super().command(path)
-
-    rendered = rendered.replace('src="//', 'src="http://')
-    rendered = rendered.replace('href="//', 'href="http://')
-    pdf = HeadlessPdfKit(rendered, 'string',
-                         options={'orientation': 'landscape'}).to_pdf(False)
+    pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
     return response
-
-    return rendered
 
 @app.route('/application_form', methods=['GET'])
 @login_required
@@ -332,8 +323,12 @@ def application_form():
                                lists=lists, id=app.id,
                                submitted_at=app.submitted_at,
                                consts=consts)
+    pdf = generate_pdf(rendered)
 
-    return rendered
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=application_form.pdf'
+    return response
 
 
 @app.route('/login', methods=['GET', 'POST'])
