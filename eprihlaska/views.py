@@ -301,7 +301,9 @@ def grades_control():
             return ['xvfb-run', '--'] + super().command(path)
 
     rendered = rendered.replace('src="//', 'src="http://')
-    pdf = HeadlessPdfKit(rendered, 'string').to_pdf(False)
+    rendered = rendered.replace('href="//', 'href="http://')
+    pdf = HeadlessPdfKit(rendered, 'string',
+                         options={'orientation': 'landscape'}).to_pdf(False)
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
