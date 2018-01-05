@@ -296,7 +296,11 @@ def grades_control():
     rendered = render_template('grade_listing.html', session=session,
                                id=app.id)
     import pdfkit
-    pdf = pdfkit.from_string(rendered, False)
+    class HeadlessPdfKit(pdfkit.PDFKit):
+        def command(self, path=None):
+            return ['xvfb-run', '--'] + super().command(path)
+
+    pdf = HeadlessPdfKit(rendered, 'string').to_pdf(False)
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
