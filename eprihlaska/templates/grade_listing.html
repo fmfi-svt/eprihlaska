@@ -3,6 +3,11 @@
 {% import "bootstrap/fixes.html" as fixes %}
 {% import "bootstrap/utils.html" as util %}
 
+{% block metas %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <h1 class="section-title">
@@ -19,7 +24,7 @@
           <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
         </div>
         <div class="col-sm-4 text-center">
-          <img src="{{ url_for('static', filename='img/fmfi-logo.jpg') }}" style="height: 150px; width: 150px" alt=""/>
+          <img src="{{ url_for('static', filename='img/fmfi-logo.jpg', _external=True) }}" style="height: 150px; width: 150px" alt=""/>
         </div>
       </div>
 
@@ -92,10 +97,6 @@
     </div>
   </div>
 </div>
-
-<script>
-  window.print();
-</script>
 
 <style>
 @media print {

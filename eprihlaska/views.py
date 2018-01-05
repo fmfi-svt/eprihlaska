@@ -300,6 +300,7 @@ def grades_control():
         def command(self, path=None):
             return ['xvfb-run', '--'] + super().command(path)
 
+    rendered = rendered.replace('src="//', 'src="http://')
     pdf = HeadlessPdfKit(rendered, 'string').to_pdf(False)
 
     response = make_response(pdf)
