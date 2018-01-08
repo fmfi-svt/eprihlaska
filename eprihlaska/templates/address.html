@@ -52,8 +52,9 @@
         */
 
 
-        if (!$('#has_correspondence_address').is(":checked")) {
-          $(correspondence_address_fieldset).hide();
+        if ($('#has_correspondence_address').is(":checked")) {
+          $(correspondence_address_fieldset).show();
+          $('#correspondence_address select.form-control').chosen();
         }
 
         $('#has_correspondence_address').click(function(e){
