@@ -166,7 +166,7 @@ def filter_competitions(competition_list, study_programme_list):
 
     constraints = {
         'FYZ': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
         'CHE': ['BIN', 'BMF'],
         'SVOC_INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
