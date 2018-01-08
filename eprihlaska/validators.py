@@ -5,7 +5,8 @@ from wtforms import validators
 
 
 class BirthNoValidator(object):
-    def __init__(self, birth_no=-1, message=None, form_err=None, mod_err=None):
+    def __init__(self, birth_no=-1, message=None, form_err=None, mod_err=None,
+                 conditional_field=None, conditional_field_vals=None):
         self.birth_no = birth_no
         self.mod_err = mod_err
         self.form_err = form_err
@@ -22,32 +23,46 @@ class BirthNoValidator(object):
             mod_err = 'Vaše rodné číslo nie je deliteľné číslom 11.'
         self.mod_err = mod_err
 
+        self.conditional_field = conditional_field
+        self.conditional_field_vals = []
+        if conditional_field_vals is not []:
+            self.conditional_field_vals = conditional_field_vals
+
+
     def __call__(self, form, field):
         bno_reg = re.compile(r'^(([0-9][0-9])(([0156])([0-9]))([0-3][0-9]))/(\d\d\d\d)$')
         mo = bno_reg.search(field.data)
 
-        # If someone doesn't have a birth number, empty field is also accepted.
-        if field.data:
-            try:
-                mo.group(0)
-            except AttributeError:
-                raise validators.ValidationError(self.message + ' ' + self.form_err)
+        # If the `conditional_field` has been set, only run the validation if
+        # the value of the `conditional_field` is among those passed to the
+        # validator via `conditional_field_vals`. Otherwise the validation
+        # is not conducted.
+        if self.conditional_field is not None:
+            conditional_field = form[self.conditional_field]
+            if conditional_field.data not in self.conditional_field_vals:
+                if not field.data:
+                    return
 
-            birth_no = int(mo.group(1) + mo.group(7))
-            if birth_no % 11 != 0:
-                raise validators.ValidationError(self.message + ' ' + self.mod_err)
+        try:
+            mo.group(0)
+        except AttributeError:
+            raise validators.ValidationError(self.message + ' ' + self.form_err)
 
-            year = mo.group(2)
-            month = mo.group(3)
-            day = mo.group(6)
-            if mo.group(4) in ['5', '6']:
-                month = '{}{}'.format(int(mo.group(4))-5, mo.group(5))
+        birth_no = int(mo.group(1) + mo.group(7))
+        if birth_no % 11 != 0:
+            raise validators.ValidationError(self.message + ' ' + self.mod_err)
 
-            try:
-                date = '{}.{}.{}'.format(day, month, year)
-                datetime.datetime.strptime(date, '%d.%m.%y')
-            except ValueError:
-                raise validators.ValidationError(self.message)
+        year = mo.group(2)
+        month = mo.group(3)
+        day = mo.group(6)
+        if mo.group(4) in ['5', '6']:
+            month = '{}{}'.format(int(mo.group(4))-5, mo.group(5))
+
+        try:
+            date = '{}.{}.{}'.format(day, month, year)
+            datetime.datetime.strptime(date, '%d.%m.%y')
+        except ValueError:
+            raise validators.ValidationError(self.message)
 
 
 class DateValidator:

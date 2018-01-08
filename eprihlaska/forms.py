@@ -28,7 +28,8 @@ class PersonalDataForm(FlaskForm):
                               validators=[validators.DataRequired()],
                               default='703')
     birth_no = StringField(label=c.BIRTH_NO,
-                           validators=[BirthNoValidator()])
+                           validators=[BirthNoValidator(conditional_field='nationality',
+                                                        conditional_field_vals=['703'])])
     date_of_birth = StringField(label=c.BIRTH_DATE,
                                 validators=[DateValidator()],
                                 render_kw={"placeholder": 'DD.MM.RRRR'})
