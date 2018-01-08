@@ -17,9 +17,16 @@ Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
 {% if not session['email'] %}
 
 <hr>
-<p>
-  Pre vyplnenie prihlášky sa prosím najprv <a href="{{ url_for('signup') }}">zaregistrujte</a>.
-</p>
+
+<h4>Registácia</h4>
+
+  {{ wtf.quick_form(form,
+                    action='/signup',
+                    form_type='horizontal',
+                    button_map={'submit': 'primary'}) }}
+
+  {% include 'social_buttons.html' %}
+
 
 {% endif %}
 

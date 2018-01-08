@@ -76,7 +76,11 @@ def load_session():
 
 @app.route('/')
 def index():
-    return render_template('intro.html', session=session)
+    form = SignupForm()
+    if hasattr(current_user, 'id'):
+        redirect(url_for('study_programme'))
+
+    return render_template('intro.html', form=form, session=session)
 
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
