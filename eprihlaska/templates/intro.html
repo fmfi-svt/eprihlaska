@@ -14,28 +14,35 @@ Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
 <a href="https://e-prihlaska.uniba.sk/" target="_blank">https://e-prihlaska.uniba.sk/</a>
 </p>
 
-<p>
-Vitajte v systéme elektronickej prihlášky Fakulty matematiky, fyziky a informatiky Univerzity Komenského v Bratislave.
-Informácie o študijných programoch nájdete <a href="https://fmph.uniba.sk/studium/programy">na stránke fakulty.</a>
-</p>
-
-<p>
-Na tejto stránke môžete vyplniť a odoslať elektronickú prihlášku, ktorá je ekvivalentná formám prihlášky zasielaným poštou.
-Na záver vypĺňania prihlášky získate podrobné pokyny ako postupovať ďalej.
-</p>
-
 <hr>
 
-<h4>Registácia</h4>
+
+<div class="row">
+  <div class="col-sm-6">
+    <p>
+    Vitajte v systéme elektronickej prihlášky Fakulty matematiky, fyziky a informatiky Univerzity Komenského v Bratislave.
+    Informácie o študijných programoch nájdete <a href="https://fmph.uniba.sk/studium/programy">na stránke fakulty.</a>
+    </p>
+
+    <p>
+    Na tejto stránke môžete vyplniť a odoslať elektronickú prihlášku, ktorá je ekvivalentná formám prihlášky zasielaným poštou.
+    Na záver vypĺňania prihlášky získate podrobné pokyny ako postupovať ďalej.
+    </p>
+
+    <p>
+      <a href="{{ url_for('login') }}" class="btn btn-block btn-social btn-red btn-primary">Prihlásiť sa</a>
+      {% include 'social_buttons.html' %}
+    </p>
+  </div>
+
+  <div class="col-sm-6">
+  <h4>Registácia</h4>
 
   {{ wtf.quick_form(form,
                     action='/signup',
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
-
-  {% include 'social_buttons.html' %}
-
-
-{% endif %}
+  </div>
+</div>
 
 {% endblock %}

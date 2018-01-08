@@ -78,7 +78,7 @@ def load_session():
 def index():
     form = SignupForm()
     if hasattr(current_user, 'id'):
-        redirect(url_for('study_programme'))
+        return redirect(url_for('study_programme'))
 
     return render_template('intro.html', form=form, session=session)
 
