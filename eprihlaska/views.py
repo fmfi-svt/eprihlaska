@@ -392,7 +392,8 @@ def login():
                 return redirect(url_for('study_programme'))
         flash('Nesprávne prihlasovacie údaje', 'error')
 
-    return render_template('login.html', form=form, session=session)
+    return render_template('login.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 def send_password_email(user):
     hash = str(uuid.uuid4())
@@ -430,8 +431,8 @@ def signup():
 
         flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
 
-    return render_template('signup.html', form=form)
-
+    return render_template('signup.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
 @app.route('/logout', methods=['GET'])
@@ -463,7 +464,8 @@ def forgotten_password_hash(hash):
             db.session.commit()
             flash('Gratulujeme, Vaše heslo bolo zmenené! Prihláste sa ním, prosím, nižšie.')
             return redirect(url_for('login'))
-        return render_template('forgotten_password.html', form=form)
+        return render_template('forgotten_password.html', form=form, session=session,
+                               sp=dict(STUDY_PROGRAMME_CHOICES))
     else:
         token.valid = False
         db.session.add(token)
@@ -483,7 +485,8 @@ def forgotten_password():
 
         flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
 
-    return render_template('forgotten_password.html', form=form)
+    return render_template('forgotten_password.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
 def create_or_get_user_and_login(site, token, name, surname, email):
