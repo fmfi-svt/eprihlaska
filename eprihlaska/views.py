@@ -76,7 +76,11 @@ def load_session():
 
 @app.route('/')
 def index():
-    return render_template('intro.html', session=session)
+    form = SignupForm()
+    if hasattr(current_user, 'id'):
+        return redirect(url_for('study_programme'))
+
+    return render_template('intro.html', form=form, session=session)
 
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
@@ -166,7 +170,7 @@ def filter_competitions(competition_list, study_programme_list):
 
     constraints = {
         'FYZ': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
         'CHE': ['BIN', 'BMF'],
         'SVOC_INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],

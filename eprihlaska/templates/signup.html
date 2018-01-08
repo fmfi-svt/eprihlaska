@@ -11,13 +11,10 @@
   <div class="account__wrap">
     <div class="account col-lg-10 col-lg-offset-2">
       <div class="account__separator">alebo</div>
-      <a href="{{ url_for('google_login') }}" class="btn btn-block btn-social btn-google ">
-        <span class="fa fa-google"></span> Prihlásiť cez Google
-      </a>
-      <a href="{{ url_for('facebook_login') }}" class="btn btn-block btn-social btn-facebook ">
-        <span class="fa fa-facebook"></span> Prihlásiť cez Facebook
-      </a>
+      {% include 'social_buttons.html' %}
     </div>
   </div>
+
+
 
 {% endblock %}
