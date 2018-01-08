@@ -23,7 +23,7 @@ class BirthNoValidator(object):
         self.mod_err = mod_err
 
     def __call__(self, form, field):
-        bno_reg = re.compile(r'^([0-9][0-9][0156][0-9][0-3][0-9])/(\d\d\d\d)$')
+        bno_reg = re.compile(r'^(([0-9][0-9])(([0156])([0-9]))([0-3][0-9]))/(\d\d\d\d)$')
         mo = bno_reg.search(field.data)
 
         # If someone doesn't have a birth number, empty field is also accepted.
@@ -33,9 +33,21 @@ class BirthNoValidator(object):
             except AttributeError:
                 raise validators.ValidationError(self.message + ' ' + self.form_err)
 
-            birth_no = int(mo.group(1) + mo.group(2))
+            birth_no = int(mo.group(1) + mo.group(7))
             if birth_no % 11 != 0:
                 raise validators.ValidationError(self.message + ' ' + self.mod_err)
+
+            year = mo.group(2)
+            month = mo.group(3)
+            day = mo.group(6)
+            if mo.group(4) in ['5', '6']:
+                month = '{}{}'.format(int(mo.group(4))-5, mo.group(5))
+
+            try:
+                date = '{}.{}.{}'.format(day, month, year)
+                datetime.datetime.strptime(date, '%d.%m.%y')
+            except ValueError:
+                raise validators.ValidationError(self.message)
 
 
 class DateValidator:
@@ -62,7 +74,7 @@ class DateValidator:
         try:
             datetime.datetime.strptime(mo.group(0), '%d.%m.%Y')
         except ValueError:
-            raise ValueError(self.val_err_msg)
+            raise validators.ValidationError(self.val_err_msg)
 
 
 class EmailDuplicateValidator:
