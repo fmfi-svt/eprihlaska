@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+{% import "wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}Listing{% endblock title %}
+  </h1>
+
+   <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#ID</th>
+        <th>Meno</th>
+        <th>Priezvisko</th>
+        <th>Študjné programy</th>
+        <th>Rok maturity</th>
+        <th>Vykonateľné akcie</th>
+      </tr>
+		</thead>
+    <tbody>
+      {% for app in apps %}
+      <tr>
+        <td>{{ app.id }}</td>
+        <td>{{ app['application']['basic_personal_data']['name'] }}</td>
+        <td>{{ app['application']['basic_personal_data']['surname'] }}</td>
+        <td>{{  ', '.join(app['application']['study_programme']) }}</td>
+        <td>{{ app['application']['basic_personal_data']['matura_year'] }}</td>
+        <td> <a href="{{ url_for('admin_view', id=app.id) }}">Pozrieť prihlášku</a> </td>
+      </tr>
+      {% endfor %}
+		</tbody>
+  </div>
+{% endblock %}
+
