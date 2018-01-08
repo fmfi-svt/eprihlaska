@@ -80,7 +80,8 @@ def index():
     if hasattr(current_user, 'id'):
         return redirect(url_for('study_programme'))
 
-    return render_template('intro.html', form=form, session=session)
+    return render_template('intro.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
@@ -109,7 +110,8 @@ def study_programme():
             save_form(form)
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
-    return render_template('study_programme.html', form=form, session=session)
+    return render_template('study_programme.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
 @app.route('/personal_info', methods=('GET', 'POST'))
@@ -122,7 +124,8 @@ def personal_info():
 
         flash('Vaše dáta boli uložené!')
         return redirect('/further_personal_info')
-    return render_template('personal_info.html', form=form, session=session)
+    return render_template('personal_info.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/further_personal_info', methods=('GET', 'POST'))
 @login_required
@@ -137,7 +140,7 @@ def further_personal_info():
             flash('Vaše dáta boli uložené!')
         return redirect('/address')
     return render_template('further_personal_info.html', form=form,
-                           session=session)
+                           session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/address', methods=('GET', 'POST'))
 @login_required
@@ -150,7 +153,8 @@ def address():
 
             flash('Vaše dáta boli uložené!')
         return redirect('/previous_studies')
-    return render_template('address.html', form=form, session=session)
+    return render_template('address.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/previous_studies', methods=('GET', 'POST'))
 @login_required
@@ -163,7 +167,8 @@ def previous_studies():
 
             flash('Vaše dáta boli uložené!')
         return redirect('/admissions_wavers')
-    return render_template('previous_studies.html', form=form, session=session)
+    return render_template('previous_studies.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 def filter_competitions(competition_list, study_programme_list):
     result_list = []
@@ -270,7 +275,8 @@ def admissions_wavers():
             flash('Vaše dáta boli uložené!')
         return redirect('/final')
 
-    return render_template('admission_wavers.html', form=form, session=session)
+    return render_template('admission_wavers.html', form=form, session=session,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/final', methods=['GET'])
 @login_required
@@ -278,7 +284,8 @@ def admissions_wavers():
 def final():
     specific_symbol = 9999 + current_user.id
     return render_template('final.html', session=session,
-                           specific_symbol=specific_symbol)
+                           specific_symbol=specific_symbol,
+                           sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/admin/list')
 def admin_list():
@@ -387,30 +394,45 @@ def login():
 
     return render_template('login.html', form=form, session=session)
 
+def send_password_email(user):
+    hash = str(uuid.uuid4())
+    valid_time = datetime.datetime.now() + datetime.timedelta(minutes=30)
+    token = ForgottenPasswordToken(hash=hash,
+                                   user_id=user.id,
+                                   valid_until=valid_time)
+    db.session.add(token)
+    db.session.commit()
+
+    link = url_for('forgotten_password_hash', hash=hash, _external=True)
+    msg = Message('ePrihlaska - nové heslo')
+    msg.body = FORGOTTEN_PASSWORD_MAIL.format(link)
+    msg.recipients = [user.email]
+    mail.send(msg)
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        hashed_pass = generate_password_hash(form.password.data,
-                                             method='sha256')
-
-        new_user = User(email=form.email.data,
-                        password=hashed_pass)
+        new_user = User(email=form.email.data)
         db.session.add(new_user)
         db.session.commit()
+
+        send_password_email(new_user)
 
         # pre-populate the email field in the form using the email provided at
         # signup time
         session['email'] = form.email.data
 
         new_application_form = ApplicationForm(user_id=new_user.id)
+        new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
         db.session.commit()
 
-        flash('Nový používateľ bol zaregistrovaný. Prosím, prihláste sa.')
-        return redirect('/login')
+        flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
 
-    return render_template('signup.html', form=form, session=session)
+    return render_template('signup.html', form=form)
+
+
 
 @app.route('/logout', methods=['GET'])
 @login_required
@@ -439,14 +461,14 @@ def forgotten_password_hash(hash):
             db.session.add(user)
             db.session.add(token)
             db.session.commit()
-            flash('Vaše heslo bolo zmenené')
+            flash('Gratulujeme, Vaše heslo bolo zmenené! Prihláste sa ním, prosím, nižšie.')
             return redirect(url_for('login'))
         return render_template('forgotten_password.html', form=form)
     else:
         token.valid = False
         db.session.add(token)
         db.session.commit()
-        flash('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu', 'error')
+        flash('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu.', 'error')
         return redirect(url_for('forgotten_password'))
 
     return redirect(url_for('index'))
@@ -457,23 +479,11 @@ def forgotten_password():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
-            hash = str(uuid.uuid4())
-            valid_time = datetime.datetime.now() + datetime.timedelta(minutes=30)
-            token = ForgottenPasswordToken(hash=hash,
-                                           user_id=user.id,
-                                           valid_until=valid_time)
-            db.session.add(token)
-            db.session.commit()
+            send_password_email(user)
 
-            link = url_for('forgotten_password_hash', hash=hash, _external=True)
-            msg = Message('ePrihlaska - zabudnuté heslo')
-            msg.body = FORGOTTEN_PASSWORD_MAIL.format(link)
-            msg.recipients = [user.email]
-            mail.send(msg)
+        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
 
-        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe')
-
-    return render_template('forgotten_password.html', form=form, session=session)
+    return render_template('forgotten_password.html', form=form)
 
 
 def create_or_get_user_and_login(site, token, name, surname, email):
@@ -491,6 +501,7 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         session['basic_personal_data']['surname'] = surname
 
         new_application_form = ApplicationForm(user_id=user.id)
+        new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
         db.session.commit()
 
