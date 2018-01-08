@@ -280,6 +280,39 @@ def final():
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol)
 
+@app.route('/admin/list')
+def admin_list():
+    apps = ApplicationForm.query.all()
+    out_apps = []
+    for app in apps:
+        out_app = {}
+        a = flask.json.loads(app.application)
+        for key in a.keys():
+            out_app[key] = a[key]
+        app.application = out_app
+    return render_template('admin_list.html', apps=apps)
+
+@app.route('/admin/view/<id>')
+def admin_view(id):
+    app = ApplicationForm.query.filter_by(id=id).first()
+    session = flask.json.loads(app.application)
+    lists = {
+        'sex': dict(SEX_CHOICES),
+        'marital_status': dict(MARITAL_STATUS_CHOICES),
+        'country': dict(COUNTRY_CHOICES),
+        'city': dict(CITY_CHOICES),
+        'highschool': dict(HIGHSCHOOL_CHOICES),
+        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
+        'education_level': dict(EDUCATION_LEVEL_CHOICES),
+        'study_programme': dict(STUDY_PROGRAMME_CHOICES),
+        'competition': dict(COMPETITION_CHOICES)
+    }
+    rendered = render_template('application_form.html', session=session,
+                               lists=lists, id=app.id,
+                               submitted_at=app.submitted_at,
+                               consts=consts)
+    return rendered
+
 
 @app.route('/submit_app')
 @login_required
