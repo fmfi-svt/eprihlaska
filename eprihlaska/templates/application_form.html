@@ -89,7 +89,7 @@
           {% if session['country_of_birth'] == '703' %}
          <div class="col-sm-4"><strong>Miesto narodenia:</strong> {{ lists['city'][session['place_of_birth']] }}</div>
          {% else %}
-         <div class="col-sm-4"><strong>Miesto (v zahraničí):</strong> {{ lists['city'][session['place_of_birth_foreign']] }}</div>
+         <div class="col-sm-4"><strong>Miesto (v zahraničí):</strong> {{ session['place_of_birth_foreign'] }}</div>
          {% endif %}
          <div class="col-sm-4"><strong>Štát:</strong> {{ lists['country'][session['country_of_birth']] }}</div>
          <div class="col-sm-4"><strong>Štátne občianstvo:</strong> {{ lists['country'][session['nationality']] }}</div>
