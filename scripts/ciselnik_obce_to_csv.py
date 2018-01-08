@@ -2,7 +2,7 @@ import pandas as pd
 import click
 import re
 
-top_regex = re.compile(r'^[A-Z]{2} - ')
+top_regex = re.compile(r'^.. - ')
 
 def obec_formatter(row):
     return top_regex.sub('', row['Okres'])
