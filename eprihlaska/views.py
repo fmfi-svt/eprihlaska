@@ -19,7 +19,7 @@ from munch import munchify
 from functools import wraps
 
 from .headless_pdfkit import generate_pdf
-from .models import User, ApplicationForm, TokenModel, ForgottenPassworToken
+from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
                      MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
@@ -425,8 +425,9 @@ def logout():
 
 @app.route('/forgotten_password/<hash>', methods=['GET', 'POST'])
 def forgotten_password_hash(hash):
-    token = ForgottenPassworToken.query.filter_by(hash=hash).first()
-    if token and token.valid:
+    token = ForgottenPasswordToken.query.filter_by(hash=hash).first()
+    valid_time = (token.valid_until - datetime.datetime.now()).total_seconds()
+    if token and token.valid and valid_time > 0:
         form = NewPasswordForm()
         if form.validate_on_submit():
             user = User.query.filter_by(id=token.user_id).first()
@@ -441,6 +442,12 @@ def forgotten_password_hash(hash):
             flash('Vaše heslo bolo zmenené')
             return redirect(url_for('login'))
         return render_template('forgotten_password.html', form=form)
+    else:
+        token.valid = False
+        db.session.add(token)
+        db.session.commit()
+        flash('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu', 'error')
+        return redirect(url_for('forgotten_password'))
 
     return redirect(url_for('index'))
 
@@ -451,8 +458,10 @@ def forgotten_password():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             hash = str(uuid.uuid4())
-            token = ForgottenPassworToken(hash=hash,
-                                          user_id=user.id)
+            valid_time = datetime.datetime.now() + datetime.timedelta(minutes=30)
+            token = ForgottenPasswordToken(hash=hash,
+                                           user_id=user.id,
+                                           valid_until=valid_time)
             db.session.add(token)
             db.session.commit()
 
