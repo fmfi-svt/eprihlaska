@@ -30,18 +30,39 @@ Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
     </p>
 
     <p>
-      <a href="{{ url_for('login') }}" class="btn btn-block btn-social btn-red btn-primary">Prihlásiť sa</a>
-      {% include 'social_buttons.html' %}
     </p>
   </div>
 
   <div class="col-sm-6">
-  <h4>Registácia</h4>
+  <h4>Prihlásenie a registrácia</h4>
 
   {{ wtf.quick_form(form,
                     action='/signup',
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
+
+  <div class="account__wrap">
+    <div class="account col-lg-10 col-lg-offset-2">
+      <div class="account__separator">alebo</div>
+      <a href="{{ url_for('login') }}" class="btn btn-block btn-red btn-primary">
+        Prihlásiť sa pomocou hesla
+      </a>
+      <a href="{{ url_for('google_login') }}" class="btn btn-block btn-google ">
+        <span class="fa fa-google"></span> Prihlásiť cez Google
+      </a>
+      <a href="{{ url_for('facebook_login') }}" class="btn btn-block btn-facebook ">
+        <span class="fa fa-facebook"></span> Prihlásiť cez Facebook
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .btn-primary {
+      width: 100%;
+      display: block;
+    }
+  </style>
+
   </div>
 </div>
 

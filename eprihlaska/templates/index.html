@@ -58,7 +58,7 @@
         {% if session['study_programme'] %}
         <span>Prihlasujete sa na študijné programy:
           {% for item in session['study_programme'] %}
-            <span class="study-programme">{{item}}</span>
+            <span class="study-programme" data-toggle="tooltip" title="{{ sp[item] }}">{{item}}</span>
           {% endfor %}</span>
         {% endif %}
           </div>
@@ -72,6 +72,12 @@
     <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
 		<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+
 
     {% block inlinescript %}
     {% endblock %}

@@ -278,11 +278,4 @@ class SignupForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email(),
                                     EmailDuplicateValidator()])
-    password = PasswordField(label=c.PASSWORD,
-                             validators=[validators.Length(min=8, max=80)])
-    repeat_password = PasswordField(label=c.REPEAT_PASSWORD,
-                                    validators=[validators.Length(min=8,
-                                                                  max=80),
-                                                validators.EqualTo('password',
-                                                                   message=c.REPEAT_PASSWORD_ERR)])
     submit = SubmitField(label=c.SIGNUP)

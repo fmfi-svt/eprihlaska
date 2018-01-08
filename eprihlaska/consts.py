@@ -189,7 +189,7 @@ SIGNUP = _('Zaregistrovať')
 LOGOUT = _('Odhlásiť')
 WELCOME = _('Vitajte {}')
 
-FORGOTTEN_PASSWORD_MAIL = _('Ak ste žiadali o zmenu Vášho hesla, môžete tak urobiť na linke {}')
+FORGOTTEN_PASSWORD_MAIL = _('Ak by ste chceli zadať nové heslo pre Váš účet, môžete tak urobiť na {}\n\nV inom prípade prosím tento email ignorujte.\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')
 
 YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')
 
