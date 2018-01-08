@@ -462,7 +462,7 @@ def forgotten_password_hash(hash):
             db.session.add(user)
             db.session.add(token)
             db.session.commit()
-            flash('Gratulujeme, Vaše heslo bolo zmenené! Prihláste sa ním, prosím, nižšie.')
+            flash('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')
             return redirect(url_for('login'))
         return render_template('forgotten_password.html', form=form, session=session,
                                sp=dict(STUDY_PROGRAMME_CHOICES))
