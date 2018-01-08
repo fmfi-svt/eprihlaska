@@ -200,8 +200,8 @@ COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
                                        sortby=1,
                                        prepend=['703', '203'])
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
-                                ['id', 'Názov obce'],
-                                fmt='{2} ({3})',
+                                ['id', 'Názov obce', 'Okres'],
+                                fmt='{2}, okr. {4}',
                                 sortby=1)
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',

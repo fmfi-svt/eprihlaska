@@ -246,18 +246,18 @@
         {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
         <tr>
           <td>Matematika</td>
-          <td>{{ session['grades_mat']['grade_first_year'] }}</td>
-          <td>{{ session['grades_mat']['grade_second_year'] }}</td>
-          <td>{{ session['grades_mat']['grade_third_year'] }}</td>
+          <td>{{ session['grades_mat']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_mat']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_mat']['grade_third_year'] or 'Nezadaná' }}</td>
         </tr>
         {% endif %}
 
         {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
         <tr>
           <td>Fyzika</td>
-          <td>{{ session['grades_fyz']['grade_first_year'] }}</td>
-          <td>{{ session['grades_fyz']['grade_second_year'] }}</td>
-          <td>{{ session['grades_fyz']['grade_third_year'] }}</td>
+          <td>{{ session['grades_fyz']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_fyz']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_fyz']['grade_third_year'] or 'Nezadaná' }}</td>
         </tr>
         {% endif %}
 
@@ -265,9 +265,9 @@
         {% if 'grades_bio' in session and 'grade_first_year' in session['grades_bio'] %}
         <tr>
           <td>Biológia</td>
-          <td>{{ session['grades_bio']['grade_first_year'] }}</td>
-          <td>{{ session['grades_bio']['grade_second_year'] }}</td>
-          <td>{{ session['grades_bio']['grade_third_year'] }}</td>
+          <td>{{ session['grades_bio']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_bio']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_bio']['grade_third_year'] or 'Nezadaná' }}</td>
         </tr>
         {% endif %}
 

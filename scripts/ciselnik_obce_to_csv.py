@@ -1,5 +1,11 @@
 import pandas as pd
 import click
+import re
+
+top_regex = re.compile(r'^.. - ')
+
+def obec_formatter(row):
+    return top_regex.sub('', row['Okres'])
 
 @click.group()
 @click.option('--file', type=click.Path(exists=True))
@@ -9,9 +15,13 @@ def cli(ctx, file, filter_nat):
     df = pd.read_excel(file, skiprows=5)
     if filter_nat:
         df = df[df[filter_nat].isnull()]
-    
+        df = df[df['id'] >= 0]
+
     df = df[df.apply(lambda x: '-' not in x['Názov obce'], axis=1)]
     df = df[df['PSČ'].notnull()]
+
+    df['Okres'] = df.apply(obec_formatter, axis=1)
+
     ctx.obj['df'] = df
 
 @cli.command()
