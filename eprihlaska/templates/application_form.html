@@ -132,9 +132,9 @@
       </div>
       <div class="row">
         <div class="col-sm-6">
-          {% if session['address_form']['city'] %}
+          {% if session['address_form']['country'] == '703' %}
           <strong>Mesto:</strong>  {{ lists['city'][session['address_form']['city']] }}
-          {% elif session['address_form']['city_foreign'] %}
+          {% else %}
           <strong>Mesto (v zahraničí):</strong>  {{ session['address_form']['city_foreign'] }}
           {% endif %}
         </div>
@@ -162,7 +162,11 @@
       </div>
       <div class="row">
         <div class="col-sm-6">
-          <strong>Mesto:</strong>  {{ lists['city'][session['correspondence_address']['city']] }}
+          {% if session['address_form']['country'] == '703' %}
+          <strong>Mesto:</strong>  {{ lists['city'][session['address_form']['city']] }}
+          {% else %}
+          <strong>Mesto (v zahraničí):</strong>  {{ session['address_form']['city_foreign'] }}
+          {% endif %}
         </div>
         <div class="col-sm-6">
           <strong>PSČ:</strong>  {{ session['correspondence_address']['postal_no'] }}
