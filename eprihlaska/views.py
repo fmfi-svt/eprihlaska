@@ -101,6 +101,10 @@ def study_programme():
 
             session['study_programme'] = study_programme
 
+            if study_programme[0] == '_':
+                flash('Vyberte si, prosím, aspoň prvý študijný program', 'error')
+                return redirect(url_for('study_programme'))
+
             save_form(form)
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
