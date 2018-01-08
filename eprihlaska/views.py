@@ -101,6 +101,11 @@ def study_programme():
 
             session['study_programme'] = study_programme
 
+            # Select at least one study programme
+            if study_programme[0] == '_':
+                flash('Vyberte si, prosím, aspoň prvý študijný program', 'error')
+                return redirect(url_for('study_programme'))
+
             save_form(form)
             flash('Vaše dáta boli uložené!')
         return redirect('/personal_info')
@@ -124,11 +129,6 @@ def personal_info():
 @require_filled_form('personal_info')
 def further_personal_info():
     form = FurtherPersonalDataForm(obj=munchify(dict(session)))
-
-    # Do not show `birth_no` field if the user does not come from SK/CZ.
-    # Do show it, however, if the user did not fill in their nationality yet.
-    if session.get('nationality') not in ['703', '203', None]:
-        form['basic_personal_data'].__delitem__('birth_no')
 
     if form.validate_on_submit():
         if 'application_submitted' not in session:
