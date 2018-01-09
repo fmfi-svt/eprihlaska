@@ -4,6 +4,7 @@ from flask_login import UserMixin, current_user
 import datetime
 import time
 import datetime
+from .consts import ApplicationStates
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -19,10 +20,11 @@ class ApplicationForm(db.Model):
     user = db.relationship('User', backref='user')
     application = db.Column(db.Text)
     last_updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now)
-    submitted = db.Column(db.Boolean, default=False)
     submitted_at = db.Column(db.DateTime)
-    processed = db.Column(db.Boolean, default=False)
     processed_at = db.Column(db.DateTime)
+    printed_at = db.Column(db.DateTime)
+    state = db.Column(db.Enum(ApplicationStates),
+                      default=ApplicationStates.in_progress)
 
 class ForgottenPasswordToken(db.Model):
     hash = db.Column(db.String(36), primary_key=True)

@@ -24,7 +24,7 @@ from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
                      MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
                      HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES)
+                     COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
 from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
@@ -53,6 +53,10 @@ def save_form(form):
     for k in form.data:
         if k not in ignored_keys:
             session[k] = form.data[k]
+    if 'application_submit_refresh' in session:
+        del session['application_submitted']
+        del session['application_submit_refresh']
+
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     app.application = flask.json.dumps(dict(session))
     db.session.commit()
@@ -72,6 +76,14 @@ def load_session():
         d = flask.json.loads(app.application)
         for k in d:
             session[k] = d[k]
+
+        if 'application_submit_refresh' in session:
+            del session['application_submitted']
+            del session['application_submit_refresh']
+
+            app.application = flask.json.dumps(dict(session))
+            db.session.commit()
+
         session.modified = True
 
 @app.route('/')
@@ -287,47 +299,14 @@ def final():
                            specific_symbol=specific_symbol,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
-@app.route('/admin/list')
-def admin_list():
-    apps = ApplicationForm.query.all()
-    out_apps = []
-    for app in apps:
-        out_app = {}
-        a = flask.json.loads(app.application)
-        for key in a.keys():
-            out_app[key] = a[key]
-        app.application = out_app
-    return render_template('admin_list.html', apps=apps)
-
-@app.route('/admin/view/<id>')
-def admin_view(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
-    session = flask.json.loads(app.application)
-    lists = {
-        'sex': dict(SEX_CHOICES),
-        'marital_status': dict(MARITAL_STATUS_CHOICES),
-        'country': dict(COUNTRY_CHOICES),
-        'city': dict(CITY_CHOICES),
-        'highschool': dict(HIGHSCHOOL_CHOICES),
-        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
-        'education_level': dict(EDUCATION_LEVEL_CHOICES),
-        'study_programme': dict(STUDY_PROGRAMME_CHOICES),
-        'competition': dict(COMPETITION_CHOICES)
-    }
-    rendered = render_template('application_form.html', session=session,
-                               lists=lists, id=app.id,
-                               submitted_at=app.submitted_at,
-                               consts=consts)
-    return rendered
-
 
 @app.route('/submit_app')
 @login_required
 def submit_app():
-    session['application_submitted'] = True
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    session['application_submitted'] = True
     app.application = flask.json.dumps(dict(session))
-    app.submitted = True
+    app.state = ApplicationStates.submitted
     app.submitted_at = datetime.datetime.now()
     db.session.commit()
 
@@ -347,9 +326,11 @@ def grades_control():
     response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
     return response
 
-@app.route('/application_form', methods=['GET'])
-@login_required
-def application_form():
+def render_app(app, print=False, use_app_session=True):
+    sess = session
+    if use_app_session:
+        sess = flask.json.loads(app.application)
+
     lists = {
         'sex': dict(SEX_CHOICES),
         'marital_status': dict(MARITAL_STATUS_CHOICES),
@@ -361,12 +342,21 @@ def application_form():
         'study_programme': dict(STUDY_PROGRAMME_CHOICES),
         'competition': dict(COMPETITION_CHOICES)
     }
-
-    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    rendered = render_template('application_form.html', session=session,
+    rendered = render_template('application_form.html', session=sess,
                                lists=lists, id=app.id,
                                submitted_at=app.submitted_at,
-                               consts=consts)
+                               consts=consts, print=print)
+    return rendered
+
+
+@app.route('/application_form', methods=['GET'])
+@login_required
+def application_form():
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    rendered = render_app(app, use_app_session=False)
+
+    return rendered
+
     pdf = generate_pdf(rendered)
 
     response = make_response(pdf)
@@ -418,17 +408,22 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
-        send_password_email(new_user)
-
         # pre-populate the email field in the form using the email provided at
         # signup time
         session['email'] = form.email.data
+
+        session['mother_name'] = {}
+        session['father_name'] = {}
+        session['address_form'] = {}
+        session['correspondence_address'] = {}
+        session['studies_in_sr'] = {}
 
         new_application_form = ApplicationForm(user_id=new_user.id)
         new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
         db.session.commit()
 
+        send_password_email(new_user)
         flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
 
     return render_template('signup.html', form=form, session=session,
@@ -503,6 +498,12 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         session['basic_personal_data']['name'] = name
         session['basic_personal_data']['surname'] = surname
 
+        session['mother_name'] = {}
+        session['father_name'] = {}
+        session['address_form'] = {}
+        session['correspondence_address'] = {}
+        session['studies_in_sr'] = {}
+
         new_application_form = ApplicationForm(user_id=user.id)
         new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
@@ -548,3 +549,46 @@ def facebook_authorize():
     create_or_get_user_and_login('facebook', token, name, surname, profile.email)
 
     return redirect(url_for('study_programme'))
+
+@app.route('/admin/list')
+def admin_list():
+    apps = ApplicationForm.query.order_by(ApplicationForm.submitted_at.desc()).all()
+    out_apps = []
+    for app in apps:
+        out_app = {}
+        a = flask.json.loads(app.application)
+        for key in a.keys():
+            out_app[key] = a[key]
+        app.application = out_app
+    return render_template('admin_list.html', apps=apps,
+                           states=APPLICATION_STATES)
+
+
+@app.route('/admin/view/<id>')
+def admin_view(id):
+    app = ApplicationForm.query.filter_by(id=id).first()
+    rendered = render_app(app)
+    return rendered
+
+@app.route('/admin/print/<id>')
+def admin_print(id):
+    app = ApplicationForm.query.filter_by(id=id).first()
+    app.state = ApplicationStates.printed
+    app.printed_at = datetime.datetime.now()
+    db.session.commit()
+
+    rendered = render_app(app, print=True)
+    return rendered
+
+@app.route('/admin/reset/<id>')
+def admin_reset(id):
+    app = ApplicationForm.query.filter_by(id=id).first()
+    app.state = ApplicationStates.in_progress
+    sess = flask.json.loads(app.application)
+    if 'application_submitted' in sess:
+        del sess['application_submitted']
+        sess['application_submit_refresh'] = True
+
+    app.application = flask.json.dumps(dict(sess))
+    db.session.commit()
+    return redirect(url_for('admin_list'))

@@ -287,7 +287,7 @@
 {% endif %}
 
 {% macro further_study_field(name, label) %}
-  {% if 'further_info' in session and session['further_study_info'][name] %}
+  {% if 'further_study_info' in session and session['further_study_info'][name] %}
   <strong>
     {{ label }}:
   </strong>
@@ -296,7 +296,7 @@
 {% endmacro %}
 
 {% macro further_study_check_field(name, label) %}
-  {% if 'further_info' in session and session['further_study_info'][name] %}
+  {% if 'further_study_info' in session and session['further_study_info'][name] %}
   <input type="checkbox" name="" id="" checked /> {{ label }} <br />
   {% endif %}
 {% endmacro %}
@@ -359,6 +359,18 @@
     }
 }
 </style>
+
+{% if print %}
+
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+<script>
+  $(document).ready(function(){
+    window.print();
+  })
+</script>
+
+{% endif %}
+
 {% endblock %}
 
 {% block head %}

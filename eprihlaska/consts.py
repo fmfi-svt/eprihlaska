@@ -1,6 +1,7 @@
 from flask_babel import gettext as _
-from .utils import choices_from_csv, city_formatter
+from .utils import choices_from_csv, city_formatter, okres_fixer
 import os
+import enum
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -202,7 +203,8 @@ COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 ['id', 'Názov obce', 'Okres'],
                                 fmt='{2}, okr. {4}',
-                                sortby=1)
+                                sortby=1,
+                                post_fmt=okres_fixer)
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
@@ -223,3 +225,14 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
                                            fmt='({1}) - {3}')
+
+APPLICATION_STATES = [_('rozpracovaná'),
+                      _('podaná'),
+                      _('vytlačená'),
+                      _('spracovaná')]
+
+class ApplicationStates(enum.Enum):
+    in_progress = 0
+    submitted = 1
+    printed = 2
+    processed = 3
