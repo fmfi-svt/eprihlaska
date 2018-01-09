@@ -101,19 +101,8 @@ class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
                               choices=c.COUNTRY_CHOICES,
                               default='703')
-    street = StringField(label=c.ADDRESS_STREET)
-    street_no = StringField(label=c.ADDRESS_NO)
-    city = SelectField(label=c.ADDRESS_CITY,
-                       choices=c.CITY_CHOICES)
-    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
-    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
-
-
-class AddressNonRequired(FlaskForm):
-    country = SelectField(label=c.ADDRESS_COUNTRY,
-                              choices=c.COUNTRY_CHOICES,
-                              default='703')
-    street = StringField(label=c.ADDRESS_STREET)
+    street = StringField(label=c.ADDRESS_STREET,
+                         description=c.ADDRESS_STREET_DESC)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=c.CITY_CHOICES)
@@ -124,7 +113,7 @@ class AddressNonRequired(FlaskForm):
 class AddressForm(FlaskForm):
     address_form = FormField(Address, label=c.PERMANENT_ADDRESS)
     has_correspondence_address = BooleanField(label=c.HAS_CORRESPONDENCE_ADDRESS)
-    correspondence_address = FormField(AddressNonRequired,
+    correspondence_address = FormField(Address,
                                        label=c.CORRESPONDENCE_ADDRESS)
     address = HiddenField()
     submit = SubmitField(label=c.NEXT)

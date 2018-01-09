@@ -98,6 +98,8 @@ ADDRESS_CITY = _('Mesto')
 ADDRESS_CITY_FOREIGN = _('Mesto (v zahraničí)')
 ADDRESS_POSTAL_NO = _('PSČ')
 
+ADDRESS_STREET_DESC = _('V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce.')
+
 PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
 HAS_CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska')
 CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa')
