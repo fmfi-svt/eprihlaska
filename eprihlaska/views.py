@@ -549,10 +549,7 @@ def facebook_authorize():
 
     return redirect(url_for('study_programme'))
 
-@app.route('/admin/list')
-def admin_list():
-    apps = ApplicationForm.query.order_by(ApplicationForm.submitted_at.desc()).all()
-    out_apps = []
+def process_apps(apps):
     for app in apps:
         out_app = {}
         a = flask.json.loads(app.application)
@@ -562,9 +559,24 @@ def admin_list():
         # TODO: this is band-aid and should be removed
         if 'basic_personal_data' not in out_app:
             out_app['basic_personal_data'] = {}
-        app.application = out_app
-    return render_template('admin_list.html', apps=apps,
-                           states=APPLICATION_STATES)
+        app.app = out_app
+    return apps
+
+def get_apps(s):
+    apps = ApplicationForm.query \
+            .filter_by(state=s) \
+            .order_by(ApplicationForm.submitted_at.desc()).all()
+    return process_apps(apps)
+
+@app.route('/admin/list')
+def admin_list():
+    in_progress = get_apps(ApplicationStates.in_progress)
+    submitted = get_apps(ApplicationStates.submitted)
+    printed = get_apps(ApplicationStates.printed)
+    processed = get_apps(ApplicationStates.processed)
+    return render_template('admin_list.html', in_progress=in_progress,
+                           submitted=submitted, printed=printed,
+                           processed=processed, states=APPLICATION_STATES)
 
 
 @app.route('/admin/view/<id>')
