@@ -103,5 +103,5 @@ class EmailDuplicateValidator:
 
         # Throw an Error if the user already exists and their password has
         # already been set.
-        if user and not user.password:
+        if user and user.password:
             raise validators.ValidationError(self.message)
