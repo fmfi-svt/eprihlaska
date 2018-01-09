@@ -410,6 +410,7 @@ def signup():
         # signup time
         session['email'] = form.email.data
 
+        session['basic_personal_data'] = {}
         session['mother_name'] = {}
         session['father_name'] = {}
         session['address_form'] = {}
