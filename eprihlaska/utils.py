@@ -36,3 +36,7 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
 def city_formatter(x):
     x = re.sub(r'^([^- ,]+)-[^,]+', r'\1', x)
     return re.sub(r'[,\s]+$', '', x)
+
+def okres_fixer(x):
+    # Strip 'Bratislava I.' into just 'Bratislava'
+    return re.sub(r'(\w+) I', r'\1', x)
