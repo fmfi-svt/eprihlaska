@@ -558,6 +558,10 @@ def admin_list():
         a = flask.json.loads(app.application)
         for key in a.keys():
             out_app[key] = a[key]
+
+        # TODO: this is band-aid and should be removed
+        if 'basic_personal_data' not in out_app:
+            out_app['basic_personal_data'] = {}
         app.application = out_app
     return render_template('admin_list.html', apps=apps,
                            states=APPLICATION_STATES)
