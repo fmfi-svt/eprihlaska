@@ -38,5 +38,5 @@ def city_formatter(x):
     return re.sub(r'[,\s]+$', '', x)
 
 def okres_fixer(x):
-    # Strip 'Bratislava I.' into just 'Bratislava'
-    return re.sub(r'(\w+) I', r'\1', x)
+    # Remove ', okr. Bratislava I' from okres listing (same with Kosice)
+    return re.sub(r', okr. (\w+) I', r'', x)
