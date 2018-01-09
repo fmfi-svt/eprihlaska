@@ -21,7 +21,7 @@ from functools import wraps
 from .headless_pdfkit import generate_pdf
 from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
-                     SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
+                     NEW_USER_MAIL, SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
                      MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
                      HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
                      COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
@@ -383,7 +383,7 @@ def login():
     return render_template('login.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
-def send_password_email(user):
+def send_password_email(user, title, body_template):
     hash = str(uuid.uuid4())
     valid_time = datetime.datetime.now() + datetime.timedelta(minutes=30)
     token = ForgottenPasswordToken(hash=hash,
@@ -393,8 +393,8 @@ def send_password_email(user):
     db.session.commit()
 
     link = url_for('forgotten_password_hash', hash=hash, _external=True)
-    msg = Message('ePrihlaska - nové heslo')
-    msg.body = FORGOTTEN_PASSWORD_MAIL.format(link)
+    msg = Message(title)
+    msg.body = body_template.format(link)
     msg.recipients = [user.email]
     mail.send(msg)
 
@@ -422,7 +422,7 @@ def signup():
         db.session.add(new_application_form)
         db.session.commit()
 
-        send_password_email(new_user)
+        send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
         flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
 
     return render_template('signup.html', form=form, session=session,
@@ -440,7 +440,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/forgotten_password/<hash>', methods=['GET', 'POST'])
+@app.route('/new_password/<hash>', methods=['GET', 'POST'])
 def forgotten_password_hash(hash):
     token = ForgottenPasswordToken.query.filter_by(hash=hash).first()
     valid_time = (token.valid_until - datetime.datetime.now()).total_seconds()
@@ -475,7 +475,7 @@ def forgotten_password():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
-            send_password_email(user)
+            send_password_email(user, 'ePrihlaska - nové heslo', FORGOTTEN_PASSWORD_MAIL)
 
         flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
 
