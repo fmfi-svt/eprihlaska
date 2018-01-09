@@ -355,8 +355,6 @@ def application_form():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_app(app, use_app_session=False)
 
-    return rendered
-
     pdf = generate_pdf(rendered)
 
     response = make_response(pdf)
