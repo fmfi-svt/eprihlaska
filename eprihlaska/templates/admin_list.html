@@ -4,12 +4,7 @@
 {% import "bootstrap/utils.html" as util %}
 
 
-{% block content %}
-<div class="container">
-  <h1 class="section-title">
-    {% block title %}Listing{% endblock title %}
-  </h1>
-
+{% macro generate_apps_table(apps) %}
    <table class="table table-striped">
     <thead>
       <tr>
@@ -26,10 +21,10 @@
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
-        <td>{{ app['application']['basic_personal_data']['name'] }}</td>
-        <td>{{ app['application']['basic_personal_data']['surname'] }}</td>
-        <td>{{  ', '.join(app['application']['study_programme']) }}</td>
-        <td>{{ app['application']['basic_personal_data']['matura_year'] }}</td>
+        <td>{{ app['app']['basic_personal_data']['name'] }}</td>
+        <td>{{ app['app']['basic_personal_data']['surname'] }}</td>
+        <td>{{  ', '.join(app['app']['study_programme']) }}</td>
+        <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
         <td>{{ states[app.state.value] }}</td>
         <td>
           <a target="_blank" class="btn btn-block btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a> <br />
@@ -41,6 +36,59 @@
       </tr>
       {% endfor %}
 		</tbody>
+  </table>
+{% endmacro %}
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}Zoznam registrovaných prihlášok{% endblock title %}
+  </h1>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <a href="#submitted"><strong>Podané prihlášky</strong></a>:
+      {{ submitted|length }}
+    </div>
+
+    <div class="col-lg-3">
+      <a href="#printed"><strong>Vytlačené prihlášky</strong></a>:
+      {{ printed|length }}
+    </div>
+
+    <div class="col-lg-3">
+      <a href="#in_progress"><strong>Rozpracované prihlášky</strong></a>:
+      {{ in_progress|length }}
+    </div>
+
+    <div class="col-lg-3">
+      <a href="#processed"><strong>Spracované prihlášky</strong></a>:
+      {{ processed|length }}
+    </div>
+
   </div>
+
+  <div class="container" id="submitted">
+    <h3>Podané prihlášky</h3>
+    {{ generate_apps_table(submitted) }}
+  </div>
+
+  <div class="container" id="printed">
+    <h3>Vytlačené prihlášky</h3>
+    {{ generate_apps_table(printed) }}
+  </div>
+
+  <div class="container" id="in_progress">
+    <h3>Rozpracované prihlášky</h3>
+    {{ generate_apps_table(in_progress) }}
+  </div>
+
+  <div class="container" id="processed">
+    <h3>Spracované prihlášky</h3>
+    {{ generate_apps_table(processed) }}
+  </div>
+
+
+</div>
 {% endblock %}
 
