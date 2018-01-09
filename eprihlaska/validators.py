@@ -101,7 +101,5 @@ class EmailDuplicateValidator:
     def __call__(self, form, field):
         user = User.query.filter_by(email=field.data).first()
 
-        # Throw an Error if the user already exists and their password has
-        # already been set.
-        if user and user.password:
+        if user:
             raise validators.ValidationError(self.message)
