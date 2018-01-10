@@ -8,7 +8,7 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 SUBMIT = _('Odoslať')
 NEXT = _('Ďalej')
 
-NATIONALITY = _('Občianstvo')
+NATIONALITY = _('Štátne občianstvo')
 NAME = _('Meno')
 SURNAME = _('Priezvisko')
 BORNWITH_SURNAME = _('Rodné priezvisko')
@@ -21,7 +21,7 @@ FEMALE = _('žena')
 
 BIRTH_NO = _('Rodné číslo')
 BIRTH_DATE = _('Dátum narodenia')
-BIRTH_COUNTRY = _('Krajina narodenia')
+BIRTH_COUNTRY = _('Štát narodenia')
 BIRTH_PLACE = _('Miesto narodenia')
 BIRTH_PLACE_FOREIGN = _('Miesto narodenia (v&nbsp;zahraničí)')
 
@@ -42,6 +42,8 @@ FATHER_BORNWITH_SURNAME = _('Rodné priezvisko otca')
 MOTHER_NAME = _('Meno matky')
 MOTHER_SURNAME = _('Priezvisko matky')
 MOTHER_BORNWITH_SURNAME = _('Rodné priezvisko matky')
+
+PERSONAL_INFO_CHECK = _('Dávam súhlas, aby vysoká škola spracúvala moje osobné údaje obsiahnuté v tejto prihláške a jej prílohách na účely prijímacieho konania až do termínu konania zápisu do 1. ročníka štúdia na vysokej škole.')
 
 DEAN_INV_LIST_YN = _('Dostal som list od dekana')
 DEAN_INV_LIST_NO = _('Číslo listu od dekana')
@@ -91,10 +93,10 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                             ('upINBI', PRG_upINBI),
                             ('upINAN', PRG_upINAN)]
 
-ADDRESS_COUNTRY = _('Krajina')
+ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
 ADDRESS_NO = _('Číslo')
-ADDRESS_CITY = _('Mesto')
+ADDRESS_CITY = _('Mesto (obec)')
 ADDRESS_CITY_FOREIGN = _('Mesto (v zahraničí)')
 ADDRESS_POSTAL_NO = _('PSČ')
 
@@ -152,13 +154,13 @@ MATURA_INF_GRADE = _('známka z maturity z informatiky')
 MATURA_CHE_GRADE = _('známka z maturity z chémie')
 MATURA_BIO_GRADE = _('známka z maturity z biológie')
 
-WILL_TAKE_EXT_MAT = _('plánujem sa zúčastniť externej maturity z matematiky')
-WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky')
-WILL_TAKE_MAT_MATURA = _('plánujem maturovať z matematiky')
-WILL_TAKE_FYZ_MATURA = _('plánujem maturovať z fyziky')
-WILL_TAKE_INF_MATURA = _('plánujem maturovať z informatiky')
-WILL_TAKE_BIO_MATURA = _('plánujem maturovať z biológie')
-WILL_TAKE_CHE_MATURA = _('plánujem maturovať z chémie')
+WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky')
+WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')
+WILL_TAKE_MAT_MATURA = _('maturujem z matematiky')
+WILL_TAKE_FYZ_MATURA = _('maturujem z fyziky')
+WILL_TAKE_INF_MATURA = _('maturujem z informatiky')
+WILL_TAKE_BIO_MATURA = _('maturujem z biológie')
+WILL_TAKE_CHE_MATURA = _('maturujem z chémie')
 
 FURTHER_STUDY_INFO = _('Prospech na strednej škole')
 

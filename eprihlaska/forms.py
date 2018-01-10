@@ -63,6 +63,8 @@ class FurtherPersonalDataForm(FlaskForm):
 
 
 class BasicPersonalDataForm(FlaskForm):
+    personal_info_check = BooleanField(label=c.PERSONAL_INFO_CHECK,
+                                       validators=[validators.DataRequired()])
     name = StringField(label=c.NAME,
                        validators=[validators.DataRequired()])
     surname = StringField(label=c.SURNAME,
