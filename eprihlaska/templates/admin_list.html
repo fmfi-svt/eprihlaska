@@ -9,6 +9,7 @@
     <thead>
       <tr>
         <th>#ID</th>
+        <th>Email</th>
         <th>Meno</th>
         <th>Priezvisko</th>
         <th>Študjné programy</th>
@@ -21,17 +22,20 @@
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
+        <td>{{ app['app']['email'] }}</td>
         <td>{{ app['app']['basic_personal_data']['name'] }}</td>
         <td>{{ app['app']['basic_personal_data']['surname'] }}</td>
         <td>{{  ', '.join(app['app']['study_programme']) }}</td>
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
         <td>{{ states[app.state.value] }}</td>
         <td>
-          <a target="_blank" class="btn btn-block btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a> <br />
-          <a target="_blank" class="btn btn-block btn-default" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
-          {% if app.state.value > 0 %}
-          <a class="btn btn-block btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Zresetovať do rozpracovaného stavu</a>
-          {% endif %}
+          <div class="btn-group">
+            <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
+            <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
+            {% if app.state.value > 0 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Zresetovať</a>
+            {% endif %}
+          </div>
         </td>
       </tr>
       {% endfor %}
