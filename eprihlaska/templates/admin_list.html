@@ -31,7 +31,7 @@
         <td>
           <div class="btn-group">
             <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
-            <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
+            <a target="_blank" class="btn btn-xs btn-default app-print" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
             {% if app.state.value > 0 %}
             <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Zresetovať</a>
             {% endif %}
@@ -91,8 +91,26 @@
     <h3>Spracované prihlášky</h3>
     {{ generate_apps_table(processed) }}
   </div>
-
-
 </div>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+<script>
+  $(document).ready(function(){
+    $('.app-print').click(function(e){
+      e.preventDefault();
+
+      window.open($(this).attr('href'), '_blank');
+
+      location.reload();
+    });
+  });
+</script>
 {% endblock %}
 
