@@ -14,7 +14,7 @@
         <th>Priezvisko</th>
         <th>Študjné programy</th>
         <th>Rok maturity</th>
-        <th>Stav</th>
+        <th>Autor poslednej zmeny</th>
         <th>Vykonateľné akcie</th>
       </tr>
 		</thead>
@@ -27,7 +27,7 @@
         <td>{{ app['app']['basic_personal_data']['surname'] }}</td>
         <td>{{  ', '.join(app['app']['study_programme']) }}</td>
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
-        <td>{{ states[app.state.value] }}</td>
+        <td>{{ app['app']['last_change_by'] }}</td>
         <td>
           <div class="btn-group">
             <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
