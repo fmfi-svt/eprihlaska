@@ -4,7 +4,12 @@
 {% import "bootstrap/utils.html" as util %}
 
 
-{% macro generate_apps_table(apps) %}
+{% macro generate_apps_table(apps, name, title) %}
+      <tr>
+        <th id="{{ name }}" colspan="8" scope="colgroup" class="text-center admin-thead">
+          {{ title }}
+        </th>
+      </tr>
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
@@ -36,32 +41,30 @@
   <h1 class="section-title">
     {% block title %}Zoznam registrovaných prihlášok{% endblock title %}
   </h1>
-
-  <div class="row">
-    <div class="col-lg-3">
-      <a href="#submitted"><strong>Podané prihlášky</strong></a>:
-      {{ submitted|length }}
-    </div>
-
-    <div class="col-lg-3">
-      <a href="#printed"><strong>Vytlačené prihlášky</strong></a>:
-      {{ printed|length }}
-    </div>
-
-    <div class="col-lg-3">
-      <a href="#in_progress"><strong>Rozpracované prihlášky</strong></a>:
-      {{ in_progress|length }}
-    </div>
-
-    <div class="col-lg-3">
-      <a href="#processed"><strong>Spracované prihlášky</strong></a>:
-      {{ processed|length }}
-    </div>
-
-  </div>
-
   <div class="container">
-   <table class="table table-striped table-hover">
+    <div class="row">
+      <div class="col-lg-3">
+        <a href="#submitted"><strong>Podané prihlášky</strong></a>:
+        {{ submitted|length }}
+      </div>
+
+      <div class="col-lg-3">
+        <a href="#printed"><strong>Vytlačené prihlášky</strong></a>:
+        {{ printed|length }}
+      </div>
+
+      <div class="col-lg-3">
+        <a href="#in_progress"><strong>Rozpracované prihlášky</strong></a>:
+        {{ in_progress|length }}
+      </div>
+
+      <div class="col-lg-3">
+        <a href="#processed"><strong>Spracované prihlášky</strong></a>:
+        {{ processed|length }}
+      </div>
+    </div>
+
+   <table class="table table-hover admin-table">
     <thead>
       <tr>
         <th>#ID</th>
@@ -75,23 +78,10 @@
       </tr>
 		</thead>
     <tbody>
-      <tr>
-        <th id="submitted" colspan="8" scope="colgroup" >Podané prihlášky</th>
-      </tr>
-    {{ generate_apps_table(submitted) }}
-
-      <tr>
-        <th id="printed" colspan="8" scope="colgroup" >Vytlačené prihlášky</th>
-      </tr>
-    {{ generate_apps_table(printed) }}
-      <tr>
-        <th id="in_progress" colspan="8" scope="colgroup" >Rozpracované prihlášky</th>
-      </tr>
-    {{ generate_apps_table(in_progress) }}
-    <tr>
-        <th id="processed" colspan="8" scope="colgroup" >Spracované prihlášky</th>
-      </tr>
-    {{ generate_apps_table(processed) }}
+    {{ generate_apps_table(submitted, "submitted", "Podané prihlášky") }}
+    {{ generate_apps_table(printed, "printed", "Vytlačené prihlášky") }}
+    {{ generate_apps_table(in_progress, "in_progress", "Rozpracované prihlášky") }}
+    {{ generate_apps_table(processed, "processed", "Spracované prihlášky") }}
 
     </tbody>
   </table>
@@ -117,5 +107,14 @@
     });
   });
 </script>
+
+<style>
+  .admin-thead {
+    padding: 20px 0;
+  }
+  .admin-table {
+    margiN: 20px 0;
+  }
+</style>
 {% endblock %}
 
