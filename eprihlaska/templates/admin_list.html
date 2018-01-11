@@ -10,6 +10,17 @@
           {{ title }}
         </th>
       </tr>
+      <tr>
+        <th>#ID</th>
+        <th>Email</th>
+        <th>Meno</th>
+        <th>Priezvisko</th>
+        <th>Študjné programy</th>
+        <th>Rok maturity</th>
+        <th>Autor poslednej zmeny</th>
+        <th>Vykonateľné akcie</th>
+      </tr>
+
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
@@ -65,18 +76,6 @@
     </div>
 
    <table class="table table-hover admin-table">
-    <thead>
-      <tr>
-        <th>#ID</th>
-        <th>Email</th>
-        <th>Meno</th>
-        <th>Priezvisko</th>
-        <th>Študjné programy</th>
-        <th>Rok maturity</th>
-        <th>Autor poslednej zmeny</th>
-        <th>Vykonateľné akcie</th>
-      </tr>
-		</thead>
     <tbody>
     {{ generate_apps_table(submitted, "submitted", "Podané prihlášky") }}
     {{ generate_apps_table(printed, "printed", "Vytlačené prihlášky") }}
