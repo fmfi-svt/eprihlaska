@@ -206,26 +206,35 @@ COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
                                        ['id', 'Štát'],
                                        sortby=1,
                                        prepend=['703', '203'])
+
+SELECT_CITY_CHOICE = [('999999', _('Zvoľte mesto alebo obec v SR'))]
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 ['id', 'Názov obce', 'Okres'],
                                 fmt='{2}, okr. {4}',
+                                extend_with=SELECT_CITY_CHOICE,
                                 sortby=1,
+                                prepend=['999999'],
                                 post_fmt=okres_fixer)
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
 
+HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX', _('Moja stredná škola nie je v zozname'))]
 HIGHSCHOOL_CHOICES = choices_from_csv(DIR + '/data/skoly.csv',
                                       ['St. šk.', 'Obec', 'Stredná škola',
                                        'Ulica'],
                                       fmt='{2}, {3}, {4}',
+                                      extend_with=HIGHSCHOOL_NOT_IN_LIST,
                                       sortby=1,
                                       prepend=['XXXXXXX'],
                                       post_fmt=city_formatter)
 
+NO_SP_CHOICE = [('XXXXXX', _('nemám kód študijného odboru'))]
 HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                               ['Odbor - kod',
                                                'Odbor stred. školy'],
+                                              extend_with=NO_SP_CHOICE,
+                                              prepend=['XXXXXX'],
                                               fmt='{1} - {2}')
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',

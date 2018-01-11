@@ -103,3 +103,19 @@ class EmailDuplicateValidator:
 
         if user:
             raise validators.ValidationError(self.message)
+
+class CityInSKValidator:
+    def __init__(self, unacceptable_value, country_field, country_field_value, message=None):
+        if not message:
+            message = 'Vyberte, prosím, mesto alebo obec v SR.'
+        self.message = message
+        self.country_field = country_field
+        self.country_field_value = country_field_value
+        self.unacceptable_value = unacceptable_value
+
+    def __call__(self, form, field):
+        country_field = form[self.country_field]
+
+        if country_field.data == self.country_field_value and \
+           field.data == self.unacceptable_value:
+            raise validators.ValidationError(self.message)
