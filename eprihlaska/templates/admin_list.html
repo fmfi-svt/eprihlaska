@@ -5,20 +5,6 @@
 
 
 {% macro generate_apps_table(apps) %}
-   <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#ID</th>
-        <th>Email</th>
-        <th>Meno</th>
-        <th>Priezvisko</th>
-        <th>Študjné programy</th>
-        <th>Rok maturity</th>
-        <th>Autor poslednej zmeny</th>
-        <th>Vykonateľné akcie</th>
-      </tr>
-		</thead>
-    <tbody>
       {% for app in apps %}
       <tr>
         <td>{{ app.id }}</td>
@@ -27,7 +13,7 @@
         <td>{{ app['app']['basic_personal_data']['surname'] }}</td>
         <td>{{  ', '.join(app['app']['study_programme']) }}</td>
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
-        <td>{{ app['app']['last_change_by'] }}</td>
+        <td>{{ app['app']['last_change_by'] }} ({{ app['app']['last_change_at'].strftime('%H:%M:%S %d.%m.%Y') }})</td>
         <td>
           <div class="btn-group">
             <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
@@ -39,8 +25,6 @@
         </td>
       </tr>
       {% endfor %}
-		</tbody>
-  </table>
 {% endmacro %}
 
 {% block content %}
@@ -72,24 +56,41 @@
 
   </div>
 
-  <div class="container" id="submitted">
-    <h3>Podané prihlášky</h3>
+  <div class="container">
+   <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#ID</th>
+        <th>Email</th>
+        <th>Meno</th>
+        <th>Priezvisko</th>
+        <th>Študjné programy</th>
+        <th>Rok maturity</th>
+        <th>Autor poslednej zmeny</th>
+        <th>Vykonateľné akcie</th>
+      </tr>
+		</thead>
+    <tbody>
+      <tr>
+        <th id="submitted" colspan="8" scope="colgroup" >Podané prihlášky</th>
+      </tr>
     {{ generate_apps_table(submitted) }}
-  </div>
 
-  <div class="container" id="printed">
-    <h3>Vytlačené prihlášky</h3>
+      <tr>
+        <th id="printed" colspan="8" scope="colgroup" >Vytlačené prihlášky</th>
+      </tr>
     {{ generate_apps_table(printed) }}
-  </div>
-
-  <div class="container" id="in_progress">
-    <h3>Rozpracované prihlášky</h3>
+      <tr>
+        <th id="in_progress" colspan="8" scope="colgroup" >Rozpracované prihlášky</th>
+      </tr>
     {{ generate_apps_table(in_progress) }}
-  </div>
-
-  <div class="container" id="processed">
-    <h3>Spracované prihlášky</h3>
+    <tr>
+        <th id="processed" colspan="8" scope="colgroup" >Spracované prihlášky</th>
+      </tr>
     {{ generate_apps_table(processed) }}
+
+    </tbody>
+  </table>
   </div>
 </div>
 
