@@ -48,6 +48,16 @@ def require_filled_form(form_key):
         return wrapper
     return decorator
 
+def require_remote_user(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.environ.get('REMOTE_USER') is None:
+            flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+            return redirect(url_for('index'))
+        return func(*args, **kwargs)
+    return wrapper
+
+
 def save_form(form):
     ignored_keys = ['csrf_token', 'submit']
     for k in form.data:
@@ -569,6 +579,7 @@ def get_apps(s):
     return process_apps(apps)
 
 @app.route('/admin/list')
+@require_remote_user
 def admin_list():
     in_progress = get_apps(ApplicationStates.in_progress)
     submitted = get_apps(ApplicationStates.submitted)
@@ -580,12 +591,14 @@ def admin_list():
 
 
 @app.route('/admin/view/<id>')
+@require_remote_user
 def admin_view(id):
     app = ApplicationForm.query.filter_by(id=id).first()
     rendered = render_app(app)
     return rendered
 
 @app.route('/admin/print/<id>')
+@require_remote_user
 def admin_print(id):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates.printed
@@ -596,6 +609,7 @@ def admin_print(id):
     return rendered
 
 @app.route('/admin/reset/<id>')
+@require_remote_user
 def admin_reset(id):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates.in_progress
