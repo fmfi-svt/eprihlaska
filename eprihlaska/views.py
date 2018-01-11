@@ -606,7 +606,8 @@ def admin_print(id):
 
     sess = flask.json.loads(app.application)
     sess['last_change_by'] = request.environ.get('REMOTE_USER')
-    sess['last_change_at'] = datetime.datetime.now()
+    date_str = datetime.datetime.now().strftime('%H:%M:%S %d.%m.%Y')
+    sess['last_change_at'] = date_str
     app.application = flask.json.dumps(dict(sess))
 
     db.session.commit()
@@ -625,7 +626,8 @@ def admin_reset(id):
         sess['application_submit_refresh'] = True
 
     sess['last_change_by'] = request.environ.get('REMOTE_USER')
-    sess['last_change_at'] = datetime.datetime.now()
+    date_str = datetime.datetime.now().strftime('%H:%M:%S %d.%m.%Y')
+    sess['last_change_at'] = date_str
 
     app.application = flask.json.dumps(dict(sess))
     db.session.commit()
