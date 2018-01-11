@@ -15,7 +15,7 @@
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
         <td>
           {% if 'last_change_at' in app['app'] %}
-          {{ app['app']['last_change_by'] }} ({{ app['app']['last_change_at'].strftime('%H:%M:%S %d.%m.%Y') }})
+          {{ app['app']['last_change_by'] }} ({{ app['app']['last_change_at'] }})
           {% endif %}
         </td>
         <td>
