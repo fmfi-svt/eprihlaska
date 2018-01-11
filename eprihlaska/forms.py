@@ -4,7 +4,8 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      DateField, FieldList, IntegerField, HiddenField,
                      PasswordField)
 
-from .validators import BirthNoValidator, DateValidator, EmailDuplicateValidator
+from .validators import (BirthNoValidator, DateValidator,
+                         EmailDuplicateValidator, CityInSKValidator)
 from . import consts as c
 
 class FatherNameForm(FlaskForm):
@@ -33,12 +34,17 @@ class PersonalDataForm(FlaskForm):
     date_of_birth = StringField(label=c.BIRTH_DATE,
                                 validators=[DateValidator()],
                                 render_kw={"placeholder": 'DD.MM.RRRR'})
+
     country_of_birth = SelectField(label=c.BIRTH_COUNTRY,
                                    choices=c.COUNTRY_CHOICES,
                                    default='703')
 
     place_of_birth = SelectField(label=c.BIRTH_PLACE,
-                                 choices=c.CITY_CHOICES)
+                                 choices=c.CITY_CHOICES,
+                                 default='999999',
+                                 validators=[CityInSKValidator('999999',
+                                                               'country_of_birth',
+                                                               '703')])
 
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
 
@@ -107,7 +113,8 @@ class Address(FlaskForm):
                          description=c.ADDRESS_STREET_DESC)
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
-                       choices=c.CITY_CHOICES)
+                       choices=c.CITY_CHOICES,
+                       default='999999')
     city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 

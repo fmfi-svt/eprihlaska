@@ -3,7 +3,7 @@ import locale
 import re
 
 def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
-                     prepend=None, post_fmt=None):
+                     extend_with=None, prepend=None, post_fmt=None):
     reader = csv.DictReader(open(csv_file, 'r', encoding='utf-8'),
                             delimiter=delimiter)
     choices = []
@@ -15,6 +15,8 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
             choice.append(fmt.format(*vals))
         choices.append(tuple(choice))
 
+    if extend_with:
+        choices.extend(extend_with)
     if post_fmt:
         choices = list(map(lambda x: [x[0], post_fmt(x[1])], choices))
     if sortby:
