@@ -126,9 +126,9 @@ class ePrihlaskaNavRenderer(BootstrapRenderer):
 
         # Endpoints which are allowed once the application has been submitted.
         #
-        # Note that 'admissions_wavers' refers to the endpoint that preceeds
+        # Note that 'admissions_waviers' refers to the endpoint that preceeds
         # 'final' (which is what should only be allowed here).
-        allowed_endpoints = [None, 'admissions_wavers']
+        allowed_endpoints = [None, 'admissions_waviers']
 
         if 'application_submitted' in session \
            and endpoint not in allowed_endpoints:

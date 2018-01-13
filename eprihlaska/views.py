@@ -131,7 +131,7 @@ def study_programme():
 
             save_form(form)
             flash('Vaše dáta boli uložené!')
-        return redirect('/personal_info')
+        return redirect(url_for('personal_info'))
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -145,7 +145,7 @@ def personal_info():
         save_form(form)
 
         flash('Vaše dáta boli uložené!')
-        return redirect('/further_personal_info')
+        return redirect(url_for('further_personal_info'))
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -160,7 +160,7 @@ def further_personal_info():
             save_form(form)
 
             flash('Vaše dáta boli uložené!')
-        return redirect('/address')
+        return redirect(url_for('address'))
     return render_template('further_personal_info.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -174,7 +174,7 @@ def address():
             save_form(form)
 
             flash('Vaše dáta boli uložené!')
-        return redirect('/previous_studies')
+        return redirect(url_for('previous_studies'))
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -188,7 +188,7 @@ def previous_studies():
             save_form(form)
 
             flash('Vaše dáta boli uložené!')
-        return redirect('/admissions_wavers')
+        return redirect(url_for('admissions_waivers'))
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -216,17 +216,17 @@ def filter_competitions(competition_list, study_programme_list):
                 result_list.append((comp, desc))
     return result_list
 
-@app.route('/admissions_wavers', methods=('GET', 'POST'))
+@app.route('/admissions_waivers', methods=('GET', 'POST'))
 @login_required
 @require_filled_form('previous_studies')
-def admissions_wavers():
+def admissions_waivers():
 
     basic_data = session['basic_personal_data']
     if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_wavers form has been filled in
-        session['admissions_wavers'] = ''
+        session['admissions_waviers'] = ''
         flash('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')
-        return redirect('/final')
+        return redirect(url_for('final'))
 
     form = AdmissionWaversForm(obj=munchify(dict(session)))
 
@@ -295,14 +295,14 @@ def admissions_wavers():
             save_form(form)
 
             flash('Vaše dáta boli uložené!')
-        return redirect('/final')
+        return redirect(url_for('final'))
 
     return render_template('admission_wavers.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/final', methods=['GET'])
 @login_required
-@require_filled_form('admissions_wavers')
+@require_filled_form('admissions_waviers')
 def final():
     specific_symbol = 9999 + current_user.id
     return render_template('final.html', session=session,

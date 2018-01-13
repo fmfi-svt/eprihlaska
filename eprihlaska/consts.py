@@ -181,7 +181,7 @@ MENU = [
     (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
-    (_('Prijatie bez prijímacích pohovorov'), 'admissions_wavers'),
+    (_('Prijatie bez prijímacích pohovorov'), 'admissions_waivers'),
     (_('Záverečné pokyny'), 'final')
 ]
 
