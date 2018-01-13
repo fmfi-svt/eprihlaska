@@ -20,6 +20,7 @@ class ApplicationForm(db.Model):
     user = db.relationship('User', backref='user')
     application = db.Column(db.Text)
     last_updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now)
+    last_updated_by = db.Column(db.String(50), default='user')
     submitted_at = db.Column(db.DateTime)
     processed_at = db.Column(db.DateTime)
     printed_at = db.Column(db.DateTime)

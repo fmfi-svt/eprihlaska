@@ -249,7 +249,7 @@ class AdmissionWaversForm(FlaskForm):
                               label=c.COMPETITION_SECOND)
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
-    admissions_wavers = HiddenField()
+    admissions_waviers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
 class LoginForm(FlaskForm):
