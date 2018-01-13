@@ -30,9 +30,7 @@
         <td>{{  ', '.join(app['app']['study_programme']) }}</td>
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
         <td>
-          {% if 'last_change_at' in app['app'] %}
-          {{ app['app']['last_change_by'] }} <small>({{ app['app']['last_change_at'] }})</small>
-          {% endif %}
+          {{ app.last_updated_by }} <small>({{ app.last_updated_at|strftime('%H:%M:%S %d.%m.%Y') }})</small>
         </td>
         <td>
           <div class="btn-group">
