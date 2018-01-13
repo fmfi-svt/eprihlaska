@@ -223,7 +223,7 @@ def admissions_waivers():
 
     basic_data = session['basic_personal_data']
     if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
-        # Pretend the admission_wavers form has been filled in
+        # Pretend the admission_waivers form has been filled in
         session['admissions_waviers'] = ''
         flash('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')
         return redirect(url_for('final'))
@@ -297,7 +297,7 @@ def admissions_waivers():
             flash('Vaše dáta boli uložené!')
         return redirect(url_for('final'))
 
-    return render_template('admission_wavers.html', form=form, session=session,
+    return render_template('admission_waivers.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
 @app.route('/final', methods=['GET'])
