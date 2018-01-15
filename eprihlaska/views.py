@@ -224,7 +224,7 @@ def admissions_waivers():
     basic_data = session['basic_personal_data']
     if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_waivers form has been filled in
-        session['admissions_waviers'] = ''
+        session['admissions_waivers'] = ''
         flash('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')
         return redirect(url_for('final'))
 
@@ -302,7 +302,7 @@ def admissions_waivers():
 
 @app.route('/final', methods=['GET'])
 @login_required
-@require_filled_form('admissions_waviers')
+@require_filled_form('admissions_waivers')
 def final():
     specific_symbol = 9999 + current_user.id
     return render_template('final.html', session=session,
@@ -380,6 +380,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
+                logout_user()
+                session.clear()
                 login_user(user)
 
                 # set the index endpoint as already visited (in order for the
