@@ -128,8 +128,7 @@ class ePrihlaskaNavRenderer(BootstrapRenderer):
         #
         # Note that 'admissions_waviers' refers to the endpoint that preceeds
         # 'final' (which is what should only be allowed here).
-        allowed_endpoints = [None, 'admissions_waviers']
-
+        allowed_endpoints = [None, 'admissions_waivers']
         if 'application_submitted' in session \
            and endpoint not in allowed_endpoints:
             url = '#'
