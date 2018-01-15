@@ -36,8 +36,9 @@ Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
   <div class="col-sm-6">
   <h4>Prihlásenie a registrácia</h4>
 
+  {% set signup_action = url_for('signup') %}
   {{ wtf.quick_form(form,
-                    action='/signup',
+                    action=signup_action,
                     form_type='horizontal',
                     button_map={'submit': 'primary'}) }}
 
