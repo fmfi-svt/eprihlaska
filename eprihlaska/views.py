@@ -428,6 +428,8 @@ def signup():
         session['studies_in_sr'] = {}
 
         new_application_form = ApplicationForm(user_id=new_user.id)
+        # FIXME: band-aid for last_updated_at
+        new_application_form.last_updated_at = datetime.datetime.now()
         new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
         db.session.commit()
@@ -514,6 +516,8 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         session['studies_in_sr'] = {}
 
         new_application_form = ApplicationForm(user_id=user.id)
+        # FIXME: band-aid for last_updated_at
+        new_application_form.last_updated_at = datetime.datetime.now()
         new_application_form.application = flask.json.dumps(dict(session))
         db.session.add(new_application_form)
         db.session.commit()
