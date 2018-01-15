@@ -13,7 +13,7 @@
       $(document).ready(function(){
         $('#nationality').chosen();
 
-        $('#place_of_birth').chosen({search_contains: true});
+        $('#place_of_birth').chosen({search_contains: false, enable_split_word_search: false});
         $('#country_of_birth').chosen({search_contains: true});
 
         if ($('#country_of_birth').val() == '703') {
