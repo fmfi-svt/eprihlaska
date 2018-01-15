@@ -57,7 +57,7 @@ Time:               %(asctime)s
 Message:
 
 %(message)s
-''')
+'''))
 
 if not app.debug:
     app.logger.addHandler(mail_handler)
