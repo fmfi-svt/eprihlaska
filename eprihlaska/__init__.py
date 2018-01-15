@@ -38,7 +38,7 @@ locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
 
 import logging
 from logging.handlers import SMTPHandler
-from logging import import Formatter
+from logging import Formatter
 
 mail_handler = SMTPHandler(
     mailhost=app.config['ERROR_EMAIL_SERVER'],
