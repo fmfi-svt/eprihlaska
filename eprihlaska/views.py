@@ -35,8 +35,8 @@ def require_filled_form(form_key):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if 'application_submitted' in session:
-                final = url_for('final')
-                if str(request.url_rule) != final:
+                rule = request.url_rule
+                if 'final' not in rule.rule:
                     return redirect(final)
 
             if request.method == 'GET' and form_key not in session:
