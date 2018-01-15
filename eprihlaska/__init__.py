@@ -36,6 +36,32 @@ babel = Babel(app)
 app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
 locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
 
+import logging
+from logging.handlers import SMTPHandler
+from logging import import Formatter
+
+mail_handler = SMTPHandler(
+    mailhost=app.config['ERROR_EMAIL_SERVER'],
+    fromaddr=app.config['ERROR_EMAIL_FROM'],
+    toaddrs=app.config['ADMINS'],
+    subject=app.config['ERROR_EMAIL_HEADER']
+)
+mail_handler.setLevel(logging.ERROR)
+mail_handler.setFormatter(Formatter('''
+Message type:       %(levelname)s
+Location:           %(pathname)s:%(lineno)d
+Module:             %(module)s
+Function:           %(funcName)s
+Time:               %(asctime)s
+
+Message:
+
+%(message)s
+''')
+
+if not app.debug:
+    app.logger.addHandler(mail_handler)
+
 @babel.localeselector
 def get_locale():
     return request.accept_languages.best_match(['sk_SK', 'en'])
