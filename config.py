@@ -22,3 +22,8 @@ MAIL_PASSWORD = ''
 MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
 
 SESSION_TYPE = 'filesystem'
+
+ADMINS = []
+ERROR_EMAIL_SERVER = ''
+ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
+ERROR_EMAIL_HEADER = 'ePrihlaska - error'
