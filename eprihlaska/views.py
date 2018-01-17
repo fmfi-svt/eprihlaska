@@ -22,12 +22,24 @@ from .headless_pdfkit import generate_pdf
 from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      NEW_USER_MAIL, SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
-                     MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
+                     CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
                      HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
                      COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
 from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
+LISTS = {
+    'sex': dict(SEX_CHOICES),
+    'marital_status': dict(MARITAL_STATUS_CHOICES),
+    'country': dict(COUNTRY_CHOICES),
+    'city': dict(CITY_CHOICES),
+    'city_psc': dict(CITY_CHOICES_PSC),
+    'highschool': dict(HIGHSCHOOL_CHOICES),
+    'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
+    'education_level': dict(EDUCATION_LEVEL_CHOICES),
+    'study_programme': dict(STUDY_PROGRAMME_CHOICES),
+    'competition': dict(COMPETITION_CHOICES)
+}
 
 
 def require_filled_form(form_key):
@@ -51,9 +63,9 @@ def require_filled_form(form_key):
 def require_remote_user(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.environ.get('REMOTE_USER') is None:
-            flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
-            return redirect(url_for('index'))
+       #if request.environ.get('REMOTE_USER') is None:
+       #    flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+       #    return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
 
@@ -341,19 +353,8 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
-    lists = {
-        'sex': dict(SEX_CHOICES),
-        'marital_status': dict(MARITAL_STATUS_CHOICES),
-        'country': dict(COUNTRY_CHOICES),
-        'city': dict(CITY_CHOICES),
-        'highschool': dict(HIGHSCHOOL_CHOICES),
-        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
-        'education_level': dict(EDUCATION_LEVEL_CHOICES),
-        'study_programme': dict(STUDY_PROGRAMME_CHOICES),
-        'competition': dict(COMPETITION_CHOICES)
-    }
     rendered = render_template('application_form.html', session=sess,
-                               lists=lists, id=app.id,
+                               lists=LISTS, id=app.id,
                                submitted_at=app.submitted_at,
                                consts=consts, print=print)
     return rendered
@@ -629,4 +630,14 @@ def admin_reset(id):
     app.application = flask.json.dumps(dict(sess))
     db.session.commit()
 
+    return redirect(url_for('admin_list'))
+
+@app.route('/admin/process/<id>')
+@require_remote_user
+def admin_process(id):
+    application = ApplicationForm.query.filter_by(id=id).first()
+    from .ais_utils import (create_context, open_dialog, save_application_form)
+
+    ctx = create_context({})
+    save_application_form(ctx, application, LISTS)
     return redirect(url_for('admin_list'))

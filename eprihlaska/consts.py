@@ -216,6 +216,10 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 prepend=['999999'],
                                 post_fmt=okres_fixer)
 
+CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
+                                ['id', 'PSČ'],
+                                fmt='{3}')
+
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
 
