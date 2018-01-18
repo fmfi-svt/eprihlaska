@@ -399,7 +399,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user:
+        if user and user.password:
             if check_password_hash(user.password, form.password.data):
                 logout_user()
                 session.clear()
