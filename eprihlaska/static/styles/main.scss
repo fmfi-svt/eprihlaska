@@ -2,6 +2,7 @@
 @import 'navbar';
 @import 'form';
 @import 'chosen';
+@import 'typography';
 
 body {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
@@ -30,11 +31,14 @@ a {
 }
 
 .footer {
-  height: 60px;
-  line-height: 60px;
+  padding: 22px 0;
   background-color: #4e2d2f;
   color: white;
   box-shadow: $box-shadow-02;
+
+  a {
+    color: white;
+  }
 }
 
 .study-programme {
