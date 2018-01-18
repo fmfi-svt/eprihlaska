@@ -99,6 +99,7 @@ ADDRESS_NO = _('Číslo')
 ADDRESS_CITY = _('Mesto (obec)')
 ADDRESS_CITY_FOREIGN = _('Mesto (v zahraničí)')
 ADDRESS_POSTAL_NO = _('PSČ')
+ADDRESS_CITY_FOREIGN_FILL = _('Napíšte, prosím, názov mesta.')
 
 ADDRESS_STREET_DESC = _('V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce.')
 
@@ -240,6 +241,11 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                               extend_with=NO_SP_CHOICE,
                                               prepend=['XXXXXX'],
                                               fmt='{1} - {2}')
+
+HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
+                                              ['St. šk.',
+                                               'Odbor - kod'],
+                                              fmt='{2}')
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],

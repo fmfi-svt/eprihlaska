@@ -22,8 +22,9 @@ from .headless_pdfkit import generate_pdf
 from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      NEW_USER_MAIL, SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
-                     CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
-                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
+                     CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
+                     HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
+                     HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
                      COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
 from . import consts
 
@@ -212,7 +213,7 @@ def filter_competitions(competition_list, study_programme_list):
         'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
         'CHE': ['BIN', 'BMF'],
-        'SVOC_INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'SVOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'SVOC_BIO': ['BIN', 'BMF'],
         'SVOC_CHM': ['BIN', 'BMF'],
         'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
@@ -257,11 +258,11 @@ def admissions_waivers():
 
     further_study_info_constraints = {
         'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'matura_bio_grade': ['BIN', 'BMF'],
         'matura_che_grade': ['BIN', 'BMF'],
         'will_take_fyz_matura': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'will_take_inf_matura': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'will_take_bio_matura': ['BIN', 'BMF'],
         'will_take_che_matura': ['BIN', 'BMF']
 
@@ -317,9 +318,29 @@ def admissions_waivers():
 @require_filled_form('admissions_waivers')
 def final():
     specific_symbol = 9999 + current_user.id
+
+    hs_sp_check = True
+    hs_education_level_check = True
+    if session['finished_highschool_check'] == 'SK':
+        # Check whether the highschool/study_programme_code pair
+        # exists in the mapping list
+        pair = (session['studies_in_sr']['highschool'],
+                session['studies_in_sr']['study_programme_code'])
+        if pair not in HS_STUDY_PROGRAMME_MAP:
+            hs_sp_check = False
+
+        # Check whether the education_level code is actually present in
+        # the study_programme_code
+        el = session['studies_in_sr']['education_level']
+        if el not in session['studies_in_sr']['study_programme_code']:
+            hs_education_level_check = False
+
+
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
-                           sp=dict(STUDY_PROGRAMME_CHOICES))
+                           sp=dict(STUDY_PROGRAMME_CHOICES),
+                           hs_sp_check=hs_sp_check,
+                           hs_ed_level_check=hs_education_level_check)
 
 
 @app.route('/submit_app')
@@ -379,7 +400,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user:
+        if user and user.password:
             if check_password_hash(user.password, form.password.data):
                 logout_user()
                 session.clear()
