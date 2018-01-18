@@ -7,18 +7,47 @@
 {% if not session['application_submitted'] %}
 
 {% if not session['address_form']['street'] %}
-<p class="bg-warning">
+<div class="alert alert-warning fade in">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
   Neuviedli ste adresu trvalého bydliska. Nekompletné prihlášky nebudú môcť byť
-  akceptované. Pridať adresu je možné <a href="{{ url_for('address') }}">v časti Adresa</a>.
-</p>
+  akceptované. Pridať adresu je možné
+  <a class="alert-link" href="{{ url_for('address') }}">v časti Adresa</a>.
+</div>
 {% endif %}
 
 {% if not session['birth_no'] %}
-<p class="bg-warning">
+<div class="alert alert-warning fade in">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
   Neuviedli ste rodné číslo. Rodné číslo je potrebné uviesť, ak vám bolo
   pridelené. Pridať rodné číslo je možné
-  <a href="{{ url_for('personal_info') }}">v časti Osobné informácie</a>.
-</p>
+  <a class="alert-link" href="{{ url_for('personal_info') }}">
+    v časti Osobné informácie
+  </a>.
+</div>
+{% endif %}
+
+{% if not hs_sp_check %}
+<div class="alert alert-warning fade in">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
+  Vaša kombinácia navštevovanej strednej školy a študijného odboru nebola
+  nájdená v našej databáze. Zmeniť navštevovanú strednú školu alebo študijný
+  odbor možete
+  <a class="alert-link" href="{{ url_for('previous_studies') }}">
+    v časti Predchádzajúce štúdium
+  </a>.
+</div>
+{% endif %}
+
+{% if not hs_sp_check %}
+<div class="alert alert-warning fade in">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
+  Vaše dosiahnuté / očakávané stredoškolské vzdelanie nekorešponduje s vami
+  zadaným kódom študijného odboru. Zmeniť Vaše dosiahnuté / očakávané
+  stredoškolské vzdelanie alebo študijný odbor možete
+  <a class="alert-link" href="{{ url_for('previous_studies') }}">
+    v časti Predchádzajúce štúdium
+  </a>.
+</div>
 {% endif %}
 
 <h3>Podanie prihlášky</h3>

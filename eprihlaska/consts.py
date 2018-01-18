@@ -237,6 +237,11 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                               prepend=['XXXXXX'],
                                               fmt='{1} - {2}')
 
+HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
+                                              ['St. šk.',
+                                               'Odbor - kod'],
+                                              fmt='{2}')
+
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
                                            fmt='({1}) - {3}')

@@ -23,11 +23,23 @@ from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      NEW_USER_MAIL, SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
                      MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
-                     HS_STUDY_PROGRAMME_CHOICES, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
+                     HS_STUDY_PROGRAMME_CHOICES, HS_STUDY_PROGRAMME_MAP,
+                     EDUCATION_LEVEL_CHOICES, COMPETITION_CHOICES,
+                     APPLICATION_STATES, ApplicationStates)
 from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
+LISTS = {
+    'sex': dict(SEX_CHOICES),
+    'marital_status': dict(MARITAL_STATUS_CHOICES),
+    'country': dict(COUNTRY_CHOICES),
+    'city': dict(CITY_CHOICES),
+    'highschool': dict(HIGHSCHOOL_CHOICES),
+    'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
+    'education_level': dict(EDUCATION_LEVEL_CHOICES),
+    'study_programme': dict(STUDY_PROGRAMME_CHOICES),
+    'competition': dict(COMPETITION_CHOICES)
+}
 
 
 def require_filled_form(form_key):
@@ -305,9 +317,29 @@ def admissions_waivers():
 @require_filled_form('admissions_waivers')
 def final():
     specific_symbol = 9999 + current_user.id
+
+    hs_sp_check = True
+    hs_education_level_check = True
+    if session['finished_highschool_check'] == 'SK':
+        # Check whether the highschool/study_programme_code pair
+        # exists in the mapping list
+        pair = (session['studies_in_sr']['highschool'],
+                session['studies_in_sr']['study_programme_code'])
+        if pair not in HS_STUDY_PROGRAMME_MAP:
+            hs_sp_check = False
+
+        # Check whether the education_level code is actually present in
+        # the study_programme_code
+        el = session['studies_in_sr']['education_level']
+        if el not in session['studies_in_sr']['study_programme_code']:
+            hs_education_level_check = False
+
+
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
-                           sp=dict(STUDY_PROGRAMME_CHOICES))
+                           sp=dict(STUDY_PROGRAMME_CHOICES),
+                           hs_sp_check=hs_sp_check,
+                           hs_ed_level_check=hs_education_level_check)
 
 
 @app.route('/submit_app')
@@ -341,19 +373,8 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
-    lists = {
-        'sex': dict(SEX_CHOICES),
-        'marital_status': dict(MARITAL_STATUS_CHOICES),
-        'country': dict(COUNTRY_CHOICES),
-        'city': dict(CITY_CHOICES),
-        'highschool': dict(HIGHSCHOOL_CHOICES),
-        'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
-        'education_level': dict(EDUCATION_LEVEL_CHOICES),
-        'study_programme': dict(STUDY_PROGRAMME_CHOICES),
-        'competition': dict(COMPETITION_CHOICES)
-    }
     rendered = render_template('application_form.html', session=sess,
-                               lists=lists, id=app.id,
+                               lists=LISTS, id=app.id,
                                submitted_at=app.submitted_at,
                                consts=consts, print=print)
     return rendered
