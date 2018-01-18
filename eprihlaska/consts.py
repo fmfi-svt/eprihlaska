@@ -99,6 +99,7 @@ ADDRESS_NO = _('Číslo')
 ADDRESS_CITY = _('Mesto (obec)')
 ADDRESS_CITY_FOREIGN = _('Mesto (v zahraničí)')
 ADDRESS_POSTAL_NO = _('PSČ')
+ADDRESS_CITY_FOREIGN_FILL = _('Napíšte, prosím, názov mesta.')
 
 ADDRESS_STREET_DESC = _('V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce.')
 

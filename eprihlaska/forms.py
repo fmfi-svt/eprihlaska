@@ -5,7 +5,8 @@ from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      PasswordField)
 
 from .validators import (BirthNoValidator, DateValidator,
-                         EmailDuplicateValidator, CityInSKValidator)
+                         EmailDuplicateValidator, CityInSKValidator,
+                         IfStreetThenCity)
 from . import consts as c
 
 class FatherNameForm(FlaskForm):
@@ -115,8 +116,18 @@ class Address(FlaskForm):
     street_no = StringField(label=c.ADDRESS_NO)
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=c.CITY_CHOICES,
-                       default='999999')
-    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN)
+                       default='999999',
+                       validators=[IfStreetThenCity(unacceptable_value='999999',
+                                                    street_field='street',
+                                                    country_field='country',
+                                                    country_field_value='703')])
+    city_foreign = StringField(label=c.ADDRESS_CITY_FOREIGN,
+                               validators=[IfStreetThenCity(unacceptable_value='',
+                                                            street_field='street',
+                                                            country_field='country',
+                                                            country_field_value='703',
+                                                            country_negated=True,
+                                                            message=c.ADDRESS_CITY_FOREIGN_FILL)])
     postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
 
 
