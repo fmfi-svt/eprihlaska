@@ -200,7 +200,7 @@ def filter_competitions(competition_list, study_programme_list):
         'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
         'CHE': ['BIN', 'BMF'],
-        'SVOC_INF': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'SVOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'SVOC_BIO': ['BIN', 'BMF'],
         'SVOC_CHM': ['BIN', 'BMF'],
         'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
@@ -245,11 +245,11 @@ def admissions_waivers():
 
     further_study_info_constraints = {
         'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'matura_bio_grade': ['BIN', 'BMF'],
         'matura_che_grade': ['BIN', 'BMF'],
         'will_take_fyz_matura': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'will_take_inf_matura': ['AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'will_take_bio_matura': ['BIN', 'BMF'],
         'will_take_che_matura': ['BIN', 'BMF']
 
