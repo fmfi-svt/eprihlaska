@@ -11,16 +11,10 @@ import aisikl.portal
 import flask.json
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
-    ctx = Context({'AISAuth': 'a6c5dc686b2a3f9ee9df801fd37f581a',
-                   'JSESSIONID': 'B14E400CEDD079BC1C1315B4EEE01104'},
+    ctx = Context({'AISAuth': '598ccaa234dfe4f1870bbe36c7cd8f51',
+                   'JSESSIONID': 'E6912443DD5F75A089033625E31BB11B'},
                   ais_url='https://'+origin+'/')
     return ctx
-
-
-
-def open_dialog(ctx):
-
-    return app, dlg
 
 def save_application_form(ctx, application, lists):
     session = flask.json.loads(application.application)

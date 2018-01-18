@@ -636,7 +636,7 @@ def admin_reset(id):
 @require_remote_user
 def admin_process(id):
     application = ApplicationForm.query.filter_by(id=id).first()
-    from .ais_utils import (create_context, open_dialog, save_application_form)
+    from .ais_utils import (create_context, save_application_form)
 
     ctx = create_context({})
     save_application_form(ctx, application, LISTS)
