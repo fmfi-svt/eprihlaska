@@ -12,9 +12,7 @@ import flask.json
 from flask import url_for
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
-    ctx = Context({'AISAuth': '0c17a1b25030d68f8308abd33fa1f0e6',
-                   'JSESSIONID': 'CC1D96A6E2FD1DBCCD65BC7105936975'},
-                  ais_url='https://'+origin+'/')
+    ctx = Context(cookies, ais_url='https://'+origin+'/')
     return ctx
 
 def save_application_form(ctx, application, lists, application_id):
@@ -269,8 +267,6 @@ def save_application_form(ctx, application, lists, application_id):
         ops = deal_with_confirm_boxes(app, ops)
 
     errors = app.d.statusHtmlArea.content
-    print("errors:", errors)
-    print(ops)
 
     ops = deal_with_confirm_boxes(app, ops)
 
@@ -284,10 +280,9 @@ def save_application_form(ctx, application, lists, application_id):
         ops = deal_with_confirm_boxes(app, ops)
 
     errors = app.d.statusHtmlArea.content
-    print("errors:", errors)
-    print(ops)
 
     dlg = app.awaited_close_dialog(ops)
+    return errors
 
 
 def deal_with_confirm_boxes(app, ops):

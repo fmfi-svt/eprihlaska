@@ -1,0 +1,44 @@
+{% extends "bootstrap/base.html" %}
+{% import "wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}Preklopenie prihlášky do AIS2 (beta){% endblock title %}
+  </h1>
+  <div class="container">
+    {% if form %}
+        {{ wtf.quick_form(form,
+                          form_type='horizontal',
+                          button_map={'submit': 'primary'}) }}
+
+    {% else %}
+    <div class="well well-lg">
+      <strong>AIS2 výstup:</strong> <br /><br />
+
+      {{ ais2_output|safe }}
+    </div>
+
+      {% if error_output %}
+      <div class="well well-lg bg-danger">
+        <strong>Náš chybový výstup:</strong> <br />
+        {{ error_output }}
+      </div>
+      {% else %}
+      <div class="well well-lg alert alert-success text-center">
+        <strong>Prihlášku sa podarilo preklopiť!</strong> <br />
+        <a class="btn" href="{{ url_for('admin_list') }}">
+          Naspäť na listing
+        </a>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}
+

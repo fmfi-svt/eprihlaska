@@ -7,13 +7,15 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
-                              NewPasswordForm)
+                              NewPasswordForm, AIS2CookieForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
 import string
 import uuid
+import sys
+import traceback
 
 from munch import munchify
 from functools import wraps
@@ -64,9 +66,9 @@ def require_filled_form(form_key):
 def require_remote_user(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-       #if request.environ.get('REMOTE_USER') is None:
-       #    flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
-       #    return redirect(url_for('index'))
+        if request.environ.get('REMOTE_USER') is None:
+            flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+            return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
 
@@ -653,12 +655,28 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
-@app.route('/admin/process/<id>')
+@app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_process(id):
     application = ApplicationForm.query.filter_by(id=id).first()
     from .ais_utils import (create_context, save_application_form)
 
-    ctx = create_context({})
-    save_application_form(ctx, application, LISTS, id)
-    return redirect(url_for('admin_list'))
+    form = AIS2CookieForm()
+    if form.validate_on_submit():
+        ctx = create_context({'AISAuth': form.data['aisauth'],
+                              'JSESSIONID': form.data['jsessionid']})
+        ais2_output = None
+        error_output = None
+        try:
+            ais2_output = save_application_form(ctx, application, LISTS, id)
+        except Exception as e:
+            error_output = traceback.format_exception(*sys.exc_info())
+
+        application.state = ApplicationStates.processed
+        db.session.commit()
+
+        return render_template('admin_process.html',
+                               ais2_output=ais2_output,
+                               error_output=error_output)
+
+    return render_template('admin_process.html', form=form)

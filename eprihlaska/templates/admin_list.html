@@ -42,6 +42,10 @@
             {% if app.state.value > 0 %}
             <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Zresetovať</a>
             {% endif %}
+
+            {% if app.state.value >= 2 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť</a>
+            {% endif %}
           </div>
         </td>
       </tr>
