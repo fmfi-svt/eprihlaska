@@ -262,14 +262,14 @@ def save_application_form(ctx, application, lists, application_id):
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
+    notes = {}
     # A set of confirm boxes may show up if highschool grades were filled in
     if len(ABBRs) > 0:
-        ops = deal_with_confirm_boxes(app, ops)
+        ops = deal_with_confirm_boxes(app, ops, notes)
 
     errors = app.d.statusHtmlArea.content
 
-    notes = {}
-    ops = deal_with_confirm_boxes(app, ops)
+    ops = deal_with_confirm_boxes(app, ops, notes)
 
     if ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
@@ -280,7 +280,7 @@ def save_application_form(ctx, application, lists, application_id):
         with app.collect_operations() as ops:
             app.d.enterButton.click()
 
-        ops = deal_with_confirm_boxes(app, ops)
+        ops = deal_with_confirm_boxes(app, ops, notes)
 
     errors = app.d.statusHtmlArea.content
 
