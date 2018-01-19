@@ -182,7 +182,7 @@ def save_application_form(ctx, application, lists, application_id):
 
         app.d.odborySkolyCheckBox.toggle()
 
-        if session['studies_in_sr']['study_programme_code'] != 'XXXXXXX':
+        if session['studies_in_sr']['study_programme_code'] != 'XXXXXX':
             app.d.kodOdborTextField.write(session['studies_in_sr']['study_programme_code'])
             app.d.c1Button.click()
 

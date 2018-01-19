@@ -66,9 +66,10 @@ def require_filled_form(form_key):
 def require_remote_user(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.environ.get('REMOTE_USER') is None:
-            flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
-            return redirect(url_for('index'))
+        if not app.debug:
+            if request.environ.get('REMOTE_USER') is None:
+                flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+                return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
 
@@ -432,7 +433,11 @@ def send_password_email(user, title, body_template):
     msg = Message(title)
     msg.body = body_template.format(link)
     msg.recipients = [user.email]
-    mail.send(msg)
+
+    # Only send the email in non-debug state
+    if not app.debug:
+        mail.send(msg)
+    return link
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -460,8 +465,11 @@ def signup():
         db.session.add(new_application_form)
         db.session.commit()
 
-        send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
-        flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
+        link = send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
+        msg = consts.NEW_USER_MSG
+        if app.debug:
+            msg += '\n{}'.format(link)
+        flash(msg)
 
     return render_template('signup.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -512,10 +520,16 @@ def forgotten_password():
     form = ForgottenPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_email(user, 'ePrihlaska - nové heslo', FORGOTTEN_PASSWORD_MAIL)
 
-        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
+        link = None
+        if user:
+            link = send_password_email(user, 'ePrihlaska - nové heslo',
+                                       FORGOTTEN_PASSWORD_MAIL)
+
+        msg = consts.FORGOTTEN_PASSWORD_MSG
+        if app.debug:
+            msg += '\n{}'.format(link)
+        flash(msg)
 
     return render_template('forgotten_password.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
