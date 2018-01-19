@@ -672,8 +672,9 @@ def admin_process(id):
         except Exception as e:
             error_output = traceback.format_exception(*sys.exc_info())
 
-        application.state = ApplicationStates.processed
-        db.session.commit()
+        if error_output is None:
+            application.state = ApplicationStates.processed
+            db.session.commit()
 
         return render_template('admin_process.html',
                                ais2_output=ais2_output,

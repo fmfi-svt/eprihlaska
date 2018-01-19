@@ -331,26 +331,27 @@ def fill_in_address(field, app, session, lists):
         with app.collect_operations() as ops:
             fields['city_button'].click()
 
-        # Open selection dialogue
-        select_dlg = app.awaited_open_dialog(ops)
+        if ops is not []:
+            # Open selection dialogue
+            select_dlg = app.awaited_open_dialog(ops)
 
-        rows = app.d.table.all_rows()
+            rows = app.d.table.all_rows()
 
-        # Let's try to find the correct row by checking the PSC
-        row_index = None
-        for idx, row in enumerate(rows):
-            if row.cells[1].value == city_psc:
-                row_index = idx
+            # Let's try to find the correct row by checking the PSC
+            row_index = None
+            for idx, row in enumerate(rows):
+                if row.cells[1].value == city_psc:
+                    row_index = idx
 
-        # If we did find a row, let's select it
-        if row_index is not None:
-            app.d.table.select(row_index)
+            # If we did find a row, let's select it
+            if row_index is not None:
+                app.d.table.select(row_index)
 
-        with app.collect_operations() as ops:
-            app.d.enterButton.click()
+            with app.collect_operations() as ops:
+                app.d.enterButton.click()
 
-        # Close selection dialogue
-        select_dlg = app.awaited_close_dialog(ops)
+            # Close selection dialogue
+            select_dlg = app.awaited_close_dialog(ops)
 
         fields['posta'].write('')
     else:
