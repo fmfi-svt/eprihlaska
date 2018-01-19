@@ -32,7 +32,7 @@
       color: #f1e2e3;
       border-color: #f1e2e3; }
   .navbar-default .navbar-nav > li > a[href="#"] {
-    color: #de4e58;
+    color: #ff8a92;
     cursor: default; }
     .navbar-default .navbar-nav > li > a[href="#"]:hover {
       background-color: transparent; }
@@ -40,7 +40,7 @@
 .navbar-default .navbar-nav > .active > a {
   background-color: transparent;
   transition: background-color 0.3s ease;
-  border: 1px solid #de4e58;
+  border: 1px solid #ff8a92;
   border-radius: 3px;
   color: white; }
   .navbar-default .navbar-nav > .active > a:hover {
@@ -53,8 +53,8 @@
 .navbar-default .navbar-main > li > a {
   padding-left: 26px; }
   .navbar-default .navbar-main > li > a[href="#"]:before {
-    border-color: #de4e58;
-    color: #de4e58; }
+    border-color: #ff8a92;
+    color: #ff8a92; }
   .navbar-default .navbar-main > li > a:before {
     position: absolute;
     top: 12px;
@@ -78,8 +78,8 @@
     color: white;
     border-color: white; }
   .navbar-default .navbar-main > li > a:hover[href="#"]:before {
-    border-color: #de4e58;
-    color: #de4e58; }
+    border-color: #ff8a92;
+    color: #ff8a92; }
 
 .navbar-default .navbar-toggle {
   transition: background-color 0.3s ease;
