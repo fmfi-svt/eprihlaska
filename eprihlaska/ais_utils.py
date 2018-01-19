@@ -11,8 +11,8 @@ import aisikl.portal
 import flask.json
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
-    ctx = Context({'AISAuth': '598ccaa234dfe4f1870bbe36c7cd8f51',
-                   'JSESSIONID': 'E6912443DD5F75A089033625E31BB11B'},
+    ctx = Context({'AISAuth': '0c17a1b25030d68f8308abd33fa1f0e6',
+                   'JSESSIONID': 'CC1D96A6E2FD1DBCCD65BC7105936975'},
                   ais_url='https://'+origin+'/')
     return ctx
 
@@ -70,11 +70,10 @@ def save_application_form(ctx, application, lists):
     app.d.evidCisloNumberControl.write(str(application.id))
 
     # Sex selection
-    # FIXME: Votr bug
-####if session['sex'] == 'male':
-####    app.d.kodPohlavieRadioBox.select(0)
-####else:
-####    app.d.kodPohlavieRadioBox.select(1)
+    if session['sex'] == 'male':
+        app.d.kodPohlavieRadioBox.select(0)
+    else:
+        app.d.kodPohlavieRadioBox.select(1)
 
 
     rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
@@ -200,11 +199,32 @@ def save_application_form(ctx, application, lists):
     else:
         app.d.sSKodTextField.write('999999999')
 
+    #if 'grades_mat' in session and 'grade_first_year' in session['grades_mat']
+    # Remove all rows in vysvedceniaTable
+    while len(app.d.vysvedceniaTable.all_rows()) > 0:
+        with app.collect_operations() as ops:
+            app.d.odobratButton.click()
+        # really confirm
+        app.confirm_box(2)
+
+    ABBRs, F = generate_subject_abbrevs(session)
+
+    for abbr in ABBRs:
+        add_subject(app, abbr)
+        fill_in_table_cells(app, abbr, F, session)
+
+    print(app.d.vysvedceniaTable.all_rows())
+
+    # Submit the app
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
+    # A set of confirm boxes may show up if highschool grades were filled in
+    if len(ABBRs) > 0:
+        ops = deal_with_confirm_boxes(app, ops)
+
     errors = app.d.statusHtmlArea.content
-    print(errors)
+    print("errors:", errors)
     print(ops)
 
     ops = deal_with_confirm_boxes(app, ops)
@@ -218,7 +238,10 @@ def save_application_form(ctx, application, lists):
 
         ops = deal_with_confirm_boxes(app, ops)
 
+    errors = app.d.statusHtmlArea.content
+    print("errors:", errors)
     print(ops)
+
     dlg = app.awaited_close_dialog(ops)
 
 
@@ -303,3 +326,126 @@ def fill_in_address(field, app, session, lists):
     fields['street_no'].write(session[field]['street_no'])
 
     fields['postal_no'].write(session[field]['postal_no'])
+
+
+def add_to_set_on_grade_field(S, F, session, grade_field, abbr):
+    if grade_field in session and 'grade_first_year' in session[grade_field]:
+        S.add(abbr)
+        F.add(grade_field)
+
+def add_to_set_on_further_study_info(S, F, session, field, abbr):
+    if 'further_study_info' in session and \
+       field in session['further_study_info'] and \
+       session['further_study_info'][field]:
+        S.add(abbr)
+        F.add(field)
+
+def generate_subject_abbrevs(session):
+    ABBRs = set()
+    F = set()
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_mat', 'M')
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_fyz', 'F')
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_bio', 'B')
+
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'external_matura_percentile', 'M')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'scio_percentile', 'IP')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'scio_date', 'IP')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'matura_mat_grade', 'M')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'matura_fyz_grade', 'F')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'matura_inf_grade', 'I')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'matura_bio_grade', 'B')
+    add_to_set_on_further_study_info(ABBRs, F, session,
+                                     'matura_che_grade', 'CH')
+    return ABBRs, F
+
+def add_subject(app, abbr):
+    # Add new rows (subjects)
+    with app.collect_operations() as ops:
+        app.d.novyButton.click()
+
+    select_predmet_dlg = app.awaited_open_dialog(ops)
+
+    rows = app.d.table.all_rows()
+    row_index = None
+    for idx, row in enumerate(rows):
+        if row.cells[4].value == abbr:
+            row_index = idx
+
+    if row_index:
+        app.d.table.select(row_index)
+
+    # Submit the dialog
+    with app.collect_operations() as ops:
+        app.d.enterButton.click()
+
+    select_predmet_dlg = app.awaited_close_dialog(ops)
+
+def fill_in_table_cells(app, abbr, F, session):
+    if abbr == 'M':
+        if 'external_matura_percentile' in F:
+            p = session['further_study_info']['external_matura_percentile']
+            index = len(app.d.vysvedceniaTable.all_rows()) - 1
+            app.d.vysvedceniaTable.edit_cell('percentil', index, p)
+
+        if 'matura_mat_grade' in F:
+            matura_grade_to_table_cell(app, session, 'matura_mat_grade')
+
+        if 'grades_mat' in F:
+            grades_to_table_cells(app, session, 'grades_mat')
+
+    if abbr == 'F':
+        if 'matura_fyz_grade' in F:
+            matura_grade_to_table_cell(app, session, 'matura_fyz_grade')
+
+        if 'grades_fyz' in F:
+            grades_to_table_cells(app, session, 'grades_fyz')
+
+    if abbr == 'B':
+        if 'matura_bio_grade' in F:
+            matura_grade_to_table_cell(app, session, 'matura_bio_grade')
+
+        if 'grades_bio' in F:
+            grades_to_table_cells(app, session, 'grades_bio')
+
+    if abbr == 'CH':
+        if 'matura_che_grade' in F:
+            matura_grade_to_table_cell(app, session, 'matura_che_grade')
+
+    if abbr == 'I':
+        if 'matura_inf_grade' in F:
+            matura_grade_to_table_cell(app, session, 'matura_inf_grade')
+
+    if abbr == 'IP':
+        if 'scio_percentile' in F or 'scio_date' in F:
+            p = session['further_study_info']['scio_percentile']
+            d = session['further_study_info']['scio_date']
+            desc = 'SCIO {}'.format(d)
+            index = len(app.d.vysvedceniaTable.all_rows()) - 1
+            app.d.vysvedceniaTable.edit_cell('popis', index, desc)
+            app.d.vysvedceniaTable.edit_cell('percentil', index, p)
+
+
+def grades_to_table_cells(app, session, grades_field):
+    first = session[grades_field]['grade_first_year']
+    second = session[grades_field]['grade_second_year']
+    third = session[grades_field]['grade_third_year']
+    index = len(app.d.vysvedceniaTable.all_rows()) - 1
+
+    if first:
+        app.d.vysvedceniaTable.edit_cell('znamkaI', index, first)
+    if second:
+        app.d.vysvedceniaTable.edit_cell('znamkaII', index, second)
+    if third:
+        app.d.vysvedceniaTable.edit_cell('znamkaIII', index, third)
+
+def matura_grade_to_table_cell(app, session, grade_field):
+    g = session['further_study_info'][grade_field]
+    index = len(app.d.vysvedceniaTable.all_rows()) - 1
+    app.d.vysvedceniaTable.edit_cell('znamkaMaturitna', index, g)
