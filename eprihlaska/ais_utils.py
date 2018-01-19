@@ -331,7 +331,7 @@ def fill_in_address(field, app, session, lists):
         with app.collect_operations() as ops:
             fields['city_button'].click()
 
-        if ops is not []:
+        if ops and ops[-1].method == 'openDialog':
             # Open selection dialogue
             select_dlg = app.awaited_open_dialog(ops)
 
