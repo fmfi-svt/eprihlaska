@@ -667,6 +667,7 @@ def admin_process(id):
         ais2_output = None
         error_output = None
         notes = {}
+
         try:
             ais2_output, notes = save_application_form(ctx,
                                                        application,

@@ -273,9 +273,9 @@ def save_application_form(ctx, application, lists, application_id):
 
     if ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
-            app.d.emailPrivateTextField.write('')
             email = app.d.emailPrivateTextField.value
             notes['email_exists'] = email
+            app.d.emailPrivateTextField.write('')
 
         with app.collect_operations() as ops:
             app.d.enterButton.click()
