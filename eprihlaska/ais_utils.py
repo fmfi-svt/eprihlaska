@@ -213,7 +213,19 @@ def save_application_form(ctx, application, lists):
         add_subject(app, abbr)
         fill_in_table_cells(app, abbr, F, session)
 
-    print(app.d.vysvedceniaTable.all_rows())
+    # Unselect everything in prilohyCheckList
+    unselect_checklist(app.d.prilohyCheckList)
+    checkboxes = generate_checkbox_abbrs(session)
+
+    # Add dean's letter
+    if session['basic_personal_data']['dean_invitation_letter'] and\
+       session['basic_personal_data']['dean_invitation_letter_no']:
+        checkboxes.add('ListD')
+
+    for item in app.d.prilohyCheckList.items:
+        if item.sid in checkboxes:
+            item.checked = True
+    app.d.prilohyCheckList._mark_changed()
 
     # Submit the app
     with app.collect_operations() as ops:
@@ -347,23 +359,44 @@ def generate_subject_abbrevs(session):
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_fyz', 'F')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_bio', 'B')
 
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'external_matura_percentile', 'M')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'scio_percentile', 'IP')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'scio_date', 'IP')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'matura_mat_grade', 'M')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'matura_fyz_grade', 'F')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'matura_inf_grade', 'I')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'matura_bio_grade', 'B')
-    add_to_set_on_further_study_info(ABBRs, F, session,
-                                     'matura_che_grade', 'CH')
+    field_abbr_map = {
+        'external_matura_percentile': 'M',
+        'scio_percentile': 'IP',
+        'scio_date': 'IP',
+        'matura_mat_grade': 'M',
+        'matura_fyz_grade': 'F',
+        'matura_inf_grade': 'I',
+        'matura_bio_grade': 'B',
+        'matura_che_grade': 'CH'
+    }
+
+    for field, abbr in field_abbr_map.items():
+        add_to_set_on_further_study_info(ABBRs, F, session,
+                                         field, abbr)
     return ABBRs, F
+
+def generate_checkbox_abbrs(session):
+    checkboxes = set()
+    field_abbr_map = {
+        'will_take_mat_matura': 'MatM',
+        'will_take_fyz_matura': 'MatF',
+        'will_take_inf_matura': 'MatI',
+        'will_take_che_matura': 'MatCh',
+        'will_take_bio_matura': 'MatB',
+        'will_take_external_mat_matura', 'ExtMat',
+        'will_take_scio': 'SCIO'
+    }
+    for field, abbr in field_abbr_map.items():
+        add_further_study_info_checkbox(checkboxes, session,
+                                        field, abbr)
+    return checkboxes
+
+def add_further_study_info_checkbox(checkboxes, session,
+                                    field, chkb):
+    if 'further_study_info' in session and \
+       field in session['further_study_info'] and \
+       session['further_study_info'][field]:
+        checkboxes.add(chkb)
 
 def add_subject(app, abbr):
     # Add new rows (subjects)
@@ -449,3 +482,9 @@ def matura_grade_to_table_cell(app, session, grade_field):
     g = session['further_study_info'][grade_field]
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
     app.d.vysvedceniaTable.edit_cell('znamkaMaturitna', index, g)
+
+
+def unselect_checklist(checklist):
+    for item in checklist.items:
+        item.checked = False
+    checklist._mark_changed()
