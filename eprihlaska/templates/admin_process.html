@@ -23,7 +23,8 @@
       {{ ais2_output|safe }}
 
       {% if notes['email_exists'] or notes['app_id_exists'] %}
-      <strong>Poznámky zo spracovania prihlášky:</strong> <br /><br />
+      <br /><br />
+      <strong>Poznámky zo spracovania prihlášky:</strong>
       <ul>
         {% if notes['email_exists'] %}
         <li>
@@ -36,6 +37,8 @@
         <li>
           V systéme AIS2 už existuje prihláška so
           zadaným ID ({{ notes['app_id_exists'] }}).
+          Proces preklápania preto nechal vygenerovať
+          tejto prihláške nové ID.
         </li>
         {% endif  %}
 
