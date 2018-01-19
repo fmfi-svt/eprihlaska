@@ -268,11 +268,14 @@ def save_application_form(ctx, application, lists, application_id):
 
     errors = app.d.statusHtmlArea.content
 
+    notes = {}
     ops = deal_with_confirm_boxes(app, ops)
 
     if ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
             app.d.emailPrivateTextField.write('')
+            email = app.d.emailPrivateTextField.value
+            notes['email_exists'] = email
 
         with app.collect_operations() as ops:
             app.d.enterButton.click()
@@ -282,15 +285,18 @@ def save_application_form(ctx, application, lists, application_id):
     errors = app.d.statusHtmlArea.content
 
     dlg = app.awaited_close_dialog(ops)
-    return errors
+    return errors, notes
 
 
-def deal_with_confirm_boxes(app, ops):
+def deal_with_confirm_boxes(app, ops, notes):
     while ops[-1].method == 'confirmBox':
         if 'evidenčným číslom' in ops[-1].args[0]:
             with app.collect_operations() as ops:
                 # Generate new id number for the app
                 app.confirm_box(-1)
+
+                num = app.d.evidCisloNumberControl.bdvalue
+                notes['app_id_exists'] = num
 
                 app.d.evidCisloNumberControl.write('')
                 app.d.ecAutomatickyCheckBox.toggle()

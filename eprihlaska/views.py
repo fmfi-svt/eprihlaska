@@ -666,8 +666,12 @@ def admin_process(id):
         ctx = create_context({'JSESSIONID': form.data['jsessionid']})
         ais2_output = None
         error_output = None
+        notes = {}
         try:
-            ais2_output = save_application_form(ctx, application, LISTS, id)
+            ais2_output, notes = save_application_form(ctx,
+                                                       application,
+                                                       LISTS,
+                                                       id)
         except Exception as e:
             error_output = traceback.format_exception(*sys.exc_info())
 
@@ -677,6 +681,8 @@ def admin_process(id):
 
         return render_template('admin_process.html',
                                ais2_output=ais2_output,
+                               notes=notes, id=id,
                                error_output=error_output)
 
-    return render_template('admin_process.html', form=form)
+    return render_template('admin_process.html',
+                           form=form, id=id)

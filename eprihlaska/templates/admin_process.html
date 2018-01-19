@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container">
   <h1 class="section-title">
-    {% block title %}Preklopenie prihlášky do AIS2 (beta){% endblock title %}
+    {% block title %}Preklopenie prihlášky #{{ id }} do AIS2 (beta){% endblock title %}
   </h1>
   <div class="container">
     {% if form %}
@@ -21,6 +21,26 @@
     <div class="well well-lg">
       <strong>AIS2 výstup:</strong> <br /><br />
       {{ ais2_output|safe }}
+
+      {% if notes['email_exists'] or notes['app_id_exists'] %}
+      <strong>Poznámky zo spracovania prihlášky:</strong> <br /><br />
+      <ul>
+        {% if notes['email_exists'] %}
+        <li>
+          V systéme AIS2 už existuje osoba so zadaným
+          emailom ({{ notes['email_exists'] }}).
+        </li>
+        {% endif  %}
+
+        {% if notes['app_id_exists'] %}
+        <li>
+          V systéme AIS2 už existuje prihláška so
+          zadaným ID ({{ notes['app_id_exists'] }}).
+        </li>
+        {% endif  %}
+
+      </ul>
+      {% endif  %}
     </div>
 
       {% if error_output %}
