@@ -41,7 +41,7 @@
   }
 
   &[href="#"] {
-    color: $red3;
+    color: $pink;
     cursor: default;
 
     &:hover {
@@ -53,7 +53,7 @@
 .navbar-default .navbar-nav > .active > a {
   background-color: transparent;
   transition: background-color 0.3s ease;
-  border: 1px solid $red3;
+  border: 1px solid $pink;
   border-radius: 3px;
   color: white;
 
@@ -72,8 +72,8 @@
 
   &[href="#"] {
     &:before {
-      border-color: $red3;
-      color: $red3;
+      border-color: $pink;
+      color: $pink;
     }
   }
 
@@ -106,8 +106,8 @@
 
     &[href="#"] {
       &:before {
-        border-color: $red3;
-        color: $red3;
+        border-color: $pink;
+        color: $pink;
       }
     }
   }
