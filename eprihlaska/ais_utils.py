@@ -240,6 +240,13 @@ def save_application_form(ctx, application, lists, application_id):
             comp =  session[s]['competition']
             checkboxes.add(competition_checkboxes_map[comp])
 
+            # TODO: "SVOC_MAT" currently means both SocM and SocF
+            # This line is a simple band-aid at best and should be
+            # refactored
+            if comp == 'SVOC_MAT':
+                checkboxes.add('SočF')
+
+
     # Check those items in prilohyCheckList that have been generated from the
     # submitted application form (the code above)
     for item in app.d.prilohyCheckList.items:
