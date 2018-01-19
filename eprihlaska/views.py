@@ -689,6 +689,19 @@ def admin_process(id):
                                                        id)
         except Exception as e:
             error_output = traceback.format_exception(*sys.exc_info())
+            error_output = '\n'.join(error_output)
+            title = '{} AIS2'.format(app.config['ERROR_EMAIL_HEADER'])
+
+            # Send email on AIS2 error
+            msg = Message(title)
+            msg.body = body_template.format(error_output)
+            msg.recipients = app.config['ADMINS']
+
+            # Only send the email if we are not in the debug mode
+            if not app.debug:
+                mail.send(msg)
+            else:
+                print(error_output)
 
         if error_output is None:
             application.state = ApplicationStates.processed
