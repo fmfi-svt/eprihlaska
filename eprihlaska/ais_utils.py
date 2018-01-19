@@ -61,6 +61,19 @@ def save_application_form(ctx, application, lists, application_id):
 
     app.d.rodneCisloTextField.write(session['birth_no'])
 
+    # Click on relevant rodneCisloButton
+    with app.collect_operations() as ops:
+        app.d.rodneCisloButton.click()
+
+    # Close the dialog if some shows up
+    if ops and ops[-1].method == 'openDialog':
+        rodne_cislo_dlg = app.awaited_open_dialog(ops)
+
+        with app.collect_operations() as ops:
+            app.d.closeButton.click()
+
+        rodne_cislo_dlg = app.awaited_close_dialog(ops)
+
     app.d.menoTextField.write(session['basic_personal_data']['name'])
     app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
     app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
@@ -176,12 +189,14 @@ def save_application_form(ctx, application, lists, application_id):
     app.d.rokZaverSkuskyNumberControl.write(str(session['basic_personal_data']['matura_year']))
 
     if session['finished_highschool_check'] == 'SK':
+        # 'XXXXXXX' signifies "highschool not found"
         if session['studies_in_sr']['highschool'] != 'XXXXXXX':
             app.d.sSKodTextField.write(session['studies_in_sr']['highschool'])
             app.d.button10.click()
 
         app.d.odborySkolyCheckBox.toggle()
 
+        # 'XXXXXX' signifies 'study programme not found'
         if session['studies_in_sr']['study_programme_code'] != 'XXXXXX':
             app.d.kodOdborTextField.write(session['studies_in_sr']['study_programme_code'])
             app.d.c1Button.click()
@@ -196,7 +211,12 @@ def save_application_form(ctx, application, lists, application_id):
             app.d.sSKodTypVzdelaniaComboBox.select(typ_vzdelania_index)
 
     else:
+        # foreign high school
         app.d.sSKodTextField.write('999999999')
+        app.d.button10.click()
+
+        # študijný odbor na zahraničnej škole
+        app.d.kodOdborTextField.write('0000500')
 
     #if 'grades_mat' in session and 'grade_first_year' in session['grades_mat']
     # Remove all rows in vysvedceniaTable
