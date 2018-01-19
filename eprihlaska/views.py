@@ -660,5 +660,5 @@ def admin_process(id):
     from .ais_utils import (create_context, save_application_form)
 
     ctx = create_context({})
-    save_application_form(ctx, application, LISTS)
+    save_application_form(ctx, application, LISTS, id)
     return redirect(url_for('admin_list'))

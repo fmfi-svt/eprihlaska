@@ -9,6 +9,7 @@ from aisikl.context import Context
 from aisikl.app import Application
 import aisikl.portal
 import flask.json
+from flask import url_for
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
     ctx = Context({'AISAuth': '0c17a1b25030d68f8308abd33fa1f0e6',
@@ -16,7 +17,7 @@ def create_context(cookies, origin='ais2-beta.uniba.sk'):
                   ais_url='https://'+origin+'/')
     return ctx
 
-def save_application_form(ctx, application, lists):
+def save_application_form(ctx, application, lists, application_id):
     session = flask.json.loads(application.application)
 
     apps = aisikl.portal.get_apps(ctx)
@@ -222,10 +223,42 @@ def save_application_form(ctx, application, lists):
        session['basic_personal_data']['dean_invitation_letter_no']:
         checkboxes.add('ListD')
 
+    competition_checkboxes_map = {
+        'MAT': 'OlymM',
+        'FYZ': 'OlymF',
+        'INF': 'OlymI',
+        'BIO': 'OlymB',
+        'CHM': 'OlymCH',
+        'SVOC_MAT': 'SočM',
+        'SVOC_INF': 'SočI',
+        'SVOC_BIO': 'SočB',
+        'SVOC_CHM': 'SočCH',
+        'TMF': 'TMF'
+    }
+
+    # Add checkboxes based on competitions
+    for s in ['competition_1', 'competition_2', 'competition_3']:
+        if s in session and session[s]['competition'] != '_':
+            comp =  session[s]['competition']
+            checkboxes.add(competition_checkboxes_map[comp])
+
+    # Check those items in prilohyCheckList that have been generated from the
+    # submitted application form (the code above)
     for item in app.d.prilohyCheckList.items:
         if item.sid in checkboxes:
             item.checked = True
     app.d.prilohyCheckList._mark_changed()
+
+    # Prepare poznamka_text
+    poznamka_items = []
+    if 'SCIO' in checkboxes:
+        poznamka_items.append('SCIO')
+    if 'ExtMat' in checkboxes:
+        poznamka_items.append('ExternaMaturitaMat')
+    poznamka_items.append(url_for('admin_view', id=application_id, _external=True))
+    poznamka_text = '\n'.join(poznamka_items)
+
+    app.d.poznamkaTextArea.write(poznamka_text)
 
     # Submit the app
     with app.collect_operations() as ops:
@@ -383,7 +416,7 @@ def generate_checkbox_abbrs(session):
         'will_take_inf_matura': 'MatI',
         'will_take_che_matura': 'MatCh',
         'will_take_bio_matura': 'MatB',
-        'will_take_external_mat_matura', 'ExtMat',
+        'will_take_external_mat_matura': 'ExtMat',
         'will_take_scio': 'SCIO'
     }
     for field, abbr in field_abbr_map.items():
