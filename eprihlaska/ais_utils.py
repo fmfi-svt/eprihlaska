@@ -61,18 +61,18 @@ def save_application_form(ctx, application, lists, application_id):
 
     app.d.rodneCisloTextField.write(session['birth_no'])
 
-    # Click on relevant rodneCisloButton
-    with app.collect_operations() as ops:
-        app.d.rodneCisloButton.click()
+    # # Click on relevant rodneCisloButton
+    # with app.collect_operations() as ops:
+    #     app.d.rodneCisloButton.click()
 
-    # Close the dialog if some shows up
-    if ops and ops[-1].method == 'openDialog':
-        rodne_cislo_dlg = app.awaited_open_dialog(ops)
+    # # Close the dialog if some shows up
+    # if ops and ops[-1].method == 'openDialog':
+    #     rodne_cislo_dlg = app.awaited_open_dialog(ops)
 
-        with app.collect_operations() as ops:
-            app.d.closeButton.click()
+    #     with app.collect_operations() as ops:
+    #         app.d.closeButton.click()
 
-        rodne_cislo_dlg = app.awaited_close_dialog(ops)
+    #     rodne_cislo_dlg = app.awaited_close_dialog(ops)
 
     app.d.menoTextField.write(session['basic_personal_data']['name'])
     app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
