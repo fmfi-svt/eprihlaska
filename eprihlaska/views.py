@@ -663,8 +663,7 @@ def admin_process(id):
 
     form = AIS2CookieForm()
     if form.validate_on_submit():
-        ctx = create_context({'AISAuth': form.data['aisauth'],
-                              'JSESSIONID': form.data['jsessionid']})
+        ctx = create_context({'JSESSIONID': form.data['jsessionid']})
         ais2_output = None
         error_output = None
         try:
