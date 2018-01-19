@@ -143,7 +143,7 @@ class IfStreetThenCity:
 
     def __call__(self, form, field):
         country_field = form[self.country_field]
-        street_field_data = form[self.street_field]
+        street_field_data = form[self.street_field].data
 
         if self.country_op(country_field.data, self.country_field_value) and \
            field.data == self.unacceptable_value and \
