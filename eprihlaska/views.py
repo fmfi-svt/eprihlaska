@@ -694,7 +694,7 @@ def admin_process(id):
 
             # Send email on AIS2 error
             msg = Message(title)
-            msg.body = body_template.format(error_output)
+            msg.body = error_output
             msg.recipients = app.config['ADMINS']
 
             # Only send the email if we are not in the debug mode
