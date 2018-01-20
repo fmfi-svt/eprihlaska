@@ -384,8 +384,10 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
+    specific_symbol = 9999 + current_user.id
     rendered = render_template('application_form.html', session=sess,
                                lists=LISTS, id=app.id,
+                               specific_symbol=specific_symbol,
                                submitted_at=app.submitted_at,
                                consts=consts, print=print)
     return rendered
