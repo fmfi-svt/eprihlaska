@@ -329,13 +329,20 @@ def final():
         # exists in the mapping list
         pair = (session['studies_in_sr']['highschool'],
                 session['studies_in_sr']['study_programme_code'])
-        if pair not in HS_STUDY_PROGRAMME_MAP:
+        study_programme_code_not_empty = (pair[1] != 'XXXXXX')
+        filled_items = (pair[0] != 'XXXXXXX',
+                        study_programme_code_not_empty)
+
+        # Only check for the pair if both of the items (highschool and
+        # study_programme_code) have been filled in.
+        if all(filled_items) and pair not in HS_STUDY_PROGRAMME_MAP:
             hs_sp_check = False
 
         # Check whether the education_level code is actually present in
         # the study_programme_code
         el = session['studies_in_sr']['education_level']
-        if el not in session['studies_in_sr']['study_programme_code']:
+        if study_programme_code_not_empty and \
+           el not in session['studies_in_sr']['study_programme_code']:
             hs_education_level_check = False
 
 
