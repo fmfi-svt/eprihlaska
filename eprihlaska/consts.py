@@ -6,7 +6,7 @@ import enum
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 SUBMIT = _('Odoslať')
-NEXT = _('Ďalej')
+NEXT = _('Ulož a pokračuj')
 
 NATIONALITY = _('Štátne občianstvo')
 NAME = _('Meno')
