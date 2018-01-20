@@ -6,11 +6,15 @@ import operator
 
 
 class BirthNoValidator(object):
-    def __init__(self, birth_no=-1, message=None, form_err=None, mod_err=None,
+    def __init__(self, birth_no=-1, empty_msg=None, message=None, form_err=None, mod_err=None,
                  conditional_field=None, conditional_field_vals=None):
         self.birth_no = birth_no
         self.mod_err = mod_err
         self.form_err = form_err
+
+        if not empty_msg:
+            empty_msg = 'Prosím, zadajte svoje rodné číslo.'
+        self.empty_msg = empty_msg
 
         if not message:
             message = 'Zadali ste nesprávne rodné číslo.'
@@ -44,6 +48,9 @@ class BirthNoValidator(object):
                 if not field.data:
                     return
 
+        if not field.data:
+            raise(validators.ValidationError(self.empty_msg))
+
         try:
             mo.group(0)
         except AttributeError:
@@ -67,8 +74,12 @@ class BirthNoValidator(object):
 
 
 class DateValidator:
-    def __init__(self, date=None, message=None, val_err_msg=None):
+    def __init__(self, date=None, empty_msg=None, message=None, val_err_msg=None):
         self.date = date
+
+        if not empty_msg:
+            empty_msg = 'Prosím, zadajte svoj dátum narodenia.'
+        self.empty_msg = empty_msg
 
         if not message:
             message = 'Správny formát je DD.MM.RRRR'
@@ -81,6 +92,9 @@ class DateValidator:
     def __call__(self, form, field):
         date_reg = re.compile(r'^(\d?\d)\.(\d?\d)\.(\d\d\d\d)$')
         mo = date_reg.search(field.data)
+
+        if not field.data:
+            raise validators.ValidationError(self.empty_msg)
 
         try:
             mo.group(0)
