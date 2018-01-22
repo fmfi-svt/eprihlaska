@@ -686,7 +686,8 @@ def admin_process(id):
 
     form = AIS2CookieForm()
     if form.validate_on_submit():
-        ctx = create_context({'JSESSIONID': form.data['jsessionid']})
+        ctx = create_context({'JSESSIONID': form.data['jsessionid']},
+                             origin='ais2-beta.uniba.sk')
         ais2_output = None
         error_output = None
         notes = {}
