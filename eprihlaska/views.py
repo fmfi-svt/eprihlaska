@@ -691,13 +691,13 @@ def admin_ais_test(id):
 @require_remote_user
 def admin_process(id):
     application = ApplicationForm.query.filter_by(id=id).first()
-    from .ais_utils import (create_context, save_application_form)
 
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, beta=True)
 
 
 def send_application_to_ais2(id, application, form, beta=False):
+    from .ais_utils import (create_context, save_application_form)
     if form.validate_on_submit():
         ctx = create_context({'JSESSIONID': form.data['jsessionid']},
                              origin='ais2-beta.uniba.sk')
