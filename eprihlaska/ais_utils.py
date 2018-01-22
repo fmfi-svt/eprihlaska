@@ -15,6 +15,36 @@ def create_context(cookies, origin='ais2-beta.uniba.sk'):
     ctx = Context(cookies, ais_url='https://'+origin+'/')
     return ctx
 
+def test_ais():
+    # Open 'cierna skrynka'
+    app, prev_ops = Application.open(ctx, apps['AS042'].url)
+
+    # Open main dialog
+    dlg = app.awaited_open_main_dialog([prev_ops[0]])
+    # Open another selection dialog
+    dlg = app.awaited_open_dialog([prev_ops[1]])
+
+    # Select the last row in the table
+    app.d.table.select(len(app.d.table.all_rows()) -1)
+
+    # Click confirm (closes the dialog)
+    with app.collect_operations() as ops:
+        app.d.enterButton.click()
+    dlg = app.awaited_close_dialog(ops)
+
+    # Click on pridatPrispevokButton
+    with app.collect_operations() as ops:
+        app.d.pridatPrispevokButton.click()
+
+    # Opens a dialog
+    dlg = app.awaited_open_dialog(ops)
+    # Write a short message
+    app.d.textTextArea.write('Dobry den pani prodekanka, toto prosim ignorujte, len testujem ten nestastny AIS.')
+
+    # Confirm the message
+    with app.collect_operations() as ops:
+        app.d.enterButton.click()
+
 def save_application_form(ctx, application, lists, application_id):
     session = flask.json.loads(application.application)
 

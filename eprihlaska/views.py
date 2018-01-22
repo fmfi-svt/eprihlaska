@@ -678,6 +678,15 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
+@app.route('/admin/ais_test')
+@require_remote_user
+def admin_ais_test(id):
+    from .ais_utils import (create_context, test_ais)
+    #FIXME: login with cosign proxy and submit something to 'prod' version of
+    # AIS
+    return redirect(url_for('admin_list'))
+
+
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_process(id):
