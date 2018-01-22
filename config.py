@@ -28,4 +28,4 @@ ERROR_EMAIL_SERVER = 'mailcheck.uniba.sk'
 ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
 ERROR_EMAIL_HEADER = 'ePrihlaska - error'
 
-UA_CODE = ''
+UA_CODE = 'UA-23362538-7'
