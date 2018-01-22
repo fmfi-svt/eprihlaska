@@ -27,3 +27,5 @@ ADMINS = []
 ERROR_EMAIL_SERVER = ''
 ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
 ERROR_EMAIL_HEADER = 'ePrihlaska - error'
+
+UA_CODE = ''
