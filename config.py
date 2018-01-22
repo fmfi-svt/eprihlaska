@@ -13,17 +13,17 @@ GOOGLE_CLIENT_SECRET = '8piOFgrJJpudab-XKvK_x813'
 FACEBOOK_CLIENT_KEY = '327870741042548'
 FACEBOOK_CLIENT_SECRET = '3ce3d27f9afcfc1014c7f3cff5a092c8'
 
-MAIL_SERVER = 'smtp.mailgun.org'
-MAIL_PORT = 465
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-MAIL_USERNAME = 'prihlaska@mg.shu.io'
-MAIL_PASSWORD = 'prihlaska'
-MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prihlaska@fmph.uniba.sk')
+MAIL_SERVER = 'mailcheck.uniba.sk'
+MAIL_PORT = 25
+MAIL_USE_TLS = True
+MAIL_USE_SSL = False
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prijimacky@fmph.uniba.sk')
 
 SESSION_TYPE = 'filesystem'
 
-ADMINS = []
-ERROR_EMAIL_SERVER = ''
+ADMINS = ['fmfi-svt@googlegroups.com']
+ERROR_EMAIL_SERVER = 'mailcheck.uniba.sk'
 ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
 ERROR_EMAIL_HEADER = 'ePrihlaska - error'
