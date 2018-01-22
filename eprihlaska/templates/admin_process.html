@@ -7,7 +7,13 @@
 {% block content %}
 <div class="container">
   <h1 class="section-title">
-    {% block title %}Preklopenie prihlášky #{{ id }} do AIS2 (beta){% endblock title %}
+    {% block title %}
+     {% if beta %}
+     Preklopenie prihlášky #{{ id }} do AIS2 (beta)
+     {% else %}
+     Preklopenie prihlášky #{{ id }} do AIS2
+     {% endif %}
+    {% endblock title %}
   </h1>
   <div class="container">
     {% if form %}

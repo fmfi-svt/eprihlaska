@@ -685,6 +685,10 @@ def admin_process(id):
     from .ais_utils import (create_context, save_application_form)
 
     form = AIS2CookieForm()
+    return send_application_to_ais2(application, form, beta=True)
+
+
+def send_application_to_ais2(application, form, beta=False):
     if form.validate_on_submit():
         ctx = create_context({'JSESSIONID': form.data['jsessionid']},
                              origin='ais2-beta.uniba.sk')
@@ -713,14 +717,17 @@ def admin_process(id):
             else:
                 print(error_output)
 
-        if error_output is None:
+        # Only update the application state of it is not sent to beta
+        if not beta and error_output is None:
             application.state = ApplicationStates.processed
             db.session.commit()
 
         return render_template('admin_process.html',
                                ais2_output=ais2_output,
                                notes=notes, id=id,
-                               error_output=error_output)
+                               error_output=error_output,
+                               beta=beta)
 
     return render_template('admin_process.html',
-                           form=form, id=id)
+                           form=form, id=id,
+                           beta=beta)
