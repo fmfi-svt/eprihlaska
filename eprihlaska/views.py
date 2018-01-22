@@ -700,6 +700,8 @@ def admin_ais_test():
     cosign_cookies = get_cosign_cookies()
     ctx = create_context(cosign_cookies,
                          origin='ais2.uniba.sk')
+    # Do log in
+    soup = ctx.request_html('/ais/login.do', method='POST')
     test_ais(ctx)
     return cosign_cookies
 
