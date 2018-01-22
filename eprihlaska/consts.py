@@ -6,7 +6,7 @@ import enum
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 SUBMIT = _('Odoslať')
-NEXT = _('Ďalej')
+NEXT = _('Ulož a pokračuj')
 
 NATIONALITY = _('Štátne občianstvo')
 NAME = _('Meno')
@@ -197,7 +197,11 @@ WELCOME = _('Vitajte {}')
 
 FORGOTTEN_PASSWORD_MAIL = _('V rámci systému elektronickej prihlášky FMFI UK bol pre Váš účet aktivovaný postup pre zmenu zabudnutého hesla. Ak chcete heslo zmeniť, použite nasledujúci link: {}\n\nV inom prípade prosím tento email ignorujte.\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')
 
+FORGOTTEN_PASSWORD_MSG = _('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
+
 NEW_USER_MAIL = _('Vitajte v systéme elektronickej prihlášky FMFI UK. Pre vytvorenie hesla a následné prihlásenie prosím použite nasledujúci link: {}\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')
+
+NEW_USER_MSG = _('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
 
 YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')
 
@@ -216,6 +220,10 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 sortby=1,
                                 prepend=['999999'],
                                 post_fmt=okres_fixer)
+
+CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
+                                ['id', 'PSČ'],
+                                fmt='{3}')
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])

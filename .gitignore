@@ -5,3 +5,5 @@ eprihlaska/static/styles/.sass-cache
 .venv/
 *.swp
 eprihlaska/database.db
+.vscode/
+flask_session/

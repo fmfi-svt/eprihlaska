@@ -1,0 +1,80 @@
+{% extends "bootstrap/base.html" %}
+{% import "wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}
+     {% if beta %}
+     Preklopenie prihlášky #{{ id }} do AIS2 (beta)
+     {% else %}
+     Preklopenie prihlášky #{{ id }} do AIS2
+     {% endif %}
+    {% endblock title %}
+  </h1>
+  <div class="container">
+    {% if form %}
+        {{ wtf.quick_form(form,
+                          form_type='horizontal',
+                          button_map={'submit': 'primary'}) }}
+
+    <p>Prosíme o strpenie a nezatváranie prehliadača: preklápanie prihlášky
+      môže trvať aj niekolko minút.</p>
+    {% else %}
+    <div class="well well-lg">
+      <strong>AIS2 výstup:</strong> <br /><br />
+      {{ ais2_output|safe }}
+
+      {% if notes['email_exists'] or notes['app_id_exists'] %}
+      <br /><br />
+      <strong>Poznámky zo spracovania prihlášky:</strong>
+      <ul>
+        {% if notes['email_exists'] %}
+        <li>
+          V systéme AIS2 už existuje osoba so zadaným
+          emailom ({{ notes['email_exists'] }}). Do preklopenej
+          prihlášky preto tento email nebol vložený, nakoľko by
+          AIS2 takúto prihlášku neakceptoval.
+        </li>
+        {% endif  %}
+
+        {% if notes['app_id_exists'] %}
+        <li>
+          V systéme AIS2 už existuje prihláška so
+          zadaným evidenčným číslom ({{ notes['app_id_exists'] }}).
+          Proces preklápania preto nechal vygenerovať
+          tejto prihláške nové evidenčné číslo.
+        </li>
+        {% endif  %}
+
+      </ul>
+      {% endif  %}
+    </div>
+
+      {% if error_output %}
+      <div class="well well-lg bg-danger">
+        <strong>Prihlášku sa nepodarilo preklopiť. Náš chybový výstup:</strong> <br />
+        <pre>
+{{ error_output }}
+        </pre>
+
+        <a href="">Skúsiť znova</a>
+      </div>
+      {% else %}
+      <div class="well well-lg alert alert-success text-center">
+        <strong>Prihlášku sa podarilo preklopiť!</strong> <br />
+        <a class="btn" href="{{ url_for('admin_list') }}">
+          Naspäť na listing
+        </a>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}
+

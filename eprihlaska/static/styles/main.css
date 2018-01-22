@@ -32,7 +32,7 @@
       color: #f1e2e3;
       border-color: #f1e2e3; }
   .navbar-default .navbar-nav > li > a[href="#"] {
-    color: #de4e58;
+    color: #ff8a92;
     cursor: default; }
     .navbar-default .navbar-nav > li > a[href="#"]:hover {
       background-color: transparent; }
@@ -40,7 +40,7 @@
 .navbar-default .navbar-nav > .active > a {
   background-color: transparent;
   transition: background-color 0.3s ease;
-  border: 1px solid #de4e58;
+  border: 1px solid #ff8a92;
   border-radius: 3px;
   color: white; }
   .navbar-default .navbar-nav > .active > a:hover {
@@ -53,8 +53,8 @@
 .navbar-default .navbar-main > li > a {
   padding-left: 26px; }
   .navbar-default .navbar-main > li > a[href="#"]:before {
-    border-color: #de4e58;
-    color: #de4e58; }
+    border-color: #ff8a92;
+    color: #ff8a92; }
   .navbar-default .navbar-main > li > a:before {
     position: absolute;
     top: 12px;
@@ -78,8 +78,8 @@
     color: white;
     border-color: white; }
   .navbar-default .navbar-main > li > a:hover[href="#"]:before {
-    border-color: #de4e58;
-    color: #de4e58; }
+    border-color: #ff8a92;
+    color: #ff8a92; }
 
 .navbar-default .navbar-toggle {
   transition: background-color 0.3s ease;
@@ -336,6 +336,113 @@ select.form-control + .chosen-container-multi .chosen-results li.result-selected
 
   .text-lg-justify {
     text-align: justify; } }
+.flex {
+  display: flex; }
+
+@media (min-width: 768px) {
+  .sm-flex {
+    display: flex; } }
+@media (min-width: 992px) {
+  .md-flex {
+    display: flex; } }
+@media (min-width: 1200px) {
+  .lg-flex {
+    display: flex; } }
+.flex-column {
+  flex-direction: column; }
+
+.flex-wrap {
+  flex-wrap: wrap; }
+
+.items-start {
+  align-items: flex-start; }
+
+.items-end {
+  align-items: flex-end; }
+
+.items-center {
+  align-items: center; }
+
+.items-baseline {
+  align-items: baseline; }
+
+.items-stretch {
+  align-items: stretch; }
+
+.self-start {
+  align-self: flex-start; }
+
+.self-end {
+  align-self: flex-end; }
+
+.self-center {
+  align-self: center; }
+
+.self-baseline {
+  align-self: baseline; }
+
+.self-stretch {
+  align-self: stretch; }
+
+.justify-start {
+  justify-content: flex-start; }
+
+.justify-end {
+  justify-content: flex-end; }
+
+.justify-center {
+  justify-content: center; }
+
+.justify-between {
+  justify-content: space-between; }
+
+.justify-around {
+  justify-content: space-around; }
+
+.content-start {
+  align-content: flex-start; }
+
+.content-end {
+  align-content: flex-end; }
+
+.content-center {
+  align-content: center; }
+
+.content-between {
+  align-content: space-between; }
+
+.content-around {
+  align-content: space-around; }
+
+.content-stretch {
+  align-content: stretch; }
+
+/* 1. Fix for Chrome 44 bug. https://code.google.com/p/chromium/issues/detail?id=506893 */
+.flex-auto {
+  flex: 1 1 auto;
+  min-width: 0;
+  /* 1 */
+  min-height: 0;
+  /* 1 */ }
+
+.flex-none {
+  flex: none; }
+
+.order-0 {
+  order: 0; }
+
+.order-1 {
+  order: 1; }
+
+.order-2 {
+  order: 2; }
+
+.order-3 {
+  order: 3; }
+
+.order-last {
+  order: 99999; }
+
 body {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
   font-size: 14px;

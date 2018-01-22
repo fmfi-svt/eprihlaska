@@ -1,0 +1,3 @@
+[submodule "eprihlaska/votr"]
+	path = eprihlaska/votr
+	url = https://github.com/fmfi-svt/votr.git

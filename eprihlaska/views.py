@@ -7,13 +7,15 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
-                              NewPasswordForm)
+                              NewPasswordForm, AIS2CookieForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
 import string
 import uuid
+import sys
+import traceback
 
 from munch import munchify
 from functools import wraps
@@ -22,10 +24,10 @@ from .headless_pdfkit import generate_pdf
 from .models import User, ApplicationForm, TokenModel, ForgottenPasswordToken
 from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      NEW_USER_MAIL, SEX_CHOICES, COUNTRY_CHOICES, CITY_CHOICES,
-                     MARITAL_STATUS_CHOICES, HIGHSCHOOL_CHOICES,
-                     HS_STUDY_PROGRAMME_CHOICES, HS_STUDY_PROGRAMME_MAP,
-                     EDUCATION_LEVEL_CHOICES, COMPETITION_CHOICES,
-                     APPLICATION_STATES, ApplicationStates)
+                     CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
+                     HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
+                     HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
+                     COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
 from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
@@ -34,6 +36,7 @@ LISTS = {
     'marital_status': dict(MARITAL_STATUS_CHOICES),
     'country': dict(COUNTRY_CHOICES),
     'city': dict(CITY_CHOICES),
+    'city_psc': dict(CITY_CHOICES_PSC),
     'highschool': dict(HIGHSCHOOL_CHOICES),
     'hs_study_programme': dict(HS_STUDY_PROGRAMME_CHOICES),
     'education_level': dict(EDUCATION_LEVEL_CHOICES),
@@ -63,9 +66,10 @@ def require_filled_form(form_key):
 def require_remote_user(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.environ.get('REMOTE_USER') is None:
-            flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
-            return redirect(url_for('index'))
+        if not app.debug:
+            if request.environ.get('REMOTE_USER') is None:
+                flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+                return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
 
@@ -325,13 +329,20 @@ def final():
         # exists in the mapping list
         pair = (session['studies_in_sr']['highschool'],
                 session['studies_in_sr']['study_programme_code'])
-        if pair not in HS_STUDY_PROGRAMME_MAP:
+        study_programme_code_not_empty = (pair[1] != 'XXXXXX')
+        filled_items = (pair[0] != 'XXXXXXX',
+                        study_programme_code_not_empty)
+
+        # Only check for the pair if both of the items (highschool and
+        # study_programme_code) have been filled in.
+        if all(filled_items) and pair not in HS_STUDY_PROGRAMME_MAP:
             hs_sp_check = False
 
         # Check whether the education_level code is actually present in
         # the study_programme_code
         el = session['studies_in_sr']['education_level']
-        if el not in session['studies_in_sr']['study_programme_code']:
+        if study_programme_code_not_empty and \
+           el not in session['studies_in_sr']['study_programme_code']:
             hs_education_level_check = False
 
 
@@ -373,8 +384,10 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
+    specific_symbol = 9999 + app.user_id
     rendered = render_template('application_form.html', session=sess,
                                lists=LISTS, id=app.id,
+                               specific_symbol=specific_symbol,
                                submitted_at=app.submitted_at,
                                consts=consts, print=print)
     return rendered
@@ -429,7 +442,11 @@ def send_password_email(user, title, body_template):
     msg = Message(title)
     msg.body = body_template.format(link)
     msg.recipients = [user.email]
-    mail.send(msg)
+
+    # Only send the email in non-debug state
+    if not app.debug:
+        mail.send(msg)
+    return link
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -457,8 +474,11 @@ def signup():
         db.session.add(new_application_form)
         db.session.commit()
 
-        send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
-        flash('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
+        link = send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
+        msg = consts.NEW_USER_MSG
+        if app.debug:
+            msg += '\n{}'.format(link)
+        flash(msg)
 
     return render_template('signup.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -509,10 +529,16 @@ def forgotten_password():
     form = ForgottenPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_email(user, 'ePrihlaska - nové heslo', FORGOTTEN_PASSWORD_MAIL)
 
-        flash('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
+        link = None
+        if user:
+            link = send_password_email(user, 'ePrihlaska - nové heslo',
+                                       FORGOTTEN_PASSWORD_MAIL)
+
+        msg = consts.FORGOTTEN_PASSWORD_MSG
+        if app.debug:
+            msg += '\n{}'.format(link)
+        flash(msg)
 
     return render_template('forgotten_password.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -651,3 +677,66 @@ def admin_reset(id):
     db.session.commit()
 
     return redirect(url_for('admin_list'))
+
+@app.route('/admin/ais_test')
+@require_remote_user
+def admin_ais_test(id):
+    from .ais_utils import (create_context, test_ais)
+    #FIXME: login with cosign proxy and submit something to 'prod' version of
+    # AIS
+    return redirect(url_for('admin_list'))
+
+
+@app.route('/admin/process/<id>', methods=['GET', 'POST'])
+@require_remote_user
+def admin_process(id):
+    application = ApplicationForm.query.filter_by(id=id).first()
+
+    form = AIS2CookieForm()
+    return send_application_to_ais2(id, application, form, beta=True)
+
+
+def send_application_to_ais2(id, application, form, beta=False):
+    from .ais_utils import (create_context, save_application_form)
+    if form.validate_on_submit():
+        ctx = create_context({'JSESSIONID': form.data['jsessionid']},
+                             origin='ais2-beta.uniba.sk')
+        ais2_output = None
+        error_output = None
+        notes = {}
+
+        try:
+            ais2_output, notes = save_application_form(ctx,
+                                                       application,
+                                                       LISTS,
+                                                       id)
+        except Exception as e:
+            error_output = traceback.format_exception(*sys.exc_info())
+            error_output = '\n'.join(error_output)
+            title = '{} AIS2'.format(app.config['ERROR_EMAIL_HEADER'])
+
+            # Send email on AIS2 error
+            msg = Message(title)
+            msg.body = error_output
+            msg.recipients = app.config['ADMINS']
+
+            # Only send the email if we are not in the debug mode
+            if not app.debug:
+                mail.send(msg)
+            else:
+                print(error_output)
+
+        # Only update the application state of it is not sent to beta
+        if not beta and error_output is None:
+            application.state = ApplicationStates.processed
+            db.session.commit()
+
+        return render_template('admin_process.html',
+                               ais2_output=ais2_output,
+                               notes=notes, id=id,
+                               error_output=error_output,
+                               beta=beta)
+
+    return render_template('admin_process.html',
+                           form=form, id=id,
+                           beta=beta)
