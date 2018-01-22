@@ -16,6 +16,7 @@ import string
 import uuid
 import sys
 import traceback
+import os
 
 from munch import munchify
 from functools import wraps
@@ -678,12 +679,30 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
+def get_cosign_cookies():
+    name = request.environ['COSIGN_SERVICE']
+    value = request.cookies[name]
+    filename = name + '=' + value.partition('/')[0]
+    result = {}
+    with open(os.path.join(app.config['COSIGN_PROXY_DIR'],
+                           filename)) as f:
+        for line in f:
+            # Remove starting "x" and everything after the space.
+            name, _, value = line[1:].split()[0].partition('=')
+            result[name] = value
+    return result
+
+
 @app.route('/admin/ais_test')
 @require_remote_user
-def admin_ais_test(id):
+def admin_ais_test():
     from .ais_utils import (create_context, test_ais)
-    #FIXME: login with cosign proxy and submit something to 'prod' version of
-    # AIS
+    cosign_cookies = get_cosign_cookies()
+    ctx = create_context(cosign_cookies,
+                         origin='ais2.uniba.sk')
+    # Do log in
+    soup = ctx.request_html('/ais/login.do', method='POST')
+    test_ais(ctx)
     return redirect(url_for('admin_list'))
 
 
@@ -699,8 +718,16 @@ def admin_process(id):
 def send_application_to_ais2(id, application, form, beta=False):
     from .ais_utils import (create_context, save_application_form)
     if form.validate_on_submit():
-        ctx = create_context({'JSESSIONID': form.data['jsessionid']},
-                             origin='ais2-beta.uniba.sk')
+        if beta:
+            ctx = create_context({'JSESSIONID': form.data['jsessionid']},
+                                 origin='ais2-beta.uniba.sk')
+        else:
+            cosign_cookies = get_cosign_cookies()
+            ctx = create_context(cosign_cookies,
+                                 origin='ais2.uniba.sk')
+            # Do log in
+            soup = ctx.request_html('/ais/login.do', method='POST')
+
         ais2_output = None
         error_output = None
         notes = {}

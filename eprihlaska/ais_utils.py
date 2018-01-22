@@ -15,8 +15,9 @@ def create_context(cookies, origin='ais2-beta.uniba.sk'):
     ctx = Context(cookies, ais_url='https://'+origin+'/')
     return ctx
 
-def test_ais():
+def test_ais(ctx):
     # Open 'cierna skrynka'
+    apps = aisikl.portal.get_apps(ctx)
     app, prev_ops = Application.open(ctx, apps['AS042'].url)
 
     # Open main dialog
