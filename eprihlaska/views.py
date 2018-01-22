@@ -680,7 +680,7 @@ def admin_reset(id):
 
 def get_cosign_cookies():
     name = request.environ['COSIGN_SERVICE']
-    value = request.cookies[service]
+    value = request.cookies[name]
     filename = name + '=' + value.partition('/')[0]
     result = {}
     with open(os.path.join(app.config['COSIGN_PROXY_DIR'],
