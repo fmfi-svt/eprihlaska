@@ -4,37 +4,35 @@
 
 {% block form %}
 
+
 <hr>
 <p>
-Toto je testovacia verzia elektronickej prihlášky, ktorá nie je v prevádzke.
+  Toto je testovacia verzia elektronickej prihlášky, ktorá nie je v prevádzke.
 </p>
 
 <p>
-Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
-<a href="https://e-prihlaska.uniba.sk/" target="_blank">https://e-prihlaska.uniba.sk/</a>
+  Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku <a href="https://e-prihlaska.uniba.sk/" target="_blank">https://e-prihlaska.uniba.sk/</a>
 </p>
-
 <hr>
 
 
-<div class="row">
-  <div class="col-sm-6">
+<div class="row sm-flex items-center">
+  <div class="col-sm-offset-1 col-sm-5">
     <p>
-    Vitajte v systéme elektronickej prihlášky Fakulty matematiky, fyziky a informatiky Univerzity Komenského v Bratislave.
-    Informácie o študijných programoch nájdete <a href="https://fmph.uniba.sk/studium/programy">na stránke fakulty.</a>
+    Vitajte v systéme elektronickej prihlášky Fakulty matematiky, fyziky a&nbsp;informatiky Univerzity Komenského v&nbsp;Bratislave.
+    Informácie o&nbsp;študijných programoch nájdete <a href="https://fmph.uniba.sk/studium/programy">na stránke fakulty.</a>
     </p>
 
     <p>
-    Na tejto stránke môžete vyplniť a odoslať elektronickú prihlášku, ktorá je ekvivalentná formám prihlášky zasielaným poštou.
+    Na tejto stránke môžete vyplniť a&nbsp;odoslať elektronickú prihlášku, ktorá je ekvivalentná formám prihlášky zasielaným poštou.
     Na záver vypĺňania prihlášky získate podrobné pokyny ako postupovať ďalej.
-    </p>
-
-    <p>
     </p>
   </div>
 
-  <div class="col-sm-6">
-  <h4>Prihlásenie a registrácia</h4>
+  <div class="col-sm-5">
+    <div class="row">
+      <h4 class="col-lg-10 col-lg-offset-2">Prihlásenie a registrácia</h4>
+    </div>
 
   {% set signup_action = url_for('signup') %}
   {{ wtf.quick_form(form,
@@ -44,7 +42,7 @@ Ak hľadáte aktuálnu elektronickú prihlášku, použite stránku
 
   <div class="account__wrap">
     <div class="account col-lg-10 col-lg-offset-2">
-      <div class="account__separator">alebo</div>
+      <div class="account__separator text-center">alebo</div>
       <a href="{{ url_for('login') }}" class="btn btn-block btn-red btn-primary">
         Prihlásiť sa pomocou hesla
       </a>
