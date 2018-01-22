@@ -694,7 +694,7 @@ def get_cosign_cookies():
 
 @app.route('/admin/ais_test')
 @require_remote_user
-def admin_ais_test(id):
+def admin_ais_test():
     from .ais_utils import (create_context, test_ais)
     cosign_cookies = get_cosign_cookies()
     ctx = create_context(cosign_cookies,
