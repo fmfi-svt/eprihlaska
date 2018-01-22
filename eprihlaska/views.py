@@ -703,7 +703,7 @@ def admin_ais_test():
     # Do log in
     soup = ctx.request_html('/ais/login.do', method='POST')
     test_ais(ctx)
-    return cosign_cookies
+    return redirect(url_for('admin_list'))
 
 
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
@@ -718,8 +718,16 @@ def admin_process(id):
 def send_application_to_ais2(id, application, form, beta=False):
     from .ais_utils import (create_context, save_application_form)
     if form.validate_on_submit():
-        ctx = create_context({'JSESSIONID': form.data['jsessionid']},
-                             origin='ais2-beta.uniba.sk')
+        if beta:
+            ctx = create_context({'JSESSIONID': form.data['jsessionid']},
+                                 origin='ais2-beta.uniba.sk')
+        else:
+            cosign_cookies = get_cosign_cookies()
+            ctx = create_context(cosign_cookies,
+                                 origin='ais2.uniba.sk')
+            # Do log in
+            soup = ctx.request_html('/ais/login.do', method='POST')
+
         ais2_output = None
         error_output = None
         notes = {}
