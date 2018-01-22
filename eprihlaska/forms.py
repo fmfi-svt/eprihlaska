@@ -286,9 +286,10 @@ class NewPasswordForm(FlaskForm):
     submit = SubmitField(label=c.SIGNUP)
 
 class SignupForm(FlaskForm):
-    email = StringField(label=c.EMAIL,
+    email = StringField(label='',
                         validators=[validators.Email(),
-                                    EmailDuplicateValidator()])
+                                    EmailDuplicateValidator()],
+                        render_kw={"placeholder": c.EMAIL})
     submit = SubmitField(label=c.SIGNUP)
 
 class AIS2CookieForm(FlaskForm):
