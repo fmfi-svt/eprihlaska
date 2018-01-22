@@ -694,10 +694,10 @@ def admin_process(id):
     from .ais_utils import (create_context, save_application_form)
 
     form = AIS2CookieForm()
-    return send_application_to_ais2(application, form, beta=True)
+    return send_application_to_ais2(id, application, form, beta=True)
 
 
-def send_application_to_ais2(application, form, beta=False):
+def send_application_to_ais2(id, application, form, beta=False):
     if form.validate_on_submit():
         ctx = create_context({'JSESSIONID': form.data['jsessionid']},
                              origin='ais2-beta.uniba.sk')
