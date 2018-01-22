@@ -29,3 +29,5 @@ ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
 ERROR_EMAIL_HEADER = 'ePrihlaska - error'
 
 UA_CODE = ''
+
+COSIGN_PROXY_DIR = ''

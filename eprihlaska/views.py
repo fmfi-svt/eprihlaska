@@ -678,13 +678,29 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
+def get_cosign_cookies():
+    name = request.environ['COSIGN_SERVICE']
+    value = request.cookies[service]
+    filename = name + '=' + value.partition('/')[0]
+    result = {}
+    with open(os.path.join(app.config['COSIGN_PROXY_DIR'],
+                           filename)) as f:
+        for line in f:
+            # Remove starting "x" and everything after the space.
+            name, _, value = line[1:].split()[0].partition('=')
+            result[name] = value
+    return result
+
+
 @app.route('/admin/ais_test')
 @require_remote_user
 def admin_ais_test(id):
     from .ais_utils import (create_context, test_ais)
-    #FIXME: login with cosign proxy and submit something to 'prod' version of
-    # AIS
-    return redirect(url_for('admin_list'))
+    cosign_cookies = get_cosign_cookies()
+    ctx = create_context(cosign_cookies,
+                         origin='ais2.uniba.sk')
+    test_ais(ctx)
+    return cosign_cookies
 
 
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
