@@ -26,16 +26,14 @@
           <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
           <strong>Akademický rok:</strong> 2018/2019 <br />
           <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
-          {% if print %}
-            <hr>
-            číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
-            variabilný symbol: <strong>800</strong> <br>
-            {% if session['birth_no'] %}
-            špecifický symbol: <strong>{{ session['birth_no']|replace("/", "") }}</strong> <br>
-            {% else %}
-            špecifický symbol: <strong>{{ specific_symbol }}</strong> <br>
-            {% endif %}
-          {% endif %}
+           <hr>
+           číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
+           variabilný symbol: <strong>800</strong> <br>
+           {% if session['birth_no'] %}
+           špecifický symbol: <strong>{{ session['birth_no']|replace("/", "") }}</strong> <br>
+           {% else %}
+           špecifický symbol: <strong>{{ specific_symbol }}</strong> <br>
+           {% endif %}
         </div>
       </div>
 

@@ -346,12 +346,21 @@ def final():
            el not in session['studies_in_sr']['study_programme_code']:
             hs_education_level_check = False
 
+    # Check whether any grades were actually filled in
+    grades = []
+    for x in session:
+        if x.startswith('grades_'):
+            for y in session[x]:
+                if y.startswith('grade_'):
+                    grades.append(session[x][y])
+    grades_filled = any(map(lambda x: x != None, grades))
 
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
                            sp=dict(STUDY_PROGRAMME_CHOICES),
                            hs_sp_check=hs_sp_check,
-                           hs_ed_level_check=hs_education_level_check)
+                           hs_ed_level_check=hs_education_level_check,
+                           grades_filled=grades_filled)
 
 
 @app.route('/submit_app')
