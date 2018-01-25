@@ -27,7 +27,10 @@
         <td>{{ app['app']['email'] }}</td>
         <td>{{ app['app']['basic_personal_data']['name'] }}</td>
         <td>{{ app['app']['basic_personal_data']['surname'] }}</td>
-        <td>{{  ', '.join(app['app']['study_programme']) }}</td>
+        <td>
+          {% for sp in app['app']['study_programme'] %}
+          <kbd>{{ sp }}</kbd> &nbsp;
+          {% endfor %}
         <td>{{ app['app']['basic_personal_data']['matura_year'] }}</td>
         <td>
           {{ app.last_updated_by }}
