@@ -5,6 +5,8 @@
 
 
 {% macro generate_apps_table(apps, name, title) %}
+  <table class="table table-hover">
+    <tbody>
       <tr>
         <th id="{{ name }}" colspan="8" scope="colgroup" class="text-center admin-thead">
           {{ title }}
@@ -79,6 +81,8 @@
         </td>
       </tr>
       {% endfor %}
+    </tbody>
+  </table>
 {% endmacro %}
 
 {% block content %}
@@ -91,36 +95,45 @@
       <div class="col-lg-12 text-right">
         <a href="https://login.uniba.sk/logout.cgi"><strong>Odhlásiť sa</strong></a>
       </div>
-      <div class="col-lg-3">
-        <a href="#submitted"><strong>Podané prihlášky</strong></a>:
-        {{ submitted|length }}
-      </div>
-
-      <div class="col-lg-3">
-        <a href="#printed"><strong>Vytlačené prihlášky</strong></a>:
-        {{ printed|length }}
-      </div>
-
-      <div class="col-lg-3">
-        <a href="#in_progress"><strong>Rozpracované prihlášky</strong></a>:
-        {{ in_progress|length }}
-      </div>
-
-      <div class="col-lg-3">
-        <a href="#processed"><strong>Spracované prihlášky</strong></a>:
-        {{ processed|length }}
-      </div>
     </div>
 
-   <table class="table table-hover admin-table">
-    <tbody>
-    {{ generate_apps_table(submitted, "submitted", "Podané prihlášky") }}
-    {{ generate_apps_table(printed, "printed", "Vytlačené prihlášky") }}
-    {{ generate_apps_table(in_progress, "in_progress", "Rozpracované prihlášky") }}
-    {{ generate_apps_table(processed, "processed", "Spracované prihlášky") }}
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a data-toggle="tab" href="#submitted">
+          <strong>Podané prihlášky</strong> ({{ submitted|length }})
+        </a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#printed">
+          <strong>Vytlačené prihlášky</strong> ({{ printed|length }})
+        </a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#in_progress">
+          <strong>Rozpracované prihlášky</strong> ({{ in_progress|length }})
+        </a>
+      </li>
+      <li>
+        <a data-toggle="tab" href="#processed">
+          <strong>Spracované prihlášky</strong> ({{ processed|length }})
+        </a>
+      </li>
+    </ul>
 
-    </tbody>
-  </table>
+    <div class="tab-content">
+			<div id="submitted" class="tab-pane fade in active">
+        {{ generate_apps_table(submitted, "submitted", "Podané prihlášky") }}
+      </div>
+      <div id="printed" class="tab-pane fade">
+        {{ generate_apps_table(printed, "printed", "Vytlačené prihlášky") }}
+      </div>
+      <div id="in_progress" class="tab-pane fade">
+        {{ generate_apps_table(in_progress, "in_progress", "Rozpracované prihlášky") }}
+      </div>
+      <div id="processed" class="tab-pane fade">
+        {{ generate_apps_table(processed, "processed", "Spracované prihlášky") }}
+      </div>
+    </div>
   </div>
 </div>
 
