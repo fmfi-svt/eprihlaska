@@ -689,6 +689,15 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
+@app.route('/admin/set_state/<id>/<int:state>')
+@require_remote_user
+def admin_set_state(id, state):
+    app = ApplicationForm.query.filter_by(id=id).first()
+    app.state = ApplicationStates(state)
+    app.last_updated_by = request.environ.get('REMOTE_USER')
+    db.session.commit()
+    return redirect(url_for('admin_list'))
+
 def get_cosign_cookies():
     name = request.environ['COSIGN_SERVICE']
     value = request.cookies[name]
