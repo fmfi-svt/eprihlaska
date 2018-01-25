@@ -40,6 +40,20 @@
           <br />
 
           Zmeniť stav:
+        </td>
+        <td>
+          <div class="btn-group">
+            <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
+            {% if app.state.value == 1 %}
+            <a target="_blank" class="btn btn-xs btn-default app-print" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
+            {% endif %}
+
+            {% if app.state.value == 2 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť na BETU</a>
+            <a class="btn btn-xs btn-default" href="#">Preklopiť</a>
+            {% endif %}
+          </div>
+          <br />
           <div class="btn-group">
             {% if app.state.value != 0 %}
             <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Rozpracovaná</a>
@@ -60,19 +74,7 @@
             </a>
             {% endif %}
           </div>
-        </td>
-        <td>
-          <div class="btn-group">
-            <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
-            {% if app.state.value == 1 %}
-            <a target="_blank" class="btn btn-xs btn-default app-print" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
-            {% endif %}
 
-            {% if app.state.value == 2 %}
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť na BETU</a>
-            <a class="btn btn-xs btn-default" href="#">Preklopiť</a>
-            {% endif %}
-          </div>
         </td>
       </tr>
       {% endfor %}
