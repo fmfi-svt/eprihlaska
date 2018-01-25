@@ -321,7 +321,8 @@ def admissions_waivers():
 @login_required
 @require_filled_form('admissions_waivers')
 def final():
-    specific_symbol = 10000 + current_user.id
+    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    specific_symbol = 10000 + app.id
 
     hs_sp_check = True
     hs_education_level_check = True
@@ -394,7 +395,7 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
-    specific_symbol = 10000 + app.user_id
+    specific_symbol = 10000 + app.id
     rendered = render_template('application_form.html', session=sess,
                                lists=LISTS, id=app.id,
                                specific_symbol=specific_symbol,
