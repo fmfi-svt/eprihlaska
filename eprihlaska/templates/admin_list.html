@@ -34,16 +34,35 @@
           {% if app.last_updated_at %}
           <small>({{ app.last_updated_at.strftime('%H:%M:%S %d.%m.%Y') }})</small>
           {% endif %}
+          <br />
+
+          Zmeniť stav:
+          <div class="btn-group">
+            {% if app.state.value != 0 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Rozpracovaná</a>
+            {% endif %}
+            {% if app.state.value != 1 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_set_state', id=app.id, state=1) }}">
+              Podaná
+            </a>
+            {% endif %}
+            {% if app.state.value != 2 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_set_state', id=app.id, state=2) }}">
+              Vytlačená
+            </a>
+            {% endif %}
+            {% if app.state.value != 3 %}
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_set_state', id=app.id, state=3) }}">
+              Spracovaná
+            </a>
+            {% endif %}
+          </div>
         </td>
         <td>
           <div class="btn-group">
             <a target="_blank" class="btn btn-xs btn-default" href="{{ url_for('admin_view', id=app.id) }}">Pozrieť</a>
-            {% if app.state.value < 2 %}
+            {% if app.state.value == 1 %}
             <a target="_blank" class="btn btn-xs btn-default app-print" href="{{ url_for('admin_print', id=app.id) }}">Vytlačiť</a>
-            {% endif %}
-
-            {% if app.state.value > 0 %}
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_reset', id=app.id) }}">Zresetovať</a>
             {% endif %}
 
             {% if app.state.value == 2 %}
