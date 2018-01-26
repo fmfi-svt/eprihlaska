@@ -214,9 +214,6 @@
          <input type="checkbox" name="" id="" checked /> V minulosti som študovala/študoval na vysokej škole v SR v I. stupni štúdia
           alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne).
         </div>
-        <div class="col-sm-12">
-          <strong>Rok maturitnej skúšky:</strong>  {{ session['basic_personal_data']['matura_year'] }}
-        </div>
       </div>
       <hr>
       {% endif %}
@@ -254,6 +251,10 @@
         <div class="col-sm-12">
           <em>Stredná škola absolvovaná mimo Slovenskej republiky</em>
        </div>
+
+        <div class="col-sm-12">
+          <strong>Rok maturitnej skúšky:</strong>  {{ session['basic_personal_data']['matura_year'] }}
+        </div>
       </div>
       {% endif %}
 
