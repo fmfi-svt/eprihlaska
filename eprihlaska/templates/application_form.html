@@ -26,6 +26,7 @@
           <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
           <strong>Akademický rok:</strong> 2018/2019 <br />
           <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
+          {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
            <hr>
            Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
            číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
@@ -35,6 +36,7 @@
            {% else %}
            špecifický symbol: <strong>{{ specific_symbol }}</strong> <br>
            {% endif %}
+          {% endif %}
         </div>
       </div>
 

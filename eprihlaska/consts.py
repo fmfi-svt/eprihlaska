@@ -45,7 +45,7 @@ MOTHER_BORNWITH_SURNAME = _('Rodné priezvisko matky')
 
 PERSONAL_INFO_CHECK = _('Dávam súhlas, aby vysoká škola spracúvala moje osobné údaje obsiahnuté v tejto prihláške a jej prílohách na účely prijímacieho konania až do termínu konania zápisu do 1. ročníka štúdia na vysokej škole.')
 
-DEAN_INV_LIST_YN = _('Dostal som list od dekana')
+DEAN_INV_LIST_YN = _('Dostal(a) som list od dekana')
 DEAN_INV_LIST_NO = _('Číslo listu od dekana')
 DEAN_INV_LIST_NO_DESC = _('Prosím, vyplňte číslo listu od dekana, ktorý ste dostali')
 
