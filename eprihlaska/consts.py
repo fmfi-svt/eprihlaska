@@ -166,7 +166,7 @@ WILL_TAKE_CHE_MATURA = _('maturujem z chémie')
 FURTHER_STUDY_INFO = _('Prospech na strednej škole')
 
 GRADE_FIRST_YEAR = _('koncoročná známka v 1. ročníku / kvinte')
-GRADE_SECOND_YEAR = _('koncoročná známka v 2. ročníku / kvarte')
+GRADE_SECOND_YEAR = _('koncoročná známka v 2. ročníku / sexte')
 GRADE_THIRD_YEAR = _('koncoročná známka v 3. ročníku / septime')
 
 GRADES_MAT = _('Známky z matematiky')
