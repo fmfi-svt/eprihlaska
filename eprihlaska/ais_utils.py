@@ -98,6 +98,12 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     with app.collect_operations() as ops:
         app.d.rodneCisloButton.click()
 
+
+    # It may happen that a confirmBox gets shown (for whatever reason).
+    # Should that happen, the confirmBox should be just closed.
+    if ops and ops[-1].method == 'confirmBox':
+        app.confirm_box(-1)
+
     # Close the dialog if some shows up
     if ops and ops[-1].method == 'openDialog':
         rodne_cislo_dlg = app.awaited_open_dialog(ops)
