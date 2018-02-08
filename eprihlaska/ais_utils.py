@@ -127,6 +127,8 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         # end the process here by returning
         return None, notes
 
+    # Turn off automatic generation of ID numbers for applications.
+    app.d.ecAutomatickyCheckBox.set_to(False)
     app.d.evidCisloNumberControl.write(str(application.id))
 
     # If we are in the 'no_fill' process_type, the personal data and address
@@ -503,6 +505,11 @@ def generate_subject_abbrevs(session):
 def generate_checkbox_abbrs(session):
     checkboxes = set()
     field_abbr_map = {
+        'matura_mat_grade': 'MatM',
+        'matura_fyz_grade': 'MatF',
+        'matura_inf_grade': 'MatI',
+        'matura_bio_grade': 'MatB',
+        'matura_che_grade': 'MatCh',
         'will_take_mat_matura': 'MatM',
         'will_take_fyz_matura': 'MatF',
         'will_take_inf_matura': 'MatI',
@@ -544,6 +551,11 @@ def add_subject(app, abbr):
         app.d.enterButton.click()
 
     select_predmet_dlg = app.awaited_close_dialog(ops)
+
+    # Add 'N' to subject level
+    index = len(app.d.vysvedceniaTable.all_rows()) - 1
+    app.d.vysvedceniaTable.edit_cell('kodUrovenMat', index, 'N')
+
 
 def fill_in_table_cells(app, abbr, F, session):
     if abbr == 'M':

@@ -28,7 +28,16 @@
                           button_map={'submit': 'primary'}) }}
 
     <p>Prosíme o strpenie a nezatváranie prehliadača: preklápanie prihlášky
-      môže trvať aj niekolko minút.</p>
+      môže trvať aj niekolko desiatok sekúnd.</p>
+
+  <div class="container">
+    <div class="progress" style="width: 100%;">
+      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+        0%
+      </div>
+    </div>
+	</div>
+
     {% else %}
     <div class="well well-lg">
       <strong>AIS2 výstup:</strong> <br /><br />
@@ -114,7 +123,7 @@
 
         <div class="row">
           <div class="col-md-4">
-            <a class="btn" href="{{ url_for('admin_list') }}">
+            <a class="btn" href="{{ url_for('admin_list') }}#printed">
               Zrušiť (naspäť na listing)
             </a>
           </div>
@@ -152,7 +161,7 @@
         </pre>
 
         <a class="btn" href="">Skúsiť znova</a>
-        <a class="btn" href="{{ url_for('admin_list') }}">
+        <a class="btn" href="{{ url_for('admin_list') }}#printed">
           Zrušiť (naspäť na listing)
         </a>
 
@@ -160,7 +169,7 @@
       {% elif not notes['person_exists']  %}
       <div class="well well-lg alert alert-success text-center">
         <strong>Prihlášku sa podarilo preklopiť!</strong> <br />
-        <a class="btn" href="{{ url_for('admin_list') }}">
+        <a class="btn" href="{{ url_for('admin_list') }}#printed">
           Naspäť na listing
         </a>
       </div>
@@ -170,5 +179,34 @@
 </div>
 
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+<script>
+  $(document).ready(function(){
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    $('#submit').click(function(e){
+      var width = 0;
+      var progress = setInterval(function () {
+          var $bar = $('.progress-bar');
+
+          if ($bar.width() >= 100) {
+              clearInterval(progress);
+          } else {
+              width = width + getRandomInt(1, 7);
+              var width_str = width + '%';
+              $bar.width(width_str);
+          }
+          $bar.text(width + '%');
+      }, 800);
+    });
+  });
+
+</script>
 {% endblock %}
 
