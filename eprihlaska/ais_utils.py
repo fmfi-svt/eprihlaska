@@ -94,19 +94,18 @@ def save_application_form(ctx, application, lists, application_id, process_type)
 
     app.d.rodneCisloTextField.write(session['birth_no'])
 
-    if process_type != 'no_fill':
-        # Click on relevant rodneCisloButton
+    # Click on relevant rodneCisloButton
+    with app.collect_operations() as ops:
+        app.d.rodneCisloButton.click()
+
+    # Close the dialog if some shows up
+    if ops and ops[-1].method == 'openDialog':
+        rodne_cislo_dlg = app.awaited_open_dialog(ops)
+
         with app.collect_operations() as ops:
-            app.d.rodneCisloButton.click()
+            app.d.closeButton.click()
 
-        # Close the dialog if some shows up
-        if ops and ops[-1].method == 'openDialog':
-            rodne_cislo_dlg = app.awaited_open_dialog(ops)
-
-            with app.collect_operations() as ops:
-                app.d.closeButton.click()
-
-            rodne_cislo_dlg = app.awaited_close_dialog(ops)
+        rodne_cislo_dlg = app.awaited_close_dialog(ops)
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
@@ -122,68 +121,72 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         # end the process here by returning
         return None, notes
 
-    app.d.menoTextField.write(session['basic_personal_data']['name'])
-    app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
-    app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
-    app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
-    app.d.datumNarodeniaDateControl.write(session['date_of_birth'])
     app.d.evidCisloNumberControl.write(str(application.id))
 
-    # Sex selection
-    if session['sex'] == 'male':
-        app.d.kodPohlavieRadioBox.select(0)
-    else:
-        app.d.kodPohlavieRadioBox.select(1)
+    # If we are in the 'no_fill' process_type, the personal data and address
+    # should be taken from whatever AIS2 provides
+    if process_type != 'no_fill':
+        app.d.menoTextField.write(session['basic_personal_data']['name'])
+        app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
+        app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
+        app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
+        app.d.datumNarodeniaDateControl.write(session['date_of_birth'])
+
+        # Sex selection
+        if session['sex'] == 'male':
+            app.d.kodPohlavieRadioBox.select(0)
+        else:
+            app.d.kodPohlavieRadioBox.select(1)
 
 
-    rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
-    # FIXME: AIS2 hack
-    if rodinny_stav_text == 'nezistený':
-        rodinny_stav_text = 'neurčené'
+        rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
+        # FIXME: AIS2 hack
+        if rodinny_stav_text == 'nezistený':
+            rodinny_stav_text = 'neurčené'
 
-    rodinny_stav_index = None
-    for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
-        option_text = option.title.split('/')[0].lower()
-        if option_text == rodinny_stav_text:
-            rodinny_stav_index = idx
+        rodinny_stav_index = None
+        for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
+            option_text = option.title.split('/')[0].lower()
+            if option_text == rodinny_stav_text:
+                rodinny_stav_index = idx
 
-    if rodinny_stav_index is not None:
-        app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
-
-    with app.collect_operations() as ops:
-        app.d.c30Button.click()
-        app.d.c31Button.click()
-
-    if session['country_of_birth'] == '703':
-        app.d.sklonovanieNarTextField.write(session['place_of_birth'])
+        if rodinny_stav_index is not None:
+            app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
 
         with app.collect_operations() as ops:
-            app.d.vyberMiestoNarodeniabutton.click()
-    else:
-        app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']])
-        with app.collect_operations() as ops:
-            app.d.button22.click()
+            app.d.c30Button.click()
+            app.d.c31Button.click()
 
-        app.d.sklonovanieNarTextField.write(session['place_of_birth_foreign'])
+        if session['country_of_birth'] == '703':
+            app.d.sklonovanieNarTextField.write(session['place_of_birth'])
 
-    app.d.telefonTextField.write(session['phone'])
-    app.d.emailPrivateTextField.write(session['email'])
+            with app.collect_operations() as ops:
+                app.d.vyberMiestoNarodeniabutton.click()
+        else:
+            app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']])
+            with app.collect_operations() as ops:
+                app.d.button22.click()
 
-    app.d.menoMatkyTextField.write(session['mother_name']['name'])
-    app.d.priezviskoMatkyTextField.write(session['mother_name']['surname'])
-    app.d.povPriezviskoMatkyTextField.write(session['mother_name']['born_with_surname'])
+            app.d.sklonovanieNarTextField.write(session['place_of_birth_foreign'])
 
-    app.d.menoOtcaTextField.write(session['father_name']['name'])
-    app.d.priezviskoOtcaTextField.write(session['father_name']['surname'])
-    app.d.povPriezviskoOtcaTextField.write(session['father_name']['born_with_surname'])
+        app.d.telefonTextField.write(session['phone'])
+        app.d.emailPrivateTextField.write(session['email'])
 
-    # Address
-    fill_in_address('address_form', app, session, lists)
+        app.d.menoMatkyTextField.write(session['mother_name']['name'])
+        app.d.priezviskoMatkyTextField.write(session['mother_name']['surname'])
+        app.d.povPriezviskoMatkyTextField.write(session['mother_name']['born_with_surname'])
 
-    # Correspondence address
-    if session['has_correspondence_address']:
-        app.d.pouzitPSAdresuCheckBox.toggle()
-        fill_in_address('correspondence_address', app, session, lists)
+        app.d.menoOtcaTextField.write(session['father_name']['name'])
+        app.d.priezviskoOtcaTextField.write(session['father_name']['surname'])
+        app.d.povPriezviskoOtcaTextField.write(session['father_name']['born_with_surname'])
+
+        # Address
+        fill_in_address('address_form', app, session, lists)
+
+        # Correspondence address
+        if session['has_correspondence_address']:
+            app.d.pouzitPSAdresuCheckBox.toggle()
+            fill_in_address('correspondence_address', app, session, lists)
 
     # Vyplnime prvy odbor
     app.d.program1TextField.write(session['study_programme'][0])
