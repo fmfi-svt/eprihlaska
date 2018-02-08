@@ -797,8 +797,9 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
             else:
                 print(error_output)
 
-        # Only update the application state of it is not sent to beta
-        if not beta and error_output is None:
+        # Only update the application state of it is not sent to beta and the
+        # 'person_exists' note is not added
+        if not beta and error_output is None and 'person_exists' not in notes:
             application.state = ApplicationStates.processed
             db.session.commit()
 
