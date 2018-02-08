@@ -783,7 +783,8 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
         except Exception as e:
             error_output = traceback.format_exception(*sys.exc_info())
             error_output = '\n'.join(error_output)
-            title = '{} AIS2'.format(app.config['ERROR_EMAIL_HEADER'])
+            title = '{} AIS2 (#{})'.format(app.config['ERROR_EMAIL_HEADER'],
+                                           id)
 
             # Send email on AIS2 error
             msg = Message(title)
