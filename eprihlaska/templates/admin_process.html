@@ -151,7 +151,11 @@
 {{ error_output }}
         </pre>
 
-        <a href="">Skúsiť znova</a>
+        <a class="btn" href="">Skúsiť znova</a>
+        <a class="btn" href="{{ url_for('admin_list') }}">
+          Zrušiť (naspäť na listing)
+        </a>
+
       </div>
       {% elif not notes['person_exists']  %}
       <div class="well well-lg alert alert-success text-center">
