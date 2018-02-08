@@ -806,7 +806,8 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
                                notes=notes, id=id,
                                error_output=error_output,
                                beta=beta, process_type=process_type,
-                               session=flask.json.loads(application.application))
+                               session=flask.json.loads(application.application),
+                               lists=LISTS)
 
     return render_template('admin_process.html',
                            form=form, id=id,
