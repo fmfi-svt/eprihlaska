@@ -134,7 +134,8 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     if process_type != 'no_fill':
         app.d.menoTextField.write(session['basic_personal_data']['name'])
         app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
-        app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
+        if session['basic_personal_data']['surname'] != session['basic_personal_data']['born_with_surname']:
+            app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
         app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
         app.d.datumNarodeniaDateControl.write(session['date_of_birth'])
 
@@ -486,6 +487,12 @@ def generate_subject_abbrevs(session):
         'matura_inf_grade': 'I',
         'matura_bio_grade': 'B',
         'matura_che_grade': 'CH'
+        'will_take_mat_matura': 'M',
+        'will_take_fyz_matura': 'F',
+        'will_take_inf_matura': 'I',
+        'will_take_bio_matura': 'B',
+        'will_take_che_matura': 'CH',
+        'will_take_external_mat_matura': 'M'
     }
 
     for field, abbr in field_abbr_map.items():
