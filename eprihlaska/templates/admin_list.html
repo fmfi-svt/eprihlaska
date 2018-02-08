@@ -48,7 +48,7 @@
 
             {% if app.state.value == 2 %}
             <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť na BETU</a>
-            <a class="btn btn-xs btn-default" href="#">Preklopiť</a>
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', id=app.id) }}">Preklopiť</a>
             {% endif %}
           </div>
           <br />

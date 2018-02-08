@@ -46,8 +46,10 @@ def test_ais(ctx):
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
-def save_application_form(ctx, application, lists, application_id):
+def save_application_form(ctx, application, lists, application_id, process_type):
     session = flask.json.loads(application.application)
+
+    notes = {}
 
     apps = aisikl.portal.get_apps(ctx)
     app, prev_ops = Application.open(ctx, apps['VSPK014'].url)
@@ -92,18 +94,33 @@ def save_application_form(ctx, application, lists, application_id):
 
     app.d.rodneCisloTextField.write(session['birth_no'])
 
-    # Click on relevant rodneCisloButton
-    with app.collect_operations() as ops:
-        app.d.rodneCisloButton.click()
-
-    # Close the dialog if some shows up
-    if ops and ops[-1].method == 'openDialog':
-        rodne_cislo_dlg = app.awaited_open_dialog(ops)
-
+    if process_type != 'no_fill':
+        # Click on relevant rodneCisloButton
         with app.collect_operations() as ops:
-            app.d.closeButton.click()
+            app.d.rodneCisloButton.click()
 
-        rodne_cislo_dlg = app.awaited_close_dialog(ops)
+        # Close the dialog if some shows up
+        if ops and ops[-1].method == 'openDialog':
+            rodne_cislo_dlg = app.awaited_open_dialog(ops)
+
+            with app.collect_operations() as ops:
+                app.d.closeButton.click()
+
+            rodne_cislo_dlg = app.awaited_close_dialog(ops)
+
+    # If the priezviskoTextField is not empty, it most probably means the
+    # person is already registered in
+    if app.d.priezviskoTextField.value != '' and process_type is None:
+        notes['person_exists'] = {
+            'name': app.d.menoTextField.value,
+            'surname': app.d.priezviskoTextField.value,
+            'date_of_birth': app.d.datumNarodeniaDateControl.value,
+            'place_of_birth': app.d.sklonovanieNarTextField.value,
+            'phone': app.d.telefonTextField.value,
+            'email': app.d.emailPrivateTextField.value
+        }
+        # end the process here by returning
+        return None, notes
 
     app.d.menoTextField.write(session['basic_personal_data']['name'])
     app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
@@ -320,7 +337,6 @@ def save_application_form(ctx, application, lists, application_id):
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
-    notes = {}
     # A set of confirm boxes may show up if highschool grades were filled in
     if len(ABBRs) > 0:
         ops = deal_with_confirm_boxes(app, ops, notes)

@@ -15,6 +15,12 @@
      {% endif %}
     {% endblock title %}
   </h1>
+  {% if process_type == 'fill'%}
+  <h3>Aktualizovanie dát v AIS2 údajmi z prihlášky</h3>
+  {% elif process_type == 'no_fill' %}
+  <h3>Vyplniť prihlášku bez párovania s osobou</h3>
+  {% endif %}
+
   <div class="container">
     {% if form %}
         {{ wtf.quick_form(form,
@@ -28,7 +34,7 @@
       <strong>AIS2 výstup:</strong> <br /><br />
       {{ ais2_output|safe }}
 
-      {% if notes['email_exists'] or notes['app_id_exists'] %}
+      {% if notes['email_exists'] or notes['app_id_exists'] or notes['person_exists'] %}
       <br /><br />
       <strong>Poznámky zo spracovania prihlášky:</strong>
       <ul>
@@ -51,6 +57,89 @@
         {% endif  %}
 
       </ul>
+
+        {% if notes['person_exists'] %}
+        <table class="table">
+          <th>
+            <td><strong>AIS2</strong></td>
+            <td><strong>Prihláška</strong></td>
+          </th>
+          <tr>
+            <td><strong>Meno</strong></td>
+            <td>{{ notes['person_exists']['name'] }}</td>
+            <td>{{ session['basic_personal_data']['name'] }}</td>
+          </tr>
+          <tr>
+            <td><strong>Priezvisko</strong></td>
+            <td>{{ notes['person_exists']['surname'] }}</td>
+            <td>{{ session['basic_personal_data']['surname'] }}</td>
+          </tr>
+          <tr>
+            <td><strong>Dátum narodenia</strong></td>
+            <td>{{ notes['person_exists']['date_of_birth'] }}</td>
+            <td>{{ session['date_of_birth'] }}</td>
+          </tr>
+          <tr>
+            <td><strong>Miesto narodenia</strong></td>
+            <td>{{ notes['person_exists']['place_of_birth'] }}</td>
+            <td>{{ session['basic_personal_data']['place_of_birth'] }}</td>
+          </tr>
+          <tr>
+            <td><strong>Telefon</strong></td>
+            <td>{{ notes['person_exists']['phone'] }}</td>
+            <td>{{ session['phone'] }}</td>
+          </tr>
+          <tr>
+            <td><strong>Email</strong></td>
+            <td>{{ notes['person_exists']['email'] }}</td>
+            <td>{{ session['email'] }}</td>
+          </tr>
+
+        </table>
+
+        <div class="well well-lg  text-center">
+          <strong>Osoba s rodným číslom už existuje. </strong> <br />
+
+          Ak zvolíte "pokračovať", budú jej osobné údaje aktualizované údajmi z
+          prihlášky. <br />
+
+          Ak zvolíte "Vyplniť prihlášku bez párovania s osobou", prihláška bude
+          vyplnená bez spárovania tejto prihlášky s osobou, ktorá ju podala.
+          Toto párovanie bude treba zabezpečiť v AIS2 manuálne. <br />
+
+          Ak zvolíte "zrušiť", nebude možné prihlášku preklopiť
+          automaticky a je potrebné ju zadať do AIS2 manuálne
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <a class="btn" href="{{ url_for('admin_list') }}">
+              Zrušiť (naspäť na listing)
+            </a>
+          </div>
+          <div class="col-md-4">
+            {% if beta %}
+            <a class="btn" href="{{ url_for('admin_process_special', id=id, process_type='no_fill') }}">
+            {% else %}
+            <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='no_fill') }}">
+            {% endif %}
+              Vyplniť prihlášku bez párovania s osobou
+            </a>
+          </div>
+          <div class="col-md-4">
+            {% if beta %}
+            <a class="btn" href="{{ url_for('admin_process_special', id=id, process_type='fill') }}">
+            {% else %}
+            <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='fill') }}">
+            {% endif %}
+              Pokračovať
+            </a>
+          </div>
+
+        </div>
+        {% endif  %}
+
       {% endif  %}
     </div>
 
@@ -63,7 +152,7 @@
 
         <a href="">Skúsiť znova</a>
       </div>
-      {% else %}
+      {% elif not notes['person_exists']  %}
       <div class="well well-lg alert alert-success text-center">
         <strong>Prihlášku sa podarilo preklopiť!</strong> <br />
         <a class="btn" href="{{ url_for('admin_list') }}">

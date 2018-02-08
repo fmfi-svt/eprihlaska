@@ -7,7 +7,7 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaversForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
-                              NewPasswordForm, AIS2CookieForm)
+                              NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
@@ -724,6 +724,22 @@ def admin_ais_test():
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
+@app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
+@require_remote_user
+def admin_ais2_process(id):
+    application = ApplicationForm.query.filter_by(id=id).first()
+
+    form = AIS2SubmitForm()
+    return send_application_to_ais2(id, application, form,
+                                    process_type=None, beta=False)
+
+@app.route('/admin/ais2_process/<id>/<process_type>', methods=['GET', 'POST'])
+def admin_ais2_process_special(id, process_type):
+    application = ApplicationForm.query.filter_by(id=id).first()
+
+    form = AIS2SubmitForm()
+    return send_application_to_ais2(id, application, form,
+                                    process_type=process_type, beta=False)
 
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
@@ -731,10 +747,17 @@ def admin_process(id):
     application = ApplicationForm.query.filter_by(id=id).first()
 
     form = AIS2CookieForm()
-    return send_application_to_ais2(id, application, form, beta=True)
+    return send_application_to_ais2(id, application, form, None, beta=True)
+
+@app.route('/admin/process/<id>/<process_type>', methods=['GET', 'POST'])
+def admin_process_special(id, process_type):
+    application = ApplicationForm.query.filter_by(id=id).first()
+
+    form = AIS2CookieForm()
+    return send_application_to_ais2(id, application, form, process_type, beta=True)
 
 
-def send_application_to_ais2(id, application, form, beta=False):
+def send_application_to_ais2(id, application, form, process_type, beta=False):
     from .ais_utils import (create_context, save_application_form)
     if form.validate_on_submit():
         if beta:
@@ -755,7 +778,8 @@ def send_application_to_ais2(id, application, form, beta=False):
             ais2_output, notes = save_application_form(ctx,
                                                        application,
                                                        LISTS,
-                                                       id)
+                                                       id,
+                                                       process_type)
         except Exception as e:
             error_output = traceback.format_exception(*sys.exc_info())
             error_output = '\n'.join(error_output)
@@ -781,7 +805,8 @@ def send_application_to_ais2(id, application, form, beta=False):
                                ais2_output=ais2_output,
                                notes=notes, id=id,
                                error_output=error_output,
-                               beta=beta)
+                               beta=beta, process_type=process_type,
+                               session=flask.json.loads(application.application))
 
     return render_template('admin_process.html',
                            form=form, id=id,
