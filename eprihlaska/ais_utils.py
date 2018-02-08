@@ -503,6 +503,11 @@ def generate_subject_abbrevs(session):
 def generate_checkbox_abbrs(session):
     checkboxes = set()
     field_abbr_map = {
+        'matura_mat_grade': 'MatM',
+        'matura_fyz_grade': 'MatF',
+        'matura_inf_grade': 'MatI',
+        'matura_bio_grade': 'MatB',
+        'matura_che_grade': 'MatCh',
         'will_take_mat_matura': 'MatM',
         'will_take_fyz_matura': 'MatF',
         'will_take_inf_matura': 'MatI',
