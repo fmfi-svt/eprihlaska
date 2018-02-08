@@ -552,6 +552,11 @@ def add_subject(app, abbr):
 
     select_predmet_dlg = app.awaited_close_dialog(ops)
 
+    # Add 'N' to subject level
+    index = len(app.d.vysvedceniaTable.all_rows()) - 1
+    app.d.vysvedceniaTable.edit_cell('kodUrovenMat', index, 'N')
+
+
 def fill_in_table_cells(app, abbr, F, session):
     if abbr == 'M':
         if 'external_matura_percentile' in F:
