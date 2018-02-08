@@ -114,7 +114,7 @@
 
         <div class="row">
           <div class="col-md-4">
-            <a class="btn" href="{{ url_for('admin_list') }}">
+            <a class="btn" href="{{ url_for('admin_list') }}#printed">
               Zrušiť (naspäť na listing)
             </a>
           </div>
@@ -152,7 +152,7 @@
         </pre>
 
         <a class="btn" href="">Skúsiť znova</a>
-        <a class="btn" href="{{ url_for('admin_list') }}">
+        <a class="btn" href="{{ url_for('admin_list') }}#printed">
           Zrušiť (naspäť na listing)
         </a>
 
@@ -160,7 +160,7 @@
       {% elif not notes['person_exists']  %}
       <div class="well well-lg alert alert-success text-center">
         <strong>Prihlášku sa podarilo preklopiť!</strong> <br />
-        <a class="btn" href="{{ url_for('admin_list') }}">
+        <a class="btn" href="{{ url_for('admin_list') }}#printed">
           Naspäť na listing
         </a>
       </div>

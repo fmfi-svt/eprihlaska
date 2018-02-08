@@ -127,6 +127,8 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         # end the process here by returning
         return None, notes
 
+    # Turn off automatic generation of ID numbers for applications.
+    app.d.ecAutomatickyCheckBox.set_to(False)
     app.d.evidCisloNumberControl.write(str(application.id))
 
     # If we are in the 'no_fill' process_type, the personal data and address
