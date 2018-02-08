@@ -100,12 +100,12 @@
         <div class="well well-lg  text-center">
           <strong>Osoba s rodným číslom už existuje. </strong> <br />
 
-          Ak zvolíte "pokračovať", budú jej osobné údaje aktualizované údajmi z
+          Ak zvolíte <em>"Pokračovať s údajmi z prihlášky"</em>, budú jej osobné údaje aktualizované údajmi z
           prihlášky. <br />
 
-          Ak zvolíte "Vyplniť prihlášku bez párovania s osobou", prihláška bude
-          vyplnená bez spárovania tejto prihlášky s osobou, ktorá ju podala.
-          Toto párovanie bude treba zabezpečiť v AIS2 manuálne. <br />
+          Ak zvolíte <em>"Pokračovať s údajmi z AIS2"</em>, budú osobné údaje
+          v AIS2 ponechané bez zmeny. <br />
+
 
           Ak zvolíte "zrušiť", nebude možné prihlášku preklopiť
           automaticky a je potrebné ju zadať do AIS2 manuálne
@@ -124,16 +124,17 @@
             {% else %}
             <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='no_fill') }}">
             {% endif %}
-              Vyplniť prihlášku bez párovania s osobou
+              Pokračovať s údajmi z AIS2
             </a>
           </div>
+
           <div class="col-md-4">
             {% if beta %}
             <a class="btn" href="{{ url_for('admin_process_special', id=id, process_type='fill') }}">
             {% else %}
             <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='fill') }}">
             {% endif %}
-              Pokračovať
+              Pokračovať s údajmi z prihlášky
             </a>
           </div>
 
