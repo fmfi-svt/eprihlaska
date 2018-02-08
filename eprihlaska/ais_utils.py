@@ -486,7 +486,7 @@ def generate_subject_abbrevs(session):
         'matura_fyz_grade': 'F',
         'matura_inf_grade': 'I',
         'matura_bio_grade': 'B',
-        'matura_che_grade': 'CH'
+        'matura_che_grade': 'CH',
         'will_take_mat_matura': 'M',
         'will_take_fyz_matura': 'F',
         'will_take_inf_matura': 'I',
