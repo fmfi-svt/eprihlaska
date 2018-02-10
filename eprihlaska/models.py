@@ -1,5 +1,5 @@
 from eprihlaska import db
-from flask import json
+from flask import json, request
 from flask_login import UserMixin, current_user
 import datetime
 import time
@@ -13,6 +13,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80))
     registered_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
+def application_form_change_author():
+    remote_user = request.environ.get('REMOTE_USER')
+    if remote_user is not None:
+        return remote_user
+    else:
+        return 'user'
+
 class ApplicationForm(db.Model):
     __tablename__ = 'application_form'
     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +27,8 @@ class ApplicationForm(db.Model):
     user = db.relationship('User', backref='user')
     application = db.Column(db.Text)
     last_updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now)
-    last_updated_by = db.Column(db.String(50), default='user')
+    last_updated_by = db.Column(db.String(50), default='user',
+                                onupdate=application_form_change_author)
     submitted_at = db.Column(db.DateTime)
     processed_at = db.Column(db.DateTime)
     printed_at = db.Column(db.DateTime)

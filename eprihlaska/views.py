@@ -667,7 +667,6 @@ def admin_print(id):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates.printed
     app.printed_at = datetime.datetime.now()
-    app.last_updated_by = request.environ.get('REMOTE_USER')
     db.session.commit()
 
     rendered = render_app(app, print=True)
@@ -683,7 +682,6 @@ def admin_reset(id):
         del sess['application_submitted']
         sess['application_submit_refresh'] = True
 
-    app.last_updated_by = request.environ.get('REMOTE_USER')
     app.application = flask.json.dumps(dict(sess))
     db.session.commit()
 
@@ -694,7 +692,6 @@ def admin_reset(id):
 def admin_set_state(id, state):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates(state)
-    app.last_updated_by = request.environ.get('REMOTE_USER')
     db.session.commit()
     return redirect(url_for('admin_list'))
 
