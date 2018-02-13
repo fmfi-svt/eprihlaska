@@ -107,8 +107,10 @@ def load_session():
             session[k] = d[k]
 
         if 'application_submit_refresh' in session:
-            del session['application_submitted']
+            #FIXME: Get rid of this band-aid
             del session['application_submit_refresh']
+            if 'application_submitted' in session:
+                del session['application_submitted']
 
             app.application = flask.json.dumps(dict(session))
             db.session.commit()
