@@ -81,8 +81,10 @@ def save_form(form):
         if k not in ignored_keys:
             session[k] = form.data[k]
     if 'application_submit_refresh' in session:
-        del session['application_submitted']
+        #FIXME: Get rid of this band-aid
         del session['application_submit_refresh']
+        if 'application_submitted' in session:
+            del session['application_submitted']
 
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     app.application = flask.json.dumps(dict(session))
@@ -356,12 +358,15 @@ def final():
                     grades.append(session[x][y])
     grades_filled = any(map(lambda x: x != None, grades))
 
+    app_state = APPLICATION_STATES[app.state.value]
+
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
                            sp=dict(STUDY_PROGRAMME_CHOICES),
                            hs_sp_check=hs_sp_check,
                            hs_ed_level_check=hs_education_level_check,
-                           grades_filled=grades_filled)
+                           grades_filled=grades_filled,
+                           app_state=app_state)
 
 
 @app.route('/submit_app')
