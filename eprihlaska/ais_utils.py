@@ -99,11 +99,6 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         app.d.rodneCisloButton.click()
 
 
-    # It may happen that a confirmBox gets shown (for whatever reason).
-    # Should that happen, the confirmBox should be just closed.
-    if ops and ops[-1].method == 'confirmBox':
-        app.confirm_box(-1)
-
     # Close the dialog if some shows up
     if ops and ops[-1].method == 'openDialog':
         rodne_cislo_dlg = app.awaited_open_dialog(ops)
@@ -112,6 +107,11 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             app.d.closeButton.click()
 
         rodne_cislo_dlg = app.awaited_close_dialog(ops)
+
+    # It may happen that a confirmBox gets shown (for whatever reason).
+    # Should that happen, the confirmBox should be just closed.
+    if ops and ops[-1].method == 'confirmBox':
+        app.confirm_box(-1)
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
