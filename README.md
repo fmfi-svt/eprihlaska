@@ -6,6 +6,11 @@
 - `source .venv/bin/activate`
 - `pip install -r requirements.txt`
 
+At this point you should most probably change the config options in `config.py`
+as you see fit. Once that is done, the DB can be created by running
+
+- `python3 init_db.py`
+
 You can then start the local version of this app by running
 
 - `python3 run.py`
