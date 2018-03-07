@@ -28,7 +28,8 @@ from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
                      HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
                      HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES, APPLICATION_STATES, ApplicationStates)
+                     COMPETITION_CHOICES, APPLICATION_STATES,
+                     ApplicationStates)
 from . import consts
 
 STUDY_PROGRAMMES = list(map(lambda x: x[0], STUDY_PROGRAMME_CHOICES))
@@ -50,10 +51,16 @@ def require_filled_form(form_key):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            rule = request.url_rule
             if 'application_submitted' in session:
-                rule = request.url_rule
                 if 'final' not in rule.rule:
                     return redirect(final)
+
+            # If submissions are not open, all of the other endpoints needs to
+            # forward to homepage.
+            if not app.config['SUBMISSIONS_OPEN'] and 'final' not in rule.rule:
+                flash(consts.SUBMISSIONS_NOT_OPEN, 'error')
+                return redirect(url_for('index'))
 
             if request.method == 'GET' and form_key not in session:
                 flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
@@ -63,6 +70,7 @@ def require_filled_form(form_key):
             return func(*args, **kwargs)
         return wrapper
     return decorator
+
 
 def require_remote_user(func):
     @wraps(func)
@@ -81,7 +89,7 @@ def save_form(form):
         if k not in ignored_keys:
             session[k] = form.data[k]
     if 'application_submit_refresh' in session:
-        #FIXME: Get rid of this band-aid
+        # FIXME: Get rid of this band-aid
         del session['application_submit_refresh']
         if 'application_submitted' in session:
             del session['application_submitted']
@@ -89,6 +97,7 @@ def save_form(form):
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     app.application = flask.json.dumps(dict(session))
     db.session.commit()
+
 
 @app.before_request
 def load_session():
@@ -107,7 +116,7 @@ def load_session():
             session[k] = d[k]
 
         if 'application_submit_refresh' in session:
-            #FIXME: Get rid of this band-aid
+            # FIXME: Get rid of this band-aid
             del session['application_submit_refresh']
             if 'application_submitted' in session:
                 del session['application_submitted']
@@ -117,20 +126,29 @@ def load_session():
 
         session.modified = True
 
+
 @app.route('/')
 def index():
     form = SignupForm()
-    if hasattr(current_user, 'id'):
+    if hasattr(current_user, 'id') and app.config['SUBMISSIONS_OPEN']:
         return redirect(url_for('study_programme'))
 
     return render_template('intro.html', form=form, session=session,
-                           sp=dict(STUDY_PROGRAMME_CHOICES))
+                           sp=dict(STUDY_PROGRAMME_CHOICES),
+                           submissions_open=app.config['SUBMISSIONS_OPEN'])
+
 
 @app.route('/study_programme', methods=('GET', 'POST'))
 @login_required
 def study_programme():
+    # If the application has been submitted already, forward to the final
+    # endpoint
     if 'application_submitted' in session:
         return redirect(url_for('final'))
+
+    # If submissions are not open, forward to index
+    if not app.config['SUBMISSIONS_OPEN']:
+        return redirect(url_for('index'))
 
     form = StudyProgrammeForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -170,6 +188,7 @@ def personal_info():
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
+
 @app.route('/further_personal_info', methods=('GET', 'POST'))
 @login_required
 @require_filled_form('personal_info')
@@ -185,6 +204,7 @@ def further_personal_info():
     return render_template('further_personal_info.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
+
 @app.route('/address', methods=('GET', 'POST'))
 @login_required
 @require_filled_form('further_personal_info')
@@ -199,6 +219,7 @@ def address():
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
+
 @app.route('/previous_studies', methods=('GET', 'POST'))
 @login_required
 @require_filled_form('address')
@@ -212,6 +233,7 @@ def previous_studies():
         return redirect(url_for('admissions_waivers'))
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
+
 
 def filter_competitions(competition_list, study_programme_list):
     result_list = []
@@ -237,6 +259,7 @@ def filter_competitions(competition_list, study_programme_list):
                 result_list.append((comp, desc))
     return result_list
 
+
 @app.route('/admissions_waivers', methods=('GET', 'POST'))
 @login_required
 @require_filled_form('previous_studies')
@@ -255,7 +278,8 @@ def admissions_waivers():
     for subform in form:
         if subform.id.startswith('competition_'):
             choices = subform.competition.choices
-            new_choices = filter_competitions(choices, session['study_programme'])
+            new_choices = filter_competitions(choices,
+                                              session['study_programme'])
             subform.competition.choices = new_choices
 
     grade_constraints = {
@@ -298,7 +322,7 @@ def admissions_waivers():
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-            matura_year not in [2015, 2016, 2017, 2018]:
+           matura_year not in [2015, 2016, 2017, 2018]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -307,7 +331,7 @@ def admissions_waivers():
                 form['further_study_info'].__delitem__(k)
 
     for k, v in relevant_years.items():
-        if not matura_year in v:
+        if matura_year not in v:
             if k in form['further_study_info']._fields:
                 form['further_study_info'].__delitem__(k)
 
@@ -318,8 +342,9 @@ def admissions_waivers():
             flash('Vaše dáta boli uložené!')
         return redirect(url_for('final'))
 
-    return render_template('admission_waivers.html', form=form, session=session,
-                           sp=dict(STUDY_PROGRAMME_CHOICES))
+    return render_template('admission_waivers.html', form=form,
+                           session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
+
 
 @app.route('/final', methods=['GET'])
 @login_required
@@ -358,7 +383,7 @@ def final():
             for y in session[x]:
                 if y.startswith('grade_'):
                     grades.append(session[x][y])
-    grades_filled = any(map(lambda x: x != None, grades))
+    grades_filled = any(map(lambda x: x is not None, grades))
 
     app_state = APPLICATION_STATES[app.state.value]
 
@@ -384,6 +409,7 @@ def submit_app():
     flash('Gratulujeme, Vaša prihláška bola podaná!')
     return redirect(url_for('final'))
 
+
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
@@ -394,8 +420,10 @@ def grades_control():
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=grades_control.pdf'
+    disposition = 'inline; filename=grades_control.pdf'
+    response.headers['Content-Disposition'] = disposition
     return response
+
 
 def render_app(app, print=False, use_app_session=True):
     sess = session
@@ -421,7 +449,8 @@ def application_form():
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=application_form.pdf'
+    disposition = 'inline; filename=application_form.pdf'
+    response.headers['Content-Disposition'] = disposition
     return response
 
 
@@ -447,6 +476,7 @@ def login():
     return render_template('login.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
+
 def send_password_email(user, title, body_template):
     hash = str(uuid.uuid4())
     valid_time = datetime.datetime.now() + datetime.timedelta(minutes=30)
@@ -465,6 +495,7 @@ def send_password_email(user, title, body_template):
     if not app.debug:
         mail.send(msg)
     return link
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -492,7 +523,10 @@ def signup():
         db.session.add(new_application_form)
         db.session.commit()
 
-        link = send_password_email(new_user, 'ePrihlaska - registrácia', NEW_USER_MAIL)
+        link = send_password_email(new_user,
+                                   'ePrihlaska - registrácia',
+                                   NEW_USER_MAIL)
+
         msg = consts.NEW_USER_MSG
         if app.debug:
             msg += '\n{}'.format(link)
@@ -513,6 +547,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
 @app.route('/new_password/<hash>', methods=['GET', 'POST'])
 def forgotten_password_hash(hash):
     token = ForgottenPasswordToken.query.filter_by(hash=hash).first()
@@ -531,7 +566,8 @@ def forgotten_password_hash(hash):
             db.session.commit()
             flash('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')
             return redirect(url_for('login'))
-        return render_template('forgotten_password.html', form=form, session=session,
+        return render_template('forgotten_password.html',
+                               form=form, session=session,
                                sp=dict(STUDY_PROGRAMME_CHOICES))
     else:
         token.valid = False
@@ -541,6 +577,7 @@ def forgotten_password_hash(hash):
         return redirect(url_for('forgotten_password'))
 
     return redirect(url_for('index'))
+
 
 @app.route('/forgotten_password', methods=['GET', 'POST'])
 def forgotten_password():
@@ -558,8 +595,8 @@ def forgotten_password():
             msg += '\n{}'.format(link)
         flash(msg)
 
-    return render_template('forgotten_password.html', form=form, session=session,
-                           sp=dict(STUDY_PROGRAMME_CHOICES))
+    return render_template('forgotten_password.html', form=form,
+                           session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
 def create_or_get_user_and_login(site, token, name, surname, email):
@@ -597,10 +634,12 @@ def create_or_get_user_and_login(site, token, name, surname, email):
     TokenModel.save(site, token, user)
     flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
 
+
 @app.route('/google/login', methods=['GET'])
 def google_login():
     callback_uri = url_for('google_authorize', _external=True)
     return google.authorize_redirect(callback_uri)
+
 
 @app.route('/google/auth', methods=['GET'])
 def google_authorize():
@@ -612,10 +651,12 @@ def google_authorize():
 
     return redirect(url_for('study_programme'))
 
+
 @app.route('/facebook/login', methods=['GET'])
 def facebook_login():
     callback_uri = url_for('facebook_authorize', _external=True)
     return facebook.authorize_redirect(callback_uri)
+
 
 @app.route('/facebook/auth', methods=['GET'])
 def facebook_authorize():
@@ -626,9 +667,14 @@ def facebook_authorize():
     name = '' if not len(data) else data[0]
     surname = '' if len(data) <= 1 else data[-1]
 
-    create_or_get_user_and_login('facebook', token, name, surname, profile.email)
+    create_or_get_user_and_login('facebook',
+                                 token,
+                                 name,
+                                 surname,
+                                 profile.email)
 
     return redirect(url_for('study_programme'))
+
 
 def process_apps(apps):
     for app in apps:
@@ -643,11 +689,13 @@ def process_apps(apps):
         app.app = out_app
     return apps
 
+
 def get_apps(s):
     apps = ApplicationForm.query \
             .filter_by(state=s) \
             .order_by(ApplicationForm.submitted_at.desc()).all()
     return process_apps(apps)
+
 
 @app.route('/admin/list')
 @require_remote_user
@@ -668,6 +716,7 @@ def admin_view(id):
     rendered = render_app(app)
     return rendered
 
+
 @app.route('/admin/print/<id>')
 @require_remote_user
 def admin_print(id):
@@ -678,6 +727,7 @@ def admin_print(id):
 
     rendered = render_app(app, print=True)
     return rendered
+
 
 @app.route('/admin/reset/<id>')
 @require_remote_user
@@ -694,6 +744,7 @@ def admin_reset(id):
 
     return redirect(url_for('admin_list'))
 
+
 @app.route('/admin/set_state/<id>/<int:state>')
 @require_remote_user
 def admin_set_state(id, state):
@@ -701,6 +752,7 @@ def admin_set_state(id, state):
     app.state = ApplicationStates(state)
     db.session.commit()
     return redirect(url_for('admin_list'))
+
 
 def get_cosign_cookies():
     name = request.environ['COSIGN_SERVICE']
@@ -728,6 +780,7 @@ def admin_ais_test():
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
+
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_ais2_process(id):
@@ -737,6 +790,7 @@ def admin_ais2_process(id):
     return send_application_to_ais2(id, application, form,
                                     process_type=None, beta=False)
 
+
 @app.route('/admin/ais2_process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_ais2_process_special(id, process_type):
     application = ApplicationForm.query.filter_by(id=id).first()
@@ -744,6 +798,7 @@ def admin_ais2_process_special(id, process_type):
     form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form,
                                     process_type=process_type, beta=False)
+
 
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
@@ -753,12 +808,14 @@ def admin_process(id):
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, None, beta=True)
 
+
 @app.route('/admin/process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_process_special(id, process_type):
     application = ApplicationForm.query.filter_by(id=id).first()
 
     form = AIS2CookieForm()
-    return send_application_to_ais2(id, application, form, process_type, beta=True)
+    return send_application_to_ais2(id, application, form, process_type,
+                                    beta=True)
 
 
 def send_application_to_ais2(id, application, form, process_type, beta=False):
@@ -807,12 +864,13 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
             application.state = ApplicationStates.processed
             db.session.commit()
 
+        sess = flask.json.loads(application.application)
         return render_template('admin_process.html',
                                ais2_output=ais2_output,
                                notes=notes, id=id,
                                error_output=error_output,
                                beta=beta, process_type=process_type,
-                               session=flask.json.loads(application.application),
+                               session=sess,
                                lists=LISTS)
 
     return render_template('admin_process.html',

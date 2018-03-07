@@ -5,6 +5,8 @@ import enum
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
+SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
+
 SUBMIT = _('Odoslať')
 NEXT = _('Ulož a pokračuj')
 CONTINUE = _('Pokračovať')
