@@ -31,3 +31,5 @@ ERROR_EMAIL_HEADER = 'ePrihlaska - error'
 UA_CODE = ''
 
 COSIGN_PROXY_DIR = ''
+
+SUBMISSIONS_OPEN = False

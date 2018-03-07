@@ -4,6 +4,13 @@
 
 {% block form %}
 
+{% if not submissions_open %}
+<div class="alert alert-info">
+  <strong>Podávanie prihlášok momentálne nie je otvorené</strong>. Ak ste podali prihlášku,
+  môžete si jej stav overiť po prihlásení.
+</div>
+{% endif %}
+
 <div class="row sm-flex items-center">
   <div class="col-sm-offset-1 col-sm-5">
     <p>
