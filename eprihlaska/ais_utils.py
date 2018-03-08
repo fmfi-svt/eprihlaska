@@ -98,20 +98,28 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     with app.collect_operations() as ops:
         app.d.rodneCisloButton.click()
 
-
-    # Close the dialog if some shows up
-    if ops and ops[-1].method == 'openDialog':
-        rodne_cislo_dlg = app.awaited_open_dialog(ops)
-
+    # FIXME: This i here is simply one nasty hack. Its purpose is simple: we
+    # really do not know what sort of an op will AIS return. Thus, we'll try
+    # openDialog and confirmBox 50 times and then continue with the process.
+    i = 0
+    while len(ops) != 0 and i < 50:
+        # Close the dialog if some shows up
         with app.collect_operations() as ops:
-            app.d.closeButton.click()
+            if ops and ops[0].method == 'openDialog':
+                rodne_cislo_dlg = app.awaited_open_dialog(ops)
 
-        rodne_cislo_dlg = app.awaited_close_dialog(ops)
+                with app.collect_operations() as ops:
+                    app.d.closeButton.click()
 
-    # It may happen that a confirmBox gets shown (for whatever reason).
-    # Should that happen, the confirmBox should be just closed.
-    if ops and ops[-1].method == 'confirmBox':
-        app.confirm_box(-1)
+                rodne_cislo_dlg = app.awaited_close_dialog(ops)
+
+        # It may happen that a confirmBox gets shown (for whatever reason).
+        # Should that happen, the confirmBox should be just closed.
+        with app.collect_operations() as ops:
+            if ops and ops[0].method == 'confirmBox':
+                app.confirm_box(-1)
+
+        i += 1
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
