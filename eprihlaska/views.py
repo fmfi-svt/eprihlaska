@@ -750,6 +750,13 @@ def admin_reset(id):
 def admin_set_state(id, state):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates(state)
+    sess = flask.json.loads(app.application)
+
+    # If application is set to submitted, set its session appropriately.
+    if app.state == ApplicationStates.submitted:
+        sess['application_submitted'] = True
+        app.application = flask.json.dumps(dict(sess))
+
     db.session.commit()
     return redirect(url_for('admin_list'))
 
