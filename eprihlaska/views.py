@@ -350,17 +350,17 @@ def admissions_waivers():
 @login_required
 @require_filled_form('admissions_waivers')
 def final():
-    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+    app_form = ApplicationForm.query.filter_by(user_id=current_user.id).first()
 
     # If the application is not after the submission step (that is, it is in
     # in_progress state) and submissions are not open, we should redirect to
     # the front page with an error message saying 'submissions are not open'
     if not app.config['SUBMISSIONS_OPEN'] \
-       and app.state == ApplicationStates.in_progress:
+       and app_form.state == ApplicationStates.in_progress:
         flash(consts.SUBMISSIONS_NOT_OPEN, 'error')
         return redirect(url_for('index'))
 
-    specific_symbol = 10000 + app.id
+    specific_symbol = 10000 + app_form.id
 
     hs_sp_check = True
     hs_education_level_check = True
@@ -394,7 +394,7 @@ def final():
                     grades.append(session[x][y])
     grades_filled = any(map(lambda x: x is not None, grades))
 
-    app_state = APPLICATION_STATES[app.state.value]
+    app_state = APPLICATION_STATES[app_form.state.value]
 
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
