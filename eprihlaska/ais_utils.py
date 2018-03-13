@@ -98,11 +98,13 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     with app.collect_operations() as ops:
         app.d.rodneCisloButton.click()
 
+    print("Before: {}".format(ops), file=sys.stderr)
     # FIXME: This i here is simply one nasty hack. Its purpose is simple: we
     # really do not know what sort of an op will AIS return. Thus, we'll try
     # openDialog and confirmBox 50 times and then continue with the process.
     i = 0
     while len(ops) != 0 and i < 50:
+        print("In: {}".format(ops), file=sys.stderr)
         # Close the dialog if some shows up
         with app.collect_operations() as ops:
             if ops and ops[0].method == 'openDialog':
@@ -119,6 +121,7 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             if ops and ops[0].method == 'confirmBox':
                 app.confirm_box(-1)
 
+        print("After: {}".format(ops), file=sys.stderr)
         i += 1
 
     # If the priezviskoTextField is not empty, it most probably means the
@@ -288,11 +291,34 @@ def save_application_form(ctx, application, lists, application_id, process_type)
 
     #if 'grades_mat' in session and 'grade_first_year' in session['grades_mat']
     # Remove all rows in vysvedceniaTable
+
+    print("Final: {}".format(ops), file=sys.stderr)
     while len(app.d.vysvedceniaTable.all_rows()) > 0:
         with app.collect_operations() as ops:
             app.d.odobratButton.click()
+        print("Removing: {}".format(ops), file=sys.stderr)
         # really confirm
-        app.confirm_box(2)
+        with app.collect_operations() as ops:
+            app.confirm_box(2)
+
+        if ops:
+            rodne_cislo_dlg = app.awaited_open_dialog(ops)
+
+            with app.collect_operations() as ops:
+                app.d.closeButton.click()
+
+            rodne_cislo_dlg = app.awaited_close_dialog([ops[0]])
+            print("In dialog: {}".format(ops), file=sys.stderr)
+            if len(ops) > 1:
+                rodne_cislo_dlg = app.awaited_open_dialog([ops[1]])
+
+                with app.collect_operations() as ops:
+                    app.d.closeButton.click()
+
+                print("after close: {}".format(ops), file=sys.stderr)
+                rodne_cislo_dlg = app.awaited_close_dialog(ops)
+
+        print("After confirm: {}".format(ops), file=sys.stderr)
 
     ABBRs, F = generate_subject_abbrevs(session)
 
@@ -365,7 +391,9 @@ def save_application_form(ctx, application, lists, application_id, process_type)
 
     ops = deal_with_confirm_boxes(app, ops, notes)
 
-    if ops[-1].method == 'messageBox':
+    print("After first confirm boxes: {}".format(ops), file=sys.stderr)
+
+    if ops and ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
             email = app.d.emailPrivateTextField.value
             notes['email_exists'] = email
@@ -375,7 +403,11 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             app.d.enterButton.click()
 
         ops = deal_with_confirm_boxes(app, ops, notes)
+    else:
+        with app.collect_operations() as ops:
+            app.d.enterButton.click()
 
+    print("After messageBox: {}".format(ops), file=sys.stderr)
     errors = app.d.statusHtmlArea.content
 
     dlg = app.awaited_close_dialog(ops)
@@ -383,7 +415,7 @@ def save_application_form(ctx, application, lists, application_id, process_type)
 
 
 def deal_with_confirm_boxes(app, ops, notes):
-    while ops[-1].method == 'confirmBox':
+    while ops and ops[-1].method == 'confirmBox':
         if 'evidenčným číslom' in ops[-1].args[0]:
             with app.collect_operations() as ops:
                 # Generate new id number for the app
