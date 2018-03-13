@@ -351,6 +351,15 @@ def admissions_waivers():
 @require_filled_form('admissions_waivers')
 def final():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
+
+    # If the application is not after the submission step (that is, it is in
+    # in_progress state) and submissions are not open, we should redirect to
+    # the front page with an error message saying 'submissions are not open'
+    if not app.config['SUBMISSIONS_OPEN'] \
+       and app.state == ApplicationStates.in_progress:
+        flash(consts.SUBMISSIONS_NOT_OPEN, 'error')
+        return redirect(url_for('index'))
+
     specific_symbol = 10000 + app.id
 
     hs_sp_check = True
@@ -750,6 +759,13 @@ def admin_reset(id):
 def admin_set_state(id, state):
     app = ApplicationForm.query.filter_by(id=id).first()
     app.state = ApplicationStates(state)
+    sess = flask.json.loads(app.application)
+
+    # If application is set to submitted, set its session appropriately.
+    if app.state == ApplicationStates.submitted:
+        sess['application_submitted'] = True
+        app.application = flask.json.dumps(dict(sess))
+
     db.session.commit()
     return redirect(url_for('admin_list'))
 
