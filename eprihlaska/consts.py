@@ -78,23 +78,23 @@ STUDY_PROGRAMME_2 = _('Druhý študijný program')
 STUDY_PROGRAMME_3 = _('Tretí študijný program')
 STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na dva študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')
 STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
-                            ('MAT', PRG_MAT),
-                            ('PMA', PRG_PMA),
-                            ('EFM', PRG_EFM),
-                            ('MMN', PRG_MNN),
-                            ('FYZ', PRG_FYZ),
-                            ('BMF', PRG_BMF),
-                            ('OZE', PRG_OZE),
-                            ('INF', PRG_INF),
-                            ('AIN', PRG_AIN),
-                            ('BIN', PRG_BIN),
-                            ('upMAFY', PRG_upMAFY),
-                            ('upMAIN', PRG_upMAIN),
-                            ('upFYIN', PRG_upFYIN),
-                            ('upMATV', PRG_upMATV),
-                            ('upMADG', PRG_upMADG),
-                            ('upINBI', PRG_upINBI),
-                            ('upINAN', PRG_upINAN)]
+                           ('MAT', PRG_MAT),
+                           ('PMA', PRG_PMA),
+                           ('EFM', PRG_EFM),
+                           ('MMN', PRG_MNN),
+                           ('FYZ', PRG_FYZ),
+                           ('BMF', PRG_BMF),
+                           ('OZE', PRG_OZE),
+                           ('INF', PRG_INF),
+                           ('AIN', PRG_AIN),
+                           ('BIN', PRG_BIN),
+                           ('upMAFY', PRG_upMAFY),
+                           ('upMAIN', PRG_upMAIN),
+                           ('upFYIN', PRG_upFYIN),
+                           ('upMATV', PRG_upMATV),
+                           ('upMADG', PRG_upMADG),
+                           ('upINBI', PRG_upINBI),
+                           ('upINAN', PRG_upINAN)]
 
 ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
@@ -211,9 +211,9 @@ YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od 
 SEX_CHOICES = [('male', MALE),
                ('female', FEMALE)]
 COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
-                                       ['id', 'Štát'],
-                                       sortby=1,
-                                       prepend=['703', '203'])
+                                   ['id', 'Štát'],
+                                   sortby=1,
+                                   prepend=['703', '203'])
 
 SELECT_CITY_CHOICE = [('999999', _('Zvoľte mesto alebo obec v SR'))]
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
@@ -225,13 +225,14 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 post_fmt=okres_fixer)
 
 CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
-                                ['id', 'PSČ'],
-                                fmt='{3}')
+                                    ['id', 'PSČ'],
+                                    fmt='{3}')
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
 
-HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX', _('Moja stredná škola nie je v zozname'))]
+HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX',
+                           _('Moja stredná škola nie je v zozname'))]
 HIGHSCHOOL_CHOICES = choices_from_csv(DIR + '/data/skoly.csv',
                                       ['St. šk.', 'Obec', 'Stredná škola',
                                        'Ulica'],
@@ -250,9 +251,8 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                               fmt='{1} - {2}')
 
 HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
-                                              ['St. šk.',
-                                               'Odbor - kod'],
-                                              fmt='{2}')
+                                          ['St. šk.', 'Odbor - kod'],
+                                          fmt='{2}')
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
@@ -262,6 +262,7 @@ APPLICATION_STATES = [_('rozpracovaná'),
                       _('podaná'),
                       _('vytlačená'),
                       _('spracovaná')]
+
 
 class ApplicationStates(enum.Enum):
     in_progress = 0
