@@ -77,7 +77,7 @@ def require_remote_user(func):
     def wrapper(*args, **kwargs):
         if not app.debug:
             if request.environ.get('REMOTE_USER') is None:
-                flash('Nemáte oprávnenie pre prístup k danému prístupovému bodu', 'error')
+                flash(conf.NO_ACCESS_MSG, 'error')
                 return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
@@ -165,7 +165,7 @@ def study_programme():
 
             # Select at least one study programme
             if study_programme[0] == '_':
-                flash('Vyberte si, prosím, aspoň prvý študijný program', 'error')
+                flash(consts.SELECT_STUDY_PROGRAMME, 'error')
                 return redirect(url_for('study_programme'))
 
             save_form(form)
@@ -251,7 +251,8 @@ def filter_competitions(competition_list, study_programme_list):
     }
 
     for comp, desc in competition_list:
-        if comp in ['MAT', 'SVOC_MAT'] and 'upINAN' not in study_programme_list:
+        if comp in ['MAT', 'SVOC_MAT'] \
+           and 'upINAN' not in study_programme_list:
             result_list.append((comp, desc))
 
         for c, sp_list in constraints.items():
@@ -266,10 +267,11 @@ def filter_competitions(competition_list, study_programme_list):
 def admissions_waivers():
 
     basic_data = session['basic_personal_data']
-    if basic_data['dean_invitation_letter'] and basic_data['dean_invitation_letter_no']:
+    if basic_data['dean_invitation_letter'] \
+       and basic_data['dean_invitation_letter_no']:
         # Pretend the admission_waivers form has been filled in
         session['admissions_waivers'] = ''
-        flash('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')
+        flash(consts.DEAN_LIST_MSG)
         return redirect(url_for('final'))
 
     form = AdmissionWaversForm(obj=munchify(dict(session)))
@@ -290,11 +292,13 @@ def admissions_waivers():
 
     further_study_info_constraints = {
         'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI',
+                             'upMAIN', 'upINAN'],
         'matura_bio_grade': ['BIN', 'BMF'],
         'matura_che_grade': ['BIN', 'BMF'],
         'will_take_fyz_matura': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI',
+                                 'upMAIN', 'upINAN'],
         'will_take_bio_matura': ['BIN', 'BMF'],
         'will_take_che_matura': ['BIN', 'BMF']
 
@@ -478,7 +482,7 @@ def login():
                 # menu generation to work correctly)
                 session['index'] = ''
 
-                flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
+                flash(consts.LOGIN_CONGRATS_MSG)
                 return redirect(url_for('study_programme'))
         flash('Nesprávne prihlasovacie údaje', 'error')
 
@@ -573,7 +577,7 @@ def forgotten_password_hash(hash):
             db.session.add(user)
             db.session.add(token)
             db.session.commit()
-            flash('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')
+            flash(consts.PASSWD_CHANGED_MSG)
             return redirect(url_for('login'))
         return render_template('forgotten_password.html',
                                form=form, session=session,
@@ -582,7 +586,7 @@ def forgotten_password_hash(hash):
         token.valid = False
         db.session.add(token)
         db.session.commit()
-        flash('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu.', 'error')
+        flash(consts.INVALID_TOKEN_MSG, 'error')
         return redirect(url_for('forgotten_password'))
 
     return redirect(url_for('index'))
@@ -795,6 +799,55 @@ def admin_ais_test():
     soup = ctx.request_html('/ais/login.do', method='POST')
     test_ais(ctx)
     return redirect(url_for('admin_list'))
+
+
+@app.route('/admin/submitted_stats')
+@require_remote_user
+def admin_submitted_stats():
+    from werkzeug.datastructures import Headers
+    from werkzeug.wrappers import Response
+    from flask import stream_with_context
+
+    def generate():
+        import io
+        import csv
+        A = ApplicationForm \
+            .query \
+            .filter(ApplicationForm.submitted_at.isnot(None)) \
+            .all()
+
+        data = io.StringIO()
+
+        w = csv.writer(data)
+        w.writerow(('school', 'started_at', 'submitted_at'))
+
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+
+        for app in A:
+            sess = flask.json.loads(app.application)
+            if not sess['finished_highschool_check'] == 'SK':
+                continue
+
+            user = User.query.filter_by(id=app.user_id).first()
+            hs_code = sess['studies_in_sr']['highschool']
+            highschool = LISTS['highschool'][hs_code]
+
+            w.writerow((highschool,
+                        user.registered_at,
+                        app.submitted_at))
+
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    headers = Headers()
+    headers.set('Content-Disposition', 'attachment',
+                filename='submitted_applications_stats.csv')
+
+    return Response(stream_with_context(generate()),
+                    mimetype='text/csv', headers=headers)
 
 
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])

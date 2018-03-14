@@ -5,6 +5,13 @@ import enum
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
+SELECT_STUDY_PROGRAMME = _('Vyberte si, prosím, aspoň prvý študijný program')
+NO_ACCESS_MSG = _('Nemáte oprávnenie pre prístup k danému prístupovému bodu')
+DEAN_LIST_MSG = _('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')  # noqa
+LOGIN_CONGRATS_MSG = _('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')  # noqa
+PASSWD_CHANGED_MSG = _('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')  # noqa
+INVALID_TOKEN_MSG = _('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu.')  # noqa
+
 SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
 
 SUBMIT = _('Odoslať')
@@ -46,11 +53,11 @@ MOTHER_NAME = _('Meno matky')
 MOTHER_SURNAME = _('Priezvisko matky')
 MOTHER_BORNWITH_SURNAME = _('Rodné priezvisko matky')
 
-PERSONAL_INFO_CHECK = _('Dávam súhlas, aby vysoká škola spracúvala moje osobné údaje obsiahnuté v tejto prihláške a jej prílohách na účely prijímacieho konania až do termínu konania zápisu do 1. ročníka štúdia na vysokej škole.')
+PERSONAL_INFO_CHECK = _('Dávam súhlas, aby vysoká škola spracúvala moje osobné údaje obsiahnuté v tejto prihláške a jej prílohách na účely prijímacieho konania až do termínu konania zápisu do 1. ročníka štúdia na vysokej škole.')  # noqa
 
 DEAN_INV_LIST_YN = _('Dostal(a) som list od dekana')
 DEAN_INV_LIST_NO = _('Číslo listu od dekana')
-DEAN_INV_LIST_NO_DESC = _('Prosím, vyplňte číslo listu od dekana, ktorý ste dostali')
+DEAN_INV_LIST_NO_DESC = _('Prosím, vyplňte číslo listu od dekana, ktorý ste dostali')  # noqa
 
 PRG_MAT = _('Matematika')
 PRG_PMA = _('Poistná matematika')
@@ -76,7 +83,7 @@ STUDY_PROGRAMMES = _('Študijné programy')
 STUDY_PROGRAMME_1 = _('Prvý študijný program')
 STUDY_PROGRAMME_2 = _('Druhý študijný program')
 STUDY_PROGRAMME_3 = _('Tretí študijný program')
-STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na dva študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')
+STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na dva študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')  # noqa
 STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('MAT', PRG_MAT),
                            ('PMA', PRG_PMA),
@@ -104,45 +111,45 @@ ADDRESS_CITY_FOREIGN = _('Mesto (v zahraničí)')
 ADDRESS_POSTAL_NO = _('PSČ')
 ADDRESS_CITY_FOREIGN_FILL = _('Napíšte, prosím, názov mesta.')
 
-ADDRESS_STREET_DESC = _('V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce.')
+ADDRESS_STREET_DESC = _('V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce.')  # noqa
 
 PERMANENT_ADDRESS = _('Adresa trvalého bydliska')
-HAS_CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska')
+HAS_CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska')  # noqa
 CORRESPONDENCE_ADDRESS = _('Korešpondenčná adresa')
 
-HAS_PREVIOUSLY_STUDIED = _('V minulosti som študoval(a) na vysokej škole v SR v I. stupni štúdia alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)')
+HAS_PREVIOUSLY_STUDIED = _('V minulosti som študoval(a) na vysokej škole v SR v I. stupni štúdia alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)')  # noqa
 FINISHED_HIGHSCHOOL = _('Absolvovaná stredná škola')
 IN_SR = _('v Slovenskej republike')
 OUTSIDE_OF_SR = _('mimo Slovenskej republiky')
 
 HIGHSCHOOL = _('Navštevovaná stredná škola')
-HIGHSCHOOL_DESC = _('V prípade, že vaša stredná škola nie je v zozname, zvoľte možnosť "Moja stredná škola nie je v zozname" (na začiatku zoznamu)')
+HIGHSCHOOL_DESC = _('V prípade, že vaša stredná škola nie je v zozname, zvoľte možnosť "Moja stredná škola nie je v zozname" (na začiatku zoznamu)')  # noqa
 STUDY_PROGRAMME_CODE = _('Kód študijného odboru')
-STUDY_PROGRAMME_CODE_DESC = _('Kód študijného odboru je uvedený na vašom vysvedčení. V prípade, že na vysvedčení nemáte uvedený jeden z týchto študijných kódov, zvoľte "nemám kód študijného odboru" (na začiatku zoznamu)')
+STUDY_PROGRAMME_CODE_DESC = _('Kód študijného odboru je uvedený na vašom vysvedčení. V prípade, že na vysvedčení nemáte uvedený jeden z týchto študijných kódov, zvoľte "nemám kód študijného odboru" (na začiatku zoznamu)')  # noqa
 HS_EDUCATION_LEVEL = _('Dosiahnuté / očakávané stredoškolské vzdelanie')
-FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval(a) som / absolvujem strednú školu s maturitou mimo SR')
+FOREIGN_FINISHED_HIGHSCHOOL = _('Absolvoval(a) som / absolvujem strednú školu s maturitou mimo SR')  # noqa
 
 FOREIGN_STUDIES = _('Štúdium mimo SR')
 STUDIES_IN_SR = _('Štúdium na Slovensku')
 
 COMPETITION_CHOICES = [
     ('_', _('neuvádzam výsledok zo súťaže')),
-    ('MAT', _('úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo celoštátne kolo')),
-    ('FYZ', _('úspešný riešiteľ - Fyzikálna olympiáda A alebo B - krajské alebo celoštátne kolo')),
-    ('INF', _('úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo celoštátne kolo')),
-    ('BIO', _('úspešný riešiteľ - Biologická olympiáda A alebo B - krajské alebo celoštátne kolo')),
-    ('CHM', _('úspešný riešiteľ - Chemická olympiáda A alebo B - krajské alebo celoštátne kolo')),
-    ('SVOC_MAT', _('úspešný účastník - Stredoškolská odborná činnost odbor 02 matematika, fyzika - celoštátne kolo')),
-    ('SVOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),
-    ('SVOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),
-    ('SVOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),
+    ('MAT', _('úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
+    ('FYZ', _('úspešný riešiteľ - Fyzikálna olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
+    ('INF', _('úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo celoštátne kolo')),  # noqa
+    ('BIO', _('úspešný riešiteľ - Biologická olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
+    ('CHM', _('úspešný riešiteľ - Chemická olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
+    ('SVOC_MAT', _('úspešný účastník - Stredoškolská odborná činnost odbor 02 matematika, fyzika - celoštátne kolo')),  # noqa
+    ('SVOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),  # noqa
+    ('SVOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),  # noqa
+    ('SVOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),  # noqa
     ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo'))
 ]
 
 COMPETITION_YEAR = _('Rok')
 COMPETITION_NAME = _('Názov súťaže')
 COMPETITION_FURTHER_INFO = _('Ďalšie informácie')
-COMPETITION_FURTHER_INFO_DESC = _('V prípade krajského kola do tohto poľa prosím napíšte názov kraja, v ktorom sa daná súťaž konala. V prípade iných kôl do tohto poľa prosím vpíšte akékoľvek iné informácie, ktoré by mohli pomôcť pri identifikácii vášho úspechu.')
+COMPETITION_FURTHER_INFO_DESC = _('V prípade krajského kola do tohto poľa prosím napíšte názov kraja, v ktorom sa daná súťaž konala. V prípade iných kôl do tohto poľa prosím vpíšte akékoľvek iné informácie, ktoré by mohli pomôcť pri identifikácii vášho úspechu.')  # noqa
 
 COMPETITION_FIRST = _('Úspech na súťaži (1)')
 COMPETITION_SECOND = _('Úspech na súťaži (2)')
@@ -159,7 +166,7 @@ MATURA_CHE_GRADE = _('známka z maturity z chémie')
 MATURA_BIO_GRADE = _('známka z maturity z biológie')
 
 WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky')
-WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')
+WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')  # noqa
 WILL_TAKE_MAT_MATURA = _('maturujem z matematiky')
 WILL_TAKE_FYZ_MATURA = _('maturujem z fyziky')
 WILL_TAKE_INF_MATURA = _('maturujem z informatiky')
@@ -198,15 +205,15 @@ SIGNUP = _('Zaregistrovať')
 LOGOUT = _('Odhlásiť')
 WELCOME = _('Vitajte {}')
 
-FORGOTTEN_PASSWORD_MAIL = _('V rámci systému elektronickej prihlášky FMFI UK bol pre Váš účet aktivovaný postup pre zmenu zabudnutého hesla. Ak chcete heslo zmeniť, použite nasledujúci link: {}\n\nV inom prípade prosím tento email ignorujte.\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')
+FORGOTTEN_PASSWORD_MAIL = _('V rámci systému elektronickej prihlášky FMFI UK bol pre Váš účet aktivovaný postup pre zmenu zabudnutého hesla. Ak chcete heslo zmeniť, použite nasledujúci link: {}\n\nV inom prípade prosím tento email ignorujte.\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')  # noqa
 
-FORGOTTEN_PASSWORD_MSG = _('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')
+FORGOTTEN_PASSWORD_MSG = _('Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom postupe.')  # noqa
 
-NEW_USER_MAIL = _('Vitajte v systéme elektronickej prihlášky FMFI UK. Pre vytvorenie hesla a následné prihlásenie prosím použite nasledujúci link: {}\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')
+NEW_USER_MAIL = _('Vitajte v systéme elektronickej prihlášky FMFI UK. Pre vytvorenie hesla a následné prihlásenie prosím použite nasledujúci link: {}\n\nS pozdravom,\nhttps://prihlaska.fmph.uniba.sk')  # noqa
 
-NEW_USER_MSG = _('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')
+NEW_USER_MSG = _('Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte podľa pokynov zaslaných na zadaný email.')  # noqa
 
-YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')
+YEAR_ERR = _('Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po %(max)s')  # noqa
 
 SEX_CHOICES = [('male', MALE),
                ('female', FEMALE)]
