@@ -801,6 +801,55 @@ def admin_ais_test():
     return redirect(url_for('admin_list'))
 
 
+@app.route('/admin/submitted_stats')
+@require_remote_user
+def admin_submitted_stats():
+    from werkzeug.datastructures import Headers
+    from werkzeug.wrappers import Response
+    from flask import stream_with_context
+
+    def generate():
+        import io
+        import csv
+        A = ApplicationForm \
+            .query \
+            .filter(ApplicationForm.submitted_at.isnot(None)) \
+            .all()
+
+        data = io.StringIO()
+
+        w = csv.writer(data)
+        w.writerow(('school', 'started_at', 'submitted_at'))
+
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+
+        for app in A:
+            sess = flask.json.loads(app.application)
+            if not sess['finished_highschool_check'] == 'SK':
+                continue
+
+            user = User.query.filter_by(id=app.user_id).first()
+            hs_code = sess['studies_in_sr']['highschool']
+            highschool = LISTS['highschool'][hs_code]
+
+            w.writerow((highschool,
+                        user.registered_at,
+                        app.submitted_at))
+
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    headers = Headers()
+    headers.set('Content-Disposition', 'attachment',
+                filename='submitted_applications_stats.csv')
+
+    return Response(stream_with_context(generate()),
+                    mimetype='text/csv', headers=headers)
+
+
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_ais2_process(id):
