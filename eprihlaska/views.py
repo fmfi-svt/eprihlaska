@@ -880,6 +880,10 @@ def admin_scio_stats():
             if 'further_study_info' not in sess:
                 continue
 
+            if 'scio_date' not in sess['further_study_info'] and \
+               'scio_percentile' not in sess['further_study_info']:
+                continue
+
             name = sess['basic_personal_data']['name']
             surname = sess['basic_personal_data']['surname']
             birth_no = sess['birth_no']
