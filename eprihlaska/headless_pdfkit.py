@@ -1,7 +1,9 @@
 import pdfkit
+
+
 class HeadlessPdfKit(pdfkit.PDFKit):
     def command(self, path=None):
-        return ['xvfb-run', '--'] + super().command(path)
+        return ['xvfb-run', '-a', '--'] + super().command(path)
 
 
 def generate_pdf(rendered, options=None):
@@ -10,4 +12,3 @@ def generate_pdf(rendered, options=None):
     pdf = HeadlessPdfKit(rendered, 'string',
                          options=options).to_pdf(False)
     return pdf
-

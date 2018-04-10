@@ -818,7 +818,7 @@ def admin_submitted_stats():
 
         data = io.StringIO()
 
-        w = csv.writer(data)
+        w = csv.writer(data, delimiter='\t')
         w.writerow(('school', 'started_at', 'submitted_at'))
 
         yield data.getvalue()
@@ -844,7 +844,58 @@ def admin_submitted_stats():
 
     headers = Headers()
     headers.set('Content-Disposition', 'attachment',
-                filename='submitted_applications_stats.csv')
+                filename='submitted_applications_stats.tsv')
+
+    return Response(stream_with_context(generate()),
+                    mimetype='text/csv', headers=headers)
+
+
+@app.route('/admin/scio_stats')
+@require_remote_user
+def admin_submitted_stats():
+    from werkzeug.datastructures import Headers
+    from werkzeug.wrappers import Response
+    from flask import stream_with_context
+
+    def generate():
+        import io
+        import csv
+        A = ApplicationForm \
+            .query \
+            .filter(ApplicationForm.submitted_at.isnot(None)) \
+            .all()
+
+        data = io.StringIO()
+
+        w = csv.writer(data, delimiter='\t')
+        w.writerow(('name', 'surname', 'birth_no', 'scio_percentile',
+                    'scio_date'))
+
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+
+        for app in A:
+            sess = flask.json.loads(app.application)
+            if 'further_study_info' not in sess:
+                continue
+
+            name = sess['basic_personal_data']['name']
+            surname = sess['basic_personal_data']['surname']
+            birth_no = sess['birth_no']
+            scio_percentile = sess['further_study_info']['scio_percentile']
+            scio_date = sess['further_study_info']['scio_percentile']
+
+            w.writerow((name, surname, birth_no,
+                        scio_percentile, scio_date))
+
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    headers = Headers()
+    headers.set('Content-Disposition', 'attachment',
+                filename='scio_stats.tsv')
 
     return Response(stream_with_context(generate()),
                     mimetype='text/csv', headers=headers)
