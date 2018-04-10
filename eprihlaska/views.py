@@ -847,7 +847,7 @@ def admin_submitted_stats():
                 filename='submitted_applications_stats.tsv')
 
     return Response(stream_with_context(generate()),
-                    mimetype='text/csv', headers=headers)
+                    mimetype='text/tsv', headers=headers)
 
 
 @app.route('/admin/scio_stats')
@@ -884,7 +884,7 @@ def admin_scio_stats():
             surname = sess['basic_personal_data']['surname']
             birth_no = sess['birth_no']
             scio_percentile = sess['further_study_info']['scio_percentile']
-            scio_date = sess['further_study_info']['scio_percentile']
+            scio_date = sess['further_study_info']['scio_date']
 
             w.writerow((name, surname, birth_no,
                         scio_percentile, scio_date))
@@ -898,7 +898,7 @@ def admin_scio_stats():
                 filename='scio_stats.tsv')
 
     return Response(stream_with_context(generate()),
-                    mimetype='text/csv', headers=headers)
+                    mimetype='text/tsv', headers=headers)
 
 
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
