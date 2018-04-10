@@ -852,7 +852,7 @@ def admin_submitted_stats():
 
 @app.route('/admin/scio_stats')
 @require_remote_user
-def admin_submitted_stats():
+def admin_scio_stats():
     from werkzeug.datastructures import Headers
     from werkzeug.wrappers import Response
     from flask import stream_with_context
