@@ -890,6 +890,9 @@ def admin_scio_stats():
             scio_percentile = sess['further_study_info']['scio_percentile']
             scio_date = sess['further_study_info']['scio_date']
 
+            if scio_date.strip() == scio_percentile.strip() == '':
+                continue
+
             w.writerow((name, surname, birth_no,
                         scio_percentile, scio_date))
 
