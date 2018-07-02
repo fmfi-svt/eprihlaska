@@ -1,7 +1,7 @@
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'te4EeGoh1axee3Nah5iwaimoogahBeithoh5ieyaanooH4Zumoox8ooQuoo8'
+SECRET_KEY = 'UumuV3neeGouluut7eirOhk8ushi0aizei0ieteeeeT0laiLie6EetahX8Ei'
 
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://eprihlaska:ia5iiyoob6evool3Ahr8@localhost/eprihlaska'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://eprihlaska:Er5phaLixie1raPhaipe@localhost/eprihlaska'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 OAUTH_CLIENT_CACHE_TYPE = 'simple'
