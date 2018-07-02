@@ -91,11 +91,11 @@ class BasicPersonalDataForm(FlaskForm):
 
 class SelectStudyProgrammeForm(FlaskForm):
     study_programme_1 = SelectField(label=c.STUDY_PROGRAMME_1,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
+                                    choices=c.STUDY_PROGRAMME_CHOICES_ACTIVE)
     study_programme_2 = SelectField(label=c.STUDY_PROGRAMME_2,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
+                                    choices=c.STUDY_PROGRAMME_CHOICES_ACTIVE)
     study_programme_3 = SelectField(label=c.STUDY_PROGRAMME_3,
-                                    choices=c.STUDY_PROGRAMME_CHOICES)
+                                    choices=c.STUDY_PROGRAMME_CHOICES_ACTIVE)
 
 class StudyProgrammeForm(FlaskForm):
     basic_personal_data = FormField(BasicPersonalDataForm,
