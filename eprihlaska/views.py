@@ -305,28 +305,28 @@ def admissions_waivers():
     }
 
     relevant_years = {
-        'external_matura_percentile': [2014, 2015, 2016, 2017],
-        'scio_percentile': [2014, 2015, 2016, 2017],
-        'scio_date': [2014, 2015, 2016, 2017],
-        'matura_mat_grade': [2015, 2016, 2017],
-        'matura_fyz_grade': [2015, 2016, 2017],
-        'matura_inf_grade': [2015, 2016, 2017],
-        'matura_bio_grade': [2015, 2016, 2017],
-        'matura_che_grade': [2015, 2016, 2017],
-        'will_take_external_mat_matura': [2018],
-        'will_take_scio': [2018],
-        'will_take_mat_matura': [2018],
-        'will_take_fyz_matura': [2018],
-        'will_take_inf_matura': [2018],
-        'will_take_bio_matura': [2018],
-        'will_take_che_matura': [2018],
+        'external_matura_percentile': [2014, 2015, 2016, 2017, 2018],
+        'scio_percentile': [2014, 2015, 2016, 2017, 2018],
+        'scio_date': [2014, 2015, 2016, 2017, 2018],
+        'matura_mat_grade': [2015, 2016, 2017, 2018],
+        'matura_fyz_grade': [2015, 2016, 2017, 2018],
+        'matura_inf_grade': [2015, 2016, 2017, 2018],
+        'matura_bio_grade': [2015, 2016, 2017, 2018],
+        'matura_che_grade': [2015, 2016, 2017, 2018],
+        'will_take_external_mat_matura': [2019],
+        'will_take_scio': [2019],
+        'will_take_mat_matura': [2019],
+        'will_take_fyz_matura': [2019],
+        'will_take_inf_matura': [2019],
+        'will_take_bio_matura': [2019],
+        'will_take_che_matura': [2019],
     }
 
     study_programme_set = set(session['study_programme'])
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           matura_year not in [2015, 2016, 2017, 2018]:
+           matura_year not in [2015, 2016, 2017, 2018, 2019]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
