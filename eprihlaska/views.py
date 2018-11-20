@@ -460,7 +460,7 @@ def grades_control():
 
 def render_app(app, print=False, use_app_session=True):
     los = session['length_of_study']
-    label_length_of_study = (consts.LENGTH_OF_STUDY_CHOICES)[los]
+    label_length_of_study = dict(consts.LENGTH_OF_STUDY_CHOICES)[los]
 
     sess = session
     if use_app_session:
