@@ -459,6 +459,9 @@ def grades_control():
 
 
 def render_app(app, print=False, use_app_session=True):
+    los = session['length_of_study']
+    label_length_of_study = (consts.LENGTH_OF_STUDY_CHOICES)[los]
+
     sess = session
     if use_app_session:
         sess = flask.json.loads(app.application)
@@ -468,7 +471,11 @@ def render_app(app, print=False, use_app_session=True):
                                lists=LISTS, id=app.id,
                                specific_symbol=specific_symbol,
                                submitted_at=app.submitted_at,
-                               consts=consts, print=print)
+                               consts=consts, print=print,
+                               label_first_year=consts.GRADE_FIRST_YEAR[los],
+                               label_second_year=consts.GRADE_SECOND_YEAR[los],
+                               label_third_year=consts.GRADE_THIRD_YEAR[los],
+                               label_length_of_study=label_length_of_study)
     return rendered
 
 
