@@ -160,10 +160,15 @@ class ForeignStudiesForm(FlaskForm):
 class PreviousStudiesForm(FlaskForm):
     has_previously_studied = BooleanField(label=c.HAS_PREVIOUSLY_STUDIED)
     finished_highschool_check = RadioField(label=c.FINISHED_HIGHSCHOOL,
-                                     choices=[('SK', c.IN_SR),
-                                              ('OUTSIDE', c.OUTSIDE_OF_SR)],
-                                     default='SK',
-                                     validators=[validators.DataRequired()])
+                                           choices=[('SK', c.IN_SR),
+                                                    ('OUTSIDE', c.OUTSIDE_OF_SR)],
+                                           default='SK',
+                                           validators=[validators.DataRequired()])
+    length_of_study = RadioField(label=c.LENGTH_OF_STUDY,
+                                 choices=c.LENGTH_OF_STUDY_CHOICES,
+                                 default=c.LENGTH_OF_STUDY_DEFAULT,
+                                 validators=[validators.DataRequired()])
+
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
@@ -227,23 +232,23 @@ class FurtherStudyInfoForm(FlaskForm):
 class FurtherGradesInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
-    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
+    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR[c.LENGTH_OF_STUDY_DEFAULT], # noqa
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
-    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
+    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                      validators=[validators.Optional(),
                                                  validators.NumberRange(min=g_min,
                                                                         max=g_max,
                                                                         message=c.GRADE_ERR)])
-    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
+    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-class AdmissionWaversForm(FlaskForm):
+class AdmissionWaiversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
                                    label=c.FURTHER_STUDY_INFO)
 

@@ -179,9 +179,24 @@ WILL_TAKE_CHE_MATURA = _('maturujem z chémie')
 
 FURTHER_STUDY_INFO = _('Prospech na strednej škole')
 
-GRADE_FIRST_YEAR = _('koncoročná známka v 1. ročníku / kvinte')
-GRADE_SECOND_YEAR = _('koncoročná známka v 2. ročníku / sexte')
-GRADE_THIRD_YEAR = _('koncoročná známka v 3. ročníku / septime')
+GRADE_FIRST_YEAR = {
+    '4': _('koncoročná známka v 1. ročníku'),
+    '8': _('koncoročná známka v kvinte'),
+    '5': _('koncoročná známka v 2. ročníku'),
+    '0': _('koncoročná známka v 1. ročníku')
+}
+GRADE_SECOND_YEAR = {
+    '4': _('koncoročná známka v 2. ročníku'),
+    '8': _('koncoročná známka v sexte'),
+    '5': _('koncoročná známka v 3. ročníku'),
+    '0': _('koncoročná známka v 2. ročníku')
+}
+GRADE_THIRD_YEAR = {
+    '4': _('koncoročná známka v 3. ročníku'),
+    '8': _('koncoročná známka v septime'),
+    '5': _('koncoročná známka v 4. ročníku'),
+    '0': _('koncoročná známka v 3. ročníku')
+}
 
 GRADES_MAT = _('Známky z matematiky')
 GRADES_FYZ = _('Známky z fyziky')
@@ -242,6 +257,14 @@ CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
+
+LENGTH_OF_STUDY = 'Dĺžka štúdia na strednej škole'
+LENGTH_OF_STUDY_CHOICES = [('4', _('4 roky')),
+                           ('5', _('5 rokov')),
+                           ('8', _('8 rokov')),
+                           ('0', _('iná'))]
+LENGTH_OF_STUDY_DEFAULT = '4'
+
 
 HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX',
                            _('Moja stredná škola nie je v zozname'))]

@@ -5,7 +5,7 @@ from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaversForm,
+                              PreviousStudiesForm, AdmissionWaiversForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
                               NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -274,7 +274,7 @@ def admissions_waivers():
         flash(consts.DEAN_LIST_MSG)
         return redirect(url_for('final'))
 
-    form = AdmissionWaversForm(obj=munchify(dict(session)))
+    form = AdmissionWaiversForm(obj=munchify(dict(session)))
 
     # Filter out competitions based on selected study programmes.
     for subform in form:
@@ -290,6 +290,14 @@ def admissions_waivers():
         'grades_bio': ['BMF', 'BIN'],
         'grades_che': ['BIN'],
     }
+
+    # Set labels for grades of respective study years based on
+    # `length_of_study`
+    los = session['length_of_study']
+    for grade_key in grade_constraints.keys():
+        form[grade_key].grade_first_year.label.text = consts.GRADE_FIRST_YEAR[los] # noqa
+        form[grade_key].grade_second_year.label.text = consts.GRADE_SECOND_YEAR[los] # noqa
+        form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
 
     further_study_info_constraints = {
         'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
