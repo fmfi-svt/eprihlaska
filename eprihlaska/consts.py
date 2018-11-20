@@ -159,7 +159,8 @@ COMPETITION_FIRST = _('Úspech na súťaži (1)')
 COMPETITION_SECOND = _('Úspech na súťaži (2)')
 COMPETITION_THIRD = _('Úspech na súťaži (3)')
 
-EXTERNAL_MATURA_PERCENTILE = _('percentil externej maturity z matematiky')
+EXTERNAL_MATURA_PERCENTILE = _('percentil externej maturity z matematiky (SR) / maturitního didaktického testu z matematiky (ČR)')
+
 SCIO_PERCENTILE = _('percentil autorizovanej skúšky z matematiky (SCIO)')
 SCIO_DATE = _('dátum vykonania autorizovanej skúšky z matematiky (SCIO)')
 
@@ -169,7 +170,7 @@ MATURA_INF_GRADE = _('známka z maturity z informatiky')
 MATURA_CHE_GRADE = _('známka z maturity z chémie')
 MATURA_BIO_GRADE = _('známka z maturity z biológie')
 
-WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky')
+WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky (SR) / maturitního didaktického testu z matematiky (ČR)')
 WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')  # noqa
 WILL_TAKE_MAT_MATURA = _('maturujem z matematiky')
 WILL_TAKE_FYZ_MATURA = _('maturujem z fyziky')

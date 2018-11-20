@@ -190,6 +190,16 @@ class CompetitionSuccessFormItem(FlaskForm):
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
+
+    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+
+    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
+    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
+    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
+    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
+    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
+
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
     scio_date = StringField(label=c.SCIO_DATE)
@@ -220,14 +230,6 @@ class FurtherStudyInfoForm(FlaskForm):
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
-    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
-
-    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
-    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
-    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
-    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
-    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
 
 class FurtherGradesInfoForm(FlaskForm):
     g_min = 1

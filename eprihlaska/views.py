@@ -316,21 +316,24 @@ def admissions_waivers():
 
     relevant_years = {
         'external_matura_percentile': [2016, 2017, 2018],
-        'scio_percentile': [2016, 2017, 2018],
-        'scio_date': [2016, 2017, 2018],
         'matura_mat_grade': [2016, 2017, 2018],
         'matura_fyz_grade': [2016, 2017, 2018],
         'matura_inf_grade': [2016, 2017, 2018],
         'matura_bio_grade': [2016, 2017, 2018],
         'matura_che_grade': [2016, 2017, 2018],
         'will_take_external_mat_matura': [2019],
-        'will_take_scio': [2019],
         'will_take_mat_matura': [2019],
         'will_take_fyz_matura': [2019],
         'will_take_inf_matura': [2019],
         'will_take_bio_matura': [2019],
         'will_take_che_matura': [2019],
     }
+
+    further_study_whitelist = [
+        'scio_percentile',
+        'scio_date',
+        'will_take_scio'
+    ]
 
     study_programme_set = set(session['study_programme'])
     matura_year = session['basic_personal_data']['matura_year']
@@ -346,7 +349,8 @@ def admissions_waivers():
 
     for k, v in relevant_years.items():
         if matura_year not in v:
-            if k in form['further_study_info']._fields:
+            if k in form['further_study_info']._fields and \
+                    k not in further_study_whitelist:
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
@@ -436,9 +440,15 @@ def submit_app():
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
+    los = session['length_of_study']
+
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_template('grade_listing.html', session=session,
-                               id=app.id)
+                               id=app.id,
+                               label_first_year=consts.GRADE_FIRST_YEAR[los],
+                               label_second_year=consts.GRADE_SECOND_YEAR[los],
+                               label_third_year=consts.GRADE_THIRD_YEAR[los])
+
     pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
 
     response = make_response(pdf)
