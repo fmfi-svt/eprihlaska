@@ -79,6 +79,16 @@
         </tr>
         {% endif %}
 
+        {% if 'grades_che' in session and 'grade_first_year' in session['grades_che'] %}
+        <tr>
+          <td>Chémia</td>
+          <td>{{ session['grades_che']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_che']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_che']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
+
       </table>
     </div>
   </div>

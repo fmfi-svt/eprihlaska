@@ -80,10 +80,10 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     matura_year = IntegerField(c.MATURA_YEAR,
-                               default=2018,
+                               default=c.CURRENT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
-                                                                  max=2018)])
+                                                                  max=c.CURRENT_MATURA_YEAR)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
@@ -253,6 +253,8 @@ class AdmissionWaversForm(FlaskForm):
                            label=c.GRADES_FYZ)
     grades_bio = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_BIO)
+    grades_che = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_CHE)
 
     competition_1 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_FIRST)
@@ -263,12 +265,14 @@ class AdmissionWaversForm(FlaskForm):
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
+
 class LoginForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email()])
     password = PasswordField(label=c.PASSWORD,
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
+
 
 class ForgottenPasswordForm(FlaskForm):
     email = StringField(label=c.EMAIL,

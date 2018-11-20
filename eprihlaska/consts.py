@@ -62,10 +62,11 @@ DEAN_INV_LIST_NO_DESC = _('Prosím, vyplňte číslo listu od dekana, ktorý ste
 PRG_MAT = _('Matematika')
 PRG_PMA = _('Poistná matematika')
 PRG_EFM = _('Ekonomická a finančná matematika')
-PRG_MNN = _('Manažérska matematika')
+PRG_MMN = _('Manažérska matematika')
 PRG_FYZ = _('Fyzika')
 PRG_BMF = _('Biomedicínska fyzika')
 PRG_OZE = _('Obnoviteľné zdroje energie a environmentálna fyzika')
+PRG_TEF = _('Technická fyzika')
 PRG_INF = _('Informatika')
 PRG_AIN = _('Aplikovaná informatika')
 PRG_BIN = _('Bioinformatika')
@@ -84,30 +85,15 @@ STUDY_PROGRAMME_1 = _('Prvý študijný program')
 STUDY_PROGRAMME_2 = _('Druhý študijný program')
 STUDY_PROGRAMME_3 = _('Tretí študijný program')
 STUDY_PROGRAMME_DESC = _('Vyberte si aspoň jeden a najviac tri študijné programy. Poradie študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. v prípade splnenia podmienok na dva študijné programy bude uchádzač prijatý na ten, ktorý bude uvedený na prvom mieste.')  # noqa
-STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
-                           ('MAT', PRG_MAT),
-                           ('PMA', PRG_PMA),
-                           ('MMN', PRG_MNN),
-                           ('FYZ', PRG_FYZ),
-                           ('BMF', PRG_BMF),
-                           ('OZE', PRG_OZE),
-                           ('INF', PRG_INF),
-                           ('AIN', PRG_AIN),
-                           ('BIN', PRG_BIN),
-                           ('upMAFY', PRG_upMAFY),
-                           ('upMAIN', PRG_upMAIN),
-                           ('upFYIN', PRG_upFYIN),
-                           ('upMADG', PRG_upMADG),
-                           ('upINBI', PRG_upINBI),
-                           ('upINAN', PRG_upINAN)]
 STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('MAT', PRG_MAT),
                            ('PMA', PRG_PMA),
                            ('EFM', PRG_EFM),
-                           ('MMN', PRG_MNN),
+                           ('MMN', PRG_MMN),
                            ('FYZ', PRG_FYZ),
                            ('BMF', PRG_BMF),
                            ('OZE', PRG_OZE),
+                           ('TEF', PRG_TEF),
                            ('INF', PRG_INF),
                            ('AIN', PRG_AIN),
                            ('BIN', PRG_BIN),
@@ -118,6 +104,8 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('upMADG', PRG_upMADG),
                            ('upINBI', PRG_upINBI),
                            ('upINAN', PRG_upINAN)]
+
+STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
 
 ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
@@ -155,10 +143,10 @@ COMPETITION_CHOICES = [
     ('INF', _('úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo celoštátne kolo')),  # noqa
     ('BIO', _('úspešný riešiteľ - Biologická olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
     ('CHM', _('úspešný riešiteľ - Chemická olympiáda A alebo B - krajské alebo celoštátne kolo')),  # noqa
-    ('SVOC_MAT', _('úspešný účastník - Stredoškolská odborná činnost odbor 02 matematika, fyzika - celoštátne kolo')),  # noqa
-    ('SVOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),  # noqa
-    ('SVOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),  # noqa
-    ('SVOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),  # noqa
+    ('SOC_MAT', _('úspešný účastník - Stredoškolská odborná činnost odbor 02 matematika, fyzika - celoštátne kolo')),  # noqa
+    ('SOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),  # noqa
+    ('SOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),  # noqa
+    ('SOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),  # noqa
     ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo'))
 ]
 
@@ -198,6 +186,7 @@ GRADE_THIRD_YEAR = _('koncoročná známka v 3. ročníku / septime')
 GRADES_MAT = _('Známky z matematiky')
 GRADES_FYZ = _('Známky z fyziky')
 GRADES_BIO = _('Známky z biológie')
+GRADES_CHE = _('Známky z chémie')
 
 GRADE_ERR = _('Zle zadaná známka. Akceptované známky sú 1 až 5.')
 
@@ -292,3 +281,6 @@ class ApplicationStates(enum.Enum):
     submitted = 1
     printed = 2
     processed = 3
+
+
+CURRENT_MATURA_YEAR = 2019
