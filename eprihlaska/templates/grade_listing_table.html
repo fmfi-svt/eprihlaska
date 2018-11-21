@@ -1,0 +1,48 @@
+      <table  class="table" cellspacing="5" cellpadding="5">
+        <tr>
+          <th>Predmet</th>
+          <th>{{ label_first_year }}</th>
+          <th>{{ label_second_year }}</th>
+          <th>{{ label_third_year }}</th>
+        </tr>
+
+        {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
+        <tr>
+          <td>Matematika</td>
+          <td>{{ session['grades_mat']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_mat']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_mat']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
+        {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
+        <tr>
+          <td>Fyzika</td>
+          <td>{{ session['grades_fyz']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_fyz']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_fyz']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
+
+        {% if 'grades_bio' in session and 'grade_first_year' in session['grades_bio'] %}
+        <tr>
+          <td>Biológia</td>
+          <td>{{ session['grades_bio']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_bio']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_bio']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
+        {% if 'grades_che' in session and 'grade_first_year' in session['grades_che'] %}
+        <tr>
+          <td>Chémia</td>
+          <td>{{ session['grades_che']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_che']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_che']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
+
+      </table>
+

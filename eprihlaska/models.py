@@ -3,7 +3,6 @@ from flask import json, request
 from flask_login import UserMixin, current_user
 import datetime
 import time
-import datetime
 from .consts import ApplicationStates
 
 class User(db.Model, UserMixin):

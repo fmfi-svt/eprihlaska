@@ -80,10 +80,10 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     matura_year = IntegerField(c.MATURA_YEAR,
-                               default=2018,
+                               default=c.CURRENT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
-                                                                  max=2018)])
+                                                                  max=c.CURRENT_MATURA_YEAR)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
@@ -160,10 +160,15 @@ class ForeignStudiesForm(FlaskForm):
 class PreviousStudiesForm(FlaskForm):
     has_previously_studied = BooleanField(label=c.HAS_PREVIOUSLY_STUDIED)
     finished_highschool_check = RadioField(label=c.FINISHED_HIGHSCHOOL,
-                                     choices=[('SK', c.IN_SR),
-                                              ('OUTSIDE', c.OUTSIDE_OF_SR)],
-                                     default='SK',
-                                     validators=[validators.DataRequired()])
+                                           choices=[('SK', c.IN_SR),
+                                                    ('OUTSIDE', c.OUTSIDE_OF_SR)],
+                                           default='SK',
+                                           validators=[validators.DataRequired()])
+    length_of_study = RadioField(label=c.LENGTH_OF_STUDY,
+                                 choices=c.LENGTH_OF_STUDY_CHOICES,
+                                 default=c.LENGTH_OF_STUDY_DEFAULT,
+                                 validators=[validators.DataRequired()])
+
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
@@ -185,6 +190,16 @@ class CompetitionSuccessFormItem(FlaskForm):
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
+
+    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+
+    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
+    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
+    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
+    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
+    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
+
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
     scio_date = StringField(label=c.SCIO_DATE)
@@ -215,35 +230,27 @@ class FurtherStudyInfoForm(FlaskForm):
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
-    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
-
-    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
-    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
-    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
-    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
-    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
 
 class FurtherGradesInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
-    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
+    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR[c.LENGTH_OF_STUDY_DEFAULT], # noqa
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
-    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
+    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                      validators=[validators.Optional(),
                                                  validators.NumberRange(min=g_min,
                                                                         max=g_max,
                                                                         message=c.GRADE_ERR)])
-    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
+    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-class AdmissionWaversForm(FlaskForm):
+class AdmissionWaiversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
                                    label=c.FURTHER_STUDY_INFO)
 
@@ -253,6 +260,8 @@ class AdmissionWaversForm(FlaskForm):
                            label=c.GRADES_FYZ)
     grades_bio = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_BIO)
+    grades_che = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_CHE)
 
     competition_1 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_FIRST)
@@ -263,12 +272,14 @@ class AdmissionWaversForm(FlaskForm):
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
+
 class LoginForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email()])
     password = PasswordField(label=c.PASSWORD,
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
+
 
 class ForgottenPasswordForm(FlaskForm):
     email = StringField(label=c.EMAIL,

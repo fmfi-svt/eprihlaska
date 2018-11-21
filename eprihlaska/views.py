@@ -5,7 +5,7 @@ from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaversForm,
+                              PreviousStudiesForm, AdmissionWaiversForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
                               NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -77,7 +77,7 @@ def require_remote_user(func):
     def wrapper(*args, **kwargs):
         if not app.debug:
             if request.environ.get('REMOTE_USER') is None:
-                flash(conf.NO_ACCESS_MSG, 'error')
+                flash(consts.NO_ACCESS_MSG, 'error')
                 return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
@@ -239,14 +239,14 @@ def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
     constraints = {
-        'FYZ': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'FYZ': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
-        'CHE': ['BIN', 'BMF'],
-        'SVOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'SVOC_BIO': ['BIN', 'BMF'],
-        'SVOC_CHM': ['BIN', 'BMF'],
-        'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'CHE': ['BIN'],
+        'SOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'SOC_BIO': ['BIN', 'BMF'],
+        'SOC_CHM': ['BIN'],
+        'TMF': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         '_': STUDY_PROGRAMMES
     }
 
@@ -274,7 +274,7 @@ def admissions_waivers():
         flash(consts.DEAN_LIST_MSG)
         return redirect(url_for('final'))
 
-    form = AdmissionWaversForm(obj=munchify(dict(session)))
+    form = AdmissionWaiversForm(obj=munchify(dict(session)))
 
     # Filter out competitions based on selected study programmes.
     for subform in form:
@@ -285,36 +285,43 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'OZE'],
-        'grades_fyz': ['BMF', 'FYZ', 'OZE'],
-        'grades_bio': ['BMF'],
+        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'INF'],
+        'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
+        'grades_bio': ['BMF', 'BIN'],
+        'grades_che': ['BIN'],
     }
 
+    # Set labels for grades of respective study years based on
+    # `length_of_study`
+    los = session['length_of_study']
+    for grade_key in grade_constraints.keys():
+        form[grade_key].grade_first_year.label.text = consts.GRADE_FIRST_YEAR[los] # noqa
+        form[grade_key].grade_second_year.label.text = consts.GRADE_SECOND_YEAR[los] # noqa
+        form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
+
     further_study_info_constraints = {
-        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI',
                              'upMAIN', 'upINAN'],
         'matura_bio_grade': ['BIN', 'BMF'],
-        'matura_che_grade': ['BIN', 'BMF'],
-        'will_take_fyz_matura': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI',
-                                 'upMAIN', 'upINAN'],
-        'will_take_bio_matura': ['BIN', 'BMF'],
-        'will_take_che_matura': ['BIN', 'BMF']
-
+        'matura_che_grade': ['BIN'],
     }
 
+    further_study_info_constraints.update({
+        'will_take_fyz_matura': further_study_info_constraints['matura_fyz_grade'], # noqa
+        'will_take_inf_matura': further_study_info_constraints['matura_inf_grade'], # noqa
+        'will_take_bio_matura': further_study_info_constraints['matura_bio_grade'], # noqa
+        'will_take_che_matura': further_study_info_constraints['matura_che_grade'], # noqa
+    })
+
     relevant_years = {
-        'external_matura_percentile': [2014, 2015, 2016, 2017, 2018],
-        'scio_percentile': [2014, 2015, 2016, 2017, 2018],
-        'scio_date': [2014, 2015, 2016, 2017, 2018],
-        'matura_mat_grade': [2015, 2016, 2017, 2018],
-        'matura_fyz_grade': [2015, 2016, 2017, 2018],
-        'matura_inf_grade': [2015, 2016, 2017, 2018],
-        'matura_bio_grade': [2015, 2016, 2017, 2018],
-        'matura_che_grade': [2015, 2016, 2017, 2018],
+        'external_matura_percentile': [2016, 2017, 2018],
+        'matura_mat_grade': [2016, 2017, 2018],
+        'matura_fyz_grade': [2016, 2017, 2018],
+        'matura_inf_grade': [2016, 2017, 2018],
+        'matura_bio_grade': [2016, 2017, 2018],
+        'matura_che_grade': [2016, 2017, 2018],
         'will_take_external_mat_matura': [2019],
-        'will_take_scio': [2019],
         'will_take_mat_matura': [2019],
         'will_take_fyz_matura': [2019],
         'will_take_inf_matura': [2019],
@@ -322,11 +329,17 @@ def admissions_waivers():
         'will_take_che_matura': [2019],
     }
 
+    further_study_whitelist = [
+        'scio_percentile',
+        'scio_date',
+        'will_take_scio'
+    ]
+
     study_programme_set = set(session['study_programme'])
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           matura_year not in [2015, 2016, 2017, 2018, 2019]:
+           matura_year not in [2016, 2017, 2018, 2019]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -336,7 +349,8 @@ def admissions_waivers():
 
     for k, v in relevant_years.items():
         if matura_year not in v:
-            if k in form['further_study_info']._fields:
+            if k in form['further_study_info']._fields and \
+                    k not in further_study_whitelist:
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
@@ -426,9 +440,15 @@ def submit_app():
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
+    los = session['length_of_study']
+
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_template('grade_listing.html', session=session,
-                               id=app.id)
+                               id=app.id,
+                               label_first_year=consts.GRADE_FIRST_YEAR[los],
+                               label_second_year=consts.GRADE_SECOND_YEAR[los],
+                               label_third_year=consts.GRADE_THIRD_YEAR[los])
+
     pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
 
     response = make_response(pdf)
@@ -439,6 +459,9 @@ def grades_control():
 
 
 def render_app(app, print=False, use_app_session=True):
+    los = session['length_of_study']
+    label_length_of_study = dict(consts.LENGTH_OF_STUDY_CHOICES)[los]
+
     sess = session
     if use_app_session:
         sess = flask.json.loads(app.application)
@@ -448,7 +471,11 @@ def render_app(app, print=False, use_app_session=True):
                                lists=LISTS, id=app.id,
                                specific_symbol=specific_symbol,
                                submitted_at=app.submitted_at,
-                               consts=consts, print=print)
+                               consts=consts, print=print,
+                               label_first_year=consts.GRADE_FIRST_YEAR[los],
+                               label_second_year=consts.GRADE_SECOND_YEAR[los],
+                               label_third_year=consts.GRADE_THIRD_YEAR[los],
+                               label_length_of_study=label_length_of_study)
     return rendered
 
 
@@ -690,16 +717,16 @@ def facebook_authorize():
 
 
 def process_apps(apps):
-    for app in apps:
+    for application in apps:
         out_app = {}
-        a = flask.json.loads(app.application)
-        for key in a.keys():
-            out_app[key] = a[key]
+        app_object = flask.json.loads(application.application)
+        for key in app_object.keys():
+            out_app[key] = app_object[key]
 
         # TODO: this is band-aid and should be removed
         if 'basic_personal_data' not in out_app:
             out_app['basic_personal_data'] = {}
-        app.app = out_app
+        application.app = out_app
     return apps
 
 
@@ -796,7 +823,7 @@ def admin_ais_test():
     ctx = create_context(cosign_cookies,
                          origin='ais2.uniba.sk')
     # Do log in
-    soup = ctx.request_html('/ais/login.do', method='POST')
+    ctx.request_html('/ais/login.do', method='POST')
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
@@ -825,18 +852,18 @@ def admin_submitted_stats():
         data.seek(0)
         data.truncate(0)
 
-        for app in A:
-            sess = flask.json.loads(app.application)
+        for application in A:
+            sess = flask.json.loads(application.application)
             if not sess['finished_highschool_check'] == 'SK':
                 continue
 
-            user = User.query.filter_by(id=app.user_id).first()
+            user = User.query.filter_by(id=application.user_id).first()
             hs_code = sess['studies_in_sr']['highschool']
             highschool = LISTS['highschool'][hs_code]
 
             w.writerow((highschool,
                         user.registered_at,
-                        app.submitted_at))
+                        application.submitted_at))
 
             yield data.getvalue()
             data.seek(0)
@@ -875,8 +902,8 @@ def admin_scio_stats():
         data.seek(0)
         data.truncate(0)
 
-        for app in A:
-            sess = flask.json.loads(app.application)
+        for application in A:
+            sess = flask.json.loads(application.application)
             if 'further_study_info' not in sess:
                 continue
 
@@ -956,7 +983,7 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
             ctx = create_context(cosign_cookies,
                                  origin='ais2.uniba.sk')
             # Do log in
-            soup = ctx.request_html('/ais/login.do', method='POST')
+            ctx.request_html('/ais/login.do', method='POST')
 
         ais2_output = None
         error_output = None
@@ -968,7 +995,7 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
                                                        LISTS,
                                                        id,
                                                        process_type)
-        except Exception as e:
+        except Exception:
             error_output = traceback.format_exception(*sys.exc_info())
             error_output = '\n'.join(error_output)
             title = '{} AIS2 (#{})'.format(app.config['ERROR_EMAIL_HEADER'],
