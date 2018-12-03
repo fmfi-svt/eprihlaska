@@ -12,7 +12,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
-import string
 import uuid
 import sys
 import traceback
@@ -459,12 +458,12 @@ def grades_control():
 
 
 def render_app(app, print=False, use_app_session=True):
-    los = session['length_of_study']
-    label_length_of_study = dict(consts.LENGTH_OF_STUDY_CHOICES)[los]
-
     sess = session
     if use_app_session:
         sess = flask.json.loads(app.application)
+
+    los = sess['length_of_study']
+    label_length_of_study = dict(consts.LENGTH_OF_STUDY_CHOICES)[los]
 
     specific_symbol = 10000 + app.id
     rendered = render_template('application_form.html', session=sess,
