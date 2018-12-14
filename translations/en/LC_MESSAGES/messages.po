@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-11-20 17:52+0100\n"
-"PO-Revision-Date: 2018-11-20 17:54+0100\n"
+"POT-Creation-Date: 2018-12-14 12:23+0100\n"
+"PO-Revision-Date: 2018-12-14 12:23+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -60,218 +60,222 @@ msgstr ""
 msgid "Pokračovať"
 msgstr ""
 
-#: eprihlaska/consts.py:21
-msgid "Štátne občianstvo"
+#: eprihlaska/consts.py:20
+msgid "Podať prihlášku"
 msgstr ""
 
 #: eprihlaska/consts.py:22
-msgid "Meno"
+msgid "Štátne občianstvo"
 msgstr ""
 
 #: eprihlaska/consts.py:23
-msgid "Priezvisko"
+msgid "Meno"
 msgstr ""
 
 #: eprihlaska/consts.py:24
+msgid "Priezvisko"
+msgstr ""
+
+#: eprihlaska/consts.py:25
 msgid "Rodné priezvisko"
 msgstr ""
 
-#: eprihlaska/consts.py:26
+#: eprihlaska/consts.py:27
 msgid "Rodinný stav"
 msgstr ""
 
-#: eprihlaska/consts.py:27
+#: eprihlaska/consts.py:28
 msgid "Pohlavie"
 msgstr ""
 
-#: eprihlaska/consts.py:29
+#: eprihlaska/consts.py:30
 msgid "muž"
 msgstr ""
 
-#: eprihlaska/consts.py:30
+#: eprihlaska/consts.py:31
 msgid "žena"
 msgstr ""
 
-#: eprihlaska/consts.py:32
+#: eprihlaska/consts.py:33
 msgid "Rodné číslo"
 msgstr ""
 
-#: eprihlaska/consts.py:33
+#: eprihlaska/consts.py:34
 msgid "Dátum narodenia"
 msgstr ""
 
-#: eprihlaska/consts.py:34
+#: eprihlaska/consts.py:35
 msgid "Štát narodenia"
 msgstr ""
 
-#: eprihlaska/consts.py:35
+#: eprihlaska/consts.py:36
 msgid "Miesto narodenia"
 msgstr ""
 
-#: eprihlaska/consts.py:36
+#: eprihlaska/consts.py:37
 msgid "Miesto narodenia (v&nbsp;zahraničí)"
 msgstr ""
 
-#: eprihlaska/consts.py:38
+#: eprihlaska/consts.py:39
 msgid "Email"
 msgstr ""
 
-#: eprihlaska/consts.py:39
+#: eprihlaska/consts.py:40
 msgid "Telefónny kontakt"
 msgstr ""
 
-#: eprihlaska/consts.py:41
+#: eprihlaska/consts.py:42
 msgid "Základné údaje"
 msgstr ""
 
-#: eprihlaska/consts.py:43
+#: eprihlaska/consts.py:44
 msgid "Ďalšie osobné údaje"
 msgstr ""
 
-#: eprihlaska/consts.py:44
+#: eprihlaska/consts.py:45
 msgid "Informácie o otcovi"
 msgstr ""
 
-#: eprihlaska/consts.py:45
+#: eprihlaska/consts.py:46
 msgid "Informácie o matke"
 msgstr ""
 
-#: eprihlaska/consts.py:48
+#: eprihlaska/consts.py:49
 msgid "Meno otca"
 msgstr ""
 
-#: eprihlaska/consts.py:49
+#: eprihlaska/consts.py:50
 msgid "Priezvisko otca"
 msgstr ""
 
-#: eprihlaska/consts.py:50
+#: eprihlaska/consts.py:51
 msgid "Rodné priezvisko otca"
 msgstr ""
 
-#: eprihlaska/consts.py:52
+#: eprihlaska/consts.py:53
 msgid "Meno matky"
 msgstr ""
 
-#: eprihlaska/consts.py:53
+#: eprihlaska/consts.py:54
 msgid "Priezvisko matky"
 msgstr ""
 
-#: eprihlaska/consts.py:54
+#: eprihlaska/consts.py:55
 msgid "Rodné priezvisko matky"
 msgstr ""
 
-#: eprihlaska/consts.py:56
+#: eprihlaska/consts.py:57
 msgid ""
 "Dávam súhlas, aby vysoká škola spracúvala moje osobné údaje obsiahnuté v "
 "tejto prihláške a jej prílohách na účely prijímacieho konania až do "
 "termínu konania zápisu do 1. ročníka štúdia na vysokej škole."
 msgstr ""
 
-#: eprihlaska/consts.py:58
+#: eprihlaska/consts.py:59
 msgid "Dostal(a) som list od dekana"
 msgstr ""
 
-#: eprihlaska/consts.py:59
+#: eprihlaska/consts.py:60
 msgid "Číslo listu od dekana"
 msgstr ""
 
-#: eprihlaska/consts.py:60
+#: eprihlaska/consts.py:61
 msgid "Prosím, vyplňte číslo listu od dekana, ktorý ste dostali"
 msgstr ""
 
-#: eprihlaska/consts.py:62
+#: eprihlaska/consts.py:63
 msgid "Matematika"
 msgstr ""
 
-#: eprihlaska/consts.py:63
+#: eprihlaska/consts.py:64
 msgid "Poistná matematika"
 msgstr ""
 
-#: eprihlaska/consts.py:64
+#: eprihlaska/consts.py:65
 msgid "Ekonomická a finančná matematika"
 msgstr ""
 
-#: eprihlaska/consts.py:65
+#: eprihlaska/consts.py:66
 msgid "Manažérska matematika"
 msgstr ""
 
-#: eprihlaska/consts.py:66
+#: eprihlaska/consts.py:67
 msgid "Fyzika"
 msgstr ""
 
-#: eprihlaska/consts.py:67
+#: eprihlaska/consts.py:68
 msgid "Biomedicínska fyzika"
 msgstr ""
 
-#: eprihlaska/consts.py:68
+#: eprihlaska/consts.py:69
 msgid "Obnoviteľné zdroje energie a environmentálna fyzika"
 msgstr ""
 
-#: eprihlaska/consts.py:69
+#: eprihlaska/consts.py:70
 msgid "Technická fyzika"
 msgstr ""
 
-#: eprihlaska/consts.py:70
+#: eprihlaska/consts.py:71
 msgid "Informatika"
 msgstr ""
 
-#: eprihlaska/consts.py:71
+#: eprihlaska/consts.py:72
 msgid "Aplikovaná informatika"
 msgstr ""
 
-#: eprihlaska/consts.py:72
+#: eprihlaska/consts.py:73
 msgid "Bioinformatika"
 msgstr ""
 
-#: eprihlaska/consts.py:73
+#: eprihlaska/consts.py:74
 msgid "Učiteľstvo matematiky a fyziky"
 msgstr ""
 
-#: eprihlaska/consts.py:74
+#: eprihlaska/consts.py:75
 msgid "Učiteľstvo matematiky a informatiky"
 msgstr ""
 
-#: eprihlaska/consts.py:75
+#: eprihlaska/consts.py:76
 msgid "Učiteľstvo fyziky a informatiky"
 msgstr ""
 
-#: eprihlaska/consts.py:76
+#: eprihlaska/consts.py:77
 msgid "Učiteľstvo matematiky a telesnej výchovy"
 msgstr ""
 
-#: eprihlaska/consts.py:77
+#: eprihlaska/consts.py:78
 msgid "Učiteľstvo matematiky a deskriptívnej geometrie"
 msgstr ""
 
-#: eprihlaska/consts.py:78
+#: eprihlaska/consts.py:79
 msgid "Učiteľstvo informatiky a biológie"
 msgstr ""
 
-#: eprihlaska/consts.py:79
+#: eprihlaska/consts.py:80
 msgid "Učiteľstvo informatiky a anglického jazyka a literatúry"
 msgstr ""
 
-#: eprihlaska/consts.py:81
+#: eprihlaska/consts.py:82
 msgid "Rok maturity"
 msgstr ""
 
-#: eprihlaska/consts.py:83 eprihlaska/consts.py:211
+#: eprihlaska/consts.py:84 eprihlaska/consts.py:218
 msgid "Študijné programy"
 msgstr ""
 
-#: eprihlaska/consts.py:84
+#: eprihlaska/consts.py:85
 msgid "Prvý študijný program"
 msgstr ""
 
-#: eprihlaska/consts.py:85
+#: eprihlaska/consts.py:86
 msgid "Druhý študijný program"
 msgstr ""
 
-#: eprihlaska/consts.py:86
+#: eprihlaska/consts.py:87
 msgid "Tretí študijný program"
 msgstr ""
 
-#: eprihlaska/consts.py:87
+#: eprihlaska/consts.py:88
 msgid ""
 "Vyberte si aspoň jeden a najviac tri študijné programy. Poradie "
 "študijných programov vyjadruje preferenciu uchádzača a je záväzné, napr. "
@@ -279,184 +283,184 @@ msgid ""
 "prijatý na ten, ktorý bude uvedený na prvom mieste."
 msgstr ""
 
-#: eprihlaska/consts.py:88
+#: eprihlaska/consts.py:89
 msgid "žiaden"
 msgstr ""
 
-#: eprihlaska/consts.py:110
+#: eprihlaska/consts.py:111
 msgid "Štát"
 msgstr ""
 
-#: eprihlaska/consts.py:111
+#: eprihlaska/consts.py:112
 msgid "Ulica"
 msgstr ""
 
-#: eprihlaska/consts.py:112
+#: eprihlaska/consts.py:113
 msgid "Číslo"
 msgstr ""
 
-#: eprihlaska/consts.py:113
+#: eprihlaska/consts.py:114
 msgid "Mesto (obec)"
 msgstr ""
 
-#: eprihlaska/consts.py:114
+#: eprihlaska/consts.py:115
 msgid "Mesto (v zahraničí)"
 msgstr ""
 
-#: eprihlaska/consts.py:115
+#: eprihlaska/consts.py:116
 msgid "PSČ"
 msgstr ""
 
-#: eprihlaska/consts.py:116
+#: eprihlaska/consts.py:117
 msgid "Napíšte, prosím, názov mesta."
 msgstr ""
 
-#: eprihlaska/consts.py:118
+#: eprihlaska/consts.py:119
 msgid "V prípade, že sa jedná o malú obec bez názvov ulíc, napíšte názov obce."
 msgstr ""
 
-#: eprihlaska/consts.py:120
+#: eprihlaska/consts.py:121
 msgid "Adresa trvalého bydliska"
 msgstr ""
 
-#: eprihlaska/consts.py:121
+#: eprihlaska/consts.py:122
 msgid "Korešpondenčná adresa sa nezhoduje s adresou trvalého bydliska"
 msgstr ""
 
-#: eprihlaska/consts.py:122
+#: eprihlaska/consts.py:123
 msgid "Korešpondenčná adresa"
 msgstr ""
 
-#: eprihlaska/consts.py:124
+#: eprihlaska/consts.py:125
 msgid ""
 "V minulosti som študoval(a) na vysokej škole v SR v I. stupni štúdia "
 "alebo v spojenom I. a II. stupni štúdia (úspešne alebo neúspešne)"
 msgstr ""
 
-#: eprihlaska/consts.py:125
+#: eprihlaska/consts.py:126
 msgid "Absolvovaná stredná škola"
 msgstr ""
 
-#: eprihlaska/consts.py:126
+#: eprihlaska/consts.py:127
 msgid "v Slovenskej republike"
 msgstr ""
 
-#: eprihlaska/consts.py:127
+#: eprihlaska/consts.py:128
 msgid "mimo Slovenskej republiky"
 msgstr ""
 
-#: eprihlaska/consts.py:129
+#: eprihlaska/consts.py:130
 msgid "Navštevovaná stredná škola"
 msgstr ""
 
-#: eprihlaska/consts.py:130
+#: eprihlaska/consts.py:131
 msgid ""
 "V prípade, že vaša stredná škola nie je v zozname, zvoľte možnosť \"Moja "
 "stredná škola nie je v zozname\" (na začiatku zoznamu)"
 msgstr ""
 
-#: eprihlaska/consts.py:131
+#: eprihlaska/consts.py:132
 msgid "Kód študijného odboru"
 msgstr ""
 
-#: eprihlaska/consts.py:132
+#: eprihlaska/consts.py:133
 msgid ""
 "Kód študijného odboru je uvedený na vašom vysvedčení. V prípade, že na "
 "vysvedčení nemáte uvedený jeden z týchto študijných kódov, zvoľte \"nemám"
 " kód študijného odboru\" (na začiatku zoznamu)"
 msgstr ""
 
-#: eprihlaska/consts.py:133
+#: eprihlaska/consts.py:134
 msgid "Dosiahnuté / očakávané stredoškolské vzdelanie"
 msgstr ""
 
-#: eprihlaska/consts.py:134
+#: eprihlaska/consts.py:135
 msgid "Absolvoval(a) som / absolvujem strednú školu s maturitou mimo SR"
 msgstr ""
 
-#: eprihlaska/consts.py:136
+#: eprihlaska/consts.py:137
 msgid "Štúdium mimo SR"
 msgstr ""
 
-#: eprihlaska/consts.py:137
+#: eprihlaska/consts.py:138
 msgid "Štúdium na Slovensku"
 msgstr ""
 
-#: eprihlaska/consts.py:140
+#: eprihlaska/consts.py:141
 msgid "neuvádzam výsledok zo súťaže"
 msgstr ""
 
-#: eprihlaska/consts.py:141
+#: eprihlaska/consts.py:142
 msgid ""
 "úspešný riešiteľ - Matematická olympiáda A alebo B - krajské alebo "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:142
+#: eprihlaska/consts.py:143
 msgid ""
 "úspešný riešiteľ - Fyzikálna olympiáda A alebo B - krajské alebo "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:143
+#: eprihlaska/consts.py:144
 msgid ""
 "úspešný riešiteľ - Olympiáda v informatike A alebo B - krajské alebo "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:144
+#: eprihlaska/consts.py:145
 msgid ""
 "úspešný riešiteľ - Biologická olympiáda A alebo B - krajské alebo "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:145
+#: eprihlaska/consts.py:146
 msgid ""
 "úspešný riešiteľ - Chemická olympiáda A alebo B - krajské alebo "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:146
+#: eprihlaska/consts.py:147
 msgid ""
 "úspešný účastník - Stredoškolská odborná činnost odbor 02 matematika, "
 "fyzika - celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:147
+#: eprihlaska/consts.py:148
 msgid ""
 "úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:148
+#: eprihlaska/consts.py:149
 msgid ""
 "úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - "
 "celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:149
+#: eprihlaska/consts.py:150
 msgid ""
 "úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, "
 "potravinárstvo - celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:150
+#: eprihlaska/consts.py:151
 msgid "úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo"
 msgstr ""
 
-#: eprihlaska/consts.py:153
+#: eprihlaska/consts.py:154
 msgid "Rok"
 msgstr ""
 
-#: eprihlaska/consts.py:154
+#: eprihlaska/consts.py:155
 msgid "Názov súťaže"
 msgstr ""
 
-#: eprihlaska/consts.py:155
+#: eprihlaska/consts.py:156
 msgid "Ďalšie informácie"
 msgstr ""
 
-#: eprihlaska/consts.py:156
+#: eprihlaska/consts.py:157
 msgid ""
 "V prípade krajského kola do tohto poľa prosím napíšte názov kraja, v "
 "ktorom sa daná súťaž konala. V prípade iných kôl do tohto poľa prosím "
@@ -464,195 +468,205 @@ msgid ""
 "vášho úspechu."
 msgstr ""
 
-#: eprihlaska/consts.py:158
+#: eprihlaska/consts.py:159
 msgid "Úspech na súťaži (1)"
 msgstr ""
 
-#: eprihlaska/consts.py:159
+#: eprihlaska/consts.py:160
 msgid "Úspech na súťaži (2)"
 msgstr ""
 
-#: eprihlaska/consts.py:160
+#: eprihlaska/consts.py:161
 msgid "Úspech na súťaži (3)"
 msgstr ""
 
-#: eprihlaska/consts.py:162
+#: eprihlaska/consts.py:163
 msgid ""
 "percentil externej maturity z matematiky (SR) / maturitního didaktického "
 "testu z matematiky (ČR)"
 msgstr ""
 
-#: eprihlaska/consts.py:164
+#: eprihlaska/consts.py:167
 msgid "percentil autorizovanej skúšky z matematiky (SCIO)"
 msgstr ""
 
-#: eprihlaska/consts.py:165
+#: eprihlaska/consts.py:168
 msgid "dátum vykonania autorizovanej skúšky z matematiky (SCIO)"
 msgstr ""
 
-#: eprihlaska/consts.py:167
+#: eprihlaska/consts.py:170
 msgid "známka z maturity z matematiky"
 msgstr ""
 
-#: eprihlaska/consts.py:168
+#: eprihlaska/consts.py:171
 msgid "známka z maturity z fyziky"
 msgstr ""
 
-#: eprihlaska/consts.py:169
+#: eprihlaska/consts.py:172
 msgid "známka z maturity z informatiky"
 msgstr ""
 
-#: eprihlaska/consts.py:170
+#: eprihlaska/consts.py:173
 msgid "známka z maturity z chémie"
 msgstr ""
 
-#: eprihlaska/consts.py:171
+#: eprihlaska/consts.py:174
 msgid "známka z maturity z biológie"
 msgstr ""
 
-#: eprihlaska/consts.py:173
+#: eprihlaska/consts.py:176
 msgid ""
 "zúčastním sa externej maturity z matematiky (SR) / maturitního "
 "didaktického testu z matematiky (ČR)"
 msgstr ""
 
-#: eprihlaska/consts.py:174
+#: eprihlaska/consts.py:178
 msgid "plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)"
 msgstr ""
 
-#: eprihlaska/consts.py:175
+#: eprihlaska/consts.py:179
 msgid "maturujem z matematiky"
 msgstr ""
 
-#: eprihlaska/consts.py:176
+#: eprihlaska/consts.py:180
 msgid "maturujem z fyziky"
 msgstr ""
 
-#: eprihlaska/consts.py:177
+#: eprihlaska/consts.py:181
 msgid "maturujem z informatiky"
 msgstr ""
 
-#: eprihlaska/consts.py:178
+#: eprihlaska/consts.py:182
 msgid "maturujem z biológie"
 msgstr ""
 
-#: eprihlaska/consts.py:179
+#: eprihlaska/consts.py:183
 msgid "maturujem z chémie"
 msgstr ""
 
-#: eprihlaska/consts.py:181
+#: eprihlaska/consts.py:185
 msgid "Prospech na strednej škole"
 msgstr ""
 
-#: eprihlaska/consts.py:184 eprihlaska/consts.py:187
+#: eprihlaska/consts.py:188 eprihlaska/consts.py:191
 msgid "koncoročná známka v 1. ročníku"
 msgstr ""
 
-#: eprihlaska/consts.py:185
+#: eprihlaska/consts.py:189
 msgid "koncoročná známka v kvinte"
 msgstr ""
 
-#: eprihlaska/consts.py:186 eprihlaska/consts.py:190 eprihlaska/consts.py:193
+#: eprihlaska/consts.py:190 eprihlaska/consts.py:194 eprihlaska/consts.py:197
 msgid "koncoročná známka v 2. ročníku"
 msgstr ""
 
-#: eprihlaska/consts.py:191
+#: eprihlaska/consts.py:195
 msgid "koncoročná známka v sexte"
 msgstr ""
 
-#: eprihlaska/consts.py:192 eprihlaska/consts.py:196 eprihlaska/consts.py:199
+#: eprihlaska/consts.py:196 eprihlaska/consts.py:200 eprihlaska/consts.py:203
 msgid "koncoročná známka v 3. ročníku"
 msgstr ""
 
-#: eprihlaska/consts.py:197
+#: eprihlaska/consts.py:201
 msgid "koncoročná známka v septime"
 msgstr ""
 
-#: eprihlaska/consts.py:198
+#: eprihlaska/consts.py:202
 msgid "koncoročná známka v 4. ročníku"
 msgstr ""
 
-#: eprihlaska/consts.py:202
+#: eprihlaska/consts.py:206
 msgid "Známky z matematiky"
 msgstr ""
 
-#: eprihlaska/consts.py:203
+#: eprihlaska/consts.py:207
 msgid "Známky z fyziky"
 msgstr ""
 
-#: eprihlaska/consts.py:204
+#: eprihlaska/consts.py:208
 msgid "Známky z biológie"
 msgstr ""
 
-#: eprihlaska/consts.py:205
+#: eprihlaska/consts.py:209
 msgid "Známky z chémie"
 msgstr ""
 
-#: eprihlaska/consts.py:207
+#: eprihlaska/consts.py:211
 msgid "Zle zadaná známka. Akceptované známky sú 1 až 5."
 msgstr ""
 
-#: eprihlaska/consts.py:210
-msgid "ePrihlaska"
-msgstr ""
-
-#: eprihlaska/consts.py:212
-msgid "Osobné údaje"
-msgstr ""
-
 #: eprihlaska/consts.py:213
-msgid "Informácie o rodičoch"
+msgid "Poznámka"
 msgstr ""
 
 #: eprihlaska/consts.py:214
-msgid "Adresa"
-msgstr ""
-
-#: eprihlaska/consts.py:215
-msgid "Predchádzajúce štúdium"
-msgstr ""
-
-#: eprihlaska/consts.py:216
-msgid "Prijatie bez prijímacích pohovorov"
+msgid ""
+"Prosím, informujte nás o skutočnostiach, ktoré by mohli byť pre Vašu "
+"prihlášku relevantné a neboli spomenuté v už vyplnených častiach."
 msgstr ""
 
 #: eprihlaska/consts.py:217
-msgid "Záverečné pokyny"
+msgid "ePrihlaska"
+msgstr ""
+
+#: eprihlaska/consts.py:219
+msgid "Osobné údaje"
 msgstr ""
 
 #: eprihlaska/consts.py:220
-msgid "Používateľské meno"
+msgid "Informácie o rodičoch"
 msgstr ""
 
 #: eprihlaska/consts.py:221
-msgid "Heslo"
+msgid "Adresa"
 msgstr ""
 
 #: eprihlaska/consts.py:222
-msgid "Zopakujte heslo"
+msgid "Predchádzajúce štúdium"
 msgstr ""
 
 #: eprihlaska/consts.py:223
-msgid "Zadané heslá sa nezhodujú"
+msgid "Prijatie bez prijímacích pohovorov"
 msgstr ""
 
 #: eprihlaska/consts.py:224
-msgid "Prihlásiť"
-msgstr ""
-
-#: eprihlaska/consts.py:225
-msgid "Zaregistrovať"
-msgstr ""
-
-#: eprihlaska/consts.py:226
-msgid "Odhlásiť"
+msgid "Záverečné pokyny"
 msgstr ""
 
 #: eprihlaska/consts.py:227
-msgid "Vitajte {}"
+msgid "Používateľské meno"
+msgstr ""
+
+#: eprihlaska/consts.py:228
+msgid "Heslo"
 msgstr ""
 
 #: eprihlaska/consts.py:229
+msgid "Zopakujte heslo"
+msgstr ""
+
+#: eprihlaska/consts.py:230
+msgid "Zadané heslá sa nezhodujú"
+msgstr ""
+
+#: eprihlaska/consts.py:231
+msgid "Prihlásiť"
+msgstr ""
+
+#: eprihlaska/consts.py:232
+msgid "Zaregistrovať"
+msgstr ""
+
+#: eprihlaska/consts.py:233
+msgid "Odhlásiť"
+msgstr ""
+
+#: eprihlaska/consts.py:234
+msgid "Vitajte {}"
+msgstr ""
+
+#: eprihlaska/consts.py:236
 msgid ""
 "V rámci systému elektronickej prihlášky FMFI UK bol pre Váš účet "
 "aktivovaný postup pre zmenu zabudnutého hesla. Ak chcete heslo zmeniť, "
@@ -664,13 +678,13 @@ msgid ""
 "https://prihlaska.fmph.uniba.sk"
 msgstr ""
 
-#: eprihlaska/consts.py:231
+#: eprihlaska/consts.py:238
 msgid ""
 "Ak bol poskytnutý e-mail nájdený, boli naň zaslané informácie o ďalšom "
 "postupe."
 msgstr ""
 
-#: eprihlaska/consts.py:233
+#: eprihlaska/consts.py:240
 msgid ""
 "Vitajte v systéme elektronickej prihlášky FMFI UK. Pre vytvorenie hesla a"
 " následné prihlásenie prosím použite nasledujúci link: {}\n"
@@ -679,60 +693,60 @@ msgid ""
 "https://prihlaska.fmph.uniba.sk"
 msgstr ""
 
-#: eprihlaska/consts.py:235
+#: eprihlaska/consts.py:242
 msgid ""
 "Nový používateľ bol zaregistrovaný. Pre zadanie hesla prosím pokračujte "
 "podľa pokynov zaslaných na zadaný email."
 msgstr ""
 
-#: eprihlaska/consts.py:237
+#: eprihlaska/consts.py:244
 #, python-format
 msgid ""
 "Nesprávne zadaná hodnota. Akceptované hodnoty sú v rozsahu od %(min)s po "
 "%(max)s"
 msgstr ""
 
-#: eprihlaska/consts.py:246
+#: eprihlaska/consts.py:253
 msgid "Zvoľte mesto alebo obec v SR"
 msgstr ""
 
-#: eprihlaska/consts.py:263
+#: eprihlaska/consts.py:270
 msgid "4 roky"
 msgstr ""
 
-#: eprihlaska/consts.py:264
+#: eprihlaska/consts.py:271
 msgid "5 rokov"
 msgstr ""
 
-#: eprihlaska/consts.py:265
+#: eprihlaska/consts.py:272
 msgid "8 rokov"
 msgstr ""
 
-#: eprihlaska/consts.py:266
+#: eprihlaska/consts.py:273
 msgid "iná"
 msgstr ""
 
-#: eprihlaska/consts.py:271
+#: eprihlaska/consts.py:278
 msgid "Moja stredná škola nie je v zozname"
 msgstr ""
 
-#: eprihlaska/consts.py:281
+#: eprihlaska/consts.py:288
 msgid "nemám kód študijného odboru"
 msgstr ""
 
-#: eprihlaska/consts.py:297
+#: eprihlaska/consts.py:304
 msgid "rozpracovaná"
 msgstr ""
 
-#: eprihlaska/consts.py:298
+#: eprihlaska/consts.py:305
 msgid "podaná"
 msgstr ""
 
-#: eprihlaska/consts.py:299
+#: eprihlaska/consts.py:306
 msgid "vytlačená"
 msgstr ""
 
-#: eprihlaska/consts.py:300
+#: eprihlaska/consts.py:307
 msgid "spracovaná"
 msgstr ""
 

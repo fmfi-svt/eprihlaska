@@ -6,6 +6,7 @@ from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaiversForm,
+                              FinalForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
                               NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -363,15 +364,15 @@ def admissions_waivers():
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
-@app.route('/final', methods=['GET'])
+@app.route('/final', methods=['GET', 'POST'])
 @login_required
 @require_filled_form('admissions_waivers')
 def final():
     app_form = ApplicationForm.query.filter_by(user_id=current_user.id).first()
 
-    # If the application is not after the submission step (that is, it is in
-    # in_progress state) and submissions are not open, we should redirect to
-    # the front page with an error message saying 'submissions are not open'
+    # If the application has not gone through the submission step (that is, it
+    # is in in_progress state) and submissions are not open, we should redirect
+    # to the front page with an error message saying 'submissions are not open'
     if not app.config['SUBMISSIONS_OPEN'] \
        and app_form.state == ApplicationStates.in_progress:
         flash(consts.SUBMISSIONS_NOT_OPEN, 'error')
@@ -411,6 +412,19 @@ def final():
                     grades.append(session[x][y])
     grades_filled = any(map(lambda x: x is not None, grades))
 
+    form = FinalForm(obj=munchify(dict(session)))
+    if form.validate_on_submit():
+        if 'application_submitted' not in session:
+            save_form(form)
+
+            session['application_submitted'] = True
+            app_form.application = flask.json.dumps(dict(session))
+            app_form.state = ApplicationStates.submitted
+            app_form.submitted_at = datetime.datetime.now()
+            db.session.commit()
+
+            flash('Gratulujeme, Vaša prihláška bola podaná!')
+
     app_state = APPLICATION_STATES[app_form.state.value]
 
     return render_template('final.html', session=session,
@@ -419,21 +433,8 @@ def final():
                            hs_sp_check=hs_sp_check,
                            hs_ed_level_check=hs_education_level_check,
                            grades_filled=grades_filled,
-                           app_state=app_state)
-
-
-@app.route('/submit_app')
-@login_required
-def submit_app():
-    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    session['application_submitted'] = True
-    app.application = flask.json.dumps(dict(session))
-    app.state = ApplicationStates.submitted
-    app.submitted_at = datetime.datetime.now()
-    db.session.commit()
-
-    flash('Gratulujeme, Vaša prihláška bola podaná!')
-    return redirect(url_for('final'))
+                           app_state=app_state,
+                           form=form)
 
 
 @app.route('/grades_control', methods=['GET'])

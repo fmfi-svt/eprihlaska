@@ -2,17 +2,19 @@ from flask_wtf import FlaskForm
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
                      validators, SelectField, FormField, SelectMultipleField,
                      DateField, FieldList, IntegerField, HiddenField,
-                     PasswordField)
+                     PasswordField, TextAreaField)
 
 from .validators import (BirthNoValidator, DateValidator,
                          EmailDuplicateValidator, CityInSKValidator,
                          IfStreetThenCity)
 from . import consts as c
 
+
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
     surname = StringField(label=c.FATHER_SURNAME)
     born_with_surname = StringField(label=c.FATHER_BORNWITH_SURNAME)
+
 
 class MotherNameForm(FlaskForm):
     name = StringField(label=c.MOTHER_NAME)
@@ -51,8 +53,8 @@ class PersonalDataForm(FlaskForm):
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
 
     marital_status = SelectField(label=c.MARITAL_STATUS,
-                               choices=c.MARITAL_STATUS_CHOICES,
-                               default='1')
+                                 choices=c.MARITAL_STATUS_CHOICES,
+                                 default='1')
 
     email = StringField(label=c.EMAIL,
                         validators=[validators.DataRequired(),
@@ -61,6 +63,7 @@ class PersonalDataForm(FlaskForm):
 
     personal_info = HiddenField()
     submit = SubmitField(label=c.NEXT)
+
 
 class FurtherPersonalDataForm(FlaskForm):
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
@@ -97,6 +100,7 @@ class SelectStudyProgrammeForm(FlaskForm):
     study_programme_3 = SelectField(label=c.STUDY_PROGRAMME_3,
                                     choices=c.STUDY_PROGRAMME_CHOICES_ACTIVE)
 
+
 class StudyProgrammeForm(FlaskForm):
     basic_personal_data = FormField(BasicPersonalDataForm,
                                     label=c.BASIC_PERSONAL_DATA)
@@ -109,8 +113,8 @@ class StudyProgrammeForm(FlaskForm):
 
 class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
-                              choices=c.COUNTRY_CHOICES,
-                              default='703')
+                          choices=c.COUNTRY_CHOICES,
+                          default='703')
     street = StringField(label=c.ADDRESS_STREET,
                          description=c.ADDRESS_STREET_DESC)
     street_no = StringField(label=c.ADDRESS_NO)
@@ -139,19 +143,21 @@ class AddressForm(FlaskForm):
     address = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
+
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
                              choices=c.HIGHSCHOOL_CHOICES,
                              description=c.HIGHSCHOOL_DESC,
                              default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
-                             default='7902J00',
-                             description=c.STUDY_PROGRAMME_CODE_DESC,
-                             choices=c.HS_STUDY_PROGRAMME_CHOICES)
+                                       default='7902J00',
+                                       description=c.STUDY_PROGRAMME_CODE_DESC,
+                                       choices=c.HS_STUDY_PROGRAMME_CHOICES)
 
     education_level = SelectField(label=c.HS_EDUCATION_LEVEL,
-                             default='J',
-                             choices=c.EDUCATION_LEVEL_CHOICES)
+                                  default='J',
+                                  choices=c.EDUCATION_LEVEL_CHOICES)
+
 
 class ForeignStudiesForm(FlaskForm):
     finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL)
@@ -173,6 +179,7 @@ class PreviousStudiesForm(FlaskForm):
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
     submit = SubmitField(label=c.NEXT)
+
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
@@ -273,6 +280,12 @@ class AdmissionWaiversForm(FlaskForm):
     submit = SubmitField(label=c.NEXT)
 
 
+class FinalForm(FlaskForm):
+    note = TextAreaField(label=c.FINAL_NOTE,
+                         description=c.FINAL_NOTE_DESC)
+    submit = SubmitField(label=c.SUBMIT_APPLICATION)
+
+
 class LoginForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email()])
@@ -286,6 +299,7 @@ class ForgottenPasswordForm(FlaskForm):
                         validators=[validators.Email()])
     submit = SubmitField(label=c.SUBMIT)
 
+
 class NewPasswordForm(FlaskForm):
     password = PasswordField(label=c.PASSWORD,
                              validators=[validators.Length(min=8, max=80)])
@@ -296,6 +310,7 @@ class NewPasswordForm(FlaskForm):
                                                                    message=c.REPEAT_PASSWORD_ERR)])
     submit = SubmitField(label=c.SIGNUP)
 
+
 class SignupForm(FlaskForm):
     email = StringField(label='',
                         validators=[validators.Email(),
@@ -303,10 +318,12 @@ class SignupForm(FlaskForm):
                         render_kw={"placeholder": c.EMAIL})
     submit = SubmitField(label=c.SIGNUP)
 
+
 class AIS2CookieForm(FlaskForm):
     jsessionid = StringField(label='JSESSIONID',
                              validators=[validators.DataRequired()])
     submit = SubmitField(label=c.SUBMIT)
+
 
 class AIS2SubmitForm(FlaskForm):
     submit = SubmitField(label=c.CONTINUE)
