@@ -15,6 +15,15 @@
         </tr>
         {% endif %}
 
+        {% if 'grades_inf' in session and 'grade_first_year' in session['grades_inf'] %}
+        <tr>
+          <td>Informatika</td>
+          <td>{{ session['grades_inf']['grade_first_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_inf']['grade_second_year'] or 'Nezadaná' }}</td>
+          <td>{{ session['grades_inf']['grade_third_year'] or 'Nezadaná' }}</td>
+        </tr>
+        {% endif %}
+
         {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
         <tr>
           <td>Fyzika</td>

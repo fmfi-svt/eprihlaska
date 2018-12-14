@@ -263,6 +263,8 @@ class AdmissionWaiversForm(FlaskForm):
 
     grades_mat = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_MAT)
+    grades_inf = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_INF)
     grades_fyz = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_FYZ)
     grades_bio = FormField(FurtherGradesInfoForm,
