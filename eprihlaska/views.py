@@ -286,6 +286,7 @@ def admissions_waivers():
 
     grade_constraints = {
         'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'INF'],
+        'grades_inf': ['BIN', 'INF'],
         'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
         'grades_bio': ['BMF', 'BIN'],
         'grades_che': ['BIN'],

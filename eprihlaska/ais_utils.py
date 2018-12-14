@@ -496,6 +496,7 @@ def generate_subject_abbrevs(session):
     ABBRs = set()
     F = set()
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_mat', 'M')
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_inf', 'I')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_fyz', 'F')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_bio', 'B')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_che', 'CH')
@@ -618,6 +619,9 @@ def fill_in_table_cells(app, abbr, F, session):
         if 'matura_inf_grade' in F:
             matura_grade_to_table_cell(app, session, 'matura_inf_grade')
 
+        if 'grades_inf' in F:
+            grades_to_table_cells(app, session, 'grades_inf')
+
     if abbr == 'IP':
         if 'scio_percentile' in F or 'scio_date' in F:
             p = session['further_study_info']['scio_percentile']
@@ -640,6 +644,7 @@ def grades_to_table_cells(app, session, grades_field):
         app.d.vysvedceniaTable.edit_cell('znamkaII', index, second)
     if third:
         app.d.vysvedceniaTable.edit_cell('znamkaIII', index, third)
+
 
 def matura_grade_to_table_cell(app, session, grade_field):
     g = session['further_study_info'][grade_field]

@@ -204,6 +204,7 @@ GRADE_THIRD_YEAR = {
 }
 
 GRADES_MAT = _('Známky z matematiky')
+GRADES_INF = _('Známky z informatiky')
 GRADES_FYZ = _('Známky z fyziky')
 GRADES_BIO = _('Známky z biológie')
 GRADES_CHE = _('Známky z chémie')
