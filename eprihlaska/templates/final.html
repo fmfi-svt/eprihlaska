@@ -67,7 +67,9 @@ všetky údaje boli vyplnené správne: <a href="{{ url_for('application_form') 
   (Po podaní prihlášky už nie je možné údaje v nej uvedené meniť.)
 </p>
 
-<a href="{{ url_for('submit_app') }}" class="btn btn-red btn-info" role="button">PODAŤ PRIHLÁŠKU</a>
+  {{ wtf.quick_form(form,
+                    form_type='horizontal',
+                    button_map={'submit': 'primary'}) }}
 
 {% else %}
 

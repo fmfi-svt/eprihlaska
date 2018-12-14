@@ -345,6 +345,16 @@
     </div>
   </div>
 
+{% if session['note'] %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Poznámka</div>
+    <div class="panel-body">
+      {{ session['note'] }}
+    </div>
+  </div>
+
+{% endif %}
 
 </div>
 
