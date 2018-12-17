@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
-                     validators, SelectField, FormField, SelectMultipleField,
-                     DateField, FieldList, IntegerField, HiddenField,
-                     PasswordField, TextAreaField)
+                     validators, SelectField, FormField,
+                     IntegerField, HiddenField, PasswordField, TextAreaField)
 
 from .validators import (BirthNoValidator, DateValidator,
                          EmailDuplicateValidator, CityInSKValidator,
@@ -286,6 +286,14 @@ class FinalForm(FlaskForm):
     note = TextAreaField(label=c.FINAL_NOTE,
                          description=c.FINAL_NOTE_DESC)
     submit = SubmitField(label=c.SUBMIT_APPLICATION)
+
+
+class ReceiptUploadForm(FlaskForm):
+        receipt = FileField(label=c.PAYMENT_RECEIPT,
+                            validators=[FileAllowed(c.receipts,
+                                                    c.ERR_EXTENSION_NOT_ALLOWED), # noqa
+                                        FileRequired(c.ERR_EMPTY_FILE)])
+        submit = SubmitField(label=c.SUBMIT)
 
 
 class LoginForm(FlaskForm):

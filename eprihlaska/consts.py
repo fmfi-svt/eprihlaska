@@ -1,4 +1,5 @@
 from flask_babel import gettext as _
+from flask_uploads import UploadSet
 from .utils import choices_from_csv, city_formatter, okres_fixer
 import os
 import enum
@@ -13,6 +14,13 @@ PASSWD_CHANGED_MSG = _('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa 
 INVALID_TOKEN_MSG = _('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu.')  # noqa
 
 SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
+
+FLASH_MSG_DATA_SAVED = _('Vaše dáta boli uložené!')
+FLASH_MSG_FILL_FORM = _('Najprv, prosím, vyplňte formulár uvedený nižšie')
+FLASH_MSG_APP_SUBMITTED = _('Gratulujeme, Vaša prihláška bola podaná!')
+FLASH_MSG_WRONG_LOGIN = _('Nesprávne prihlasovacie údaje.')
+FLASH_MSG_AFTER_LOGIN = _('Gratulujeme, boli ste prihlásení do prostredia '
+                          'ePrihlaska!')
 
 SUBMIT = _('Odoslať')
 NEXT = _('Ulož a pokračuj')
@@ -314,5 +322,12 @@ class ApplicationStates(enum.Enum):
     printed = 2
     processed = 3
 
+
+PAYMENT_RECEIPT = _('Potvrdenie o zaplatení')
+ERR_EMPTY_FILE = _('Odovzdaný súbor bol prázdny.')
+ERR_EXTENSION_NOT_ALLOWED = _('Povolené sú iba súbory PDF, JPG, BMP a PNG.')
+ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
+
+receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
 CURRENT_MATURA_YEAR = 2019
