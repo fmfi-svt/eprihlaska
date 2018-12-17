@@ -1,15 +1,14 @@
 import os
 import sys
 import re
+import flask.json
+from flask import url_for
 DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, DIR + '/votr/')
 
-
-from aisikl.context import Context
-from aisikl.app import Application
-import aisikl.portal
-import flask.json
-from flask import url_for
+from aisikl.context import Context # noqa
+from aisikl.app import Application # noqa
+import aisikl.portal # noqa
 
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):

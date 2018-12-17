@@ -1,12 +1,12 @@
 from flask import (render_template, flash, redirect, session, request, url_for,
-                   make_response)
+                   make_response, send_from_directory)
 import flask.json
 from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
                               PreviousStudiesForm, AdmissionWaiversForm,
-                              FinalForm,
+                              FinalForm, ReceiptUploadForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
                               NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -63,7 +63,7 @@ def require_filled_form(form_key):
                 return redirect(url_for('index'))
 
             if request.method == 'GET' and form_key not in session:
-                flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
+                flash(consts.FLASH_MSG_FILL_FORM)
                 for _, endpoint in MENU:
                     if endpoint not in session:
                         return redirect(url_for(endpoint))
@@ -169,7 +169,7 @@ def study_programme():
                 return redirect(url_for('study_programme'))
 
             save_form(form)
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('personal_info'))
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -183,7 +183,7 @@ def personal_info():
     if form.validate_on_submit():
         save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+        flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('further_personal_info'))
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -199,7 +199,7 @@ def further_personal_info():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('address'))
     return render_template('further_personal_info.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -214,7 +214,7 @@ def address():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('previous_studies'))
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -229,7 +229,7 @@ def previous_studies():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('admissions_waivers'))
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -362,7 +362,7 @@ def admissions_waivers():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('final'))
 
     return render_template('admission_waivers.html', form=form,
@@ -428,9 +428,17 @@ def final():
             app_form.submitted_at = datetime.datetime.now()
             db.session.commit()
 
-            flash('Gratulujeme, Vaša prihláška bola podaná!')
+            flash(consts.FLASH_MSG_APP_SUBMITTED)
 
     app_state = APPLICATION_STATES[app_form.state.value]
+
+    receipt_form = None
+    if app_form.state == consts.ApplicationStates.submitted:
+        if 'receipt_filename' not in session:
+            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
+            if receipt_form.validate_on_submit():
+                filename = consts.receipts.save(receipt_form.receipt.data)
+                session['receipt_filename'] = filename
 
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
@@ -439,7 +447,20 @@ def final():
                            hs_ed_level_check=hs_education_level_check,
                            grades_filled=grades_filled,
                            app_state=app_state,
-                           form=form)
+                           form=form, receipt_form=receipt_form)
+
+
+@app.route('/payment_receipt', methods=['GET'])
+@login_required
+def payment_receipt():
+    if 'receipt_filename' not in session:
+        flash(consts.ERR_RECEIPT_NOT_UPLOADED, 'error')
+        return redirect(url_for('final'))
+
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
+    return send_from_directory(receipt_dir, session['receipt_filename'],
+                               as_attachment=True)
 
 
 @app.route('/grades_control', methods=['GET'])
@@ -516,7 +537,7 @@ def login():
 
                 flash(consts.LOGIN_CONGRATS_MSG)
                 return redirect(url_for('study_programme'))
-        flash('Nesprávne prihlasovacie údaje', 'error')
+        flash(consts.FLASH_MSG_WRONG_LOGIN, 'error')
 
     return render_template('login.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -677,7 +698,7 @@ def create_or_get_user_and_login(site, token, name, surname, email):
 
     login_user(user)
     TokenModel.save(site, token, user)
-    flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
+    flash(consts.FLASH_MSG_AFTER_LOGIN)
 
 
 @app.route('/google/login', methods=['GET'])

@@ -110,9 +110,33 @@ variabilný symbol: <strong>800</strong> <br>
 {% endif %}
 
 <br>
-Potvrdenie o zaplatení si odložte pre
-prípad, že by sa vyskytol problém pri spárovaní vašej platby
-s prihláškou.
+
+Potvrdenie o zaplatení si odložte pre prípad, že by sa vyskytol problém pri
+spárovaní vašej platby s prihláškou.
+
+<br>
+<br>
+
+{% if not session['receipt_filename'] %}
+
+Pre rýchlejšie spracovanie Vašej prihlášky tiež môžete potvrdenie v digitálnej
+forme priložiť použitím nasledujúceho formulára:
+
+<br>
+<br>
+<br>
+
+  {% if receipt_form %}
+    {{ wtf.quick_form(receipt_form,
+                      form_type='horizontal',
+                      button_map={'submit': 'primary'}) }}
+
+
+  {% endif %}
+{% else %}
+Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej linke:
+<strong><a href="{{ url_for('payment_receipt') }}">odovzdané potvrdenie</a></strong>.
+{% endif %}
 
 {% endif %}
 
