@@ -21,6 +21,8 @@ FLASH_MSG_APP_SUBMITTED = _('Gratulujeme, Vaša prihláška bola podaná!')
 FLASH_MSG_WRONG_LOGIN = _('Nesprávne prihlasovacie údaje.')
 FLASH_MSG_AFTER_LOGIN = _('Gratulujeme, boli ste prihlásení do prostredia '
                           'ePrihlaska!')
+FLASH_MSG_RECEIPT_SUBMITTED = _('Priložený súbor s potvrdením o zaplatení bol '
+                                'uložený.')
 
 SUBMIT = _('Odoslať')
 NEXT = _('Ulož a pokračuj')

@@ -417,6 +417,17 @@ def final():
                     grades.append(session[x][y])
     grades_filled = any(map(lambda x: x is not None, grades))
 
+    # Deal with receipt form
+    receipt_form = None
+    if app_form.state == consts.ApplicationStates.submitted:
+        if 'receipt_filename' not in session:
+            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
+            if receipt_form.validate_on_submit():
+                filename = consts.receipts.save(receipt_form.receipt.data)
+                session['receipt_filename'] = filename
+
+                flash(consts.FLASH_MSG_RECEIPT_SUBMITTED)
+
     form = FinalForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
         if 'application_submitted' not in session:
@@ -431,14 +442,6 @@ def final():
             flash(consts.FLASH_MSG_APP_SUBMITTED)
 
     app_state = APPLICATION_STATES[app_form.state.value]
-
-    receipt_form = None
-    if app_form.state == consts.ApplicationStates.submitted:
-        if 'receipt_filename' not in session:
-            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
-            if receipt_form.validate_on_submit():
-                filename = consts.receipts.save(receipt_form.receipt.data)
-                session['receipt_filename'] = filename
 
     return render_template('final.html', session=session,
                            specific_symbol=specific_symbol,
