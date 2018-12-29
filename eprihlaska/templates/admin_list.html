@@ -71,6 +71,11 @@
               Spracovaná
             </a>
             {% endif %}
+            {% if app['app']['receipt_filename'] %}
+            <a href="{{ url_for('admin_payment_receipt', id=app.id) }}">
+              Potvrdenie o zaplatení
+            </a>
+            {% endif %}
           </div>
 
         </td>

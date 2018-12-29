@@ -94,6 +94,10 @@ def save_form(form):
         if 'application_submitted' in session:
             del session['application_submitted']
 
+    save_current_session_to_DB()
+
+
+def save_current_session_to_DB():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     app.application = flask.json.dumps(dict(session))
     db.session.commit()
@@ -426,6 +430,8 @@ def final():
                 filename = consts.receipts.save(receipt_form.receipt.data)
                 session['receipt_filename'] = filename
 
+                save_current_session_to_DB()
+
                 flash(consts.FLASH_MSG_RECEIPT_SUBMITTED)
 
     form = FinalForm(obj=munchify(dict(session)))
@@ -438,6 +444,10 @@ def final():
             app_form.state = ApplicationStates.submitted
             app_form.submitted_at = datetime.datetime.now()
             db.session.commit()
+
+            # The receipt_form should now be operational, as the application is
+            # submitted
+            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
 
             flash(consts.FLASH_MSG_APP_SUBMITTED)
 
@@ -781,7 +791,7 @@ def admin_list():
 @app.route('/admin/view/<id>')
 @require_remote_user
 def admin_view(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     rendered = render_app(app)
     return rendered
 
@@ -789,7 +799,7 @@ def admin_view(id):
 @app.route('/admin/print/<id>')
 @require_remote_user
 def admin_print(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates.printed
     app.printed_at = datetime.datetime.now()
     db.session.commit()
@@ -801,7 +811,7 @@ def admin_print(id):
 @app.route('/admin/reset/<id>')
 @require_remote_user
 def admin_reset(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates.in_progress
     sess = flask.json.loads(app.application)
     if 'application_submitted' in sess:
@@ -817,7 +827,7 @@ def admin_reset(id):
 @app.route('/admin/set_state/<id>/<int:state>')
 @require_remote_user
 def admin_set_state(id, state):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates(state)
     sess = flask.json.loads(app.application)
 
@@ -828,6 +838,18 @@ def admin_set_state(id, state):
 
     db.session.commit()
     return redirect(url_for('admin_list'))
+
+
+@app.route('/admin/payment_receipt/<id>')
+@require_remote_user
+def admin_payment_receipt(id):
+    application = ApplicationForm.query.get(id)
+    sess = flask.json.loads(application.application)
+
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
+    return send_from_directory(receipt_dir, sess['receipt_filename'],
+                               as_attachment=True)
 
 
 def get_cosign_cookies():
@@ -967,7 +989,7 @@ def admin_scio_stats():
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_ais2_process(id):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form,
@@ -976,7 +998,7 @@ def admin_ais2_process(id):
 
 @app.route('/admin/ais2_process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_ais2_process_special(id, process_type):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form,
@@ -986,7 +1008,7 @@ def admin_ais2_process_special(id, process_type):
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_process(id):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, None, beta=True)
@@ -994,7 +1016,7 @@ def admin_process(id):
 
 @app.route('/admin/process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_process_special(id, process_type):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, process_type,
