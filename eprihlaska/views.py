@@ -460,7 +460,8 @@ def final():
                            hs_ed_level_check=hs_education_level_check,
                            grades_filled=grades_filled,
                            app_state=app_state,
-                           form=form, receipt_form=receipt_form)
+                           form=form, receipt_form=receipt_form,
+                           consts=consts)
 
 
 @app.route('/payment_receipt', methods=['GET'])

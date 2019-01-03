@@ -188,7 +188,7 @@ class CompetitionSuccessFormItem(FlaskForm):
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional(),
                                     validators.NumberRange(min=1990,
-                                                           max=2018,
+                                                           max=c.CURRENT_MATURA_YEAR,
                                                            message=c.YEAR_ERR)])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
                                description=c.COMPETITION_FURTHER_INFO_DESC)

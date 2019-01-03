@@ -141,7 +141,7 @@ Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej li
 {% endif %}
 
 <h3>Overená kópia maturitného vysvedčenia</h3>
-{% if session['basic_personal_data']['matura_year'] == 2018 %}
+{% if session['basic_personal_data']['matura_year'] == consts.CURRENT_MATURA_YEAR %}
 
 <p>
 Po skončení maturity nám bezodkladne pošlite overenú kópiu maturitného
