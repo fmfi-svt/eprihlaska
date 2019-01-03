@@ -176,6 +176,8 @@ EXTERNAL_MATURA_PERCENTILE = _('percentil externej maturity z matematiky '
 
 SCIO_PERCENTILE = _('percentil autorizovanej skúšky z matematiky (SCIO)')
 SCIO_DATE = _('dátum vykonania autorizovanej skúšky z matematiky (SCIO)')
+SCIO_CERT_NO = _('číslo certifikátu SCIO')
+SCIO_CERT_NO_DESC = _('V prípade, že ste autorizovanú skúšku z matematiky (SCIO) už v minulosti absolvovali, do tohto poľa prosím napíšte číslo certifikátu, ktorý ste po jej vykonaní obdržali. Zrýchlite tak proces spracovania Vašej prihlášky. Ďakujeme!') # noqa
 
 MATURA_MAT_GRADE = _('známka z maturity z matematiky')
 MATURA_FYZ_GRADE = _('známka z maturity z fyziky')
