@@ -3,6 +3,8 @@
 {% import "bootstrap/fixes.html" as fixes %}
 {% import "bootstrap/utils.html" as util %}
 
+{% set los = session['length_of_study'] or '0' %}
+
  {% block metas %}
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -262,7 +264,7 @@
 
       <div class="row">
         <div class="col-sm-12">
-          <strong>{{ consts.LENGTH_OF_STUDY }}:</strong> {{ label_length_of_study }}
+          <strong>{{ consts.LENGTH_OF_STUDY }}:</strong> {{ dict(consts.LENGTH_OF_STUDY_CHOICES)[los] }}
        </div>
       </div>
 

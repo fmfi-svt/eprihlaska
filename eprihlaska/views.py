@@ -479,14 +479,11 @@ def payment_receipt():
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
-    los = session['length_of_study']
-
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    rendered = render_template('grade_listing.html', session=session,
+    rendered = render_template('grade_listing.html',
+                               session=session,
                                id=app.id,
-                               label_first_year=consts.GRADE_FIRST_YEAR[los],
-                               label_second_year=consts.GRADE_SECOND_YEAR[los],
-                               label_third_year=consts.GRADE_THIRD_YEAR[los])
+                               consts=consts)
 
     pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
 
@@ -502,19 +499,12 @@ def render_app(app, print=False, use_app_session=True):
     if use_app_session:
         sess = flask.json.loads(app.application)
 
-    los = sess['length_of_study']
-    label_length_of_study = dict(consts.LENGTH_OF_STUDY_CHOICES)[los]
-
     specific_symbol = 10000 + app.id
     rendered = render_template('application_form.html', session=sess,
                                lists=LISTS, id=app.id,
                                specific_symbol=specific_symbol,
                                submitted_at=app.submitted_at,
-                               consts=consts, print=print,
-                               label_first_year=consts.GRADE_FIRST_YEAR[los],
-                               label_second_year=consts.GRADE_SECOND_YEAR[los],
-                               label_third_year=consts.GRADE_THIRD_YEAR[los],
-                               label_length_of_study=label_length_of_study)
+                               consts=consts, print=print)
     return rendered
 
 

@@ -1,9 +1,11 @@
+      {% set los = session['length_of_study'] or '0' %}
+
       <table  class="table" cellspacing="5" cellpadding="5">
         <tr>
           <th>Predmet</th>
-          <th>{{ label_first_year }}</th>
-          <th>{{ label_second_year }}</th>
-          <th>{{ label_third_year }}</th>
+          <th>{{ consts.GRADE_FIRST_YEAR[los] }}</th>
+          <th>{{ consts.GRADE_SECOND_YEAR[los] }}</th>
+          <th>{{ consts.GRADE_THIRD_YEAR[los] }}</th>
         </tr>
 
         {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
