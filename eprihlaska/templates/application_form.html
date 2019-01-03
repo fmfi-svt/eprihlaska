@@ -24,10 +24,8 @@
           <img src="{{ url_for('static', filename='img/fmfi-logo.jpg', _external=True) }}" style="height: 150px; width: 150px" alt=""/>
         </div>
         <div class="col-lg-8">
-          <strong>Univerzita:</strong> Univerzita Komenského v Bratislave <br />
-          <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
-          <strong>Akademický rok:</strong> 2018/2019 <br />
-          <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
+          {% include "application_form_header.html" %}
+
           {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
            <hr>
            Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
