@@ -1,19 +1,20 @@
 import os
 import sys
 import re
+import flask.json
+from flask import url_for
 DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, DIR + '/votr/')
 
+from aisikl.context import Context # noqa
+from aisikl.app import Application # noqa
+import aisikl.portal # noqa
 
-from aisikl.context import Context
-from aisikl.app import Application
-import aisikl.portal
-import flask.json
-from flask import url_for
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
     ctx = Context(cookies, ais_url='https://'+origin+'/')
     return ctx
+
 
 def test_ais(ctx):
     # Open 'cierna skrynka'
@@ -26,7 +27,7 @@ def test_ais(ctx):
     dlg = app.awaited_open_dialog([prev_ops[1]])
 
     # Select the last row in the table
-    app.d.table.select(len(app.d.table.all_rows()) -1)
+    app.d.table.select(len(app.d.table.all_rows()) - 1)
 
     # Click confirm (closes the dialog)
     with app.collect_operations() as ops:
@@ -46,7 +47,13 @@ def test_ais(ctx):
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
-def save_application_form(ctx, application, lists, application_id, process_type):
+
+def save_application_form(ctx,
+                          application,
+                          lists,
+                          application_id,
+                          process_type):
+
     session = flask.json.loads(application.application)
 
     notes = {}
@@ -157,7 +164,6 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             app.d.kodPohlavieRadioBox.select(0)
         else:
             app.d.kodPohlavieRadioBox.select(1)
-
 
         rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
         # FIXME: AIS2 hack
@@ -289,7 +295,6 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         # študijný odbor na zahraničnej škole
         app.d.kodOdborTextField.write('0000500')
 
-    #if 'grades_mat' in session and 'grade_first_year' in session['grades_mat']
     # Remove all rows in vysvedceniaTable
 
     print("Final: {}".format(ops), file=sys.stderr)
@@ -341,17 +346,17 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         'INF': 'OlymI',
         'BIO': 'OlymB',
         'CHM': 'OlymCH',
-        'SVOC_MAT': 'SočM',
-        'SVOC_INF': 'SočI',
-        'SVOC_BIO': 'SočB',
-        'SVOC_CHM': 'SočCH',
+        'SOC_MAT': 'SočM',
+        'SOC_INF': 'SočI',
+        'SOC_BIO': 'SočB',
+        'SOC_CHE': 'SočCH',
         'TMF': 'TMF'
     }
 
     # Add checkboxes based on competitions
     for s in ['competition_1', 'competition_2', 'competition_3']:
         if s in session and session[s]['competition'] != '_':
-            comp =  session[s]['competition']
+            comp = session[s]['competition']
             checkboxes.add(competition_checkboxes_map[comp])
 
             # TODO: "SVOC_MAT" currently means both SocM and SocF
@@ -359,7 +364,6 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             # refactored
             if comp == 'SVOC_MAT':
                 checkboxes.add('SočF')
-
 
     # Check those items in prilohyCheckList that have been generated from the
     # submitted application form (the code above)
@@ -374,7 +378,10 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         poznamka_items.append('SCIO')
     if 'ExtMat' in checkboxes:
         poznamka_items.append('ExternaMaturitaMat')
-    poznamka_items.append(url_for('admin_view', id=application_id, _external=True))
+
+    poznamka_items.append(url_for('admin_view',
+                                  id=application_id,
+                                  _external=True))
     poznamka_text = '\n'.join(poznamka_items)
 
     app.d.poznamkaTextArea.write(poznamka_text)
@@ -410,7 +417,7 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     print("After messageBox: {}".format(ops), file=sys.stderr)
     errors = app.d.statusHtmlArea.content
 
-    dlg = app.awaited_close_dialog(ops)
+    app.awaited_close_dialog(ops)
     return errors, notes
 
 
@@ -433,6 +440,7 @@ def deal_with_confirm_boxes(app, ops, notes):
                 app.confirm_box(2)
     return ops
 
+
 def fill_in_address(field, app, session, lists):
     fields_map = {
         'city': [app.d.trIdObecTextField, app.d.psIdObecTextField],
@@ -447,9 +455,9 @@ def fill_in_address(field, app, session, lists):
     }
 
     if field == 'address_form':
-        fields = {k:v[0] for k, v in fields_map.items()}
+        fields = {k: v[0] for k, v in fields_map.items()}
     else:
-        fields = {k:v[1] for k, v in fields_map.items()}
+        fields = {k: v[1] for k, v in fields_map.items()}
 
     if session[field]['country'] == '703':
         # Local (SR) address
@@ -506,6 +514,7 @@ def add_to_set_on_grade_field(S, F, session, grade_field, abbr):
         S.add(abbr)
         F.add(grade_field)
 
+
 def add_to_set_on_further_study_info(S, F, session, field, abbr):
     if 'further_study_info' in session and \
        field in session['further_study_info'] and \
@@ -513,12 +522,15 @@ def add_to_set_on_further_study_info(S, F, session, field, abbr):
         S.add(abbr)
         F.add(field)
 
+
 def generate_subject_abbrevs(session):
     ABBRs = set()
     F = set()
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_mat', 'M')
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_inf', 'I')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_fyz', 'F')
     add_to_set_on_grade_field(ABBRs, F, session, 'grades_bio', 'B')
+    add_to_set_on_grade_field(ABBRs, F, session, 'grades_che', 'CH')
 
     field_abbr_map = {
         'external_matura_percentile': 'M',
@@ -542,6 +554,7 @@ def generate_subject_abbrevs(session):
                                          field, abbr)
     return ABBRs, F
 
+
 def generate_checkbox_abbrs(session):
     checkboxes = set()
     field_abbr_map = {
@@ -563,12 +576,14 @@ def generate_checkbox_abbrs(session):
                                         field, abbr)
     return checkboxes
 
+
 def add_further_study_info_checkbox(checkboxes, session,
                                     field, chkb):
     if 'further_study_info' in session and \
        field in session['further_study_info'] and \
        session['further_study_info'][field]:
         checkboxes.add(chkb)
+
 
 def add_subject(app, abbr):
     # Add new rows (subjects)
@@ -628,9 +643,15 @@ def fill_in_table_cells(app, abbr, F, session):
         if 'matura_che_grade' in F:
             matura_grade_to_table_cell(app, session, 'matura_che_grade')
 
+        if 'grades_che' in F:
+            grades_to_table_cells(app, session, 'grades_che')
+
     if abbr == 'I':
         if 'matura_inf_grade' in F:
             matura_grade_to_table_cell(app, session, 'matura_inf_grade')
+
+        if 'grades_inf' in F:
+            grades_to_table_cells(app, session, 'grades_inf')
 
     if abbr == 'IP':
         if 'scio_percentile' in F or 'scio_date' in F:
@@ -654,6 +675,7 @@ def grades_to_table_cells(app, session, grades_field):
         app.d.vysvedceniaTable.edit_cell('znamkaII', index, second)
     if third:
         app.d.vysvedceniaTable.edit_cell('znamkaIII', index, third)
+
 
 def matura_grade_to_table_cell(app, session, grade_field):
     g = session['further_study_info'][grade_field]

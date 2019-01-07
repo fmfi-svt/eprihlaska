@@ -22,10 +22,7 @@
         </div>
 
         <div class="col-lg-8">
-          <strong>Univerzita:</strong> Univerzita Komenského v Bratislave <br />
-          <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
-          <strong>Akademický rok:</strong> 2018/2019 <br />
-          <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
+          {% include "application_form_header.html" %}
         </div>
       </div>
     </div>
@@ -43,43 +40,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">Známky poskytnuté ako súčasť prihlášky</div>
     <div class="panel-body">
-      <table  class="table" cellspacing="5" cellpadding="5">
-        <tr>
-          <th>Predmet</th>
-          <th>Známka 1. ročník / kvinta</th>
-          <th>Známka 2. ročník / sexta</th>
-          <th>Známka 3. ročník / septima</th>
-        </tr>
-
-        {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
-        <tr>
-          <td>Matematika</td>
-          <td>{{ session['grades_mat']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_mat']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_mat']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-        {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
-        <tr>
-          <td>Fyzika</td>
-          <td>{{ session['grades_fyz']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_fyz']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_fyz']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-
-        {% if 'grades_bio' in session and 'grade_first_year' in session['grades_bio'] %}
-        <tr>
-          <td>Biológia</td>
-          <td>{{ session['grades_bio']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_bio']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_bio']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-      </table>
+      {% include "grade_listing_table.html" %}
     </div>
   </div>
 

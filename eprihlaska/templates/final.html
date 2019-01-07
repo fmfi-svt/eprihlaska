@@ -67,7 +67,9 @@ všetky údaje boli vyplnené správne: <a href="{{ url_for('application_form') 
   (Po podaní prihlášky už nie je možné údaje v nej uvedené meniť.)
 </p>
 
-<a href="{{ url_for('submit_app') }}" class="btn btn-red btn-info" role="button">PODAŤ PRIHLÁŠKU</a>
+  {{ wtf.quick_form(form,
+                    form_type='horizontal',
+                    button_map={'submit': 'primary'}) }}
 
 {% else %}
 
@@ -108,14 +110,38 @@ variabilný symbol: <strong>800</strong> <br>
 {% endif %}
 
 <br>
-Potvrdenie o zaplatení si odložte pre
-prípad, že by sa vyskytol problém pri spárovaní vašej platby
-s prihláškou.
+
+Potvrdenie o zaplatení si odložte pre prípad, že by sa vyskytol problém pri
+spárovaní vašej platby s prihláškou.
+
+<br>
+<br>
+
+{% if not session['receipt_filename'] %}
+
+Pre rýchlejšie spracovanie Vašej prihlášky tiež môžete potvrdenie v digitálnej
+forme priložiť použitím nasledujúceho formulára:
+
+<br>
+<br>
+<br>
+
+  {% if receipt_form %}
+    {{ wtf.quick_form(receipt_form,
+                      form_type='horizontal',
+                      button_map={'submit': 'primary'}) }}
+
+
+  {% endif %}
+{% else %}
+Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej linke:
+<strong><a href="{{ url_for('payment_receipt') }}">odovzdané potvrdenie</a></strong>.
+{% endif %}
 
 {% endif %}
 
 <h3>Overená kópia maturitného vysvedčenia</h3>
-{% if session['basic_personal_data']['matura_year'] == 2018 %}
+{% if session['basic_personal_data']['matura_year'] == consts.CURRENT_MATURA_YEAR %}
 
 <p>
 Po skončení maturity nám bezodkladne pošlite overenú kópiu maturitného

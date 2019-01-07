@@ -3,8 +3,8 @@ from flask import json, request
 from flask_login import UserMixin, current_user
 import datetime
 import time
-import datetime
 from .consts import ApplicationStates
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80))
     registered_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
+
 def application_form_change_author():
     remote_user = request.environ.get('REMOTE_USER')
     if remote_user is not None:
@@ -20,9 +21,11 @@ def application_form_change_author():
     else:
         return 'user'
 
+
 class ApplicationForm(db.Model):
     __tablename__ = 'application_form'
-    id = db.Column(db.Integer, primary_key=True)
+    __table_args__ = {'sqlite_autoincrement': True}
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='user')
     application = db.Column(db.Text)
@@ -35,11 +38,13 @@ class ApplicationForm(db.Model):
     state = db.Column(db.Enum(ApplicationStates),
                       default=ApplicationStates.in_progress)
 
+
 class ForgottenPasswordToken(db.Model):
     hash = db.Column(db.String(36), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     valid = db.Column(db.Boolean, default=True)
     valid_until = db.Column(db.DateTime)
+
 
 class TokenModel(db.Model):
     __tablename__ = 'connect'

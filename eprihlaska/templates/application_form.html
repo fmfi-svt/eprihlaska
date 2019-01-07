@@ -3,6 +3,8 @@
 {% import "bootstrap/fixes.html" as fixes %}
 {% import "bootstrap/utils.html" as util %}
 
+{% set los = session['length_of_study'] or '0' %}
+
  {% block metas %}
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,10 +24,8 @@
           <img src="{{ url_for('static', filename='img/fmfi-logo.jpg', _external=True) }}" style="height: 150px; width: 150px" alt=""/>
         </div>
         <div class="col-lg-8">
-          <strong>Univerzita:</strong> Univerzita Komenského v Bratislave <br />
-          <strong>Fakulta:</strong> Fakulta matematiky, fyziky a informatiky  <br />
-          <strong>Akademický rok:</strong> 2018/2019 <br />
-          <strong>Evidenčné číslo prihlášky:</strong> eprih-2018-{{ id }} <br />
+          {% include "application_form_header.html" %}
+
           {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
            <hr>
            Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
@@ -260,50 +260,21 @@
       </div>
       {% endif %}
 
+      <div class="row">
+        <div class="col-sm-12">
+          <strong>{{ consts.LENGTH_OF_STUDY }}:</strong> {{ dict(consts.LENGTH_OF_STUDY_CHOICES)[los] }}
+       </div>
+      </div>
+
+
     </div>
   </div>
 
-{% if session['grades_mat'] or session['grades_fyz'] or session['grades_bio']  %}
+{% if session['grades_mat'] or session['grades_fyz'] or session['grades_bio'] or session['grades_inf'] %}
   <div class="panel panel-default">
     <div class="panel-heading">Známky poskytnuté ako súčasť prihlášky</div>
     <div class="panel-body">
-      <table  class="table" cellspacing="5" cellpadding="5">
-        <tr>
-          <th>Predmet</th>
-          <th>Známka 1. ročník / kvinta</th>
-          <th>Známka 2. ročník / sexta</th>
-          <th>Známka 3. ročník / septima</th>
-        </tr>
-
-        {% if 'grades_mat' in session and 'grade_first_year' in session['grades_mat'] %}
-        <tr>
-          <td>Matematika</td>
-          <td>{{ session['grades_mat']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_mat']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_mat']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-        {% if 'grades_fyz' in session and 'grade_first_year' in session['grades_fyz'] %}
-        <tr>
-          <td>Fyzika</td>
-          <td>{{ session['grades_fyz']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_fyz']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_fyz']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-
-        {% if 'grades_bio' in session and 'grade_first_year' in session['grades_bio'] %}
-        <tr>
-          <td>Biológia</td>
-          <td>{{ session['grades_bio']['grade_first_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_bio']['grade_second_year'] or 'Nezadaná' }}</td>
-          <td>{{ session['grades_bio']['grade_third_year'] or 'Nezadaná' }}</td>
-        </tr>
-        {% endif %}
-
-      </table>
+      {% include "grade_listing_table.html" %}
     </div>
   </div>
 
@@ -339,6 +310,7 @@
       {{ further_study_field('external_matura_percentile', consts.EXTERNAL_MATURA_PERCENTILE) }}
       {{ further_study_field('scio_percentile', consts.SCIO_PERCENTILE) }}
       {{ further_study_field('scio_date', consts.SCIO_DATE) }}
+      {{ further_study_field('scio_cert_no', consts.SCIO_CERT_NO) }}
       {{ further_study_field('matura_mat_grade', consts.MATURA_MAT_GRADE) }}
       {{ further_study_field('matura_fyz_grade', consts.MATURA_FYZ_GRADE) }}
       {{ further_study_field('matura_inf_grade', consts.MATURA_INF_GRADE) }}
@@ -374,6 +346,16 @@
     </div>
   </div>
 
+{% if session['note'] %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Poznámka</div>
+    <div class="panel-body">
+      {{ session['note'] }}
+    </div>
+  </div>
+
+{% endif %}
 
 </div>
 

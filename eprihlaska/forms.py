@@ -1,18 +1,20 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import (StringField, BooleanField, RadioField, SubmitField,
-                     validators, SelectField, FormField, SelectMultipleField,
-                     DateField, FieldList, IntegerField, HiddenField,
-                     PasswordField)
+                     validators, SelectField, FormField,
+                     IntegerField, HiddenField, PasswordField, TextAreaField)
 
 from .validators import (BirthNoValidator, DateValidator,
                          EmailDuplicateValidator, CityInSKValidator,
                          IfStreetThenCity)
 from . import consts as c
 
+
 class FatherNameForm(FlaskForm):
     name = StringField(label=c.FATHER_NAME)
     surname = StringField(label=c.FATHER_SURNAME)
     born_with_surname = StringField(label=c.FATHER_BORNWITH_SURNAME)
+
 
 class MotherNameForm(FlaskForm):
     name = StringField(label=c.MOTHER_NAME)
@@ -51,8 +53,8 @@ class PersonalDataForm(FlaskForm):
     place_of_birth_foreign = StringField(label=c.BIRTH_PLACE_FOREIGN)
 
     marital_status = SelectField(label=c.MARITAL_STATUS,
-                               choices=c.MARITAL_STATUS_CHOICES,
-                               default='1')
+                                 choices=c.MARITAL_STATUS_CHOICES,
+                                 default='1')
 
     email = StringField(label=c.EMAIL,
                         validators=[validators.DataRequired(),
@@ -61,6 +63,7 @@ class PersonalDataForm(FlaskForm):
 
     personal_info = HiddenField()
     submit = SubmitField(label=c.NEXT)
+
 
 class FurtherPersonalDataForm(FlaskForm):
     father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
@@ -80,10 +83,10 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     matura_year = IntegerField(c.MATURA_YEAR,
-                               default=2018,
+                               default=c.CURRENT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
-                                                                  max=2018)])
+                                                                  max=c.CURRENT_MATURA_YEAR)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
@@ -97,6 +100,7 @@ class SelectStudyProgrammeForm(FlaskForm):
     study_programme_3 = SelectField(label=c.STUDY_PROGRAMME_3,
                                     choices=c.STUDY_PROGRAMME_CHOICES_ACTIVE)
 
+
 class StudyProgrammeForm(FlaskForm):
     basic_personal_data = FormField(BasicPersonalDataForm,
                                     label=c.BASIC_PERSONAL_DATA)
@@ -109,8 +113,8 @@ class StudyProgrammeForm(FlaskForm):
 
 class Address(FlaskForm):
     country = SelectField(label=c.ADDRESS_COUNTRY,
-                              choices=c.COUNTRY_CHOICES,
-                              default='703')
+                          choices=c.COUNTRY_CHOICES,
+                          default='703')
     street = StringField(label=c.ADDRESS_STREET,
                          description=c.ADDRESS_STREET_DESC)
     street_no = StringField(label=c.ADDRESS_NO)
@@ -139,19 +143,21 @@ class AddressForm(FlaskForm):
     address = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
+
 class StudiesInSRForm(FlaskForm):
     highschool = SelectField(label=c.HIGHSCHOOL,
                              choices=c.HIGHSCHOOL_CHOICES,
                              description=c.HIGHSCHOOL_DESC,
                              default='XXXXXXX')
     study_programme_code = SelectField(label=c.STUDY_PROGRAMME_CODE,
-                             default='7902J00',
-                             description=c.STUDY_PROGRAMME_CODE_DESC,
-                             choices=c.HS_STUDY_PROGRAMME_CHOICES)
+                                       default='7902J00',
+                                       description=c.STUDY_PROGRAMME_CODE_DESC,
+                                       choices=c.HS_STUDY_PROGRAMME_CHOICES)
 
     education_level = SelectField(label=c.HS_EDUCATION_LEVEL,
-                             default='J',
-                             choices=c.EDUCATION_LEVEL_CHOICES)
+                                  default='J',
+                                  choices=c.EDUCATION_LEVEL_CHOICES)
+
 
 class ForeignStudiesForm(FlaskForm):
     finished_highschool = BooleanField(label=c.FOREIGN_FINISHED_HIGHSCHOOL)
@@ -160,14 +166,20 @@ class ForeignStudiesForm(FlaskForm):
 class PreviousStudiesForm(FlaskForm):
     has_previously_studied = BooleanField(label=c.HAS_PREVIOUSLY_STUDIED)
     finished_highschool_check = RadioField(label=c.FINISHED_HIGHSCHOOL,
-                                     choices=[('SK', c.IN_SR),
-                                              ('OUTSIDE', c.OUTSIDE_OF_SR)],
-                                     default='SK',
-                                     validators=[validators.DataRequired()])
+                                           choices=[('SK', c.IN_SR),
+                                                    ('OUTSIDE', c.OUTSIDE_OF_SR)],
+                                           default='SK',
+                                           validators=[validators.DataRequired()])
+    length_of_study = RadioField(label=c.LENGTH_OF_STUDY,
+                                 choices=c.LENGTH_OF_STUDY_CHOICES,
+                                 default=c.LENGTH_OF_STUDY_DEFAULT,
+                                 validators=[validators.DataRequired()])
+
     studies_in_sr = FormField(StudiesInSRForm, label=c.STUDIES_IN_SR)
     foreign_studies = FormField(ForeignStudiesForm, label=c.FOREIGN_STUDIES)
     previous_studies = HiddenField()
     submit = SubmitField(label=c.NEXT)
+
 
 class CompetitionSuccessFormItem(FlaskForm):
     competition = SelectField(label=c.COMPETITION_NAME,
@@ -176,7 +188,7 @@ class CompetitionSuccessFormItem(FlaskForm):
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional(),
                                     validators.NumberRange(min=1990,
-                                                           max=2018,
+                                                           max=c.CURRENT_MATURA_YEAR,
                                                            message=c.YEAR_ERR)])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
                                description=c.COMPETITION_FURTHER_INFO_DESC)
@@ -185,9 +197,21 @@ class CompetitionSuccessFormItem(FlaskForm):
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
+
+    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+
+    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
+    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
+    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
+    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
+    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
+
     external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
     scio_percentile = StringField(label=c.SCIO_PERCENTILE)
     scio_date = StringField(label=c.SCIO_DATE)
+    scio_cert_no = StringField(label=c.SCIO_CERT_NO,
+                               description=c.SCIO_CERT_NO_DESC)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
                                     validators=[validators.Optional(),
@@ -215,44 +239,40 @@ class FurtherStudyInfoForm(FlaskForm):
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-    will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
-    will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
-
-    will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
-    will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
-    will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
-    will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
-    will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
 
 class FurtherGradesInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
-    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR,
+    grade_first_year = IntegerField(c.GRADE_FIRST_YEAR[c.LENGTH_OF_STUDY_DEFAULT], # noqa
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
-    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR,
+    grade_second_year = IntegerField(c.GRADE_SECOND_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                      validators=[validators.Optional(),
                                                  validators.NumberRange(min=g_min,
                                                                         max=g_max,
                                                                         message=c.GRADE_ERR)])
-    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR,
+    grade_third_year = IntegerField(c.GRADE_THIRD_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
                                                                        message=c.GRADE_ERR)])
 
-class AdmissionWaversForm(FlaskForm):
+class AdmissionWaiversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
                                    label=c.FURTHER_STUDY_INFO)
 
     grades_mat = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_MAT)
+    grades_inf = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_INF)
     grades_fyz = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_FYZ)
     grades_bio = FormField(FurtherGradesInfoForm,
                            label=c.GRADES_BIO)
+    grades_che = FormField(FurtherGradesInfoForm,
+                           label=c.GRADES_CHE)
 
     competition_1 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_FIRST)
@@ -263,6 +283,21 @@ class AdmissionWaversForm(FlaskForm):
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
+
+class FinalForm(FlaskForm):
+    note = TextAreaField(label=c.FINAL_NOTE,
+                         description=c.FINAL_NOTE_DESC)
+    submit = SubmitField(label=c.SUBMIT_APPLICATION)
+
+
+class ReceiptUploadForm(FlaskForm):
+        receipt = FileField(label=c.PAYMENT_RECEIPT,
+                            validators=[FileAllowed(c.receipts,
+                                                    c.ERR_EXTENSION_NOT_ALLOWED), # noqa
+                                        FileRequired(c.ERR_EMPTY_FILE)])
+        submit = SubmitField(label=c.SUBMIT)
+
+
 class LoginForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email()])
@@ -270,10 +305,12 @@ class LoginForm(FlaskForm):
                              validators=[validators.Length(min=8, max=80)])
     submit = SubmitField(label=c.LOGIN)
 
+
 class ForgottenPasswordForm(FlaskForm):
     email = StringField(label=c.EMAIL,
                         validators=[validators.Email()])
     submit = SubmitField(label=c.SUBMIT)
+
 
 class NewPasswordForm(FlaskForm):
     password = PasswordField(label=c.PASSWORD,
@@ -285,6 +322,7 @@ class NewPasswordForm(FlaskForm):
                                                                    message=c.REPEAT_PASSWORD_ERR)])
     submit = SubmitField(label=c.SIGNUP)
 
+
 class SignupForm(FlaskForm):
     email = StringField(label='',
                         validators=[validators.Email(),
@@ -292,10 +330,12 @@ class SignupForm(FlaskForm):
                         render_kw={"placeholder": c.EMAIL})
     submit = SubmitField(label=c.SIGNUP)
 
+
 class AIS2CookieForm(FlaskForm):
     jsessionid = StringField(label='JSESSIONID',
                              validators=[validators.DataRequired()])
     submit = SubmitField(label=c.SUBMIT)
+
 
 class AIS2SubmitForm(FlaskForm):
     submit = SubmitField(label=c.CONTINUE)

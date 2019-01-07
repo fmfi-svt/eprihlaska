@@ -23,7 +23,7 @@ MAIL_DEFAULT_SENDER = ('ePrihlaska', 'prijimacky@fmph.uniba.sk')
 
 SESSION_TYPE = 'filesystem'
 
-ADMINS = ['mareksuppa@gmail.com']
+ADMINS = ['mareksuppa@gmail.com', 'ado.matejov@gmail.com', 'tvinar@gmail.com']
 ERROR_EMAIL_SERVER = 'mailcheck.uniba.sk'
 ERROR_EMAIL_FROM = 'prihlaska@fmph.uniba.sk'
 ERROR_EMAIL_HEADER = 'ePrihlaska - error'
@@ -32,4 +32,7 @@ UA_CODE = 'UA-23362538-7'
 
 COSIGN_PROXY_DIR = '/opt/cosign/proxy'
 
-SUBMISSIONS_OPEN = False
+SUBMISSIONS_OPEN = True
+
+UPLOADED_RECEIPTS_DEST = 'receipts'
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024

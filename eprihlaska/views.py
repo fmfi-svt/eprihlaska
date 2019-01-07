@@ -1,18 +1,18 @@
 from flask import (render_template, flash, redirect, session, request, url_for,
-                   make_response)
+                   make_response, send_from_directory)
 import flask.json
 from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaversForm,
+                              PreviousStudiesForm, AdmissionWaiversForm,
+                              FinalForm, ReceiptUploadForm,
                               LoginForm, SignupForm, ForgottenPasswordForm,
                               NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
 import datetime
-import string
 import uuid
 import sys
 import traceback
@@ -63,7 +63,7 @@ def require_filled_form(form_key):
                 return redirect(url_for('index'))
 
             if request.method == 'GET' and form_key not in session:
-                flash('Najprv, prosím, vyplňte formulár uvedený nižšie')
+                flash(consts.FLASH_MSG_FILL_FORM)
                 for _, endpoint in MENU:
                     if endpoint not in session:
                         return redirect(url_for(endpoint))
@@ -77,7 +77,7 @@ def require_remote_user(func):
     def wrapper(*args, **kwargs):
         if not app.debug:
             if request.environ.get('REMOTE_USER') is None:
-                flash(conf.NO_ACCESS_MSG, 'error')
+                flash(consts.NO_ACCESS_MSG, 'error')
                 return redirect(url_for('index'))
         return func(*args, **kwargs)
     return wrapper
@@ -94,6 +94,10 @@ def save_form(form):
         if 'application_submitted' in session:
             del session['application_submitted']
 
+    save_current_session_to_DB()
+
+
+def save_current_session_to_DB():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     app.application = flask.json.dumps(dict(session))
     db.session.commit()
@@ -169,7 +173,7 @@ def study_programme():
                 return redirect(url_for('study_programme'))
 
             save_form(form)
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('personal_info'))
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -183,7 +187,7 @@ def personal_info():
     if form.validate_on_submit():
         save_form(form)
 
-        flash('Vaše dáta boli uložené!')
+        flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('further_personal_info'))
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -199,7 +203,7 @@ def further_personal_info():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('address'))
     return render_template('further_personal_info.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -214,7 +218,7 @@ def address():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('previous_studies'))
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -229,7 +233,7 @@ def previous_studies():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('admissions_waivers'))
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -239,14 +243,14 @@ def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
     constraints = {
-        'FYZ': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'FYZ': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
         'BIO': ['BIN', 'BMF'],
-        'CHE': ['BIN', 'BMF'],
-        'SVOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'SVOC_BIO': ['BIN', 'BMF'],
-        'SVOC_CHM': ['BIN', 'BMF'],
-        'TMF': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'CHE': ['BIN'],
+        'SOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'SOC_BIO': ['BIN', 'BMF'],
+        'SOC_CHM': ['BIN'],
+        'TMF': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         '_': STUDY_PROGRAMMES
     }
 
@@ -274,7 +278,7 @@ def admissions_waivers():
         flash(consts.DEAN_LIST_MSG)
         return redirect(url_for('final'))
 
-    form = AdmissionWaversForm(obj=munchify(dict(session)))
+    form = AdmissionWaiversForm(obj=munchify(dict(session)))
 
     # Filter out competitions based on selected study programmes.
     for subform in form:
@@ -285,36 +289,48 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'OZE'],
-        'grades_fyz': ['BMF', 'FYZ', 'OZE'],
-        'grades_bio': ['BMF'],
+        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'INF'],
+        'grades_inf': ['BIN', 'INF'],
+        'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
+        'grades_bio': ['BMF', 'BIN'],
+        'grades_che': ['BIN'],
     }
 
+    # Set labels for grades of respective study years based on
+    # `length_of_study`
+    los = session['length_of_study']
+    for grade_key in grade_constraints.keys():
+        form[grade_key].grade_first_year.label.text = consts.GRADE_FIRST_YEAR[los] # noqa
+        form[grade_key].grade_second_year.label.text = consts.GRADE_SECOND_YEAR[los] # noqa
+        form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
+
     further_study_info_constraints = {
-        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
+        'matura_mat_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'AIN', 'BIN', 'INF',
+                             'upFYIN', 'upINAN', 'upINBI', 'upMADG' 'upMAFY',
+                             'upMAIN', 'upMATV'],
+        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
         'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI',
                              'upMAIN', 'upINAN'],
         'matura_bio_grade': ['BIN', 'BMF'],
-        'matura_che_grade': ['BIN', 'BMF'],
-        'will_take_fyz_matura': ['BMF', 'FYZ', 'OZE', 'upFYIN', 'upMAFY'],
-        'will_take_inf_matura': ['INF', 'AIN', 'BIN', 'upINBI',
-                                 'upMAIN', 'upINAN'],
-        'will_take_bio_matura': ['BIN', 'BMF'],
-        'will_take_che_matura': ['BIN', 'BMF']
-
+        'matura_che_grade': ['BIN'],
     }
 
+    further_study_info_constraints.update({
+        'will_take_mat_matura': further_study_info_constraints['matura_mat_grade'], # noqa
+        'will_take_fyz_matura': further_study_info_constraints['matura_fyz_grade'], # noqa
+        'will_take_inf_matura': further_study_info_constraints['matura_inf_grade'], # noqa
+        'will_take_bio_matura': further_study_info_constraints['matura_bio_grade'], # noqa
+        'will_take_che_matura': further_study_info_constraints['matura_che_grade'], # noqa
+    })
+
     relevant_years = {
-        'external_matura_percentile': [2014, 2015, 2016, 2017, 2018],
-        'scio_percentile': [2014, 2015, 2016, 2017, 2018],
-        'scio_date': [2014, 2015, 2016, 2017, 2018],
-        'matura_mat_grade': [2015, 2016, 2017, 2018],
-        'matura_fyz_grade': [2015, 2016, 2017, 2018],
-        'matura_inf_grade': [2015, 2016, 2017, 2018],
-        'matura_bio_grade': [2015, 2016, 2017, 2018],
-        'matura_che_grade': [2015, 2016, 2017, 2018],
+        'external_matura_percentile': [2016, 2017, 2018],
+        'matura_mat_grade': [2016, 2017, 2018],
+        'matura_fyz_grade': [2016, 2017, 2018],
+        'matura_inf_grade': [2016, 2017, 2018],
+        'matura_bio_grade': [2016, 2017, 2018],
+        'matura_che_grade': [2016, 2017, 2018],
         'will_take_external_mat_matura': [2019],
-        'will_take_scio': [2019],
         'will_take_mat_matura': [2019],
         'will_take_fyz_matura': [2019],
         'will_take_inf_matura': [2019],
@@ -322,11 +338,17 @@ def admissions_waivers():
         'will_take_che_matura': [2019],
     }
 
+    further_study_whitelist = [
+        'scio_percentile',
+        'scio_date',
+        'will_take_scio'
+    ]
+
     study_programme_set = set(session['study_programme'])
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           matura_year not in [2015, 2016, 2017, 2018, 2019]:
+           matura_year not in [2016, 2017, 2018, 2019]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -336,29 +358,30 @@ def admissions_waivers():
 
     for k, v in relevant_years.items():
         if matura_year not in v:
-            if k in form['further_study_info']._fields:
+            if k in form['further_study_info']._fields and \
+                    k not in further_study_whitelist:
                 form['further_study_info'].__delitem__(k)
 
     if form.validate_on_submit():
         if 'application_submitted' not in session:
             save_form(form)
 
-            flash('Vaše dáta boli uložené!')
+            flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('final'))
 
     return render_template('admission_waivers.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
-@app.route('/final', methods=['GET'])
+@app.route('/final', methods=['GET', 'POST'])
 @login_required
 @require_filled_form('admissions_waivers')
 def final():
     app_form = ApplicationForm.query.filter_by(user_id=current_user.id).first()
 
-    # If the application is not after the submission step (that is, it is in
-    # in_progress state) and submissions are not open, we should redirect to
-    # the front page with an error message saying 'submissions are not open'
+    # If the application has not gone through the submission step (that is, it
+    # is in in_progress state) and submissions are not open, we should redirect
+    # to the front page with an error message saying 'submissions are not open'
     if not app.config['SUBMISSIONS_OPEN'] \
        and app_form.state == ApplicationStates.in_progress:
         flash(consts.SUBMISSIONS_NOT_OPEN, 'error')
@@ -398,6 +421,36 @@ def final():
                     grades.append(session[x][y])
     grades_filled = any(map(lambda x: x is not None, grades))
 
+    # Deal with receipt form
+    receipt_form = None
+    if app_form.state == consts.ApplicationStates.submitted:
+        if 'receipt_filename' not in session:
+            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
+            if receipt_form.validate_on_submit():
+                filename = consts.receipts.save(receipt_form.receipt.data)
+                session['receipt_filename'] = filename
+
+                save_current_session_to_DB()
+
+                flash(consts.FLASH_MSG_RECEIPT_SUBMITTED)
+
+    form = FinalForm(obj=munchify(dict(session)))
+    if form.validate_on_submit():
+        if 'application_submitted' not in session:
+            save_form(form)
+
+            session['application_submitted'] = True
+            app_form.application = flask.json.dumps(dict(session))
+            app_form.state = ApplicationStates.submitted
+            app_form.submitted_at = datetime.datetime.now()
+            db.session.commit()
+
+            # The receipt_form should now be operational, as the application is
+            # submitted
+            receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
+
+            flash(consts.FLASH_MSG_APP_SUBMITTED)
+
     app_state = APPLICATION_STATES[app_form.state.value]
 
     return render_template('final.html', session=session,
@@ -406,29 +459,33 @@ def final():
                            hs_sp_check=hs_sp_check,
                            hs_ed_level_check=hs_education_level_check,
                            grades_filled=grades_filled,
-                           app_state=app_state)
+                           app_state=app_state,
+                           form=form, receipt_form=receipt_form,
+                           consts=consts)
 
 
-@app.route('/submit_app')
+@app.route('/payment_receipt', methods=['GET'])
 @login_required
-def submit_app():
-    app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    session['application_submitted'] = True
-    app.application = flask.json.dumps(dict(session))
-    app.state = ApplicationStates.submitted
-    app.submitted_at = datetime.datetime.now()
-    db.session.commit()
+def payment_receipt():
+    if 'receipt_filename' not in session:
+        flash(consts.ERR_RECEIPT_NOT_UPLOADED, 'error')
+        return redirect(url_for('final'))
 
-    flash('Gratulujeme, Vaša prihláška bola podaná!')
-    return redirect(url_for('final'))
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
+    return send_from_directory(receipt_dir, session['receipt_filename'],
+                               as_attachment=True)
 
 
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    rendered = render_template('grade_listing.html', session=session,
-                               id=app.id)
+    rendered = render_template('grade_listing.html',
+                               session=session,
+                               id=app.id,
+                               consts=consts)
+
     pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
 
     response = make_response(pdf)
@@ -484,7 +541,7 @@ def login():
 
                 flash(consts.LOGIN_CONGRATS_MSG)
                 return redirect(url_for('study_programme'))
-        flash('Nesprávne prihlasovacie údaje', 'error')
+        flash(consts.FLASH_MSG_WRONG_LOGIN, 'error')
 
     return render_template('login.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -645,7 +702,7 @@ def create_or_get_user_and_login(site, token, name, surname, email):
 
     login_user(user)
     TokenModel.save(site, token, user)
-    flash('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')
+    flash(consts.FLASH_MSG_AFTER_LOGIN)
 
 
 @app.route('/google/login', methods=['GET'])
@@ -690,16 +747,16 @@ def facebook_authorize():
 
 
 def process_apps(apps):
-    for app in apps:
+    for application in apps:
         out_app = {}
-        a = flask.json.loads(app.application)
-        for key in a.keys():
-            out_app[key] = a[key]
+        app_object = flask.json.loads(application.application)
+        for key in app_object.keys():
+            out_app[key] = app_object[key]
 
         # TODO: this is band-aid and should be removed
         if 'basic_personal_data' not in out_app:
             out_app['basic_personal_data'] = {}
-        app.app = out_app
+        application.app = out_app
     return apps
 
 
@@ -725,7 +782,7 @@ def admin_list():
 @app.route('/admin/view/<id>')
 @require_remote_user
 def admin_view(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     rendered = render_app(app)
     return rendered
 
@@ -733,7 +790,7 @@ def admin_view(id):
 @app.route('/admin/print/<id>')
 @require_remote_user
 def admin_print(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates.printed
     app.printed_at = datetime.datetime.now()
     db.session.commit()
@@ -745,7 +802,7 @@ def admin_print(id):
 @app.route('/admin/reset/<id>')
 @require_remote_user
 def admin_reset(id):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates.in_progress
     sess = flask.json.loads(app.application)
     if 'application_submitted' in sess:
@@ -761,7 +818,7 @@ def admin_reset(id):
 @app.route('/admin/set_state/<id>/<int:state>')
 @require_remote_user
 def admin_set_state(id, state):
-    app = ApplicationForm.query.filter_by(id=id).first()
+    app = ApplicationForm.query.get(id)
     app.state = ApplicationStates(state)
     sess = flask.json.loads(app.application)
 
@@ -772,6 +829,18 @@ def admin_set_state(id, state):
 
     db.session.commit()
     return redirect(url_for('admin_list'))
+
+
+@app.route('/admin/payment_receipt/<id>')
+@require_remote_user
+def admin_payment_receipt(id):
+    application = ApplicationForm.query.get(id)
+    sess = flask.json.loads(application.application)
+
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
+    return send_from_directory(receipt_dir, sess['receipt_filename'],
+                               as_attachment=True)
 
 
 def get_cosign_cookies():
@@ -796,7 +865,7 @@ def admin_ais_test():
     ctx = create_context(cosign_cookies,
                          origin='ais2.uniba.sk')
     # Do log in
-    soup = ctx.request_html('/ais/login.do', method='POST')
+    ctx.request_html('/ais/login.do', method='POST')
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
@@ -825,18 +894,18 @@ def admin_submitted_stats():
         data.seek(0)
         data.truncate(0)
 
-        for app in A:
-            sess = flask.json.loads(app.application)
+        for application in A:
+            sess = flask.json.loads(application.application)
             if not sess['finished_highschool_check'] == 'SK':
                 continue
 
-            user = User.query.filter_by(id=app.user_id).first()
+            user = User.query.filter_by(id=application.user_id).first()
             hs_code = sess['studies_in_sr']['highschool']
             highschool = LISTS['highschool'][hs_code]
 
             w.writerow((highschool,
                         user.registered_at,
-                        app.submitted_at))
+                        application.submitted_at))
 
             yield data.getvalue()
             data.seek(0)
@@ -875,8 +944,8 @@ def admin_scio_stats():
         data.seek(0)
         data.truncate(0)
 
-        for app in A:
-            sess = flask.json.loads(app.application)
+        for application in A:
+            sess = flask.json.loads(application.application)
             if 'further_study_info' not in sess:
                 continue
 
@@ -911,7 +980,7 @@ def admin_scio_stats():
 @app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_ais2_process(id):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form,
@@ -920,7 +989,7 @@ def admin_ais2_process(id):
 
 @app.route('/admin/ais2_process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_ais2_process_special(id, process_type):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form,
@@ -930,7 +999,7 @@ def admin_ais2_process_special(id, process_type):
 @app.route('/admin/process/<id>', methods=['GET', 'POST'])
 @require_remote_user
 def admin_process(id):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, None, beta=True)
@@ -938,7 +1007,7 @@ def admin_process(id):
 
 @app.route('/admin/process/<id>/<process_type>', methods=['GET', 'POST'])
 def admin_process_special(id, process_type):
-    application = ApplicationForm.query.filter_by(id=id).first()
+    application = ApplicationForm.query.get(id)
 
     form = AIS2CookieForm()
     return send_application_to_ais2(id, application, form, process_type,
@@ -956,7 +1025,7 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
             ctx = create_context(cosign_cookies,
                                  origin='ais2.uniba.sk')
             # Do log in
-            soup = ctx.request_html('/ais/login.do', method='POST')
+            ctx.request_html('/ais/login.do', method='POST')
 
         ais2_output = None
         error_output = None
@@ -968,7 +1037,7 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
                                                        LISTS,
                                                        id,
                                                        process_type)
-        except Exception as e:
+        except Exception:
             error_output = traceback.format_exception(*sys.exc_info())
             error_output = '\n'.join(error_output)
             title = '{} AIS2 (#{})'.format(app.config['ERROR_EMAIL_HEADER'],
