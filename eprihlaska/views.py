@@ -790,13 +790,36 @@ def admin_view(id):
 @app.route('/admin/print/<id>')
 @require_remote_user
 def admin_print(id):
+    import pypdftk # noqa
+    import tempfile
+
     app = ApplicationForm.query.get(id)
     app.state = ApplicationStates.printed
     app.printed_at = datetime.datetime.now()
     db.session.commit()
 
     rendered = render_app(app, print=True)
-    return rendered
+    pdf = generate_pdf(rendered)
+
+    with tempfile.NamedTemporaryFile() as fp:
+        fp.write(pdf)
+        n_pages = pypdftk.get_num_pages(fp.name)
+        n_blank_pages = 3 - n_pages
+        blank_path = consts.DIR + '/data/blank_A4.pdf'
+
+        paths_to_concat = [fp.name]
+        paths_to_concat += [blank_path] * n_blank_pages
+        paths_to_concat += [consts.DIR + '/data/protokol.pdf']
+
+        concated_file = pypdftk.concat(paths_to_concat)
+        with open(concated_file, 'rb') as out_f:
+            output = out_f.read()
+
+    response = make_response(output)
+    response.headers['Content-Type'] = 'application/pdf'
+    disposition = 'inline; filename=application_form_{}.pdf'.format(id)
+    response.headers['Content-Disposition'] = disposition
+    return response
 
 
 @app.route('/admin/reset/<id>')
