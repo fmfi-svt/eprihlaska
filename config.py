@@ -1,5 +1,5 @@
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'UumuV3neeGouluut7eirOhk8ushi0aizei0ieteeeeT0laiLie6EetahX8Ei'
+SECRET_KEY = 'UumuV3neeGouluut7eirOhk8ushi0aizei0ieteeeeT0laiLie6EetahX8EiAA'
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://eprihlaska:Er5phaLixie1raPhaipe@localhost/eprihlaska'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
