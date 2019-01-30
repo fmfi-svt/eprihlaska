@@ -9,6 +9,7 @@ sys.path.insert(0, DIR + '/votr/')
 from aisikl.context import Context # noqa
 from aisikl.app import Application # noqa
 import aisikl.portal # noqa
+import time
 
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
@@ -104,6 +105,9 @@ def save_application_form(ctx,
     # Click on relevant rodneCisloButton
     with app.collect_operations() as ops:
         app.d.rodneCisloButton.click()
+        # FIXME: Vinko's fix
+        time.sleep(1)
+
 
     # FIXME: This i here is simply one nasty hack. Its purpose is simple: we
     # really do not know what sort of an op will AIS return. Thus, we'll try
