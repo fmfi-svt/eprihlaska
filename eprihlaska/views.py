@@ -716,8 +716,10 @@ def google_authorize():
     token = google.authorize_access_token()
     profile = google.parse_openid(token)
 
-    create_or_get_user_and_login('google', token, profile.data['given_name'],
-                                 profile.data['family_name'], profile.email)
+    create_or_get_user_and_login('google', token,
+                                 profile.data.get('given_name', ''),
+                                 profile.data.get('family_name', ''),
+                                 profile.email)
 
     return redirect(url_for('study_programme'))
 
