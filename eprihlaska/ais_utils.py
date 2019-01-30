@@ -305,8 +305,8 @@ def save_application_form(ctx,
         add_subject(app, abbr)
         fill_in_table_cells(app, abbr, F, session)
 
-    # Unselect everything in prilohyCheckList
-    unselect_checklist(app.d.prilohyCheckList)
+    # Unselect everything in prilohyTable (literally)
+    unselect_table(app.d.prilohyTable)
     checkboxes = generate_checkbox_abbrs(session)
 
     # Add dean's letter
@@ -341,10 +341,9 @@ def save_application_form(ctx,
 
     # Check those items in prilohyCheckList that have been generated from the
     # submitted application form (the code above)
-    for item in app.d.prilohyCheckList.items:
-        if item.sid in checkboxes:
-            item.checked = True
-    app.d.prilohyCheckList._mark_changed()
+    for idx, row in enumerate(app.d.prilohyTable.all_rows()):
+        if row.cells[1].value in checkboxes:
+            app.d.prilohyTable.edit_cell('checkBox', idx, True)
 
     # Prepare poznamka_text
     poznamka_items = []
@@ -575,9 +574,12 @@ def add_subject(app, abbr):
 
     select_predmet_dlg = app.awaited_close_dialog(ops)
 
-    # Add 'N' to subject level
+    # Add 'N' to subject level, if such a cell exists
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
-    app.d.vysvedceniaTable.edit_cell('kodUrovenMat', index, 'N')
+    try:
+        app.d.vysvedceniaTable.edit_cell('kodUrovenMat', index, 'N')
+    except KeyError:
+        pass
 
 
 def fill_in_table_cells(app, abbr, F, session):
@@ -649,6 +651,14 @@ def matura_grade_to_table_cell(app, session, grade_field):
     g = session['further_study_info'][grade_field]
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
     app.d.vysvedceniaTable.edit_cell('znamkaMaturitna', index, g)
+
+
+def unselect_table(table):
+    """
+    Unselect all first checkboxes in a table. Don't ask me why.
+    """
+    for idx, row in enumerate(table.all_rows()):
+        table.edit_cell('checkBox', idx, False)
 
 
 def unselect_checklist(checklist):
