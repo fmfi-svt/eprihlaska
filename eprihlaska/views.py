@@ -486,7 +486,8 @@ def grades_control():
                                id=app.id,
                                consts=consts)
 
-    pdf = generate_pdf(rendered, options={'orientation': 'landscape'})
+    pdf = generate_pdf(rendered, options={'orientation': 'landscape',
+                                          'quiet': ''})
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
@@ -515,7 +516,7 @@ def application_form():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
     rendered = render_app(app, use_app_session=False)
 
-    pdf = generate_pdf(rendered)
+    pdf = generate_pdf(rendered, options={'quiet': ''})
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
@@ -801,21 +802,25 @@ def admin_print(id):
     db.session.commit()
 
     rendered = render_app(app, print=True)
-    pdf = generate_pdf(rendered)
+    pdf = generate_pdf(rendered, options={'quiet': ''})
 
-    with tempfile.NamedTemporaryFile() as fp:
+    with tempfile.NamedTemporaryFile(delete=False) as fp:
         fp.write(pdf)
-        n_pages = pypdftk.get_num_pages(fp.name)
-        n_blank_pages = 3 - n_pages
-        blank_path = consts.DIR + '/data/blank_A4.pdf'
 
-        paths_to_concat = [fp.name]
-        paths_to_concat += [blank_path] * n_blank_pages
-        paths_to_concat += [consts.DIR + '/data/protokol.pdf']
+    n_pages = pypdftk.get_num_pages(fp.name)
+    n_blank_pages = 3 - n_pages
+    blank_path = consts.DIR + '/data/blank_A4.pdf'
 
-        concated_file = pypdftk.concat(paths_to_concat)
-        with open(concated_file, 'rb') as out_f:
-            output = out_f.read()
+    paths_to_concat = [fp.name]
+    paths_to_concat += [blank_path] * n_blank_pages
+    paths_to_concat += [consts.DIR + '/data/protokol.pdf']
+
+    concated_file = pypdftk.concat(paths_to_concat)
+    with open(concated_file, 'rb') as out_f:
+        output = out_f.read()
+
+    # remove the temp file
+    os.unlink(fp.name)
 
     response = make_response(output)
     response.headers['Content-Type'] = 'application/pdf'
