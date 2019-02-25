@@ -797,9 +797,6 @@ def admin_print(id):
     import tempfile
 
     app = ApplicationForm.query.get(id)
-    app.state = ApplicationStates.printed
-    app.printed_at = datetime.datetime.now()
-    db.session.commit()
 
     rendered = render_app(app, print=True)
     pdf = generate_pdf(rendered, options={'quiet': ''})
@@ -821,6 +818,11 @@ def admin_print(id):
 
     # remove the temp file
     os.unlink(fp.name)
+
+    # mark the application as 'printed' in the DB
+    app.state = ApplicationStates.printed
+    app.printed_at = datetime.datetime.now()
+    db.session.commit()
 
     response = make_response(output)
     response.headers['Content-Type'] = 'application/pdf'

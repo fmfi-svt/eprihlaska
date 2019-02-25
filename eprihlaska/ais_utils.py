@@ -327,7 +327,7 @@ def save_application_form(ctx,
         'SOC_MAT': 'SočM',
         'SOC_INF': 'SočI',
         'SOC_BIO': 'SočB',
-        'SOC_CHE': 'SočCH',
+        'SOC_CHM': 'SočCH',
         'TMF': 'TMF'
     }
 
@@ -477,7 +477,7 @@ def fill_in_address(field, app, session, lists):
     fields['street'].write(session[field]['street'])
     fields['street_no'].write(session[field]['street_no'])
 
-    fields['postal_no'].write(session[field]['postal_no'])
+    fields['postal_no'].write(session[field]['postal_no'][:10])
 
 
 def add_to_set_on_grade_field(S, F, session, grade_field, abbr):
