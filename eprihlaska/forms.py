@@ -132,7 +132,8 @@ class Address(FlaskForm):
                                                             country_field_value='703',
                                                             country_negated=True,
                                                             message=c.ADDRESS_CITY_FOREIGN_FILL)])
-    postal_no = StringField(label=c.ADDRESS_POSTAL_NO)
+    postal_no = StringField(label=c.ADDRESS_POSTAL_NO,
+                            validators=[validators.Length(max=10)])
 
 
 class AddressForm(FlaskForm):
