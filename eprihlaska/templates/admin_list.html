@@ -163,7 +163,9 @@
 
       window.open($(this).attr('href'), '_blank');
 
-      location.reload();
+      // Wait a bit before reloading the page so that the backed has time to
+      // change the status of the application that is being printed
+      setTimeout(location.reload, 5000);
     });
 
     // Open a nav-tab from a given URL hash.
