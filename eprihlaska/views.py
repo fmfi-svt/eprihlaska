@@ -423,7 +423,9 @@ def final():
 
     # Deal with receipt form
     receipt_form = None
-    if app_form.state == consts.ApplicationStates.submitted:
+    # If the application is no longer in progress (i.e. it has been either
+    # submitted, printed or processed already), only then show the receipt_form
+    if app_form.state != consts.ApplicationStates.in_progress:
         if 'receipt_filename' not in session:
             receipt_form = ReceiptUploadForm(obj=munchify(dict(session)))
             if receipt_form.validate_on_submit():
