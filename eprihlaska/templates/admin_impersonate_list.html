@@ -1,0 +1,31 @@
+
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}Impersonate user{% endblock title %}
+  </h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <a href="https://login.uniba.sk/logout.cgi"><strong>Odhlásiť sa</strong></a>
+      </div>
+    </div>
+
+    <div class="row">
+      <ul>
+        {% for user in users %}
+        <li><a href="{{ url_for('admin_impersonate_user', id=user.id) }}">{{ user.email }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
