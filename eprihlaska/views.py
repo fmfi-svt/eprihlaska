@@ -1106,3 +1106,20 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
     return render_template('admin_process.html',
                            form=form, id=id,
                            beta=beta)
+
+
+@app.route('/admin/impersonate/list')
+@require_remote_user
+def admin_impersonate_list():
+    users = User.query.all()
+    return render_template('admin_impersonate_list.html', users=users)
+
+
+@app.route('/admin/impersonate/<id>')
+@require_remote_user
+def admin_impersonate_user(id):
+    user = User.query.get(id)
+    logout_user()
+    session.clear()
+    login_user(user)
+    return redirect(url_for('index'))
