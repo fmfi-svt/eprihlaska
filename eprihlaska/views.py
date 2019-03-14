@@ -738,7 +738,7 @@ def facebook_authorize():
     token = facebook.authorize_access_token()
     profile = facebook.fetch_user()
 
-    data = profile.data['name'].split(' ')
+    data = profile.data.get('name', '').split(' ')
     name = '' if not len(data) else data[0]
     surname = '' if len(data) <= 1 else data[-1]
 
