@@ -83,7 +83,7 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     matura_year = IntegerField(c.MATURA_YEAR,
-                               default=c.CURRENT_MATURA_YEAR,
+                               default=c.DEFAULT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
                                                                   max=c.CURRENT_MATURA_YEAR)])

@@ -324,18 +324,18 @@ def admissions_waivers():
     })
 
     relevant_years = {
-        'external_matura_percentile': [2016, 2017, 2018],
-        'matura_mat_grade': [2016, 2017, 2018],
-        'matura_fyz_grade': [2016, 2017, 2018],
-        'matura_inf_grade': [2016, 2017, 2018],
-        'matura_bio_grade': [2016, 2017, 2018],
-        'matura_che_grade': [2016, 2017, 2018],
-        'will_take_external_mat_matura': [2019],
-        'will_take_mat_matura': [2019],
-        'will_take_fyz_matura': [2019],
-        'will_take_inf_matura': [2019],
-        'will_take_bio_matura': [2019],
-        'will_take_che_matura': [2019],
+        'external_matura_percentile': [2016, 2017, 2018, 2019],
+        'matura_mat_grade': [2016, 2017, 2018, 2019],
+        'matura_fyz_grade': [2016, 2017, 2018, 2019],
+        'matura_inf_grade': [2016, 2017, 2018, 2019],
+        'matura_bio_grade': [2016, 2017, 2018, 2019],
+        'matura_che_grade': [2016, 2017, 2018, 2019],
+        'will_take_external_mat_matura': [2020],
+        'will_take_mat_matura': [2020],
+        'will_take_fyz_matura': [2020],
+        'will_take_inf_matura': [2020],
+        'will_take_bio_matura': [2020],
+        'will_take_che_matura': [2020],
     }
 
     further_study_whitelist = [
@@ -1065,7 +1065,14 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
         error_output = None
         notes = {}
 
+        logfile = None
         try:
+            if beta:
+                import gzip
+                import random
+                logfile = gzip.open('/tmp/log_%s_%s' % (id, random.randrange(10000)), 'wt', encoding='utf8')
+                ctx.logger.log_file = logfile
+
             ais2_output, notes = save_application_form(ctx,
                                                        application,
                                                        LISTS,
@@ -1087,6 +1094,8 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
                 mail.send(msg)
             else:
                 print(error_output)
+
+        if logfile: logfile.close()
 
         # Only update the application state of it is not sent to beta and the
         # 'person_exists' note is not added

@@ -116,7 +116,21 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('upINBI', PRG_upINBI),
                            ('upINAN', PRG_upINAN)]
 
-STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
+# STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
+STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
+                           ('MAT', PRG_MAT),
+                           ('PMA', PRG_PMA),
+                           ('MMN', PRG_MMN),
+                           ('FYZ', PRG_FYZ),
+                           ('OZE', PRG_OZE),
+                           ('TEF', PRG_TEF),
+                           ('AIN', PRG_AIN),
+                           ('upMAFY', PRG_upMAFY),
+                           ('upMAIN', PRG_upMAIN),
+                           ('upFYIN', PRG_upFYIN),
+                           ('upMADG', PRG_upMADG),
+                           ('upINBI', PRG_upINBI),
+                           ('upINAN', PRG_upINAN)]
 
 ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
@@ -334,4 +348,5 @@ ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
-CURRENT_MATURA_YEAR = 2019
+CURRENT_MATURA_YEAR = 2020
+DEFAULT_MATURA_YEAR = 2019
