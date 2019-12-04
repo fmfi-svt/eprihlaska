@@ -76,10 +76,10 @@ class BasicPersonalDataForm(FlaskForm):
     born_with_surname = StringField(c.BORNWITH_SURNAME)
 
     matura_year = IntegerField(c.MATURA_YEAR,
-                               default=c.CURRENT_MATURA_YEAR,
+                               default=c.DEFAULT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
-                                                                  max=c.CURRENT_MATURA_YEAR)])
+                                                                  max=c.DEFAULT_MATURA_YEAR)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
@@ -182,7 +182,7 @@ class CompetitionSuccessFormItem(FlaskForm):
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional(),
                                     validators.NumberRange(min=1990,
-                                                           max=c.CURRENT_MATURA_YEAR,
+                                                           max=c.DEFAULT_MATURA_YEAR,
                                                            message=c.YEAR_ERR)])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
                                description=c.COMPETITION_FURTHER_INFO_DESC)

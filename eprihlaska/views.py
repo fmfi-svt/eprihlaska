@@ -28,7 +28,7 @@ from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
                      HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
                      HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES, APPLICATION_STATES,
+                     COMPETITION_CHOICES, APPLICATION_STATES, CURRENT_MATURA_YEAR, DEFAULT_MATURA_YEAR,
                      ApplicationStates)
 from . import consts
 
@@ -286,8 +286,8 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'INF'],
-        'grades_inf': ['BIN', 'INF'],
+        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'DAV', 'INF'],
+        'grades_inf': ['BIN', 'INF', 'DAV'],
         'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
         'grades_bio': ['BMF', 'BIN'],
         'grades_che': ['BIN'],
@@ -302,14 +302,13 @@ def admissions_waivers():
         form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
 
     further_study_info_constraints = {
-        'matura_mat_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'AIN', 'BIN', 'INF',
+        'matura_mat_grade': ['AIN', 
                              'upFYIN', 'upINAN', 'upINBI', 'upMADG' 'upMAFY',
                              'upMAIN', 'upMATV'],
-        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI',
-                             'upMAIN', 'upINAN'],
-        'matura_bio_grade': ['BIN', 'BMF'],
-        'matura_che_grade': ['BIN'],
+        'matura_fyz_grade': ['upFYIN', 'upMAFY'],
+        'matura_inf_grade': ['AIN', 'upINBI','upMAIN', 'upINAN'],
+        'matura_bio_grade': [ ],
+        'matura_che_grade': [ ],
     }
 
     further_study_info_constraints.update({
@@ -320,19 +319,22 @@ def admissions_waivers():
         'will_take_che_matura': further_study_info_constraints['matura_che_grade'], # noqa
     })
 
+
+    relevant_years_last4 = [DEFAULT_MATURA_YEAR-3, DEFAULT_MATURA_YEAR-2, DEFAULT_MATURA_YEAR-1, CURRENT_MATURA_YEAR-1]
+    
     relevant_years = {
-        'external_matura_percentile': [2016, 2017, 2018],
-        'matura_mat_grade': [2016, 2017, 2018],
-        'matura_fyz_grade': [2016, 2017, 2018],
-        'matura_inf_grade': [2016, 2017, 2018],
-        'matura_bio_grade': [2016, 2017, 2018],
-        'matura_che_grade': [2016, 2017, 2018],
-        'will_take_external_mat_matura': [2019],
-        'will_take_mat_matura': [2019],
-        'will_take_fyz_matura': [2019],
-        'will_take_inf_matura': [2019],
-        'will_take_bio_matura': [2019],
-        'will_take_che_matura': [2019],
+        'external_matura_percentile': relevant_years_last4,
+        'matura_mat_grade': relevant_years_last4,
+        'matura_fyz_grade': relevant_years_last4,
+        'matura_inf_grade': relevant_years_last4,
+        'matura_bio_grade': relevant_years_last4,
+        'matura_che_grade': relevant_years_last4,
+        'will_take_external_mat_matura': [CURRENT_MATURA_YEAR],
+        'will_take_mat_matura': [CURRENT_MATURA_YEAR],
+        'will_take_fyz_matura': [CURRENT_MATURA_YEAR],
+        'will_take_inf_matura': [CURRENT_MATURA_YEAR],
+        'will_take_bio_matura': [CURRENT_MATURA_YEAR],
+        'will_take_che_matura': [CURRENT_MATURA_YEAR],
     }
 
     further_study_whitelist = [
@@ -345,7 +347,7 @@ def admissions_waivers():
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           matura_year not in [2016, 2017, 2018, 2019]:
+           matura_year not in relevant_years_last4 + [DEFAULT_MATURA_YEAR]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
