@@ -281,13 +281,13 @@ class AdmissionWaiversForm(FlaskForm):
                               label=c.COMPETITION_SECOND)
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
+    note = TextAreaField(label=c.FINAL_NOTE,
+                         description=c.FINAL_NOTE_DESC)
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
 
 class FinalForm(FlaskForm):
-    note = TextAreaField(label=c.FINAL_NOTE,
-                         description=c.FINAL_NOTE_DESC)
     submit = SubmitField(label=c.SUBMIT_APPLICATION)
 
 
