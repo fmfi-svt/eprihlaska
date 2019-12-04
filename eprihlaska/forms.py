@@ -193,19 +193,19 @@ class FurtherStudyInfoForm(FlaskForm):
     g_max = 5
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
+
     will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
+    scio_date = StringField(label=c.SCIO_DATE)
+    scio_cert_no = StringField(label=c.SCIO_CERT_NO,
+                               description=c.SCIO_CERT_NO_DESC)
 
     will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
     will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
     will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
     will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
     will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
-
-    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
-    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
-    scio_date = StringField(label=c.SCIO_DATE)
-    scio_cert_no = StringField(label=c.SCIO_CERT_NO,
-                               description=c.SCIO_CERT_NO_DESC)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
                                     validators=[validators.Optional(),
