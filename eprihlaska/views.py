@@ -4,11 +4,11 @@ import flask.json
 from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
-                              FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaiversForm,
-                              FinalForm, ReceiptUploadForm,
-                              LoginForm, SignupForm, ForgottenPasswordForm,
-                              NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
+                              AddressForm, PreviousStudiesForm,
+                              AdmissionWaiversForm, FinalForm,
+                              ReceiptUploadForm, LoginForm, SignupForm,
+                              ForgottenPasswordForm, NewPasswordForm,
+                              AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
@@ -188,30 +188,14 @@ def personal_info():
         save_form(form)
 
         flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('further_personal_info'))
+        return redirect(url_for('address'))
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
-@app.route('/further_personal_info', methods=('GET', 'POST'))
-@login_required
-@require_filled_form('personal_info')
-def further_personal_info():
-    form = FurtherPersonalDataForm(obj=munchify(dict(session)))
-
-    if form.validate_on_submit():
-        if 'application_submitted' not in session:
-            save_form(form)
-
-            flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('address'))
-    return render_template('further_personal_info.html', form=form,
-                           session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
-
-
 @app.route('/address', methods=('GET', 'POST'))
 @login_required
-@require_filled_form('further_personal_info')
+@require_filled_form('personal_info')
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -596,8 +580,6 @@ def signup():
         session['email'] = form.email.data
 
         session['basic_personal_data'] = {}
-        session['mother_name'] = {}
-        session['father_name'] = {}
         session['address_form'] = {}
         session['correspondence_address'] = {}
         session['studies_in_sr'] = {}
@@ -699,8 +681,6 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         session['basic_personal_data']['name'] = name
         session['basic_personal_data']['surname'] = surname
 
-        session['mother_name'] = {}
-        session['father_name'] = {}
         session['address_form'] = {}
         session['correspondence_address'] = {}
         session['studies_in_sr'] = {}

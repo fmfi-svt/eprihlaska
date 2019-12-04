@@ -243,7 +243,6 @@ MENU = [
     (_('ePrihlaska'), 'index'),
     (_('Študijné programy'), 'study_programme'),
     (_('Osobné údaje'), 'personal_info'),
-    (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
     (_('Prijatie bez prijímacích pohovorov'), 'admissions_waivers'),
@@ -347,4 +346,4 @@ ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
-CURRENT_MATURA_YEAR = 2019
+CURRENT_MATURA_YEAR = 2020

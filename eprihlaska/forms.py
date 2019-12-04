@@ -65,13 +65,6 @@ class PersonalDataForm(FlaskForm):
     submit = SubmitField(label=c.NEXT)
 
 
-class FurtherPersonalDataForm(FlaskForm):
-    father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
-    mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
-
-    further_personal_info = HiddenField()
-    submit = SubmitField(label=c.NEXT)
-
 
 class BasicPersonalDataForm(FlaskForm):
     personal_info_check = BooleanField(label=c.PERSONAL_INFO_CHECK,

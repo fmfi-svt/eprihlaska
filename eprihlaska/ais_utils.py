@@ -190,22 +190,14 @@ def save_application_form(ctx,
             with app.collect_operations() as ops:
                 app.d.vyberMiestoNarodeniabutton.click()
         else:
-            app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']])
+            app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']]) # noqa
             with app.collect_operations() as ops:
                 app.d.button22.click()
 
-            app.d.sklonovanieNarTextField.write(session['place_of_birth_foreign'])
+            app.d.sklonovanieNarTextField.write(session['place_of_birth_foreign']) # noqa
 
         app.d.telefonTextField.write(session['phone'])
         app.d.emailPrivateTextField.write(session['email'])
-
-        app.d.menoMatkyTextField.write(session['mother_name']['name'])
-        app.d.priezviskoMatkyTextField.write(session['mother_name']['surname'])
-        app.d.povPriezviskoMatkyTextField.write(session['mother_name']['born_with_surname'])
-
-        app.d.menoOtcaTextField.write(session['father_name']['name'])
-        app.d.priezviskoOtcaTextField.write(session['father_name']['surname'])
-        app.d.povPriezviskoOtcaTextField.write(session['father_name']['born_with_surname'])
 
         # Address
         fill_in_address('address_form', app, session, lists)

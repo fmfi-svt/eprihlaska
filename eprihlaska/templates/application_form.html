@@ -28,7 +28,7 @@
 
           {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
            <hr>
-           Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
+           Poplatok za prijímacie konanie vo výške 15 EUR je potrebné uhradiť na účet: <br>
            číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
            variabilný symbol: <strong>800</strong> <br>
            {% if session['birth_no'] %}
@@ -118,31 +118,6 @@
          <div class="col-sm-4"><strong>Telefón:</strong> {{ session['phone'] }}</div>
          <div class="col-sm-8"><strong>Email:</strong> {{ session['email'] }}</div>
        </div>
-
-       <hr>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Matka:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['mother_name']['name'] }} {{ session['mother_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small> {{ session['mother_name']['born_with_surname'] }}
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Otec:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['father_name']['name'] }} {{ session['father_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small>{{ session['father_name']['born_with_surname'] }}
-         </div>
-
-       </div>
-
-
     </div>
   </div>
 
