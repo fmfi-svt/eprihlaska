@@ -334,4 +334,4 @@ ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
-CURRENT_MATURA_YEAR = 2019
+CURRENT_MATURA_YEAR = 2020
