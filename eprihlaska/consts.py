@@ -230,7 +230,6 @@ MENU = [
     (_('ePrihlaska'), 'index'),
     (_('Študijné programy'), 'study_programme'),
     (_('Osobné údaje'), 'personal_info'),
-    (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
     (_('Prijatie bez prijímacích pohovorov'), 'admissions_waivers'),

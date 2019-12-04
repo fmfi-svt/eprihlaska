@@ -118,31 +118,6 @@
          <div class="col-sm-4"><strong>Telefón:</strong> {{ session['phone'] }}</div>
          <div class="col-sm-8"><strong>Email:</strong> {{ session['email'] }}</div>
        </div>
-
-       <hr>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Matka:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['mother_name']['name'] }} {{ session['mother_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small> {{ session['mother_name']['born_with_surname'] }}
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Otec:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['father_name']['name'] }} {{ session['father_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small>{{ session['father_name']['born_with_surname'] }}
-         </div>
-
-       </div>
-
-
     </div>
   </div>
 
