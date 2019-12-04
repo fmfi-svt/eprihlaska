@@ -226,21 +226,34 @@ def previous_studies():
 def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
+    constraint_profiles = {
+        'F': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
+        'I': ['INF', 'AIN', 'BIN', 'DAV', 'upINBI', 'upMAIN', 'upINAN'],
+        'B': ['BIN', 'BMF'],
+        'CH': ['BIN']
+    }
+    
     constraints = {
-        'FYZ': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
-        'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'BIO': ['BIN', 'BMF'],
-        'CHE': ['BIN'],
-        'SOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'SOC_BIO': ['BIN', 'BMF'],
-        'SOC_CHM': ['BIN'],
-        'TMF': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
+        'FYZ': constraint_profiles['F'],
+        'INF': constraint_profiles['I'],
+        'BIO': constraint_profiles['B'],
+        'CHM': constraint_profiles['CH'],
+        'SOC_INF': constraint_profiles['I'],
+        'SOC_BIO': constraint_profiles['B'],
+        'SOC_CHM': constraint_profiles['CH'],
+        'TMF': constraint_profiles['F'],
+        'FVAT_FYZ': constraint_profiles['F'],
+        'FVAT_INF': constraint_profiles['I'],
+        'ROBOCUP': constraint_profiles['I'],
+        'IBOBOR': constraint_profiles['I'],
+        'ZENIT': constraint_profiles['I'],
+        'TROJSTEN_KSP': constraint_profiles['I'],
+        'TROJSTEN_FKS': constraint_profiles['F'],
         '_': STUDY_PROGRAMMES
     }
 
     for comp, desc in competition_list:
-        if comp in ['MAT', 'SVOC_MAT'] \
-           and 'upINAN' not in study_programme_list:
+        if comp in ['MAT', 'SOC_MAT', 'FVAT_MAT', 'TROJSTEN_KMS']:
             result_list.append((comp, desc))
 
         for c, sp_list in constraints.items():
