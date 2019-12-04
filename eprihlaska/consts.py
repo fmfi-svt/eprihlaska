@@ -81,6 +81,7 @@ PRG_TEF = _('Technická fyzika')
 PRG_INF = _('Informatika')
 PRG_AIN = _('Aplikovaná informatika')
 PRG_BIN = _('Bioinformatika')
+PRG_DAV = _('Dátová veda')
 PRG_upMAFY = _('Učiteľstvo matematiky a fyziky')
 PRG_upMAIN = _('Učiteľstvo matematiky a informatiky')
 PRG_upFYIN = _('Učiteľstvo fyziky a informatiky')
@@ -108,6 +109,7 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('INF', PRG_INF),
                            ('AIN', PRG_AIN),
                            ('BIN', PRG_BIN),
+                           ('DAV', PRG_DAV),
                            ('upMAFY', PRG_upMAFY),
                            ('upMAIN', PRG_upMAIN),
                            ('upFYIN', PRG_upFYIN),
@@ -158,7 +160,18 @@ COMPETITION_CHOICES = [
     ('SOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),  # noqa
     ('SOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),  # noqa
     ('SOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),  # noqa
-    ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo'))
+    ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo')),
+    ('FVAT_MAT', _('úspešný účastník - Festival vedy a techniky kategória Matematika - celoštátne kolo')),
+    ('FVAT_FYZ', _('úspešný účastník - Festival vedy a techniky kategória Fyzika a astronómia - celoštátne kolo')),
+    ('FVAT_INF', _('úspešný účastník - Festival vedy a techniky kategória Informatika a počítačové inžinierstvo - celoštátne kolo')),
+    ('FVAT_BIO', _('úspešný účastník - Festival vedy a techniky kategória Biológia - celoštátne kolo')),
+    ('FVAT_MAT', _('úspešný účastník - Festival vedy a techniky kategória Chémia - celoštátne kolo')),
+    ('ROBOCUP', _('postup do medzinárodného kola - RoboCupJunior')),
+    ('IBOBOR', _('percentil aspoň 90 - iBobor - kategória Senior')),
+    ('ZENIT', _('úspešný riešiteľ - Súťaž ZENIT v programovaní - krajské kolo')),
+    ('TROJSTEN_KMS', _('65% bodov v ľubovoľnej kategórii - KMS (TROJSTEN) - ktorýkoľvek ročník a časť')),
+    ('TROJSTEN_FKS', _('65% bodov v ľubovoľnej kategórii - FKS (TROJSTEN) - ktorýkoľvek ročník a časť')),
+    ('TROJSTEN_KSP', _('65% bodov v ľubovoľnej kategórii - KSP (TROJSTEN) - ktorýkoľvek ročník a časť')),    
 ]
 
 COMPETITION_YEAR = _('Rok')
@@ -200,19 +213,19 @@ GRADE_FIRST_YEAR = {
     '4': _('koncoročná známka v 1. ročníku'),
     '8': _('koncoročná známka v kvinte'),
     '5': _('koncoročná známka v 2. ročníku'),
-    '0': _('koncoročná známka v 1. ročníku')
+    '0': _('koncoročná známka v ročníku n-3, kde n je počet ročníkov')
 }
 GRADE_SECOND_YEAR = {
     '4': _('koncoročná známka v 2. ročníku'),
     '8': _('koncoročná známka v sexte'),
     '5': _('koncoročná známka v 3. ročníku'),
-    '0': _('koncoročná známka v 2. ročníku')
+    '0': _('koncoročná známka v ročníku n-2, kde n je počet ročníkov')
 }
 GRADE_THIRD_YEAR = {
     '4': _('koncoročná známka v 3. ročníku'),
     '8': _('koncoročná známka v septime'),
     '5': _('koncoročná známka v 4. ročníku'),
-    '0': _('koncoročná známka v 3. ročníku')
+    '0': _('koncoročná známka v ročníku n-1, kde n je počet ročníkov')
 }
 
 GRADES_MAT = _('Známky z matematiky')
