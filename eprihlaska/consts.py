@@ -200,14 +200,14 @@ MATURA_BIO_GRADE = _('známka z maturity z biológie')
 
 WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky (SR) /'
                       ' maturitního didaktického testu z matematiky (ČR)')
-WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')  # noqa
+WILL_TAKE_SCIO = _('zúčastním sa autorizovanej skúšky z matematiky (SCIO)')  # noqa
 WILL_TAKE_MAT_MATURA = _('maturujem z matematiky')
 WILL_TAKE_FYZ_MATURA = _('maturujem z fyziky')
 WILL_TAKE_INF_MATURA = _('maturujem z informatiky')
 WILL_TAKE_BIO_MATURA = _('maturujem z biológie')
 WILL_TAKE_CHE_MATURA = _('maturujem z chémie')
 
-FURTHER_STUDY_INFO = _('Prospech na strednej škole')
+FURTHER_STUDY_INFO = _('Autorizovaná skúška z matematiky a maturity')
 
 GRADE_FIRST_YEAR = {
     '4': _('koncoročná známka v 1. ročníku'),
@@ -245,7 +245,7 @@ MENU = [
     (_('Osobné údaje'), 'personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
-    (_('Prijatie bez prijímacích pohovorov'), 'admissions_waivers'),
+    (_('Výsledky a úspechy'), 'admissions_waivers'),
     (_('Záverečné pokyny'), 'final')
 ]
 
