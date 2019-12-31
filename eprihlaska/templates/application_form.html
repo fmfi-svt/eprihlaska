@@ -326,12 +326,12 @@
     </div>
   </div>
 
-{% if session['note'] %}
+{% if session['final_note']['note'] %}
 
   <div class="panel panel-default">
     <div class="panel-heading">Poznámka</div>
     <div class="panel-body">
-      {{ session['note'] }}
+      {{ session['final_note']['note'] }}
     </div>
   </div>
 

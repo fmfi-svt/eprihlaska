@@ -188,6 +188,10 @@ class CompetitionSuccessFormItem(FlaskForm):
                                description=c.COMPETITION_FURTHER_INFO_DESC)
 
 
+class FinalNoteForm(FlaskForm):
+    note = TextAreaField(label=c.FINAL_NOTE,
+                         description=c.FINAL_NOTE_DESC)
+
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
@@ -274,12 +278,12 @@ class AdmissionWaiversForm(FlaskForm):
                               label=c.COMPETITION_SECOND)
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
-    note = TextAreaField(label=c.FINAL_NOTE,
-                         description=c.FINAL_NOTE_DESC)
+    final_note = FormField(FinalNoteForm,
+                           label=c.FINAL_NOTE_SDESC)
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
-
+    
 class FinalForm(FlaskForm):
     submit = SubmitField(label=c.SUBMIT_APPLICATION)
 

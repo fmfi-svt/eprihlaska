@@ -237,6 +237,7 @@ GRADES_CHE = _('Známky z chémie')
 GRADE_ERR = _('Zle zadaná známka. Akceptované známky sú 1 až 5.')
 
 FINAL_NOTE = _('Poznámka')
+FINAL_NOTE_SDESC = ('Ďalšie skutočnosti, ktoré chcete uviesť')
 FINAL_NOTE_DESC = _('Prosím, informujte nás o skutočnostiach, ktoré by mohli byť pre Vašu prihlášku relevantné a neboli spomenuté v už vyplnených častiach.') # noqa
 
 MENU = [
