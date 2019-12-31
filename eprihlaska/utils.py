@@ -2,6 +2,7 @@ import csv
 import locale
 import re
 
+
 def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
                      extend_with=None, prepend=None, post_fmt=None):
     reader = csv.DictReader(open(csv_file, 'r', encoding='utf-8'),
@@ -10,9 +11,10 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
     for line in reader:
         choice = [line[k] for k in reader.fieldnames if k in keys]
         if fmt:
-            choice = [line[keys[0]]]
-            vals = [line[f] for f in reader.fieldnames]
-            choice.append(fmt.format(*vals))
+            vals = choice
+            key = line[keys[0]]
+            formatted_value = fmt.format(*vals)
+            choice = [key, formatted_value]
         choices.append(tuple(choice))
 
     if extend_with:
@@ -35,9 +37,11 @@ def choices_from_csv(csv_file, keys, delimiter=',', fmt=None, sortby=None,
         choices = new_choices
     return choices
 
+
 def city_formatter(x):
     x = re.sub(r'^([^- ,]+)-[^,]+', r'\1', x)
     return re.sub(r'[,\s]+$', '', x)
+
 
 def okres_fixer(x):
     # Remove ', okr. Bratislava I' from okres listing (same with Kosice)

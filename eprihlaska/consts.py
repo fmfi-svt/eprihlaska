@@ -280,7 +280,7 @@ COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
 SELECT_CITY_CHOICE = [('999999', _('Zvoľte mesto alebo obec v SR'))]
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 ['id', 'Názov obce', 'Okres'],
-                                fmt='{2}, okr. {4}',
+                                fmt='{1}, okr. {2}',
                                 extend_with=SELECT_CITY_CHOICE,
                                 sortby=1,
                                 prepend=['999999'],
@@ -288,7 +288,7 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
 
 CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
                                     ['id', 'PSČ'],
-                                    fmt='{2}')
+                                    fmt='{1}')
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
@@ -326,7 +326,7 @@ HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
-                                           fmt='({0}) - {2}')
+                                           fmt='({0}) - {1}')
 
 APPLICATION_STATES = [_('rozpracovaná'),
                       _('podaná'),
