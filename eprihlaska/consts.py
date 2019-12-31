@@ -288,7 +288,7 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
 
 CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
                                     ['id', 'PSČ'],
-                                    fmt='{3}')
+                                    fmt='{2}')
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
@@ -306,7 +306,7 @@ HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX',
 HIGHSCHOOL_CHOICES = choices_from_csv(DIR + '/data/skoly.csv',
                                       ['St. šk.', 'Obec', 'Stredná škola',
                                        'Ulica'],
-                                      fmt='{2}, {3}, {4}',
+                                      fmt='{1}, {2}, {3}',
                                       extend_with=HIGHSCHOOL_NOT_IN_LIST,
                                       sortby=1,
                                       prepend=['XXXXXXX'],
@@ -318,15 +318,15 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                                'Odbor stred. školy'],
                                               extend_with=NO_SP_CHOICE,
                                               prepend=['XXXXXX'],
-                                              fmt='{1} - {2}')
+                                              fmt='{0} - {1}')
 
 HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
                                           ['St. šk.', 'Odbor - kod'],
-                                          fmt='{2}')
+                                          fmt='{1}')
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
-                                           fmt='({1}) - {3}')
+                                           fmt='({0}) - {2}')
 
 APPLICATION_STATES = [_('rozpracovaná'),
                       _('podaná'),
