@@ -65,13 +65,6 @@ class PersonalDataForm(FlaskForm):
     submit = SubmitField(label=c.NEXT)
 
 
-class FurtherPersonalDataForm(FlaskForm):
-    father_name = FormField(FatherNameForm, label=c.INFO_FATHER)
-    mother_name = FormField(MotherNameForm, label=c.INFO_MATHER)
-
-    further_personal_info = HiddenField()
-    submit = SubmitField(label=c.NEXT)
-
 
 class BasicPersonalDataForm(FlaskForm):
     personal_info_check = BooleanField(label=c.PERSONAL_INFO_CHECK,
@@ -86,7 +79,7 @@ class BasicPersonalDataForm(FlaskForm):
                                default=c.DEFAULT_MATURA_YEAR,
                                validators=[validators.DataRequired(),
                                            validators.NumberRange(min=1900,
-                                                                  max=c.CURRENT_MATURA_YEAR)])
+                                                                  max=c.DEFAULT_MATURA_YEAR)])
     dean_invitation_letter = BooleanField(label=c.DEAN_INV_LIST_YN)
     dean_invitation_letter_no = StringField(label=c.DEAN_INV_LIST_NO,
                                             description=c.DEAN_INV_LIST_NO_DESC)
@@ -189,30 +182,34 @@ class CompetitionSuccessFormItem(FlaskForm):
     year = IntegerField(label=c.COMPETITION_YEAR,
                         validators=[validators.Optional(),
                                     validators.NumberRange(min=1990,
-                                                           max=c.CURRENT_MATURA_YEAR,
+                                                           max=c.DEFAULT_MATURA_YEAR,
                                                            message=c.YEAR_ERR)])
     further_info = StringField(label=c.COMPETITION_FURTHER_INFO,
                                description=c.COMPETITION_FURTHER_INFO_DESC)
 
+
+class FinalNoteForm(FlaskForm):
+    note = TextAreaField(label=c.FINAL_NOTE,
+                         description=c.FINAL_NOTE_DESC)
 
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
 
     will_take_external_mat_matura = BooleanField(label=c.WILL_TAKE_EXT_MAT)
+    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
+
     will_take_scio = BooleanField(label=c.WILL_TAKE_SCIO)
+    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
+    scio_date = StringField(label=c.SCIO_DATE)
+    scio_cert_no = StringField(label=c.SCIO_CERT_NO,
+                               description=c.SCIO_CERT_NO_DESC)
 
     will_take_mat_matura = BooleanField(label=c.WILL_TAKE_MAT_MATURA)
     will_take_fyz_matura = BooleanField(label=c.WILL_TAKE_FYZ_MATURA)
     will_take_inf_matura = BooleanField(label=c.WILL_TAKE_INF_MATURA)
     will_take_che_matura = BooleanField(label=c.WILL_TAKE_CHE_MATURA)
     will_take_bio_matura = BooleanField(label=c.WILL_TAKE_BIO_MATURA)
-
-    external_matura_percentile = StringField(label=c.EXTERNAL_MATURA_PERCENTILE)
-    scio_percentile = StringField(label=c.SCIO_PERCENTILE)
-    scio_date = StringField(label=c.SCIO_DATE)
-    scio_cert_no = StringField(label=c.SCIO_CERT_NO,
-                               description=c.SCIO_CERT_NO_DESC)
 
     matura_mat_grade = IntegerField(label=c.MATURA_MAT_GRADE,
                                     validators=[validators.Optional(),
@@ -281,13 +278,13 @@ class AdmissionWaiversForm(FlaskForm):
                               label=c.COMPETITION_SECOND)
     competition_3 = FormField(CompetitionSuccessFormItem,
                               label=c.COMPETITION_THIRD)
+    final_note = FormField(FinalNoteForm,
+                           label=c.FINAL_NOTE_SDESC)
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
-
+    
 class FinalForm(FlaskForm):
-    note = TextAreaField(label=c.FINAL_NOTE,
-                         description=c.FINAL_NOTE_DESC)
     submit = SubmitField(label=c.SUBMIT_APPLICATION)
 
 

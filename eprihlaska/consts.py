@@ -16,6 +16,7 @@ INVALID_TOKEN_MSG = _('Váš token na zmenu hesla je neplatný. Vyplnte prosím 
 SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
 
 FLASH_MSG_DATA_SAVED = _('Vaše dáta boli uložené!')
+FLASH_MSG_DATA_NOT_SAVED = _('Vaše dáta neboli uložené, vyplnený formulár obsahuje chybu! Opravte vyznačené chyby a uložte dáta znovu.')
 FLASH_MSG_FILL_FORM = _('Najprv, prosím, vyplňte formulár uvedený nižšie')
 FLASH_MSG_APP_SUBMITTED = _('Gratulujeme, Vaša prihláška bola podaná!')
 FLASH_MSG_WRONG_LOGIN = _('Nesprávne prihlasovacie údaje.')
@@ -81,6 +82,7 @@ PRG_TEF = _('Technická fyzika')
 PRG_INF = _('Informatika')
 PRG_AIN = _('Aplikovaná informatika')
 PRG_BIN = _('Bioinformatika')
+PRG_DAV = _('Dátová veda')
 PRG_upMAFY = _('Učiteľstvo matematiky a fyziky')
 PRG_upMAIN = _('Učiteľstvo matematiky a informatiky')
 PRG_upFYIN = _('Učiteľstvo fyziky a informatiky')
@@ -108,6 +110,7 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('INF', PRG_INF),
                            ('AIN', PRG_AIN),
                            ('BIN', PRG_BIN),
+                           ('DAV', PRG_DAV),
                            ('upMAFY', PRG_upMAFY),
                            ('upMAIN', PRG_upMAIN),
                            ('upFYIN', PRG_upFYIN),
@@ -172,7 +175,18 @@ COMPETITION_CHOICES = [
     ('SOC_INF', _('úspešný účastník - Stredoškolská odborná činnosť odbor 11 informatika - celoštátne kolo')),  # noqa
     ('SOC_BIO', _('úspešný účastník - Stredoškolská odborná činnosť odbor 04 biológia - celoštátne kolo')),  # noqa
     ('SOC_CHM', _('úspešný účastník - Stredoškolská odborná činnosť odbor 03 chémia, potravinárstvo - celoštátne kolo')),  # noqa
-    ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo'))
+    ('TMF', _('úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo')),
+    ('FVAT_MAT', _('úspešný účastník - Festival vedy a techniky kategória Matematika - celoštátne kolo')),
+    ('FVAT_FYZ', _('úspešný účastník - Festival vedy a techniky kategória Fyzika a astronómia - celoštátne kolo')),
+    ('FVAT_INF', _('úspešný účastník - Festival vedy a techniky kategória Informatika a počítačové inžinierstvo - celoštátne kolo')),
+    ('FVAT_BIO', _('úspešný účastník - Festival vedy a techniky kategória Biológia - celoštátne kolo')),
+    ('FVAT_MAT', _('úspešný účastník - Festival vedy a techniky kategória Chémia - celoštátne kolo')),
+    ('ROBOCUP', _('postup do medzinárodného kola - RoboCupJunior')),
+    ('IBOBOR', _('percentil aspoň 90 - iBobor - kategória Senior')),
+    ('ZENIT', _('úspešný riešiteľ - Súťaž ZENIT v programovaní - krajské kolo')),
+    ('TROJSTEN_KMS', _('65% bodov v ľubovoľnej kategórii - KMS (TROJSTEN) - ktorýkoľvek ročník a časť')),
+    ('TROJSTEN_FKS', _('65% bodov v ľubovoľnej kategórii - FKS (TROJSTEN) - ktorýkoľvek ročník a časť')),
+    ('TROJSTEN_KSP', _('65% bodov v ľubovoľnej kategórii - KSP (TROJSTEN) - ktorýkoľvek ročník a časť')),    
 ]
 
 COMPETITION_YEAR = _('Rok')
@@ -201,32 +215,32 @@ MATURA_BIO_GRADE = _('známka z maturity z biológie')
 
 WILL_TAKE_EXT_MAT = _('zúčastním sa externej maturity z matematiky (SR) /'
                       ' maturitního didaktického testu z matematiky (ČR)')
-WILL_TAKE_SCIO = _('plánujem sa zúčastniť autorizovanej skúšky z matematiky (SCIO)')  # noqa
+WILL_TAKE_SCIO = _('zúčastním sa autorizovanej skúšky z matematiky (SCIO)')  # noqa
 WILL_TAKE_MAT_MATURA = _('maturujem z matematiky')
 WILL_TAKE_FYZ_MATURA = _('maturujem z fyziky')
 WILL_TAKE_INF_MATURA = _('maturujem z informatiky')
 WILL_TAKE_BIO_MATURA = _('maturujem z biológie')
 WILL_TAKE_CHE_MATURA = _('maturujem z chémie')
 
-FURTHER_STUDY_INFO = _('Prospech na strednej škole')
+FURTHER_STUDY_INFO = _('Autorizovaná skúška z matematiky a maturity')
 
 GRADE_FIRST_YEAR = {
     '4': _('koncoročná známka v 1. ročníku'),
     '8': _('koncoročná známka v kvinte'),
     '5': _('koncoročná známka v 2. ročníku'),
-    '0': _('koncoročná známka v 1. ročníku')
+    '0': _('koncoročná známka v ročníku n-3, kde n je počet ročníkov')
 }
 GRADE_SECOND_YEAR = {
     '4': _('koncoročná známka v 2. ročníku'),
     '8': _('koncoročná známka v sexte'),
     '5': _('koncoročná známka v 3. ročníku'),
-    '0': _('koncoročná známka v 2. ročníku')
+    '0': _('koncoročná známka v ročníku n-2, kde n je počet ročníkov')
 }
 GRADE_THIRD_YEAR = {
     '4': _('koncoročná známka v 3. ročníku'),
     '8': _('koncoročná známka v septime'),
     '5': _('koncoročná známka v 4. ročníku'),
-    '0': _('koncoročná známka v 3. ročníku')
+    '0': _('koncoročná známka v ročníku n-1, kde n je počet ročníkov')
 }
 
 GRADES_MAT = _('Známky z matematiky')
@@ -238,16 +252,16 @@ GRADES_CHE = _('Známky z chémie')
 GRADE_ERR = _('Zle zadaná známka. Akceptované známky sú 1 až 5.')
 
 FINAL_NOTE = _('Poznámka')
+FINAL_NOTE_SDESC = ('Ďalšie skutočnosti, ktoré chcete uviesť')
 FINAL_NOTE_DESC = _('Prosím, informujte nás o skutočnostiach, ktoré by mohli byť pre Vašu prihlášku relevantné a neboli spomenuté v už vyplnených častiach.') # noqa
 
 MENU = [
     (_('ePrihlaska'), 'index'),
     (_('Študijné programy'), 'study_programme'),
     (_('Osobné údaje'), 'personal_info'),
-    (_('Informácie o rodičoch'), 'further_personal_info'),
     (_('Adresa'), 'address'),
     (_('Predchádzajúce štúdium'), 'previous_studies'),
-    (_('Prijatie bez prijímacích pohovorov'), 'admissions_waivers'),
+    (_('Výsledky a úspechy'), 'admissions_waivers'),
     (_('Záverečné pokyny'), 'final')
 ]
 
@@ -280,7 +294,7 @@ COUNTRY_CHOICES = choices_from_csv(DIR + '/data/staty.csv',
 SELECT_CITY_CHOICE = [('999999', _('Zvoľte mesto alebo obec v SR'))]
 CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
                                 ['id', 'Názov obce', 'Okres'],
-                                fmt='{2}, okr. {4}',
+                                fmt='{1}, okr. {2}',
                                 extend_with=SELECT_CITY_CHOICE,
                                 sortby=1,
                                 prepend=['999999'],
@@ -288,7 +302,7 @@ CITY_CHOICES = choices_from_csv(DIR + '/data/obce.csv',
 
 CITY_CHOICES_PSC = choices_from_csv(DIR + '/data/obce.csv',
                                     ['id', 'PSČ'],
-                                    fmt='{3}')
+                                    fmt='{1}')
 
 MARITAL_STATUS_CHOICES = choices_from_csv(DIR + '/data/rodinne-stavy.csv',
                                           ['id', 'Rodinný stav'])
@@ -306,7 +320,7 @@ HIGHSCHOOL_NOT_IN_LIST = [('XXXXXXX',
 HIGHSCHOOL_CHOICES = choices_from_csv(DIR + '/data/skoly.csv',
                                       ['St. šk.', 'Obec', 'Stredná škola',
                                        'Ulica'],
-                                      fmt='{2}, {3}, {4}',
+                                      fmt='{1}, {2}, {3}',
                                       extend_with=HIGHSCHOOL_NOT_IN_LIST,
                                       sortby=1,
                                       prepend=['XXXXXXX'],
@@ -318,15 +332,15 @@ HS_STUDY_PROGRAMME_CHOICES = choices_from_csv(DIR + '/data/odbory.csv',
                                                'Odbor stred. školy'],
                                               extend_with=NO_SP_CHOICE,
                                               prepend=['XXXXXX'],
-                                              fmt='{1} - {2}')
+                                              fmt='{0} - {1}')
 
 HS_STUDY_PROGRAMME_MAP = choices_from_csv(DIR + '/data/ss-odbor-map.csv',
                                           ['St. šk.', 'Odbor - kod'],
-                                          fmt='{2}')
+                                          fmt='{1}')
 
 EDUCATION_LEVEL_CHOICES = choices_from_csv(DIR + '/data/vzdelanie.csv',
                                            ['Kód', 'Skrát. popis'],
-                                           fmt='({1}) - {3}')
+                                           fmt='({0}) - {1}')
 
 APPLICATION_STATES = [_('rozpracovaná'),
                       _('podaná'),
@@ -348,5 +362,8 @@ ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
+# for the regular applications (before june) set to the same year
+# for the additional application (after june) set CURRENT_MATURA_YEAR to next year
+# this is soooo much fun!
 CURRENT_MATURA_YEAR = 2020
-DEFAULT_MATURA_YEAR = 2019
+DEFAULT_MATURA_YEAR = 2020

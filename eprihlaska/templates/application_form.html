@@ -28,7 +28,7 @@
 
           {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
            <hr>
-           Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť na účet: <br>
+           Poplatok za prijímacie konanie vo výške 15 EUR je potrebné uhradiť na účet: <br>
            číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
            variabilný symbol: <strong>800</strong> <br>
            {% if session['birth_no'] %}
@@ -118,31 +118,6 @@
          <div class="col-sm-4"><strong>Telefón:</strong> {{ session['phone'] }}</div>
          <div class="col-sm-8"><strong>Email:</strong> {{ session['email'] }}</div>
        </div>
-
-       <hr>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Matka:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['mother_name']['name'] }} {{ session['mother_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small> {{ session['mother_name']['born_with_surname'] }}
-         </div>
-       </div>
-
-       <div class="row">
-         <div class="col-sm-4">
-           <strong>Otec:</strong> <small>(meno a priezvisko)&nbsp;&nbsp;</small>
-           {{ session['father_name']['name'] }} {{ session['father_name']['surname'] }}
-         </div>
-         <div class="col-sm-8">
-           <small>(rodné priezvisko)&nbsp;&nbsp;</small>{{ session['father_name']['born_with_surname'] }}
-         </div>
-
-       </div>
-
-
     </div>
   </div>
 
@@ -298,7 +273,7 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      Skutočnosti dôležité pre prijatie bez prijímacích pohovorov
+      Informácie potrebné pre prijímacie konanie
     </div>
     <div class="panel-body">
       {% if session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no'] %}
@@ -308,23 +283,28 @@
       {% endif %}
 
       {{ further_study_field('external_matura_percentile', consts.EXTERNAL_MATURA_PERCENTILE) }}
+      {{ further_study_check_field('will_take_external_mat_matura', consts.WILL_TAKE_EXT_MAT) }}
+
+      {{ further_study_check_field('will_take_scio', consts.WILL_TAKE_SCIO) }}
       {{ further_study_field('scio_percentile', consts.SCIO_PERCENTILE) }}
       {{ further_study_field('scio_date', consts.SCIO_DATE) }}
       {{ further_study_field('scio_cert_no', consts.SCIO_CERT_NO) }}
+
+
       {{ further_study_field('matura_mat_grade', consts.MATURA_MAT_GRADE) }}
-      {{ further_study_field('matura_fyz_grade', consts.MATURA_FYZ_GRADE) }}
-      {{ further_study_field('matura_inf_grade', consts.MATURA_INF_GRADE) }}
-      {{ further_study_field('matura_bio_grade', consts.MATURA_BIO_GRADE) }}
-      {{ further_study_field('matura_che_grade', consts.MATURA_CHE_GRADE) }}
-
-
-      {{ further_study_check_field('will_take_external_mat_matura', consts.WILL_TAKE_EXT_MAT) }}
-      {{ further_study_check_field('will_take_scio', consts.WILL_TAKE_SCIO) }}
       {{ further_study_check_field('will_take_mat_matura', consts.WILL_TAKE_MAT_MATURA) }}
+
+      {{ further_study_field('matura_fyz_grade', consts.MATURA_FYZ_GRADE) }}
       {{ further_study_check_field('will_take_fyz_matura', consts.WILL_TAKE_FYZ_MATURA) }}
+
+      {{ further_study_field('matura_inf_grade', consts.MATURA_INF_GRADE) }}
       {{ further_study_check_field('will_take_inf_matura', consts.WILL_TAKE_INF_MATURA) }}
-      {{ further_study_check_field('will_take_che_matura', consts.WILL_TAKE_CHE_MATURA) }}
+
+      {{ further_study_field('matura_bio_grade', consts.MATURA_BIO_GRADE) }}
       {{ further_study_check_field('will_take_bio_matura', consts.WILL_TAKE_BIO_MATURA) }}
+
+      {{ further_study_field('matura_che_grade', consts.MATURA_CHE_GRADE) }}
+      {{ further_study_check_field('will_take_che_matura', consts.WILL_TAKE_CHE_MATURA) }}
 
       {% for s in ['competition_1', 'competition_2', 'competition_3'] %}
         {% if s in session and session[s]['competition'] != '_' %}
@@ -346,12 +326,12 @@
     </div>
   </div>
 
-{% if session['note'] %}
+{% if session['final_note'] is defined and session['final_note']['note'] %}
 
   <div class="panel panel-default">
     <div class="panel-heading">Poznámka</div>
     <div class="panel-body">
-      {{ session['note'] }}
+      {{ session['final_note']['note'] }}
     </div>
   </div>
 

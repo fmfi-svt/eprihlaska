@@ -4,11 +4,11 @@ import flask.json
 from flask_mail import Message
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
-                              FurtherPersonalDataForm, AddressForm,
-                              PreviousStudiesForm, AdmissionWaiversForm,
-                              FinalForm, ReceiptUploadForm,
-                              LoginForm, SignupForm, ForgottenPasswordForm,
-                              NewPasswordForm, AIS2CookieForm, AIS2SubmitForm)
+                              AddressForm, PreviousStudiesForm,
+                              AdmissionWaiversForm, FinalForm,
+                              ReceiptUploadForm, LoginForm, SignupForm,
+                              ForgottenPasswordForm, NewPasswordForm,
+                              AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from authlib.client.apps import google, facebook
@@ -28,7 +28,7 @@ from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
                      HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
                      HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES, APPLICATION_STATES,
+                     COMPETITION_CHOICES, APPLICATION_STATES, CURRENT_MATURA_YEAR, DEFAULT_MATURA_YEAR,
                      ApplicationStates)
 from . import consts
 
@@ -175,6 +175,10 @@ def study_programme():
             save_form(form)
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('personal_info'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -188,30 +192,18 @@ def personal_info():
         save_form(form)
 
         flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('further_personal_info'))
+        return redirect(url_for('address'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
 
-@app.route('/further_personal_info', methods=('GET', 'POST'))
-@login_required
-@require_filled_form('personal_info')
-def further_personal_info():
-    form = FurtherPersonalDataForm(obj=munchify(dict(session)))
-
-    if form.validate_on_submit():
-        if 'application_submitted' not in session:
-            save_form(form)
-
-            flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('address'))
-    return render_template('further_personal_info.html', form=form,
-                           session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
-
-
 @app.route('/address', methods=('GET', 'POST'))
 @login_required
-@require_filled_form('further_personal_info')
+@require_filled_form('personal_info')
 def address():
     form = AddressForm(obj=munchify(dict(session)))
     if form.validate_on_submit():
@@ -220,6 +212,10 @@ def address():
 
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('previous_studies'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -235,6 +231,10 @@ def previous_studies():
 
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('admissions_waivers'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -242,21 +242,34 @@ def previous_studies():
 def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
+    constraint_profiles = {
+        'F': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
+        'I': ['INF', 'AIN', 'BIN', 'DAV', 'upINBI', 'upMAIN', 'upINAN'],
+        'B': ['BIN', 'BMF'],
+        'CH': ['BIN']
+    }
+    
     constraints = {
-        'FYZ': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
-        'INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'BIO': ['BIN', 'BMF'],
-        'CHE': ['BIN'],
-        'SOC_INF': ['INF', 'AIN', 'BIN', 'upINBI', 'upMAIN', 'upINAN'],
-        'SOC_BIO': ['BIN', 'BMF'],
-        'SOC_CHM': ['BIN'],
-        'TMF': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
+        'FYZ': constraint_profiles['F'],
+        'INF': constraint_profiles['I'],
+        'BIO': constraint_profiles['B'],
+        'CHM': constraint_profiles['CH'],
+        'SOC_INF': constraint_profiles['I'],
+        'SOC_BIO': constraint_profiles['B'],
+        'SOC_CHM': constraint_profiles['CH'],
+        'TMF': constraint_profiles['F'],
+        'FVAT_FYZ': constraint_profiles['F'],
+        'FVAT_INF': constraint_profiles['I'],
+        'ROBOCUP': constraint_profiles['I'],
+        'IBOBOR': constraint_profiles['I'],
+        'ZENIT': constraint_profiles['I'],
+        'TROJSTEN_KSP': constraint_profiles['I'],
+        'TROJSTEN_FKS': constraint_profiles['F'],
         '_': STUDY_PROGRAMMES
     }
 
     for comp, desc in competition_list:
-        if comp in ['MAT', 'SVOC_MAT'] \
-           and 'upINAN' not in study_programme_list:
+        if comp in ['MAT', 'SOC_MAT', 'FVAT_MAT', 'TROJSTEN_KMS']:
             result_list.append((comp, desc))
 
         for c, sp_list in constraints.items():
@@ -289,8 +302,8 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'INF'],
-        'grades_inf': ['BIN', 'INF'],
+        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'DAV', 'INF'],
+        'grades_inf': ['BIN', 'INF', 'DAV'],
         'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
         'grades_bio': ['BMF', 'BIN'],
         'grades_che': ['BIN'],
@@ -305,14 +318,13 @@ def admissions_waivers():
         form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
 
     further_study_info_constraints = {
-        'matura_mat_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'AIN', 'BIN', 'INF',
+        'matura_mat_grade': ['AIN', 
                              'upFYIN', 'upINAN', 'upINBI', 'upMADG' 'upMAFY',
                              'upMAIN', 'upMATV'],
-        'matura_fyz_grade': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['INF', 'AIN', 'BIN', 'upINBI',
-                             'upMAIN', 'upINAN'],
-        'matura_bio_grade': ['BIN', 'BMF'],
-        'matura_che_grade': ['BIN'],
+        'matura_fyz_grade': ['upFYIN', 'upMAFY'],
+        'matura_inf_grade': ['AIN', 'upINBI','upMAIN', 'upINAN'],
+        'matura_bio_grade': [ ],
+        'matura_che_grade': [ ],
     }
 
     further_study_info_constraints.update({
@@ -323,19 +335,22 @@ def admissions_waivers():
         'will_take_che_matura': further_study_info_constraints['matura_che_grade'], # noqa
     })
 
+
+    relevant_years_last4 = [DEFAULT_MATURA_YEAR-3, DEFAULT_MATURA_YEAR-2, DEFAULT_MATURA_YEAR-1, CURRENT_MATURA_YEAR-1]
+    
     relevant_years = {
-        'external_matura_percentile': [2016, 2017, 2018, 2019],
-        'matura_mat_grade': [2016, 2017, 2018, 2019],
-        'matura_fyz_grade': [2016, 2017, 2018, 2019],
-        'matura_inf_grade': [2016, 2017, 2018, 2019],
-        'matura_bio_grade': [2016, 2017, 2018, 2019],
-        'matura_che_grade': [2016, 2017, 2018, 2019],
-        'will_take_external_mat_matura': [2020],
-        'will_take_mat_matura': [2020],
-        'will_take_fyz_matura': [2020],
-        'will_take_inf_matura': [2020],
-        'will_take_bio_matura': [2020],
-        'will_take_che_matura': [2020],
+        'external_matura_percentile': relevant_years_last4,
+        'matura_mat_grade': relevant_years_last4,
+        'matura_fyz_grade': relevant_years_last4,
+        'matura_inf_grade': relevant_years_last4,
+        'matura_bio_grade': relevant_years_last4,
+        'matura_che_grade': relevant_years_last4,
+        'will_take_external_mat_matura': [CURRENT_MATURA_YEAR],
+        'will_take_mat_matura': [CURRENT_MATURA_YEAR],
+        'will_take_fyz_matura': [CURRENT_MATURA_YEAR],
+        'will_take_inf_matura': [CURRENT_MATURA_YEAR],
+        'will_take_bio_matura': [CURRENT_MATURA_YEAR],
+        'will_take_che_matura': [CURRENT_MATURA_YEAR],
     }
 
     further_study_whitelist = [
@@ -348,7 +363,7 @@ def admissions_waivers():
     matura_year = session['basic_personal_data']['matura_year']
     for k, v in grade_constraints.items():
         if not study_programme_set & set(v) or \
-           matura_year not in [2016, 2017, 2018, 2019]:
+           matura_year not in relevant_years_last4 + [DEFAULT_MATURA_YEAR]:
             form.__delitem__(k)
 
     for k, v in further_study_info_constraints.items():
@@ -367,8 +382,11 @@ def admissions_waivers():
             save_form(form)
 
             flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('final'))
-
+        return redirect(url_for('final'))    
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('admission_waivers.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -583,8 +601,6 @@ def signup():
         session['email'] = form.email.data
 
         session['basic_personal_data'] = {}
-        session['mother_name'] = {}
-        session['father_name'] = {}
         session['address_form'] = {}
         session['correspondence_address'] = {}
         session['studies_in_sr'] = {}
@@ -686,8 +702,6 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         session['basic_personal_data']['name'] = name
         session['basic_personal_data']['surname'] = surname
 
-        session['mother_name'] = {}
-        session['father_name'] = {}
         session['address_form'] = {}
         session['correspondence_address'] = {}
         session['studies_in_sr'] = {}
@@ -738,7 +752,7 @@ def facebook_authorize():
     token = facebook.authorize_access_token()
     profile = facebook.fetch_user()
 
-    data = profile.data['name'].split(' ')
+    data = profile.data.get('name', '').split(' ')
     name = '' if not len(data) else data[0]
     surname = '' if len(data) <= 1 else data[-1]
 

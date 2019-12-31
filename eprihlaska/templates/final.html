@@ -31,7 +31,7 @@
   <a href="#" class="close" data-dismiss="alert">&times;</a>
   Vaša kombinácia navštevovanej strednej školy a študijného odboru nebola
   nájdená v našej databáze. Zmeniť navštevovanú strednú školu alebo študijný
-  odbor možete
+  odbor môžete
   <a class="alert-link" href="{{ url_for('previous_studies') }}">
     v časti Predchádzajúce štúdium
   </a>.
@@ -43,7 +43,7 @@
   <a href="#" class="close" data-dismiss="alert">&times;</a>
   Vaše dosiahnuté / očakávané stredoškolské vzdelanie nekorešponduje s vami
   zadaným kódom študijného odboru. Zmeniť Vaše dosiahnuté / očakávané
-  stredoškolské vzdelanie alebo študijný odbor možete
+  stredoškolské vzdelanie alebo študijný odbor môžete
   <a class="alert-link" href="{{ url_for('previous_studies') }}">
     v časti Predchádzajúce štúdium
   </a>.
@@ -100,8 +100,8 @@ telefón: 02/602 95 152, 02/602 95 480
 
 <h3>Poplatok</h3>
 
-Poplatok za prijímacie konanie vo výške 33 EUR je potrebné uhradiť <strong>do 3 dní</strong> na účet: <br>
-číslo <strong>SK88 8180 0000 0070 0013 8327</strong> <br>
+Poplatok za prijímacie konanie vo výške 15 EUR je potrebné uhradiť <strong>do 3 dní</strong> na účet: <br>
+IBAN <strong>SK88 8180 0000 0070 0013 8327</strong> SWIFT: <strong>SPSRSKBA</strong> <br>
 variabilný symbol: <strong>800</strong> <br>
 {% if session['birth_no'] %}
 špecifický symbol: <strong>{{ session['birth_no']|replace("/", "") }}</strong> <br>
@@ -109,7 +109,14 @@ variabilný symbol: <strong>800</strong> <br>
 špecifický symbol: <strong>{{ specific_symbol }}</strong> <br>
 {% endif %}
 
-<br>
+<p>Ďalšie údaje pre platby zo zahraničia:<br>
+  Názov účtu: Univerzita Komenského v Bratislave<br>
+  Adresa banky: Všeobecná úverová banka,
+  Mlynské Nivy 1,
+  829 90 Bratislava
+  
+
+<p>
 
 <!--Potvrdenie o zaplatení si odložte pre prípad, že by sa vyskytol problém pri
 spárovaní vašej platby s prihláškou.-->
@@ -146,29 +153,21 @@ Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej li
 
 <p>
 Po skončení maturity nám bezodkladne pošlite overenú kópiu maturitného
-vysvedčenia, aby sme mohli vyhodnotiť splnenie podmienok pre prípadné prijatie
-bez prijímacieho konania. Kópiu maturitného vysvedčenia pošlite na adresu: <br> <br>
-
-<em>
-Fakulta matematiky, fyziky a informatiky UK, <br />
-Mlynská dolina, <br>
-842 48 Bratislava
-</em>
-</p>
+vysvedčenia na adresu: <br> <br>
 
 {% else %}
 <p>
 <b>Obratom</b> nám, prosím, pošlite poštou overenú kópiu Vášho maturitného vysvedčenia na adresu:
 <br /><br />
+{% endif %}
 
 <em>
 Fakulta matematiky, fyziky a informatiky UK, <br />
+Študijné oddelenie, <br>
 Mlynská dolina, <br>
 842 48 Bratislava
 </em>
 </p>
-
-{% endif %}
 
 {% if grades_filled  %}
 
@@ -182,6 +181,7 @@ alebo overené kópie príslušných koncoročných vysvedčení na adresu:<br /
 <p>
 <em>
 Fakulta matematiky, fyziky a informatiky UK, <br />
+Študijné oddelenie, <br>
 Mlynská dolina, <br>
 842 48 Bratislava
 </em>
@@ -195,10 +195,9 @@ Mlynská dolina, <br>
 
 <p>
 
-O ďalšom postupe prijímacieho konania (predbežné alebo podmienečné rozhodnutie
-o prijatí, pozvánka na prijímacie pohovory, rozhodnutie o neprijatí a pod.) vás
-budeme včas informovať písomne listom na adresu, ktorú ste uviedli v tejto
-prihláške. V prípade akýchkoľvek otázok nás prosím kontaktujte
+O ďalšom postupe vás budeme včas informovať písomne listom
+na adresu, ktorú ste uviedli v tejto prihláške. V prípade akýchkoľvek otázok
+nás prosím kontaktujte
 </p>
 
 <p>
@@ -206,7 +205,6 @@ prihláške. V prípade akýchkoľvek otázok nás prosím kontaktujte
 e-mail: <a href="mailto:prijimacky@fmph.uniba.sk">prijimacky@fmph.uniba.sk</a> <br />
 telefón: 02/602 95 152, 02/602 95 480
 </p>
-
 
 {% endif %}
 {% endblock %}
