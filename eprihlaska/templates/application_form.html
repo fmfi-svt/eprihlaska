@@ -326,7 +326,7 @@
     </div>
   </div>
 
-{% if session['final_note']['note'] %}
+{% if session['final_note'] is defined and session['final_note']['note'] %}
 
   <div class="panel panel-default">
     <div class="panel-heading">Poznámka</div>
