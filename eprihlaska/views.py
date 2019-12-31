@@ -175,6 +175,10 @@ def study_programme():
             save_form(form)
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('personal_info'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -189,6 +193,10 @@ def personal_info():
 
         flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('address'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -204,6 +212,10 @@ def address():
 
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('previous_studies'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -219,6 +231,10 @@ def previous_studies():
 
             flash(consts.FLASH_MSG_DATA_SAVED)
         return redirect(url_for('admissions_waivers'))
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -366,8 +382,11 @@ def admissions_waivers():
             save_form(form)
 
             flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('final'))
-
+        return redirect(url_for('final'))    
+    else:
+        if request.method == 'POST':
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+    
     return render_template('admission_waivers.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 

@@ -16,6 +16,7 @@ INVALID_TOKEN_MSG = _('Váš token na zmenu hesla je neplatný. Vyplnte prosím 
 SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
 
 FLASH_MSG_DATA_SAVED = _('Vaše dáta boli uložené!')
+FLASH_MSG_DATA_NOT_SAVED = _('Vaše dáta neboli uložené, vyplnený formulár obsahuje chybu! Opravte vyznačené chyby a uložte dáta znovu.')
 FLASH_MSG_FILL_FORM = _('Najprv, prosím, vyplňte formulár uvedený nižšie')
 FLASH_MSG_APP_SUBMITTED = _('Gratulujeme, Vaša prihláška bola podaná!')
 FLASH_MSG_WRONG_LOGIN = _('Nesprávne prihlasovacie údaje.')
