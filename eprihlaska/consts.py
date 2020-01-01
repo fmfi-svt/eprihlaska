@@ -119,21 +119,7 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('upINBI', PRG_upINBI),
                            ('upINAN', PRG_upINAN)]
 
-# STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
-STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
-                           ('MAT', PRG_MAT),
-                           ('PMA', PRG_PMA),
-                           ('MMN', PRG_MMN),
-                           ('FYZ', PRG_FYZ),
-                           ('OZE', PRG_OZE),
-                           ('TEF', PRG_TEF),
-                           ('AIN', PRG_AIN),
-                           ('upMAFY', PRG_upMAFY),
-                           ('upMAIN', PRG_upMAIN),
-                           ('upFYIN', PRG_upFYIN),
-                           ('upMADG', PRG_upMADG),
-                           ('upINBI', PRG_upINBI),
-                           ('upINAN', PRG_upINAN)]
+STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
 
 ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
