@@ -318,7 +318,18 @@ def save_application_form(ctx,
         'SOC_INF': 'SočI',
         'SOC_BIO': 'SočB',
         'SOC_CHM': 'SočCH',
-        'TMF': 'TMF'
+        'TMF': 'TMF',
+        'FVAT_MAT': 'FVAT_M',
+        'FVAT_FYZ': 'FVAT_F',
+        'FVAT_INF': 'FVAT_I',
+        'FVAT_BIO': 'FVAT_B',
+        'FVAT_CH': 'FVAT_Ch',
+        'ROBOCUP': 'RoboCup',
+        'IBOBOR': 'iBobor',
+        'ZENIT': 'ZENIT',
+        'TROJSTEN_KMS': 'KMS',
+        'TROJSTEN_FKS': 'FKS',
+        'TROJSTEN_KSP': 'KSP'
     }
 
     # Add checkboxes based on competitions
