@@ -166,7 +166,7 @@ COMPETITION_CHOICES = [
     ('FVAT_FYZ', _('úspešný účastník - Festival vedy a techniky kategória Fyzika a astronómia - celoštátne kolo')),
     ('FVAT_INF', _('úspešný účastník - Festival vedy a techniky kategória Informatika a počítačové inžinierstvo - celoštátne kolo')),
     ('FVAT_BIO', _('úspešný účastník - Festival vedy a techniky kategória Biológia - celoštátne kolo')),
-    ('FVAT_MAT', _('úspešný účastník - Festival vedy a techniky kategória Chémia - celoštátne kolo')),
+    ('FVAT_CH', _('úspešný účastník - Festival vedy a techniky kategória Chémia - celoštátne kolo')),
     ('ROBOCUP', _('postup do medzinárodného kola - RoboCupJunior')),
     ('IBOBOR', _('percentil aspoň 90 - iBobor - kategória Senior')),
     ('ZENIT', _('úspešný riešiteľ - Súťaž ZENIT v programovaní - krajské kolo')),
