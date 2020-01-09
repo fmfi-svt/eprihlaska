@@ -99,36 +99,39 @@ def save_application_form(ctx,
     with app.collect_operations() as ops:
         app.d.button3.click()
 
-    app.d.rodneCisloTextField.write(session['birth_no'])
+    # If the birth number is not filled in, just skip the whole "guess the
+    # person by their birth number" part
+    if len(session['birth_no'].strip()) != 0:
+        app.d.rodneCisloTextField.write(session['birth_no'])
 
-    # Click on relevant rodneCisloButton
-    with app.collect_operations() as ops:
-        app.d.rodneCisloButton.click()
+        # Click on relevant rodneCisloButton
+        with app.collect_operations() as ops:
+            app.d.rodneCisloButton.click()
 
-    # FIXME: This i here is simply one nasty hack. Its purpose is simple: we
-    # really do not know what sort of an op will AIS return. Thus, we'll try
-    # openDialog and confirmBox and throw an exception otherwise
-    while len(ops) != 0:
-        # Close the dialog if some shows up
-        if len(ops) == 1 and ops[0].method == 'openDialog':
-            app.awaited_open_dialog(ops)
+        # FIXME: This i here is simply one nasty hack. Its purpose is simple:
+        # we really do not know what sort of an op will AIS return. Thus, we'll
+        # try openDialog and confirmBox and throw an exception otherwise
+        while len(ops) != 0:
+            # Close the dialog if some shows up
+            if len(ops) == 1 and ops[0].method == 'openDialog':
+                app.awaited_open_dialog(ops)
 
-            with app.collect_operations() as ops:
-                app.d.closeButton.click()
+                with app.collect_operations() as ops:
+                    app.d.closeButton.click()
 
-            app.awaited_close_dialog(ops)
+                app.awaited_close_dialog(ops)
 
-            # Clear the ops
-            ops = []
+                # Clear the ops
+                ops = []
 
-        # It may happen that a confirmBox gets shown (for whatever reason).
-        # Should that happen, the confirmBox should be just closed.
-        elif len(ops) == 1 and ops[0].method == 'confirmBox':
-            with app.collect_operations() as ops:
-                app.confirm_box(-1)
+            # It may happen that a confirmBox gets shown (for whatever reason).
+            # Should that happen, the confirmBox should be just closed.
+            elif len(ops) == 1 and ops[0].method == 'confirmBox':
+                with app.collect_operations() as ops:
+                    app.confirm_box(-1)
 
-        elif len(ops) == 1:
-            raise Exception('Unexpected ops {}'.format(ops))
+            elif len(ops) == 1:
+                raise Exception('Unexpected ops {}'.format(ops))
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
