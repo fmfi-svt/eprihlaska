@@ -9,7 +9,6 @@ sys.path.insert(0, DIR + '/votr/')
 from aisikl.context import Context # noqa
 from aisikl.app import Application # noqa
 import aisikl.portal # noqa
-import time
 
 
 def create_context(cookies, origin='ais2-beta.uniba.sk'):
@@ -69,7 +68,7 @@ def save_application_form(ctx,
     # Zavrieme ten dalsi dialog
     with app.collect_operations() as ops:
         app.d.enterButton.click()
-        dlg = app.awaited_close_dialog(ops)
+    dlg = app.awaited_close_dialog(ops)
 
     # Vyrobime novu prihlasku
     with app.collect_operations() as ops:
@@ -105,32 +104,31 @@ def save_application_form(ctx,
     # Click on relevant rodneCisloButton
     with app.collect_operations() as ops:
         app.d.rodneCisloButton.click()
-        # FIXME: Vinko's fix
-        time.sleep(1)
-
 
     # FIXME: This i here is simply one nasty hack. Its purpose is simple: we
     # really do not know what sort of an op will AIS return. Thus, we'll try
-    # openDialog and confirmBox 50 times and then continue with the process.
-    i = 0
-    while len(ops) != 0 and i < 50:
+    # openDialog and confirmBox and throw an exception otherwise
+    while len(ops) != 0:
         # Close the dialog if some shows up
-        with app.collect_operations() as ops:
-            if ops and ops[0].method == 'openDialog':
-                rodne_cislo_dlg = app.awaited_open_dialog(ops)
+        if len(ops) == 1 and ops[0].method == 'openDialog':
+            app.awaited_open_dialog(ops)
 
-                with app.collect_operations() as ops:
-                    app.d.closeButton.click()
+            with app.collect_operations() as ops:
+                app.d.closeButton.click()
 
-                rodne_cislo_dlg = app.awaited_close_dialog(ops)
+            app.awaited_close_dialog(ops)
+
+            # Clear the ops
+            ops = []
 
         # It may happen that a confirmBox gets shown (for whatever reason).
         # Should that happen, the confirmBox should be just closed.
-        with app.collect_operations() as ops:
-            if ops and ops[0].method == 'confirmBox':
+        elif len(ops) == 1 and ops[0].method == 'confirmBox':
+            with app.collect_operations() as ops:
                 app.confirm_box(-1)
 
-        i += 1
+        elif len(ops) == 1:
+            raise Exception('Unexpected ops {}'.format(ops))
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
@@ -367,7 +365,7 @@ def save_application_form(ctx,
 
     ops = deal_with_confirm_boxes(app, ops, notes)
 
-    if ops[-1].method == 'messageBox':
+    if len(ops) == 1 and ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
             email = app.d.emailPrivateTextField.value
             notes['email_exists'] = email
@@ -385,7 +383,7 @@ def save_application_form(ctx,
 
 
 def deal_with_confirm_boxes(app, ops, notes):
-    while ops[-1].method == 'confirmBox':
+    while ops and ops[-1].method == 'confirmBox':
         if 'evidenčným číslom' in ops[-1].args[0]:
             with app.collect_operations() as ops:
                 # Generate new id number for the app
@@ -434,7 +432,7 @@ def fill_in_address(field, app, session, lists):
         with app.collect_operations() as ops:
             fields['city_button'].click()
 
-        if ops and ops[-1].method == 'openDialog':
+        if len(ops) == 1 and ops[-1].method == 'openDialog':
             # Open selection dialogue
             select_dlg = app.awaited_open_dialog(ops)
 
