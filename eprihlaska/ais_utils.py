@@ -110,7 +110,7 @@ def save_application_form(ctx,
     # openDialog and confirmBox and throw an exception otherwise
     while len(ops) != 0:
         # Close the dialog if some shows up
-        if ops and ops[0].method == 'openDialog':
+        if len(ops) == 1 and ops[0].method == 'openDialog':
             app.awaited_open_dialog(ops)
 
             with app.collect_operations() as ops:
@@ -123,11 +123,11 @@ def save_application_form(ctx,
 
         # It may happen that a confirmBox gets shown (for whatever reason).
         # Should that happen, the confirmBox should be just closed.
-        elif ops and ops[0].method == 'confirmBox':
+        elif len(ops) == 1 and ops[0].method == 'confirmBox':
             with app.collect_operations() as ops:
                 app.confirm_box(-1)
 
-        elif ops:
+        elif len(ops) == 1:
             raise Exception('Unexpected ops {}'.format(ops))
 
     # If the priezviskoTextField is not empty, it most probably means the
@@ -373,7 +373,7 @@ def save_application_form(ctx,
 
     ops = deal_with_confirm_boxes(app, ops, notes)
 
-    if ops and ops[-1].method == 'messageBox':
+    if len(ops) == 1 and ops[-1].method == 'messageBox':
         if 'existuje osoba s Vami zadaným emailom.' in errors:
             email = app.d.emailPrivateTextField.value
             notes['email_exists'] = email
@@ -440,7 +440,7 @@ def fill_in_address(field, app, session, lists):
         with app.collect_operations() as ops:
             fields['city_button'].click()
 
-        if ops and ops[-1].method == 'openDialog':
+        if len(ops) == 1 and ops[-1].method == 'openDialog':
             # Open selection dialogue
             select_dlg = app.awaited_open_dialog(ops)
 
