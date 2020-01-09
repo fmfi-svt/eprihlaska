@@ -32,11 +32,11 @@ Jinja2==2.10
 lxml==4.1.1
 MarkupSafe==1.0
 munch==2.2.0
-numpy==1.14.0
-pandas==0.22.0
+numpy==1.16.0
+pandas==0.24.1
 pdfkit==0.6.1
 pdfrw==0.4
-Pillow==5.0.0
+Pillow==5.4.1
 pyasn1==0.4.2
 pycparser==2.18
 PyJWT==1.5.3
