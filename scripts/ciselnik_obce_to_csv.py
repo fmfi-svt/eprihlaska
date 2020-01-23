@@ -20,7 +20,14 @@ def cli(ctx, file, filter_nat, sheet):
         df = df[df[filter_nat].isnull()]
         df = df[df['id'] >= 0]
 
-    df = df[df.apply(lambda x: '-' not in x['Názov obce'], axis=1)]
+    def obec_to_include(row):
+        name = row['Názov obce']
+        return '-' not in name \
+            or (not name.startswith('Bratislava')
+                and not name.startswith('Košice')
+                and not name.startswith('Žilina'))
+
+    df = df[df.apply(obec_to_include, axis=1)]
     df = df[df['PSČ'].notnull()]
 
     df['Okres'] = df.apply(obec_formatter, axis=1)
