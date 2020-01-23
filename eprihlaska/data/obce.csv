@@ -28,10 +28,12 @@ id,Názov obce,PSČ,Okres
 517631,Jablonové,01352,Bytča
 517674,Kolárovice,01354,Bytča
 517691,Kotešová,01361,Bytča
+517798,Maršová-Rašov,01351,Bytča
 547620,Paština Závada,01341,Žilina
 517861,Petrovice,01353,Bytča
 517895,Predmier,01351,Bytča
 518000,Svederník,01332,Žilina
+517992,Súľov-Hradná,01352,Bytča
 518085,Veľké Rovné,01362,Bytča
 518018,Štiavnik,01355,Bytča
 517429,Belá,01305,Žilina
@@ -66,6 +68,7 @@ id,Názov obce,PSČ,Okres
 557994,Kľače,01319,Žilina
 517739,Lietava,01318,Žilina
 557935,Lietavská Lúčka,01311,Žilina
+517755,Lietavská Svinná-Babkov,01311,Žilina
 517780,Malá Čierna,01501,Žilina
 517879,Podhorie,01318,Žilina
 557960,Porúbka,01311,Žilina
@@ -232,6 +235,7 @@ id,Názov obce,PSČ,Okres
 513938,Čavoj,97229,Prievidza
 513946,Čereňany,97246,Prievidza
 513903,Bojnice,97201,Prievidza
+514021,Chrenovec-Brusno,97232,Prievidza
 514039,Chvojnica,97213,Prievidza
 513920,Cigeľ,97101,Prievidza
 513997,Handlová,97251,Prievidza
@@ -244,6 +248,7 @@ id,Názov obce,PSČ,Okres
 557706,Lipník,97232,Prievidza
 514187,Malinová,97213,Prievidza
 514179,Malá Čausa,97101,Prievidza
+514209,Nedožery-Brezany,97212,Prievidza
 514225,Nitrianske Pravno,97213,Prievidza
 514284,Opatovce nad Nitrou,97202,Prievidza
 514314,Poluvsie,97216,Prievidza
@@ -495,6 +500,7 @@ id,Názov obce,PSČ,Okres
 518794,Slatinské Lazy,96225,Detva
 518816,Stará Huta,96225,Detva
 518824,Stožok,96212,Detva
+518930,Vígľašská Huta-Kalinka,96202,Detva
 518212,Bzovík,96241,Krupina
 518239,Cerovo,96252,Krupina
 518280,Devičie,96265,Krupina
@@ -512,6 +518,7 @@ id,Názov obce,PSČ,Okres
 518484,Jalšovík,96241,Krupina
 518514,Kozí Vrbovok,96241,Krupina
 518557,Krupina,96301,Krupina
+518531,Kráľovce-Krnišov,96265,Krupina
 518565,Lackov,96244,Krupina
 518573,Ladzany,96265,Krupina
 518611,Litava,96244,Krupina
@@ -538,6 +545,7 @@ id,Názov obce,PSČ,Okres
 508802,Motyčky,97602,Banská Bystrica
 508837,Oravce,97633,Banská Bystrica
 508969,Riečka,97401,Banská Bystrica
+508977,Sebedín-Bečov,97401,Banská Bystrica
 509019,Staré Hory,97602,Banská Bystrica
 509060,Tajov,97634,Banská Bystrica
 557269,Turecká,97602,Banská Bystrica
@@ -588,6 +596,7 @@ id,Názov obce,PSČ,Okres
 517178,Prenčov,96973,Banská Štiavnica
 517372,Vysoká,96901,Banská Štiavnica
 517283,Štiavnické Bane,96981,Banská Štiavnica
+516759,Hodruša-Hámre,96663,Žarnovica
 516805,Horné Hámre,96671,Žarnovica
 516813,Hrabičov,96678,Žarnovica
 516830,Hronský Beňadik,96653,Žarnovica
@@ -625,6 +634,7 @@ id,Názov obce,PSČ,Okres
 599328,Ladomerská Vieska,96501,Žiar nad Hronom
 517011,Lehôtka pod Brehmi,96601,Žiar nad Hronom
 517020,Lovča,96621,Žiar nad Hronom
+517038,Lovčica-Trubín,96623,Žiar nad Hronom
 599336,Lutila,96622,Žiar nad Hronom
 517046,Lúčky,96701,Žiar nad Hronom
 517089,Nevoľné,96701,Žiar nad Hronom
@@ -801,6 +811,7 @@ id,Názov obce,PSČ,Okres
 599310,Chorváty,04402,Košice - okolie
 521329,Debraď,04501,Košice - okolie
 521337,Drienovec,04401,Košice - okolie
+559873,Dvorníky-Včeláre,04402,Košice - okolie
 521396,Hačava,04402,Košice - okolie
 518107,Hosťovce,04402,Košice - okolie
 518123,Háj,04402,Košice - okolie
@@ -814,6 +825,7 @@ id,Názov obce,PSČ,Okres
 521787,Nováčany,04421,Košice - okolie
 521850,Paňovce,04471,Košice - okolie
 521868,Peder,04405,Košice - okolie
+521876,Perín-Chym,04474,Košice - okolie
 521892,Poproč,04424,Košice - okolie
 521922,Rešica,04473,Košice - okolie
 521949,Rudník,04423,Košice - okolie
@@ -891,6 +903,7 @@ id,Názov obce,PSČ,Okres
 521523,Kecerovce,04447,Košice - okolie
 521540,Kecerovský Lipovec,04447,Košice - okolie
 559687,Kechnec,04458,Košice - okolie
+521558,Kokšov-Bakša,04413,Košice - okolie
 521591,Košické Oľšany,04442,Košice - okolie
 521604,Košický Klečenov,04445,Košice - okolie
 521574,Košická Belá,04465,Košice - okolie
@@ -1013,6 +1026,7 @@ id,Názov obce,PSČ,Okres
 526304,Šivetice,04914,Revúca
 505838,Adamovské Kochanovce,91305,Trenčín
 505854,Bobot,91325,Trenčín
+506087,Chocholná-Velčice,91304,Trenčín
 505935,Dolná Poruba,91443,Trenčín
 505943,Dolná Súča,91332,Trenčín
 505960,Drietoma,91303,Trenčín
@@ -1022,6 +1036,9 @@ id,Názov obce,PSČ,Okres
 506028,Horňany,91324,Trenčín
 506044,Hrabovka,91332,Trenčín
 506095,Ivanovce,91305,Trenčín
+506133,Kostolná-Záriečie,91304,Trenčín
+506168,Krivosúd-Bodovka,91311,Trenčín
+545686,Melčice-Lieskové,91305,Trenčín
 506231,Mníchova Lehota,91321,Trenčín
 506273,Motešice,91326,Trenčín
 506281,Nemšová,91441,Trenčín
@@ -1077,6 +1094,7 @@ id,Názov obce,PSČ,Okres
 507008,Dubovany,92208,Piešťany
 558338,Ducové,92221,Piešťany
 556581,Hubina,92221,Piešťany
+507199,Kočín-Lančár,92204,Piešťany
 507229,Krakovany,92202,Piešťany
 507342,Moravany nad Váhom,92221,Piešťany
 507369,Nižná,92206,Piešťany
@@ -1279,6 +1297,7 @@ id,Názov obce,PSČ,Okres
 526452,Dlhé Stráže,05401,Levoča
 526461,Doľany,05302,Levoča
 526495,Dúbrava,05305,Levoča
+526517,Granč-Petrovce,05305,Levoča
 526525,Harakovce,05305,Levoča
 543179,Jablonov,05303,Levoča
 543225,Klčov,05302,Levoča
@@ -1340,6 +1359,7 @@ id,Názov obce,PSČ,Okres
 504947,Veľké Leváre,90873,Malacky
 504980,Závod,90872,Malacky
 504319,Čáry,90843,Senica
+504891,Šaštín-Stráže,90841,Senica
 504904,Štefanov,90645,Senica
 505846,Beckov,91638,Nové Mesto nad Váhom
 505871,Bošáca,91307,Nové Mesto nad Váhom
@@ -1713,6 +1733,7 @@ id,Názov obce,PSČ,Okres
 502791,Šalov,93571,Levice
 502804,Šarovce,93552,Levice
 500071,Branč,95113,Nitra
+545589,Cabaj-Čápor,95117,Nitra
 500194,Dolné Obdokovce,95102,Nitra
 500232,Golianovo,95108,Nitra
 555878,Horná Kráľová,95132,Šaľa
@@ -2035,6 +2056,7 @@ id,Názov obce,PSČ,Okres
 500704,Rišňovce,95121,Nitra
 500712,Rumanová,95137,Nitra
 500887,Veľké Zálužie,95135,Nitra
+500941,Výčapy-Opatovce,95144,Nitra
 500950,Zbehy,95142,Nitra
 500101,Čakajovce,95143,Nitra
 500992,Žirany,95174,Nitra
@@ -2328,6 +2350,7 @@ id,Názov obce,PSČ,Okres
 511056,Štiavnička,03401,Ružomberok
 511064,Švošov,03491,Ružomberok
 510807,Ľubochňa,03491,Ružomberok
+512052,Belá-Dulice,03811,Martin
 512061,Benice,03842,Martin
 512133,Bystrička,03804,Martin
 512168,Diaková,03802,Martin
@@ -2529,6 +2552,7 @@ id,Názov obce,PSČ,Okres
 505765,Vysočany,95635,Bánovce nad Bebravou
 505790,Zlatníky,95637,Bánovce nad Bebravou
 542806,Čierna Lehota,95653,Bánovce nad Bebravou
+505811,Žitná-Radiša,95641,Bánovce nad Bebravou
 505552,Šišov,95638,Bánovce nad Bebravou
 505544,Šípkov,95653,Bánovce nad Bebravou
 505056,Ľutov,95703,Bánovce nad Bebravou
@@ -2835,6 +2859,7 @@ id,Názov obce,PSČ,Okres
 546640,Dolný Lieskov,01821,Považská Bystrica
 557579,Malé Lednice,01816,Považská Bystrica
 513466,Papradno,01813,Považská Bystrica
+513474,Plevník-Drienové,01826,Považská Bystrica
 580864,Podskalie,01822,Považská Bystrica
 512842,Považská Bystrica,01701,Považská Bystrica
 558222,Počarová,01815,Považská Bystrica
@@ -2865,3 +2890,5 @@ id,Názov obce,PSČ,Okres
 513407,Mojtín,02072,Púchov
 557447,Nimnica,02071,Púchov
 513610,Púchov,02001,Púchov
+44487,Lopušné Pažite - Lopušná,02336,Kysucké Nové Mesto
+44488,Lopušné Pažite - Pažite,02336,Kysucké Nové Mesto
