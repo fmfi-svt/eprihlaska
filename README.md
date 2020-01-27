@@ -6,6 +6,7 @@
 - `source .venv/bin/activate`
 - `pip install -r requirements.txt`
 
+Copy `config-sample.py` to `config.py`.
 At this point you should most probably change the config options in `config.py`
 as you see fit. Once that is done, the DB can be created by running
 
