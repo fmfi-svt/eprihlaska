@@ -348,6 +348,11 @@ ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 
+DOCUMENT_MATURA_LIST = _('Maturitné vysvedčenie')
+DOCUMENT_LIST_GRADES = _('Potvrdený výpis známok')
+DOCUMENT_FINAL_GRADES = _('Koncoročné vysvedčenie')
+DOCUMENT_DIPLOMA = _('Diplom zo súťaže')
+
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
