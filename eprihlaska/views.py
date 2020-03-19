@@ -530,6 +530,50 @@ def file_upload():
     return redirect(url_for('final'))
 
 
+@app.route('/file/download/<uuid>', methods=['GET'])
+@login_required
+def file_download(uuid):
+    uploaded_files = session.get('uploaded_files', [])
+    filtered = list(filter(lambda x: x['uuid'] == uuid, uploaded_files))
+
+    if len(filtered) < 1:
+        flash(consts.ERR_FILE_DOES_NOT_EXIST)
+        return redirect(url_for('final'))
+
+    file = filtered[0]['file']
+
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_UPFILES_DEST'])
+    return send_from_directory(receipt_dir, file, as_attachment=True)
+
+
+@app.route('/file/delete/<uuid>', methods=['GET'])
+@login_required
+def file_delete(uuid):
+    uploaded_files = session.get('uploaded_files', [])
+    filtered = list(filter(lambda x: x['uuid'] == uuid, uploaded_files))
+
+    if len(filtered) < 1:
+        flash(consts.ERR_FILE_DOES_NOT_EXIST)
+        return redirect(url_for('final'))
+
+    file = filtered[0]['file']
+
+    root_dir = os.getcwd()
+    file_path = os.path.join(root_dir, app.config['UPLOADED_UPFILES_DEST'],
+                             file)
+    os.unlink(file_path)
+
+    new_uploaded_files = list(filter(lambda x: x['uuid'] != uuid,
+                                     uploaded_files))
+    session['uploaded_files'] = new_uploaded_files
+
+    save_current_session_to_DB()
+
+    flash(consts.FLASH_MSG_FILE_REMOVED)
+    return redirect(url_for('final'))
+
+
 @app.route('/grades_control', methods=['GET'])
 @login_required
 def grades_control():
