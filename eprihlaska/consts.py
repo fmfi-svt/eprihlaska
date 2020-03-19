@@ -25,6 +25,7 @@ FLASH_MSG_AFTER_LOGIN = _('Gratulujeme, boli ste prihlásení do prostredia '
 FLASH_MSG_RECEIPT_SUBMITTED = _('Priložený súbor s potvrdením o zaplatení bol '
                                 'uložený.')
 FLASH_MSG_FILE_SUBMITTED = _('Priložený súbor bol úspešne uložený.')
+FLASH_MSG_FILE_REMOVED = _('Priložený súbor bol úspešne odstránený.')
 
 SUBMIT = _('Odoslať')
 NEXT = _('Ulož a pokračuj')
@@ -347,6 +348,7 @@ ERR_EMPTY_FILE = _('Odovzdaný súbor bol prázdny.')
 ERR_EXTENSION_NOT_ALLOWED = _('Povolené sú iba súbory PDF, JPG, BMP a PNG.')
 ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
 ERR_FILE_UPLOAD_ERROR = _('Problém s uploadom súboru.')
+ERR_FILE_DOES_NOT_EXIST = _('Súbor neexistuje.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
 uploaded_files = UploadSet('upfiles', ['pdf', 'jpg', 'bmp', 'png'])
