@@ -195,7 +195,7 @@ Mlynská dolina, <br>
 {% if 'uploaded_files' in session %}
 <ul>
   {% for file in session['uploaded_files'] %}
-  <li> <a href="{{ url_for('file_download', uuid=file['uuid']) }}"> {{ file['file'] }} </a>
+  <li> <strong>{{ consts.DOCUMENTS_TO_UPLOAD[file['type']|int] }}</strong> <a href="{{ url_for('file_download', uuid=file['uuid']) }}"> {{ file['file'] }} </a>
     <a class='btn' href="{{ url_for('file_delete', uuid=file['uuid']) }}"> zmazať </a>
   {% endfor %}
 </ul>
