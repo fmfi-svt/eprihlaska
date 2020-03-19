@@ -520,7 +520,7 @@ def file_upload():
 
     session['uploaded_files'].append({
         'uuid': str(uuid.uuid4()),
-        'type': request.form.get('type'),
+        'type': request.form.get('uploaded_document_type'),
         'file': filename
     })
 
