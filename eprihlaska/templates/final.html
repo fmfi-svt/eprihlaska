@@ -114,7 +114,7 @@ variabilný symbol: <strong>800</strong> <br>
   Adresa banky: Všeobecná úverová banka,
   Mlynské Nivy 1,
   829 90 Bratislava
-  
+
 
 <p>
 
@@ -201,16 +201,21 @@ Mlynská dolina, <br>
 </ul>
 {% endif %}
 
-<form method=POST enctype=multipart/form-data action="{{ url_for('file_upload') }}">
+<form class='form form-horizontal' method=POST enctype=multipart/form-data action="{{ url_for('file_upload') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  Priložiť nový dokument:
+  <label class="control-label col-lg-2"> Priložiť nový dokument: </label>
+  <div class='col-lg-10'>
   <select name="uploaded_document_type">
   {% for doc in consts.DOCUMENTS_TO_UPLOAD %}
     <option value="{{ loop.index0 }}">{{ doc }}</option>
   {% endfor %}
   </select>
   <input type=file name=file> <br />
-  <input type="submit" />
+  </div>
+
+  <div class="col-lg-offset-2 col-lg-10">
+    <input class="btn btn-red btn-primary" id="submit" name="submit" type="submit" value="Priložiť">
+  </div>
 </form>
 
 
