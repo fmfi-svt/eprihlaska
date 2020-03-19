@@ -203,7 +203,13 @@ Mlynská dolina, <br>
 
 <form method=POST enctype=multipart/form-data action="{{ url_for('file_upload') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  Priložiť nový dokument: <input type=file name=file> <br />
+  Priložiť nový dokument:
+  <select name="uploaded_document_type">
+  {% for doc in consts.DOCUMENTS_TO_UPLOAD %}
+    <option value="{{ loop.index0 }}">{{ doc }}</option>
+  {% endfor %}
+  </select>
+  <input type=file name=file> <br />
   <input type="submit" />
 </form>
 
