@@ -24,6 +24,7 @@ FLASH_MSG_AFTER_LOGIN = _('Gratulujeme, boli ste prihlásení do prostredia '
                           'ePrihlaska!')
 FLASH_MSG_RECEIPT_SUBMITTED = _('Priložený súbor s potvrdením o zaplatení bol '
                                 'uložený.')
+FLASH_MSG_FILE_SUBMITTED = _('Priložený súbor bol úspešne uložený.')
 
 SUBMIT = _('Odoslať')
 NEXT = _('Ulož a pokračuj')
@@ -345,8 +346,10 @@ PAYMENT_RECEIPT = _('Potvrdenie o zaplatení')
 ERR_EMPTY_FILE = _('Odovzdaný súbor bol prázdny.')
 ERR_EXTENSION_NOT_ALLOWED = _('Povolené sú iba súbory PDF, JPG, BMP a PNG.')
 ERR_RECEIPT_NOT_UPLOADED = _('Potvrdenie o zaplatení nebolo odoslané.')
+ERR_FILE_UPLOAD_ERROR = _('Problém s uploadom súboru.')
 
 receipts = UploadSet('receipts', ['pdf', 'jpg', 'bmp', 'png'])
+uploaded_files = UploadSet('upfiles', ['pdf', 'jpg', 'bmp', 'png'])
 
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year

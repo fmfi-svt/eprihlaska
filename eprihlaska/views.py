@@ -2,6 +2,7 @@ from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response, send_from_directory)
 import flask.json
 from flask_mail import Message
+from flask_uploads import UploadNotAllowed
 from eprihlaska import app, db, mail
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               AddressForm, PreviousStudiesForm,
@@ -28,7 +29,8 @@ from .consts import (MENU, STUDY_PROGRAMME_CHOICES, FORGOTTEN_PASSWORD_MAIL,
                      CITY_CHOICES_PSC, MARITAL_STATUS_CHOICES,
                      HIGHSCHOOL_CHOICES, HS_STUDY_PROGRAMME_CHOICES,
                      HS_STUDY_PROGRAMME_MAP, EDUCATION_LEVEL_CHOICES,
-                     COMPETITION_CHOICES, APPLICATION_STATES, CURRENT_MATURA_YEAR, DEFAULT_MATURA_YEAR,
+                     COMPETITION_CHOICES, APPLICATION_STATES,
+                     CURRENT_MATURA_YEAR, DEFAULT_MATURA_YEAR,
                      ApplicationStates)
 from . import consts
 
@@ -177,7 +179,7 @@ def study_programme():
         return redirect(url_for('personal_info'))
     else:
         if request.method == 'POST':
-            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED, 'error')
 
     return render_template('study_programme.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
@@ -195,8 +197,8 @@ def personal_info():
         return redirect(url_for('address'))
     else:
         if request.method == 'POST':
-            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
-    
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED, 'error')
+
     return render_template('personal_info.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -214,8 +216,8 @@ def address():
         return redirect(url_for('previous_studies'))
     else:
         if request.method == 'POST':
-            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
-    
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED, 'error')
+
     return render_template('address.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -233,8 +235,8 @@ def previous_studies():
         return redirect(url_for('admissions_waivers'))
     else:
         if request.method == 'POST':
-            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
-    
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED, 'error')
+
     return render_template('previous_studies.html', form=form, session=session,
                            sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -248,7 +250,7 @@ def filter_competitions(competition_list, study_programme_list):
         'B': ['BIN', 'BMF'],
         'CH': ['BIN']
     }
-    
+
     constraints = {
         'FYZ': constraint_profiles['F'],
         'INF': constraint_profiles['I'],
@@ -318,13 +320,13 @@ def admissions_waivers():
         form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
 
     further_study_info_constraints = {
-        'matura_mat_grade': ['AIN', 
+        'matura_mat_grade': ['AIN',
                              'upFYIN', 'upINAN', 'upINBI', 'upMADG' 'upMAFY',
                              'upMAIN', 'upMATV'],
         'matura_fyz_grade': ['upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['AIN', 'upINBI','upMAIN', 'upINAN'],
-        'matura_bio_grade': [ ],
-        'matura_che_grade': [ ],
+        'matura_inf_grade': ['AIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'matura_bio_grade': [],
+        'matura_che_grade': [],
     }
 
     further_study_info_constraints.update({
@@ -335,9 +337,9 @@ def admissions_waivers():
         'will_take_che_matura': further_study_info_constraints['matura_che_grade'], # noqa
     })
 
+    relevant_years_last4 = [DEFAULT_MATURA_YEAR-3, DEFAULT_MATURA_YEAR-2,
+                            DEFAULT_MATURA_YEAR-1, CURRENT_MATURA_YEAR-1]
 
-    relevant_years_last4 = [DEFAULT_MATURA_YEAR-3, DEFAULT_MATURA_YEAR-2, DEFAULT_MATURA_YEAR-1, CURRENT_MATURA_YEAR-1]
-    
     relevant_years = {
         'external_matura_percentile': relevant_years_last4,
         'matura_mat_grade': relevant_years_last4,
@@ -382,11 +384,11 @@ def admissions_waivers():
             save_form(form)
 
             flash(consts.FLASH_MSG_DATA_SAVED)
-        return redirect(url_for('final'))    
+        return redirect(url_for('final'))
     else:
         if request.method == 'POST':
-            flash(consts.FLASH_MSG_DATA_NOT_SAVED,'error')
-    
+            flash(consts.FLASH_MSG_DATA_NOT_SAVED, 'error')
+
     return render_template('admission_waivers.html', form=form,
                            session=session, sp=dict(STUDY_PROGRAMME_CHOICES))
 
@@ -495,6 +497,37 @@ def payment_receipt():
     receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
     return send_from_directory(receipt_dir, session['receipt_filename'],
                                as_attachment=True)
+
+
+@app.route('/file/upload', methods=['POST'])
+@login_required
+def file_upload():
+    if 'file' not in request.files:
+        flash(consts.ERR_FILE_UPLOAD_ERROR, 'error')
+        return redirect(url_for('final'))
+
+    if 'uploaded_files' not in session:
+        session['uploaded_files'] = []
+
+    # Ensure that the uploaded file is saved to a subdir with the current
+    # user's ID (i.e. a unique one).
+    try:
+        filename = consts.uploaded_files.save(request.files['file'],
+                                              folder=str(current_user.id))
+    except UploadNotAllowed:
+        flash(consts.ERR_EXTENSION_NOT_ALLOWED, 'error')
+        return redirect(url_for('final'))
+
+    session['uploaded_files'].append({
+        'uuid': str(uuid.uuid4()),
+        'type': request.form.get('type'),
+        'file': filename
+    })
+
+    save_current_session_to_DB()
+
+    flash(consts.FLASH_MSG_FILE_SUBMITTED)
+    return redirect(url_for('final'))
 
 
 @app.route('/grades_control', methods=['GET'])

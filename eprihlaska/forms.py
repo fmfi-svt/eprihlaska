@@ -192,6 +192,7 @@ class FinalNoteForm(FlaskForm):
     note = TextAreaField(label=c.FINAL_NOTE,
                          description=c.FINAL_NOTE_DESC)
 
+
 class FurtherStudyInfoForm(FlaskForm):
     g_min = 1
     g_max = 5
@@ -283,17 +284,17 @@ class AdmissionWaiversForm(FlaskForm):
     admissions_waivers = HiddenField()
     submit = SubmitField(label=c.NEXT)
 
-    
+
 class FinalForm(FlaskForm):
     submit = SubmitField(label=c.SUBMIT_APPLICATION)
 
 
 class ReceiptUploadForm(FlaskForm):
-        receipt = FileField(label=c.PAYMENT_RECEIPT,
-                            validators=[FileAllowed(c.receipts,
-                                                    c.ERR_EXTENSION_NOT_ALLOWED), # noqa
-                                        FileRequired(c.ERR_EMPTY_FILE)])
-        submit = SubmitField(label=c.SUBMIT)
+    receipt = FileField(label=c.PAYMENT_RECEIPT,
+                        validators=[FileAllowed(c.receipts,
+                                                c.ERR_EXTENSION_NOT_ALLOWED), # noqa
+                                    FileRequired(c.ERR_EMPTY_FILE)])
+    submit = SubmitField(label=c.SUBMIT)
 
 
 class LoginForm(FlaskForm):
@@ -317,7 +318,7 @@ class NewPasswordForm(FlaskForm):
                                     validators=[validators.Length(min=8,
                                                                   max=80),
                                                 validators.EqualTo('password',
-                                                                   message=c.REPEAT_PASSWORD_ERR)])
+                                                                   message=c.REPEAT_PASSWORD_ERR)]) # noqa
     submit = SubmitField(label=c.SIGNUP)
 
 

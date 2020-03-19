@@ -13,7 +13,7 @@ from authlib.flask.client import OAuth
 from authlib.client.apps import google, facebook
 
 from flask_uploads import configure_uploads
-from .consts import MENU, receipts
+from .consts import MENU, receipts, uploaded_files
 from .renderer import (ePrihlaskaNavRenderer, ExtendedNavbar, UserGreeting,
                        LogInLogOut)
 import locale
@@ -43,6 +43,7 @@ app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
 locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
 
 configure_uploads(app, receipts)
+configure_uploads(app, uploaded_files)
 
 mail_handler = SMTPHandler(
     mailhost=app.config['ERROR_EMAIL_SERVER'],

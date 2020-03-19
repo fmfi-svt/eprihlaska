@@ -190,6 +190,23 @@ Mlynská dolina, <br>
 {% endif %}
 
 
+<h3> Priložené dokumenty </h3>
+
+{% if 'uploaded_files' in session %}
+<ul>
+  {% for file in session['uploaded_files'] %}
+  <li> {{ file['uuid'] }} - {{ file['file'] }}
+  {% endfor %}
+</ul>
+{% endif %}
+
+<form method=POST enctype=multipart/form-data action="{{ url_for('file_upload') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  Priložiť nový dokument: <input type=file name=file> <br />
+  <input type="submit" />
+</form>
+
+
 
 <h3>Čo ďalej?</h3>
 
