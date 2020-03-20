@@ -72,10 +72,22 @@
             </a>
             {% endif %}
             {% if app['app']['receipt_filename'] %}
-            <a href="{{ url_for('admin_payment_receipt', id=app.id) }}">
-              Potvrdenie o zaplatení
-            </a>
+            <span data-toggle="tooltip" title="Potvrdenie o zaplatení">
+              <strong><a href="{{ url_for('admin_payment_receipt', id=app.id) }}">PZ</a></strong>
+            </span>&nbsp;
             {% endif %}
+            {% if 'uploaded_files' in app['app'] %}
+              {% for file in app['app']['uploaded_files'] %}
+                <span data-toggle="tooltip" title="{{ consts.DOCUMENTS_TO_UPLOAD[file['type']|int] }}">
+                  <a href="{{ url_for('admin_file_download', id=app.id, uuid=file['uuid']) }}">
+                    <strong>{{ consts.DOCUMENTS_TO_UPLOAD_SHORT[file['type']|int] }}<strong>
+                  </a>
+                </span>&nbsp;
+
+              {% endfor %}
+            {% endif %}
+
+
           </div>
 
         </td>
@@ -132,7 +144,7 @@
     </ul>
 
     <div class="tab-content">
-			<div id="submitted" class="tab-pane fade in active">
+      <div id="submitted" class="tab-pane fade in active">
         {{ generate_apps_table(submitted, "submitted", "Podané prihlášky") }}
       </div>
       <div id="printed" class="tab-pane fade">
@@ -171,7 +183,6 @@
     // Open a nav-tab from a given URL hash.
     var hash = document.location.hash;
     if (hash) {
-      console.log(hash);
         $('.nav-tabs a[href="' + hash + '"]').tab('show') ;
     }
 
@@ -183,6 +194,7 @@
             window.location.hash = e.target.hash; //Polyfill for old browsers
         }
     });
+    $('[data-toggle="tooltip"]').tooltip();
   });
 </script>
 {% endblock %}
