@@ -872,7 +872,8 @@ def admin_list():
     processed = get_apps(ApplicationStates.processed)
     return render_template('admin_list.html', in_progress=in_progress,
                            submitted=submitted, printed=printed,
-                           processed=processed, states=APPLICATION_STATES)
+                           processed=processed, states=APPLICATION_STATES,
+                           consts=consts)
 
 
 @app.route('/admin/view/<id>')
@@ -966,6 +967,22 @@ def admin_payment_receipt(id):
     receipt_dir = os.path.join(root_dir, app.config['UPLOADED_RECEIPTS_DEST'])
     return send_from_directory(receipt_dir, sess['receipt_filename'],
                                as_attachment=True)
+
+
+@app.route('/admin/file/download/<id>/<uuid>', methods=['GET'])
+@require_remote_user
+def admin_file_download(id, uuid):
+    application = ApplicationForm.query.get(id)
+    sess = flask.json.loads(application.application)
+
+    uploaded_files = sess.get('uploaded_files', [])
+    filtered = list(filter(lambda x: x['uuid'] == uuid, uploaded_files))
+
+    file = filtered[0]['file']
+
+    root_dir = os.getcwd()
+    receipt_dir = os.path.join(root_dir, app.config['UPLOADED_UPFILES_DEST'])
+    return send_from_directory(receipt_dir, file, as_attachment=True)
 
 
 def get_cosign_cookies():

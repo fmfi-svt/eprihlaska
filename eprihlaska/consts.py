@@ -359,6 +359,7 @@ DOCUMENT_FINAL_GRADES = _('Koncoročné vysvedčenie')
 DOCUMENT_DIPLOMA = _('Diplom zo súťaže')
 DOCUMENTS_TO_UPLOAD = [DOCUMENT_MATURA_LIST, DOCUMENT_LIST_GRADES,
                        DOCUMENT_FINAL_GRADES, DOCUMENT_DIPLOMA]
+DOCUMENTS_TO_UPLOAD_SHORT = ['MV', 'ZN', 'KV', 'DI']
 
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
