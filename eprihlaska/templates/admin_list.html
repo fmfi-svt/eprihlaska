@@ -71,6 +71,7 @@
               Spracovaná
             </a>
             {% endif %}
+            <br />
             {% if app['app']['receipt_filename'] %}
             <span data-toggle="tooltip" title="Potvrdenie o zaplatení">
               <strong><a href="{{ url_for('admin_payment_receipt', id=app.id) }}">PZ</a></strong>
