@@ -952,6 +952,7 @@ def admin_set_state(id, state):
     if app.state == ApplicationStates.submitted:
         sess['application_submitted'] = True
         app.application = flask.json.dumps(dict(sess))
+        app.submitted_at = datetime.datetime.now()
 
     db.session.commit()
     return redirect(url_for('admin_list'))

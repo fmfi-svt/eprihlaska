@@ -174,7 +174,7 @@ COMPETITION_CHOICES = [
     ('ZENIT', _('úspešný riešiteľ - Súťaž ZENIT v programovaní - krajské kolo')),
     ('TROJSTEN_KMS', _('65% bodov v ľubovoľnej kategórii - KMS (TROJSTEN) - ktorýkoľvek ročník a časť')),
     ('TROJSTEN_FKS', _('65% bodov v ľubovoľnej kategórii - FKS (TROJSTEN) - ktorýkoľvek ročník a časť')),
-    ('TROJSTEN_KSP', _('65% bodov v ľubovoľnej kategórii - KSP (TROJSTEN) - ktorýkoľvek ročník a časť')),    
+    ('TROJSTEN_KSP', _('65% bodov v ľubovoľnej kategórii - KSP (TROJSTEN) - ktorýkoľvek ročník a časť')),
 ]
 
 COMPETITION_YEAR = _('Rok')
