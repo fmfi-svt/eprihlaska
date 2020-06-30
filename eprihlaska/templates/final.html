@@ -98,6 +98,7 @@ telefón: 02/602 95 152, 02/602 95 480
 
 {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
+<!--
 <h3>Poplatok</h3>
 
 Poplatok za prijímacie konanie vo výške 15 EUR je potrebné uhradiť <strong>do 3 dní</strong> na účet: <br>
@@ -118,8 +119,6 @@ variabilný symbol: <strong>800</strong> <br>
 
 <p>
 
-<!--Potvrdenie o zaplatení si odložte pre prípad, že by sa vyskytol problém pri
-spárovaní vašej platby s prihláškou.-->
 Potvrdenie o zaplatení <b>nám pošlite spolu s maturitným vysvedčením.</b>
 
 <br>
@@ -147,7 +146,9 @@ Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej li
 {% endif %}
 
 {% endif %}
+-->
 
+<!--
 <h3>Overená kópia maturitného vysvedčenia</h3>
 {% if session['basic_personal_data']['matura_year'] == consts.CURRENT_MATURA_YEAR %}
 
@@ -170,6 +171,14 @@ Mlynská dolina, <br>
 </p>
 
 {% if grades_filled  %}
+-->
+
+<h3>Potvrdenie o zaplatení poplatku a overená kópia maturitného vysvedčenia</h2>
+
+<p> Ku zaplateniu poplatku a zaslaniu overenej kópie maturitného vysvedčenia vás vyzveme prostredníctvom e-mailu
+  po overení, že vaša prihláška spĺňa podmienky dodatočného prijímacieho konania.
+
+<p> Nascanovanú alebo odfotenú verziu maturitného vysvedčenia prosím uploadnite v sekcii "Upload dokumentov" nižšie.
 
 <h3>Výpis vybraných známok</h3>
 
