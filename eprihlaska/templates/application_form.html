@@ -46,7 +46,9 @@
         <div class="col-sm-12">
           {% if session['application_submitted'] %}
           <strong>Stav prihlášky: </strong> podaná <br />
+	  {% if submitted_at   %}
           <strong>Dátum podania:</strong> {{ submitted_at.strftime('%d.%m.%Y') }} <br />
+	  {% endif %}
           {% else %}
           <strong>Stav prihlášky: </strong> nepodaná <br />
           {% endif %}
