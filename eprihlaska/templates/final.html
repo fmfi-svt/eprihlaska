@@ -96,6 +96,8 @@ telefón: 02/602 95 152, 02/602 95 480
   <a href="{{ url_for('application_form') }}" target="_blank">Formulár elektronickej prihlášky (PDF)</a>
 </strong>
 
+<!--
+
 {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
 <h3>Poplatok</h3>
@@ -118,8 +120,6 @@ variabilný symbol: <strong>800</strong> <br>
 
 <p>
 
-<!--Potvrdenie o zaplatení si odložte pre prípad, že by sa vyskytol problém pri
-spárovaní vašej platby s prihláškou.-->
 Potvrdenie o zaplatení <b>nám pošlite spolu s maturitným vysvedčením.</b>
 
 <br>
@@ -147,7 +147,10 @@ Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej li
 {% endif %}
 
 {% endif %}
+-->
 
+
+<!--
 <h3>Overená kópia maturitného vysvedčenia</h3>
 {% if session['basic_personal_data']['matura_year'] == consts.CURRENT_MATURA_YEAR %}
 
@@ -168,11 +171,19 @@ Mlynská dolina, <br>
 842 48 Bratislava
 </em>
 </p>
+-->
 
-<p><b>Vzhľadom k aktuálnej mimoriadnej situácii nám dokumenty môžete poslať aj elektronicky v časti "Upload dokumentov". V prípade, že budeme potrebovať zaslanie fyzických dokumentov, Vás budeme kontaktovať prostredníctvom e-mailu.</b>
+
+
+<h3>Potvrdenie o zaplatení poplatku a overená kópia maturitného vysvedčenia</h2>
+
+<p> Ku zaplateniu poplatku a zaslaniu overenej kópie maturitného vysvedčenia vás vyzveme prostredníctvom e-mailu
+  po overení, že vaša prihláška spĺňa podmienky dodatočného prijímacieho konania.
+
+<p> Nascanovanú alebo odfotenú verziu maturitného vysvedčenia prosím uploadnite v sekcii "Upload dokumentov" nižšie.
 
 {% if grades_filled  %}
-
+  
 <h3>Výpis vybraných známok</h3>
 
 <p>
@@ -188,9 +199,6 @@ Mlynská dolina, <br>
 842 48 Bratislava
 </em>
 </p>
-
-<p><b>Vzhľadom k aktuálnej mimoriadnej situácii nám dokumenty môžete poslať aj elektronicky v časti "Upload dokumentov". V prípade, že budeme potrebovať zaslanie fyzických dokumentov, Vás budeme kontaktovať prostredníctvom e-mailu.</b>
-
 {% endif %}
 
 
@@ -199,6 +207,9 @@ Mlynská dolina, <br>
 <p> V tejto časti nám môžete elektronicky poslať podporné dokumenty. Podporované
   sú nascanované alebo odfotené dokumenty v súboroch typu pdf, jpg alebo png. V prípade,
   že budeme potrebovať overené kópie týchto dokumentov, vás budeme kontaktovať e-mailom.
+
+<p><b>Overená fyzická kópia maturitného vysvedčenia, ako aj ďalšie vyžiadané dokumenty, sú nevyhnutné na vydanie finálneho rozhodnutia o prijatí,
+    bez nich nemožno vydať rozhodnutie a vykonať zápis na štúdium.</b>
 
 {% if 'uploaded_files' in session %}
 <ul>
