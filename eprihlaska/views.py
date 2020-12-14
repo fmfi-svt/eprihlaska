@@ -952,6 +952,7 @@ def admin_set_state(id, state):
     if app.state == ApplicationStates.submitted:
         sess['application_submitted'] = True
         app.application = flask.json.dumps(dict(sess))
+        app.submitted_at = datetime.datetime.now()
 
     db.session.commit()
     return redirect(url_for('admin_list'))
@@ -1007,7 +1008,7 @@ def admin_ais_test():
     ctx = create_context(cosign_cookies,
                          origin='ais2.uniba.sk')
     # Do log in
-    ctx.request_html('/ais/login.do', method='POST')
+    ctx.request_html('/ais/loginCosign.do', method='POST')
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
@@ -1143,7 +1144,7 @@ def admin_ais2_process_special(id, process_type):
 def admin_process(id):
     application = ApplicationForm.query.get(id)
 
-    form = AIS2CookieForm()
+    form = AIS2SubmitForm()
     return send_application_to_ais2(id, application, form, None, beta=True)
 
 
@@ -1159,15 +1160,15 @@ def admin_process_special(id, process_type):
 def send_application_to_ais2(id, application, form, process_type, beta=False):
     from .ais_utils import (create_context, save_application_form)
     if form.validate_on_submit():
+        origin = 'ais2.uniba.sk'
         if beta:
-            ctx = create_context({'JSESSIONID': form.data['jsessionid']},
-                                 origin='ais2-beta.uniba.sk')
-        else:
-            cosign_cookies = get_cosign_cookies()
-            ctx = create_context(cosign_cookies,
-                                 origin='ais2.uniba.sk')
-            # Do log in
-            ctx.request_html('/ais/login.do', method='POST')
+            origin = 'ais2-beta.uniba.sk'
+
+        cosign_cookies = get_cosign_cookies()
+        ctx = create_context(cosign_cookies,
+                             origin=origin)
+        # Do log in
+        ctx.request_html('/ais/loginCosign.do', method='POST')
 
         ais2_output = None
         error_output = None
