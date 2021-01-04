@@ -245,10 +245,10 @@ def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
     constraint_profiles = {
-        'F': ['BMF', 'FYZ', 'OZE', 'TEF', 'upFYIN', 'upMAFY'],
-        'I': ['INF', 'AIN', 'BIN', 'DAV', 'upINBI', 'upMAIN', 'upINAN'],
-        'B': ['BIN', 'BMF'],
-        'CH': ['BIN']
+        'F': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY'],
+        'I': ['INF', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
+        'B': ['BIN', 'BIN/k', 'BMF'],
+        'CH': ['BIN', 'BIN/k']
     }
 
     constraints = {
@@ -304,11 +304,11 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'OZE', 'TEF', 'BIN', 'DAV', 'INF'],
-        'grades_inf': ['BIN', 'INF', 'DAV'],
-        'grades_fyz': ['BMF', 'FYZ', 'OZE', 'TEF'],
-        'grades_bio': ['BMF', 'BIN'],
-        'grades_che': ['BIN'],
+        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'INF', 'MAT', 'PMA'],
+        'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k'],
+        'grades_fyz': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
+        'grades_bio': ['BMF', 'BIN', 'BIN/k'],
+        'grades_che': ['BIN', 'BIN/k'],
     }
 
     # Set labels for grades of respective study years based on
@@ -321,10 +321,10 @@ def admissions_waivers():
 
     further_study_info_constraints = {
         'matura_mat_grade': ['AIN',
-                             'upFYIN', 'upINAN', 'upINBI', 'upMADG' 'upMAFY',
+                             'upFYIN', 'upINAN', 'upINBI', 'upINGE', 'upINCH', 'upMADG' 'upMAFY',
                              'upMAIN', 'upMATV'],
         'matura_fyz_grade': ['upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['AIN', 'upINBI', 'upMAIN', 'upINAN'],
+        'matura_inf_grade': ['AIN', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
         'matura_bio_grade': [],
         'matura_che_grade': [],
     }

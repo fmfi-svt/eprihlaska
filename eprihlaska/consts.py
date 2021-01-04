@@ -78,13 +78,18 @@ PRG_PMA = _('Poistná matematika')
 PRG_EFM = _('Ekonomická a finančná matematika')
 PRG_MMN = _('Manažérska matematika')
 PRG_FYZ = _('Fyzika')
+PRG_FYZk = _('Fyzika (konverzný program)')
 PRG_BMF = _('Biomedicínska fyzika')
 PRG_OZE = _('Obnoviteľné zdroje energie a environmentálna fyzika')
+PRG_OZEk = _('Obnoviteľné zdroje energie a environmentálna fyzika (konverzný program)')
 PRG_TEF = _('Technická fyzika')
+PRG_TEFk = _('Technická fyzika (konverzný program)')
 PRG_INF = _('Informatika')
 PRG_AIN = _('Aplikovaná informatika')
 PRG_BIN = _('Bioinformatika')
+PRG_BINk = _('Bioinformatika (konverzný program)')
 PRG_DAV = _('Dátová veda')
+PRG_DAVk = _('Dátová veda (konverzný program)')
 PRG_upMAFY = _('Učiteľstvo matematiky a fyziky')
 PRG_upMAIN = _('Učiteľstvo matematiky a informatiky')
 PRG_upFYIN = _('Učiteľstvo fyziky a informatiky')
@@ -92,6 +97,8 @@ PRG_upMATV = _('Učiteľstvo matematiky a telesnej výchovy')
 PRG_upMADG = _('Učiteľstvo matematiky a deskriptívnej geometrie')
 PRG_upINBI = _('Učiteľstvo informatiky a biológie')
 PRG_upINAN = _('Učiteľstvo informatiky a anglického jazyka a literatúry')
+PRG_upINGE = _('Učiteľstvo informatiky a geografie')
+PRG_upINCH = _('Učiteľstvo informatiky a chémie')
 
 MATURA_YEAR = _('Rok maturity')
 
@@ -106,39 +113,28 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('EFM', PRG_EFM),
                            ('MMN', PRG_MMN),
                            ('FYZ', PRG_FYZ),
+                           ('FYZ/k', PRG_FYZk),
                            ('BMF', PRG_BMF),
                            ('OZE', PRG_OZE),
+                           ('OZE/k', PRG_OZEk),
                            ('TEF', PRG_TEF),
+                           ('TEF/k', PRG_TEFk),
                            ('INF', PRG_INF),
                            ('AIN', PRG_AIN),
                            ('BIN', PRG_BIN),
+                           ('BIN/k', PRG_BINk),
                            ('DAV', PRG_DAV),
+                           ('DAV/k', PRG_DAVk),
                            ('upMAFY', PRG_upMAFY),
                            ('upMAIN', PRG_upMAIN),
-                           ('upFYIN', PRG_upFYIN),
                            ('upMATV', PRG_upMATV),
-                           ('upMADG', PRG_upMADG),
+                           ('upFYIN', PRG_upFYIN),
                            ('upINBI', PRG_upINBI),
+                           ('upINGE', PRG_upINGE),
+                           ('upINCH', PRG_upINCH),
                            ('upINAN', PRG_upINAN)]
 
-# STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
-STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
-                           ('MAT', PRG_MAT),
-                           ('PMA', PRG_PMA),
-                           ('MMN', PRG_MMN),
-                           ('FYZ', PRG_FYZ),
-                           ('BMF', PRG_BMF),
-                           ('OZE', PRG_OZE),
-                           ('TEF', PRG_TEF),
-                           ('INF', PRG_INF),
-                           ('AIN', PRG_AIN),
-                           ('BIN', PRG_BIN),
-                           ('DAV', PRG_DAV),
-                           ('upMAFY', PRG_upMAFY),
-                           ('upMAIN', PRG_upMAIN),
-                           ('upFYIN', PRG_upFYIN),
-                           ('upMADG', PRG_upMADG),
-                           ('upINBI', PRG_upINBI)]
+STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
 
 
 ADDRESS_COUNTRY = _('Štát')
@@ -383,4 +379,4 @@ DOCUMENTS_TO_UPLOAD_SHORT = ['MV', 'ZN', 'KV', 'DI']
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
 CURRENT_MATURA_YEAR = 2021
-DEFAULT_MATURA_YEAR = 2020
+DEFAULT_MATURA_YEAR = 2021

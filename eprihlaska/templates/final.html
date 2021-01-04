@@ -96,7 +96,7 @@ telefón: 02/602 95 152, 02/602 95 480
   <a href="{{ url_for('application_form') }}" target="_blank">Formulár elektronickej prihlášky (PDF)</a>
 </strong>
 
-<!--
+-
 
 {% if not (session['basic_personal_data']['dean_invitation_letter'] and session['basic_personal_data']['dean_invitation_letter_no']) %}
 
@@ -118,17 +118,13 @@ variabilný symbol: <strong>800</strong> <br>
   829 90 Bratislava
 
 
-<p>
-
-Potvrdenie o zaplatení <b>nám pošlite spolu s maturitným vysvedčením.</b>
-
 <br>
 <br>
 
 {% if not session['receipt_filename'] %}
 
-Pre rýchlejšie spracovanie Vašej prihlášky tiež môžete potvrdenie v digitálnej
-forme priložiť použitím nasledujúceho formulára:
+Pre účely správnej identifikácie platby prosím uploadnite potvrdenie (napríklad z internet bankingu) v digitálnej
+forme:
 
 <br>
 <br>
@@ -147,10 +143,9 @@ Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej li
 {% endif %}
 
 {% endif %}
--->
 
 
-<!--
+
 <h3>Overená kópia maturitného vysvedčenia</h3>
 {% if session['basic_personal_data']['matura_year'] == consts.CURRENT_MATURA_YEAR %}
 
@@ -171,16 +166,17 @@ Mlynská dolina, <br>
 842 48 Bratislava
 </em>
 </p>
--->
 
 
 
+<!--
 <h3>Potvrdenie o zaplatení poplatku a overená kópia maturitného vysvedčenia</h2>
 
 <p> Ku zaplateniu poplatku a zaslaniu overenej kópie maturitného vysvedčenia vás vyzveme prostredníctvom e-mailu
   po overení, že vaša prihláška spĺňa podmienky dodatočného prijímacieho konania.
 
 <p> Nascanovanú alebo odfotenú verziu maturitného vysvedčenia prosím uploadnite v sekcii "Upload dokumentov" nižšie.
+-->
 
 {% if grades_filled  %}
   
