@@ -158,7 +158,12 @@ def save_application_form(ctx,
         app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
         if session['basic_personal_data']['surname'] != session['basic_personal_data']['born_with_surname']:
             app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
-        app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
+
+        # This should basically never happen in production, but when testing,
+        # it would be nice not to fail in case the application does not have
+        # the submitted_at date filled in yet.
+        if application.submitted_at is not None:
+            app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
         app.d.datumNarodeniaDateControl.write(session['date_of_birth'])
 
         # Sex selection
