@@ -172,20 +172,21 @@ def save_application_form(ctx,
         else:
             app.d.kodPohlavieRadioBox.select(1)
 
-        rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
-        # FIXME: AIS2 hack
-        if rodinny_stav_text == 'nezistený':
-            rodinny_stav_text = 'neurčené'
+       #rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
+       ## FIXME: AIS2 hack
+       #if rodinny_stav_text == 'nezistený':
+       #    rodinny_stav_text = 'neurčené'
 
-        rodinny_stav_index = None
-        for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
-            option_text = option.title.split('/')[0].lower()
-            if option_text == rodinny_stav_text:
-                rodinny_stav_index = idx
+       #rodinny_stav_index = None
+       #for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
+       #    option_text = option.title.split('/')[0].lower()
+       #    if option_text == rodinny_stav_text:
+       #        rodinny_stav_index = idx
 
-        if rodinny_stav_index is not None:
-            app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
+       #if rodinny_stav_index is not None:
+       #    app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
 
+        # Clean up place of birth and state of birth
         with app.collect_operations() as ops:
             app.d.c30Button.click()
             app.d.c31Button.click()
@@ -220,6 +221,12 @@ def save_application_form(ctx,
     with app.collect_operations() as ops:
         app.d.button12.click()
 
+    print('After filling in study programme: {}'.format(ops), file=sys.stderr)
+
+    # Deal with the dialog that opens up when a prefix of a programme
+    # matches various options, e.g. FYZ and FYZ/k
+    choose_study_programme(app, ops, session['study_programme'][0])
+
     # Nechame doplit povinne predmety
     with app.collect_operations() as ops:
         app.d.c11Button.click()
@@ -246,6 +253,10 @@ def save_application_form(ctx,
         with app.collect_operations() as ops:
             app.d.button13.click()
 
+        # Deal with the dialog that opens up when a prefix of a programme
+        # matches various options, e.g. FYZ and FYZ/k
+        choose_study_programme(app, ops, second_study_programme)
+
         # Nechame doplit povinne predmety
         with app.collect_operations() as ops:
             app.d.c12Button.click()
@@ -257,6 +268,10 @@ def save_application_form(ctx,
         # Nechame doplnit cely nazov odboru
         with app.collect_operations() as ops:
             app.d.button14.click()
+
+        # Deal with the dialog that opens up when a prefix of a programme
+        # matches various options, e.g. FYZ and FYZ/k
+        choose_study_programme(app, ops, third_study_programme)
 
         # Nechame doplit povinne predmety
         with app.collect_operations() as ops:
@@ -399,6 +414,8 @@ def save_application_form(ctx,
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
+    print("Post submit: {}".format(ops), file=sys.stderr)
+
     # A set of confirm boxes may show up if highschool grades were filled in
     if len(ABBRs) > 0:
         ops = deal_with_confirm_boxes(app, ops, notes)
@@ -423,6 +440,7 @@ def save_application_form(ctx,
 
     print("After messageBox: {}".format(ops), file=sys.stderr)
     errors = app.d.statusHtmlArea.content
+    print("errors: {}".format(errors), file=sys.stderr)
 
     app.awaited_close_dialog(ops)
     return errors, notes
@@ -487,12 +505,14 @@ def fill_in_address(field, app, session, lists):
             # Let's try to find the correct row by checking the PSC
             row_index = None
             for idx, row in enumerate(rows):
-                if row.cells[1].value == city_psc:
+                if row.cells[2].value == city_psc:
                     row_index = idx
 
             # If we did find a row, let's select it
             if row_index is not None:
                 app.d.table.select(row_index)
+            else:
+                raise Exception('Could not find city_psc {}'.format(city_psc))
 
             with app.collect_operations() as ops:
                 app.d.enterButton.click()
@@ -705,3 +725,31 @@ def unselect_checklist(checklist):
     for item in checklist.items:
         item.checked = False
     checklist._mark_changed()
+
+
+def choose_study_programme(app, ops, study_programme):
+    # Do nothing if there is no dialog to be opened
+    if len(ops) == 0:
+        return
+
+    if len(ops) == 1 and ops[0].method == 'openDialog':
+        app.awaited_open_dialog(ops)
+
+        rows = app.d.table.all_rows()
+        row_index = None
+        for idx, row in enumerate(rows):
+            if row.cells[0].value == study_programme:
+                row_index = idx
+
+        # If we did find a row, let's select it
+        if row_index is not None:
+            app.d.table.select(row_index)
+        else:
+            raise Exception('Could not find {}'.format(study_programme))
+
+        with app.collect_operations() as ops:
+            app.d.enterButton.click()
+
+        app.awaited_close_dialog(ops)
+    else:
+        raise Exception('Unexpected ops: {}'.format(ops))
