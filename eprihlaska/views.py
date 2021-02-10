@@ -320,11 +320,11 @@ def admissions_waivers():
         form[grade_key].grade_third_year.label.text = consts.GRADE_THIRD_YEAR[los] # noqa
 
     further_study_info_constraints = {
-        'matura_mat_grade': ['AIN',
-                             'upFYIN', 'upINAN', 'upINBI', 'upINGE', 'upINCH', 'upMADG' 'upMAFY',
-                             'upMAIN', 'upMATV'],
+        'matura_mat_grade': ['AIN', 'upFYIN', 'upINAN', 'upINBI', 'upINGE',
+                             'upINCH', 'upMADG', 'upMAFY', 'upMAIN', 'upMATV'],
         'matura_fyz_grade': ['upFYIN', 'upMAFY'],
-        'matura_inf_grade': ['AIN', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
+        'matura_inf_grade': ['AIN', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN',
+                             'upINGE', 'upINCH'],
         'matura_bio_grade': [],
         'matura_che_grade': [],
     }
