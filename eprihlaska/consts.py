@@ -12,6 +12,7 @@ DEAN_LIST_MSG = _('Na základe listu dekana nie je potrebné zadávať údaje o 
 LOGIN_CONGRATS_MSG = _('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')  # noqa
 PASSWD_CHANGED_MSG = _('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')  # noqa
 INVALID_TOKEN_MSG = _('Váš token na zmenu hesla je neplatný. Vyplnte prosím Váš email znovu.')  # noqa
+INVALID_NAME_MSG = _('Meno a priezvisko nesmie obsahovať znaky 0-9 alebo /')  # noqa
 
 SUBMISSIONS_NOT_OPEN = _('Podávanie prihlášok momentálne nie je otvorené.')
 
