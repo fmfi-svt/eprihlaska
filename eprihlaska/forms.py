@@ -70,10 +70,16 @@ class BasicPersonalDataForm(FlaskForm):
     personal_info_check = BooleanField(label=c.PERSONAL_INFO_CHECK,
                                        validators=[validators.DataRequired()])
     name = StringField(label=c.NAME,
-                       validators=[validators.DataRequired()])
+                       validators=[validators.DataRequired(),
+                                   validators.Regexp(r'[^0-9/]+',
+                                                     message=c.INVALID_NAME_MSG)])
     surname = StringField(label=c.SURNAME,
-                          validators=[validators.DataRequired()])
-    born_with_surname = StringField(c.BORNWITH_SURNAME)
+                          validators=[validators.DataRequired(),
+                                      validators.Regexp(r'[^0-9/]+',
+                                                        message=c.INVALID_NAME_MSG)])
+    born_with_surname = StringField(c.BORNWITH_SURNAME,
+                                    validators=[validators.Regexp(r'[^0-9/]+',
+                                                                  message=c.INVALID_NAME_MSG)])
 
     matura_year = IntegerField(c.MATURA_YEAR,
                                default=c.DEFAULT_MATURA_YEAR,
