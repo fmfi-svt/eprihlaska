@@ -78,7 +78,8 @@ class BasicPersonalDataForm(FlaskForm):
                                       validators.Regexp(r'[^0-9/]+',
                                                         message=c.INVALID_NAME_MSG)])
     born_with_surname = StringField(c.BORNWITH_SURNAME,
-                                    validators=[validators.Regexp(r'[^0-9/]+',
+                                    validators=[validators.Optional(),
+                                                validators.Regexp(r'[^0-9/]+',
                                                                   message=c.INVALID_NAME_MSG)])
 
     matura_year = IntegerField(c.MATURA_YEAR,
