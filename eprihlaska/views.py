@@ -483,7 +483,7 @@ def final():
                            grades_filled=grades_filled,
                            app_state=app_state,
                            form=form, receipt_form=receipt_form,
-                           consts=consts)
+                           consts=consts,uploads_enabled=app.config['UPLOADS_ENABLED'])
 
 
 @app.route('/payment_receipt', methods=['GET'])

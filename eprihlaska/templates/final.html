@@ -197,8 +197,9 @@ Mlynská dolina, <br>
 </p>
 {% endif %}
 
-
 <h3> Upload dokumentov </h3>
+
+{% if uploads_enabled %}
 
 <p> V tejto časti nám môžete elektronicky poslať podporné dokumenty. Podporované
   sú nascanované alebo odfotené dokumenty v súboroch typu pdf, jpg alebo png. V prípade,
@@ -207,6 +208,12 @@ Mlynská dolina, <br>
 <p><b>Overená fyzická kópia maturitného vysvedčenia, ako aj ďalšie vyžiadané dokumenty, sú nevyhnutné na vydanie finálneho rozhodnutia o prijatí,
     bez nich nemožno vydať rozhodnutie a vykonať zápis na štúdium.</b>
 
+{% else %}
+
+<p> Elektronické zasielanie dokumentov je momentálne vypnuté. Obráťte sa prosím na študijné oddelenie.
+
+{% endif %}
+  
 {% if 'uploaded_files' in session %}
 <ul>
   {% for file in session['uploaded_files'] %}
@@ -215,6 +222,8 @@ Mlynská dolina, <br>
   {% endfor %}
 </ul>
 {% endif %}
+
+{% if uploads_enabled %}
 
 <form class='form form-horizontal' method=POST enctype=multipart/form-data action="{{ url_for('file_upload') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -233,6 +242,7 @@ Mlynská dolina, <br>
   </div>
 </form>
 
+{% endif %}
 
 
 <h3>Čo ďalej?</h3>
