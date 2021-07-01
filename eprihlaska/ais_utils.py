@@ -491,8 +491,14 @@ def fill_in_address(field, app, session, lists):
         city_parts = city.split(' ')
         city_psc = lists['city_psc'][session[field]['city']]
 
-        fields['city'].write(city_parts[0])
+        # First write country to the country field (even in case of SK)
+        fields['country'].write(lists['country'][session[field]['country']])
+        with app.collect_operations() as ops:
+            fields['country_button'].click()
 
+
+        # Write PSC instead of city name (TODO: hack to work with current AIS)
+        fields['city'].write(city_psc)
         with app.collect_operations() as ops:
             fields['city_button'].click()
 
@@ -505,14 +511,15 @@ def fill_in_address(field, app, session, lists):
             # Let's try to find the correct row by checking the PSC
             row_index = None
             for idx, row in enumerate(rows):
+                print('city_psc: {}, row_value: {}'.format(city_psc, row.cells[2].value), file=sys.stderr)
                 if row.cells[2].value == city_psc:
                     row_index = idx
 
             # If we did find a row, let's select it
             if row_index is not None:
                 app.d.table.select(row_index)
-            else:
-                raise Exception('Could not find city_psc {}'.format(city_psc))
+            #else:
+            #    raise Exception('Could not find city_psc {}'.format(city_psc))
 
             with app.collect_operations() as ops:
                 app.d.enterButton.click()
@@ -520,7 +527,9 @@ def fill_in_address(field, app, session, lists):
             # Close selection dialogue
             select_dlg = app.awaited_close_dialog(ops)
 
-        fields['posta'].write('')
+        # TODO: hack to work with current AIS
+        # Write the actual city to "Post office" field
+        fields['posta'].write(city)
     else:
         # Foreign (non SR) address
         fields['country'].write(lists['country'][session[field]['country']])

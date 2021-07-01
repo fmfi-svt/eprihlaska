@@ -135,7 +135,28 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('upINCH', PRG_upINCH),
                            ('upINAN', PRG_upINAN)]
 
-STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
+STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
+                           ('MAT', PRG_MAT),
+                           ('PMA', PRG_PMA),
+                           ('EFM', PRG_EFM),
+                           ('MMN', PRG_MMN),
+                           ('FYZ', PRG_FYZ),
+                           ('FYZ/k', PRG_FYZk),
+                           ('BMF', PRG_BMF),
+                           ('OZE', PRG_OZE),
+                           ('OZE/k', PRG_OZEk),
+                           ('TEF', PRG_TEF),
+                           ('TEF/k', PRG_TEFk),
+                           ('INF', PRG_INF),
+                           ('AIN', PRG_AIN),
+                           ('BIN', PRG_BIN),
+                           ('BIN/k', PRG_BINk),
+                           ('upMAFY', PRG_upMAFY),
+                           ('upMAIN', PRG_upMAIN),
+                           ('upFYIN', PRG_upFYIN),
+                           ('upINBI', PRG_upINBI),
+                           ('upINGE', PRG_upINGE),
+                           ('upINCH', PRG_upINCH)]
 
 
 ADDRESS_COUNTRY = _('Štát')
@@ -379,5 +400,5 @@ DOCUMENTS_TO_UPLOAD_SHORT = ['MV', 'ZN', 'KV', 'DI']
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
-CURRENT_MATURA_YEAR = 2021
+CURRENT_MATURA_YEAR = 2022
 DEFAULT_MATURA_YEAR = 2021
