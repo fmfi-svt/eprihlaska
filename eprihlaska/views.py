@@ -304,7 +304,7 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'INF', 'MAT', 'PMA'],
+        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'INF', 'EFM', 'MMN', 'MAT', 'PMA'],
         'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k'],
         'grades_fyz': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
         'grades_bio': ['BMF', 'BIN', 'BIN/k'],
