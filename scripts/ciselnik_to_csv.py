@@ -8,7 +8,7 @@ import click
 @click.option('--sheet', type=str, default=0)
 @click.pass_context
 def cli(ctx, file, filter_nat, sheet):
-    df = pd.read_excel(file, skiprows=3, sheet_name=sheet)
+    df = pd.read_excel(file, skiprows=5, sheet_name=sheet)
     if filter_nat:
         df = df[df[filter_nat].isnull()]
     ctx.obj['df'] = df

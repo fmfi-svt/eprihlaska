@@ -683,7 +683,6 @@ Odbor - kod,Odbor stred. školy
 3920M00,polytechnika
 3957M00,multimédiá
 4234M00,"podnikanie v chovoch spoločenských, cudzokrajných a malých zvierat"
-2381L00,stojárstvo
 2447K00,mechanik hasičskej techniky
 2493L00,predaj a servis vozidiel
 2495K00,autotronik
@@ -720,6 +719,22 @@ Odbor - kod,Odbor stred. školy
 6443L00,obchodník
 7232M00,marketingová komunikácia
 8266M00,nástenná maľba v architektúre
+3436K00,operátor knihárskych technológií
+3918M03,technické lýceum - bilingválne štúdium
+4212M00,rybárstvo a vodný manažment
+2559M00,inteligentné technológie
+2571K00,správca inteligentných a digitálnych systémov
+2573M00,programovanie digitálnych technológií
+2868K00,technik spracovania plastov
+2891K00,technik pre chemický a farmaceutický priemysel
+3136K00,procesný technik odevnej výroby
+8627M00,digitálna maľba - koncept art
+8628M00,dizajn digitálnych aplikácií
+6330K00,bankový pracovník
+7475M00,digitálne služby v športe
+7476M00,spracovanie dát v športe
+7902J94,gymnázium - QSI International Program
+7902J95,gymnázium - Edexcel International A levels
 3667K00,technik vodár vodohospodár
 4240M00,záhradný dizajn
 2174K00,technik mineralurg
@@ -739,4 +754,57 @@ Odbor - kod,Odbor stred. školy
 7902J99,gymnázium - medzinárodný bakalársky program International Baccalaureate (IB) program
 8271M00,digitálna maľba - koncept art
 8272M00,dizajn digitálnych aplikácií
+2950M00,poradenstvo vo výžive
+3348M00,tvorba nábytku a interiéru
+5361M00,praktická sestra
+6858M00,ekonomicko-právne činnosti v podnikaní
+7451J00,športové gymnázium
+7471M00,športový manažment
+8521K00,výtvarné spracúvanie skla
+8521K02,výtvarné spracúvanie skla - brúsenie skla
+8521K03,výtvarné spracúvanie skla - hutnícke tvarovanie skla
+8521K04,výtvarné spracúvanie skla - maľovanie a leptanie skla
+8521K07,výtvarné spracúvanie skla - vzorkárstvo sklenej bižutérie
+8521K11,výtvarné spracúvanie skla - výroba sklenej vitráže
+8523K00,tvorba vitrážového skla a smaltu
+8539K00,ladenie a údržba klavírov a klávesových nástrojov
+8602M00,priemyselný dizajn
+8603M00,grafický a priestorový dizajn
+8604M00,grafický dizajn
+8606M00,fotografický dizajn
+8609M00,textilný dizajn
+8610M00,odevný dizajn
+8613M00,dizajn exteriéru
+8614M00,dizajn interiéru
+8616M00,dizajn a tvarovanie dreva
+8619M00,keramický dizajn
+8630M00,animovaná tvorba
+8633M00,reklamná tvorba
+8635M00,masmediálna tvorba
+8637M00,obrazová a zvuková tvorba
+8637M01,"obrazová a zvuková tvorba - kamera, zvuk, strih"
+8637M02,obrazová a zvuková tvorba - umelecká produkcia
+8637M03,obrazová a zvuková tvorba - virtuálna grafika
+8641M00,propagačné výtvarníctvo
+8642M00,scénické výtvarníctvo
+8642M01,scénické výtvarníctvo - kostýmová tvorba
+8642M02,scénické výtvarníctvo - maľba a dekoračná tvorba
+8642M04,scénické výtvarníctvo - maskérska tvorba
+8642M05,scénické výtvarníctvo - tvarovanie dreva
+8642M06,scénické výtvarníctvo - tvorba a konštrukcia scény
+8644M00,úžitková maľba
+8646M00,tvorba hračiek a dekoratívnych predmetov
+8651M00,konzervátorstvo a reštaurátorstvo
+8651M01,konzervátorstvo a reštaurátorstvo - drevorezieb
+8651M02,konzervátorstvo a reštaurátorstvo - kovov
+8651M05,konzervátorstvo a reštaurátorstvo - omietky a štuková výzdoba
+8651M07,konzervátorstvo a reštaurátorstvo - maliarske techniky
+8651M09,"konzervátorstvo a reštaurátorstvo - papier, staré tlače a knižné väzby"
+8656M00,kameňosochárstvo
+8658M00,štukatérstvo
+8661M00,výtvarné spracúvanie kovov a drahých kameňov
+8661M01,výtvarné spracúvanie kovov a drahých kameňov - zlatníctvo a strieborníctvo
+8661M02,výtvarné spracúvanie kovov a drahých kameňov - umelecké zámočníctvo a kováčstvo
+8661M03,výtvarné spracúvanie kovov a drahých kameňov - plošné a plastické rytie kovov
+8661M04,výtvarné spracúvanie kovov a drahých kameňov - umelecké odlievanie
 3138K04,operátor textilnej výroby - zošľachťovanie textílií
