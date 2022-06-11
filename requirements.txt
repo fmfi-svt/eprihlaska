@@ -41,7 +41,7 @@ pyasn1==0.4.2
 pycparser==2.18
 PyJWT==2.4.0
 PyMySQL==0.8.0
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 -e git://github.com/revolunet/pypdftk.git@537dc1bdcf0dd990eeaa8a26b9f1bdee02409a97#egg=pypdftk
 Pyphen==0.9.4
 python-dateutil==2.6.1
