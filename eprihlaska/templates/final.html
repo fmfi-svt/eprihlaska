@@ -113,23 +113,18 @@ variabilný symbol: <strong>800</strong> <br>
 
 <p>Ďalšie údaje pre platby zo zahraničia:<br>
   Názov účtu: Univerzita Komenského v Bratislave<br>
-  Adresa banky: Všeobecná úverová banka,
-  Mlynské Nivy 1,
-  829 90 Bratislava
+  Adresa banky: Štátna pokladnica,
+  Radlinského 32,
+  810 05 Bratislava
 
 
-<br>
-<br>
 
 {% if not session['receipt_filename'] %}
 
-Pre účely správnej identifikácie platby prosím uploadnite potvrdenie (napríklad z internet bankingu) v digitálnej
-forme:
+<p>Pre účely správnej identifikácie platby prosím uploadnite potvrdenie (napríklad z internet bankingu) v digitálnej
+forme.
 
-<br>
-<br>
-<br>
-
+<p>
   {% if receipt_form %}
     {{ wtf.quick_form(receipt_form,
                       form_type='horizontal',
@@ -138,7 +133,7 @@ forme:
 
   {% endif %}
 {% else %}
-Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej linke:
+<p>Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej linke:
 <strong><a href="{{ url_for('payment_receipt') }}">odovzdané potvrdenie</a></strong>.
 {% endif %}
 
@@ -185,25 +180,19 @@ Mlynská dolina, <br>
 <h3>Výpis vybraných známok</h3>
 
 <p>
-Obratom nám, prosím, pošlite poštou potvrdený <strong><a target="_blank" href="{{ url_for('grades_control') }}">formulár s výpisom známok</a></strong>
-alebo overené kópie príslušných koncoročných vysvedčení na adresu:<br />
-</p>
+Obratom nám, prosím, elektronicky pošlite potvrdený <strong><a target="_blank" href="{{ url_for('grades_control') }}">formulár s výpisom známok</a></strong>
+alebo kópie príslušných koncoročných vysvedčení.
 
 <p>
-<em>
-Fakulta matematiky, fyziky a informatiky UK, <br />
-Študijné oddelenie, <br>
-Mlynská dolina, <br>
-842 48 Bratislava
-</em>
-</p>
+Na zaslanie využite formulár "upload dokumentov" nižšie, zvoľte typ dokumentu "koncoročné vysvedčenie".
+
 {% endif %}
 
 <h3> Upload dokumentov </h3>
 
 {% if uploads_enabled %}
 
-<p> V tejto časti nám môžete elektronicky poslať podporné dokumenty. Podporované
+<p>  Podporované
   sú nascanované alebo odfotené dokumenty v súboroch typu pdf, jpg alebo png. V prípade,
   že budeme potrebovať overené kópie týchto dokumentov, vás budeme kontaktovať e-mailom.
 
