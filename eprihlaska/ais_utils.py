@@ -77,7 +77,17 @@ def save_application_form(ctx,
     dlg = app.awaited_open_dialog(ops)
 
     # Opyta sa nas to na stupen studia
-    app.d.stupenComboBox.select(0)
+    # app.d.stupenComboBox.select(0)
+    stupen_studia_prefix = "I."
+    stupen_studia_index = None
+    for idx, option in enumerate(app.d.stupenComboBox.options):
+        option_text = option.title
+        if option_text.startswith(stupen_studia_prefix):
+            stupen_studia_index = idx
+
+    if stupen_studia_index is not None:
+        app.d.stupenComboBox.select(stupen_studia_index)
+
 
     with app.collect_operations() as ops:
         app.d.enterButton.click()
