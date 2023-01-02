@@ -136,28 +136,7 @@ STUDY_PROGRAMME_CHOICES = [('_', _('žiaden')),
                            ('upINCH', PRG_upINCH),
                            ('upINAN', PRG_upINAN)]
 
-STUDY_PROGRAMME_CHOICES_ACTIVE = [('_', _('žiaden')),
-                           ('MAT', PRG_MAT),
-                           ('PMA', PRG_PMA),
-                           ('EFM', PRG_EFM),
-                           ('MMN', PRG_MMN),
-                           ('FYZ', PRG_FYZ),
-                           ('FYZ/k', PRG_FYZk),
-                           ('BMF', PRG_BMF),
-                           ('OZE', PRG_OZE),
-                           ('OZE/k', PRG_OZEk),
-                           ('TEF', PRG_TEF),
-                           ('TEF/k', PRG_TEFk),
-                           ('INF', PRG_INF),
-                           ('AIN', PRG_AIN),
-                           ('BIN', PRG_BIN),
-                           ('BIN/k', PRG_BINk),
-                           ('upMAFY', PRG_upMAFY),
-                           ('upMAIN', PRG_upMAIN),
-                           ('upMADG', PRG_upMADG),
-                           ('upINGE', PRG_upINGE)]
-
-#STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
+STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
 
 ADDRESS_COUNTRY = _('Štát')
 ADDRESS_STREET = _('Ulica')
@@ -393,12 +372,12 @@ DOCUMENT_MATURA_LIST = _('Maturitné vysvedčenie')
 DOCUMENT_LIST_GRADES = _('Potvrdený výpis známok')
 DOCUMENT_FINAL_GRADES = _('Koncoročné vysvedčenie')
 DOCUMENT_DIPLOMA = _('Diplom zo súťaže')
-DOCUMENTS_TO_UPLOAD = [DOCUMENT_MATURA_LIST, DOCUMENT_LIST_GRADES,
-                       DOCUMENT_FINAL_GRADES, DOCUMENT_DIPLOMA]
-DOCUMENTS_TO_UPLOAD_SHORT = ['MV', 'ZN', 'KV', 'DI']
+DOCUMENTS_TO_UPLOAD = [PAYMENT_RECEIPT, DOCUMENT_DIPLOMA, DOCUMENT_LIST_GRADES,
+                       DOCUMENT_FINAL_GRADES]
+DOCUMENTS_TO_UPLOAD_SHORT = ['PZ', 'DI', 'ZN', 'KV']
 
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
 CURRENT_MATURA_YEAR = 2023
-DEFAULT_MATURA_YEAR = 2022
+DEFAULT_MATURA_YEAR = 2023

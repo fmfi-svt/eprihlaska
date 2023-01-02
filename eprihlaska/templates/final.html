@@ -117,25 +117,8 @@ variabilný symbol: <strong>800</strong> <br>
   Radlinského 32,
   810 05 Bratislava
 
-
-
-{% if not session['receipt_filename'] %}
-
-<p>Pre účely správnej identifikácie platby prosím uploadnite potvrdenie (napríklad z internet bankingu) v digitálnej
-forme.
-
-<p>
-  {% if receipt_form %}
-    {{ wtf.quick_form(receipt_form,
-                      form_type='horizontal',
-                      button_map={'submit': 'primary'}) }}
-
-
-  {% endif %}
-{% else %}
-<p>Odovzdané potvrdenie o zaplatení si môžete skontrolovať na nasledujúcej linke:
-<strong><a href="{{ url_for('payment_receipt') }}">odovzdané potvrdenie</a></strong>.
-{% endif %}
+<p>Pre účely správnej identifikácie platby prosím <b>obratom uploadnite potvrdenie (napríklad z internet bankingu) v digitálnej
+forme</b> pomocou formulára v časti <a href="#upload">upload dokumentov</a>.
 
 {% endif %}
 
@@ -165,16 +148,6 @@ Mlynská dolina, <br>
 </p>
 
 
-
-<!--
-<h3>Potvrdenie o zaplatení poplatku a overená kópia maturitného vysvedčenia</h2>
-
-<p> Ku zaplateniu poplatku a zaslaniu overenej kópie maturitného vysvedčenia vás vyzveme prostredníctvom e-mailu
-  po overení, že vaša prihláška spĺňa podmienky dodatočného prijímacieho konania.
-
-<p> Nascanovanú alebo odfotenú verziu maturitného vysvedčenia prosím uploadnite v sekcii "Upload dokumentov" nižšie.
--->
-
 {% if grades_filled  %}
   
 <h3>Výpis vybraných známok</h3>
@@ -188,7 +161,9 @@ Na zaslanie využite formulár "upload dokumentov" nižšie, zvoľte typ dokumen
 
 {% endif %}
 
-<h3> Upload dokumentov </h3>
+<a name="upload">
+  <h3> Upload dokumentov </h3>
+</a>
 
 {% if uploads_enabled %}
 
