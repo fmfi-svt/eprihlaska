@@ -117,7 +117,8 @@ class Address(FlaskForm):
                           default='703')
     street = StringField(label=c.ADDRESS_STREET,
                          description=c.ADDRESS_STREET_DESC)
-    street_no = StringField(label=c.ADDRESS_NO)
+    street_no = StringField(label=c.ADDRESS_NO,
+                            validators=[validators.Length(max=15)])
     city = SelectField(label=c.ADDRESS_CITY,
                        choices=c.CITY_CHOICES,
                        default='999999',
