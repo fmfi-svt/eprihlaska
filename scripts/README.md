@@ -36,3 +36,11 @@
         $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/Ciselniky_PK_2022_01_10.xlsx --sheet 714 convert --out-file ../eprihlaska/data/ss-odbor-map.csv  'St. šk.' 'Odbor - kod'
 
         $ python3 ciselnik_obce_to_csv.py  --file ../eprihlaska/data/Ciselniky_PK_2022_01_10.xlsx --sheet 244 --filter-NaT='Do dátumu' convert --out-file ../eprihlaska/data/obce.csv  'id' 'Názov obce' 'PSČ' 'Okres'
+
+## Ciselnik to CSV in 2022
+
+        $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/Ciselniky_PK_Bc_2023_01_02.xlsx --sheet 109 --filter-NaT='Do dátumu' convert --out-file ../eprihlaska/data/skoly.csv 'St. šk.' 'Obec' 'Stredná škola' 'Ulica'
+
+        $ python3 ciselnik_to_csv.py --file ../eprihlaska/data/Ciselniky_PK_Bc_2023_01_02.xlsx --sheet 714 convert --out-file ../eprihlaska/data/ss-odbor-map.csv  'St. šk.' 'Odbor - kod'
+
+        $ python3 ciselnik_obce_to_csv.py  --file ../eprihlaska/data/Ciselniky_PK_2022_01_10.xlsx --sheet 244 --filter-NaT='Do dátumu' convert --out-file ../eprihlaska/data/obce.csv  'id' 'Názov obce' 'PSČ' 'Okres'
