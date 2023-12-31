@@ -248,7 +248,7 @@ def filter_competitions(competition_list, study_programme_list):
         'F': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY'],
         'I': ['INF', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
         'B': ['BIN', 'BIN/k', 'BMF'],
-        'CH': ['BIN', 'BIN/k']
+        'CH': ['BMF','BIN', 'BIN/k']
     }
 
     constraints = {
@@ -308,7 +308,7 @@ def admissions_waivers():
         'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k'],
         'grades_fyz': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
         'grades_bio': ['BMF', 'BIN', 'BIN/k'],
-        'grades_che': ['BIN', 'BIN/k'],
+        'grades_che': ['BMF', 'BIN', 'BIN/k'],
     }
 
     # Set labels for grades of respective study years based on

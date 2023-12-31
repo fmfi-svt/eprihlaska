@@ -379,5 +379,5 @@ DOCUMENTS_TO_UPLOAD_SHORT = ['PZ', 'DI', 'ZN', 'KV']
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
-CURRENT_MATURA_YEAR = 2023
-DEFAULT_MATURA_YEAR = 2023
+CURRENT_MATURA_YEAR = 2024
+DEFAULT_MATURA_YEAR = 2024
