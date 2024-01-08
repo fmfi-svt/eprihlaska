@@ -1,3 +1,13 @@
+## Update ciselnikov 2024
+
+python3 ciselnik_obce_to_csv.py --file ciselniky-2024-01.xlsx --sheet 244  --filter-NaT='Do dátumu' convert --out-file obce.csv 'id' 'Názov obce' 'PSČ' 'Okres'
+# bezo zmeny
+
+python3 ciselnik_to_csv.py --file ciselniky-2024-01.xlsx --sheet 573 --filter-NaT='Platnosť do' convert --out-file staty.csv 'Id štát' Štát
+# premenuj v cvs Id štát na id
+
+python3 ciselnik_to_csv.py --file ciselniky-2024-01.xlsx --sheet 109 --filter-NaT='Do dátumu' convert --out-file='skoly.csv' 'St. šk.' 'Obec' 'Stredná škola' 'Ulica'
+
 
 ## Ciselnik to CSV
 

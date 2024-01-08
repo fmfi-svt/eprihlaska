@@ -11,7 +11,7 @@ St. šk.,Obec,Stredná škola,Ulica
 161756,Košice-Sever,Stredná priemyselná škola elektrotechnická,Komenského 44
 35531754,Košice-Sever,Gymnázium,Park mládeže 5
 42319234,Košice-Staré Mesto,Premonštrátske gymnázium,Kováčska 28
-42407362,Košice-Staré Mesto,Súkromné gymnázium FUTURUM,Grešákova 1
+42407362,Košice-Staré Mesto,Súkromné gymnázium FUTURUM,Moyzesova 5
 618233,Košice-Staré Mesto,Stredná zdravotnícka škola sv. Alžbety,Mäsiarska 25
 606766,Košice-Staré Mesto,Stredná zdravotnícka škola,Moyzesova 17
 133132,Košice-Staré Mesto,Škola umeleckého priemyslu,Jakobyho 15
@@ -29,11 +29,11 @@ St. šk.,Obec,Stredná škola,Ulica
 160971,Košice-Staré Mesto,Gymnázium Milana Rastislava Štefánika,Nám. L. Novomeského 4
 35570172,Košice-Staré Mesto,Stredná odborná škola obchodu a služieb Jána Bocatia,Bocatiova 1
 35562820,Košice-Staré Mesto,Súkromné konzervatórium,Zádielska 12
-35547031,Košice-Staré Mesto,Súkromná stredná odborná škola ekonomická KOŠICKÁ AKADÉMIA DA VINCI,Tajovského 15
+35547031,Košice-Staré Mesto,Súkromná stredná odborná škola ekonomická KOŠICKÁ AKADÉMIA,Tajovského 15
 162574,Košice-Barca,Stredná odborná škola veterinárna,Nám. mladých poľnohospodárov 2
 606758,Košice-Juh,Stredná zdravotnícka škola,Kukučínova 40
 42107148,Košice-Juh,Súkromné hudobné a dramatické konzervatórium,Požiarnická 1
-35565233,Košice-Juh,Súkromná pedagogická a sociálna akadémia,Požiarnická 1
+35565233,Košice-Juh,Súkromná stredná odborná škola pedagogická a sociálna,Požiarnická 1
 35564024,Košice-Juh,Stredná odborná škola pedagogická sv. Cyrila a Metoda,Južná trieda 48
 31946615,Košice-Juh,Hotelová akadémia,Južná trieda 10
 17078423,Košice-Juh,Stredná odborná škola beauty služieb,Gemerská 1
@@ -48,7 +48,6 @@ St. šk.,Obec,Stredná škola,Ulica
 31295657,Košice-Nad jazerom,Súkromná stredná odborná škola,Bukovecká 17
 31262767,Košice-Nad jazerom,Súkromné gymnázium,Dneperská 1
 31956688,Košice-Nad jazerom,Obchodná akadémia,Polárna 1
-710158068,Košice-Vyšné Opátske,Spojená škola-Obchodná akadémia pre žiakov s telesným postihnutím,Opatovská cesta 101
 710146446,Košice-Vyšné Opátske,Spojená škola-Stredná odborná škola pre žiakov s telesným postihnutím,Opatovská cesta 101
 162159,Košice-Vyšné Opátske,Gymnázium,Opatovská cesta 7
 999999999,Zahraničná obec - Oblasti inde nešpecifikované,Zahraničná škola,
@@ -92,7 +91,7 @@ St. šk.,Obec,Stredná škola,Ulica
 45017000,Banská Bystrica,Stredná odborná škola,Pod Bánošom 80
 158496,Banská Bystrica,Stredná odborná škola hotelových služieb a obchodu,Školská 5
 17059887,Banská Bystrica,Konzervatórium Jána Levoslava Bellu,Skuteckého 27
-162027,Banská Bystrica,Obchodná akadémia,J. G. Tajovského 25
+162027,Banská Bystrica,Obchodná akadémia Mareka Frauwirtha,J. G. Tajovského 25
 161471,Banská Bystrica,Stredná priemyselná škola Jozefa Murgaša,Hurbanova 6
 30232171,Banská Bystrica,Evanjelické gymnázium,Skuteckého 5
 516554,Banská Bystrica,Stredná športová škola,Trieda SNP 54
@@ -123,7 +122,7 @@ St. šk.,Obec,Stredná škola,Ulica
 710261500,Poltár,Spojená škola-Stredná odborná škola,Železničná 5
 52375277,Nováky,Stredná odborná škola,Rastislavova 332
 42024471,Handlová,Stredná odborná škola,Lipová 8
-52164284,Prievidza,Stredná zdravotnícka škola,Vinohradnícka 8
+52164284,Prievidza,Stredná zdravotnícka škola,Vinohradnícka 8A
 710262116,Prievidza,Spojená škola piaristická Františka Hanáka-Gymnázium,A. Hlinku 44
 42378699,Prievidza,Súkromná obchodná akadémia,Bakalárska 2
 710227825,Prievidza,Spojená škola piaristická Františka Hanáka-Stredná odborná škola,A. Hlinku 44
@@ -225,7 +224,7 @@ St. šk.,Obec,Stredná škola,Ulica
 161063,Michalovce,Gymnázium Pavla Horova,Masarykova 1
 31942369,Michalovce,Stredná odborná škola sv. Cyrila a Metoda,Tehliarska 2
 17078385,Michalovce,Stredná odborná škola obchodu a služieb,Školská 4
-710260296,Moldava nad Bodvou,Spojená škola cirkevná-Gymnázium bl. Sáry Salkaházi s vyučovacím jazykom maďarským,Školská 13
+710260296,Moldava nad Bodvou,Spojená škola cirkevná-Gymnázium bl. Sáry Salkaházi s vyučovacím jazykom maďarským,Československej armády 1450
 42102341,Moldava nad Bodvou,Stredná odborná škola agrotechnická,Hlavná 54
 161071,Moldava nad Bodvou,Gymnázium Štefana Moysesa,Školská 13
 710274050,Bratislava-Staré Mesto,Spojená škola sv. Uršule-Gymnázium sv. Uršule,Nedbalova 4
@@ -269,12 +268,11 @@ St. šk.,Obec,Stredná škola,Ulica
 17337097,Bratislava-Podunajské Biskupice,Gymnázium Federica Garcíu Lorcu,Hronská 3
 30795290,Bratislava-Podunajské Biskupice,Súkromná stredná odborná škola - Gastroškola,Bieloruská 1
 710213530,Bratislava-Podunajské Biskupice,Súkromná obchodná akadémia Profi - Kamo,Dudvážska 6
-31787517,Bratislava-Podunajské Biskupice,Súkromná hotelová akadémia HaGMa,Biskupická 21
 710212674,Bratislava-Podunajské Biskupice,Súkromné gymnázium Galileo School,Dudvážska 6
 36060674,Bratislava-Podunajské Biskupice,Súkromná stredná odborná škola pedagogická,Bieloruská 1
 51950766,Bratislava-Nové Mesto,Súkromné gymnázium (KSI),Trnavská cesta 3421/39
 42268877,Bratislava-Nové Mesto,Súkromná stredná športová škola EISB,Radničné námestie 4
-30792975,Bratislava-Nové Mesto,Súkromná stredná odborná škola HOST,Riazanská 75
+30792975,Bratislava-Nové Mesto,Súkromná stredná odborná škola HOST,Pionierska 15
 710159986,Bratislava-Nové Mesto,Škola pre mimoriadne nadané deti a Gymnázium,Teplická  (Skalická ) 7 (1)
 17314895,Bratislava-Nové Mesto,Stredná odborná škola beauty služieb,Račianska 105
 894915,Bratislava-Nové Mesto,Stredná odborná škola polygrafická,Račianska 190
@@ -303,6 +301,7 @@ St. šk.,Obec,Stredná škola,Ulica
 17337054,Bratislava-Karlova Ves,Gymnázium,Ladislava Sáru 1
 30775329,Bratislava-Karlova Ves,Škola umeleckého priemyslu Josefa Vydru,Dúbravská cesta 11
 891657,Bratislava-Devínska Nová Ves,Súkromná stredná odborná škola automobilová Duálna akadémia,Jána Jonáša 5
+54622093,Bratislava-Petržalka,Stredná odborná škola lýceum C. S. Lewisa,Haanova 28
 710276664,Bratislava-Petržalka,Spojená škola-Gymnázium,Pankúchova 6
 710276613,Bratislava-Petržalka,Spojená škola súkromná francúzsko-slovenská-Súkromné gymnázium francúzsko-slovenské,M. C. Sklodowskej 1
 53507339,Bratislava-Petržalka,Súkromné gymnázium FELIX,Krásnohorská 14
@@ -316,7 +315,7 @@ St. šk.,Obec,Stredná škola,Ulica
 36070793,Bratislava-Petržalka,Súkromná obchodná akadémia,Kremnická 26
 710228295,Bratislava-Petržalka,Spojená škola Svätej Rodiny-Gymnázium Svätej Rodiny,Gercenova 10
 31744265,Bratislava-Petržalka,Súkromné gymnázium,Kremnická 26
-30843201,Bratislava-Petržalka,Súkromné gymnázium MERCURY,Zadunajská cesta 27
+30843201,Bratislava-Petržalka,Súkromné gymnázium MERCURY,Zadunajská cesta 406/4
 605760,Bratislava-Petržalka,Gymnázium Alberta Einsteina,Einsteinova 35
 17327164,Bratislava-Petržalka,Evanjelické lýceum,Vranovská 2
 17050332,Bratislava-Petržalka,Stredná odborná škola technická,Vranovská 4
@@ -388,6 +387,7 @@ St. šk.,Obec,Stredná škola,Ulica
 710260865,Krompachy,Spojená škola súkromná EDURAM-Súkromná stredná odborná škola EDURAM,Maurerova 55
 161021,Krompachy,Gymnázium,Lorencova 46
 710261357,Levoča,Spojená škola internátna-Stredná odborná škola ekonomiky a služieb pre žiakov so zrakovým postihnutím internátna,Nám. Štefana Kluberta 1
+710230710,Levoča,Spojená škola internátna-Stredná odborná škola  ekonomiky a služieb pre žiakov s telesným postihnutím internátna,Nám. Štefana Kluberta 1
 161039,Levoča,Gymnázium Janka Francisciho-Rimavského,Kláštorská 37
 17082447,Levoča,Gymnázium sv. Františka Assiského,Kláštorská 24
 159514,Levoča,Stredná odborná škola služieb Majstra Pavla,Kukučínova 9
@@ -438,7 +438,7 @@ St. šk.,Obec,Stredná škola,Ulica
 17078393,Humenné,Hotelová akadémia,Štefánikova 28
 893358,Humenné,Stredná odborná škola polytechnická,Štefánikova 1550/20
 710280874,Medzilaborce,Spojená škola-Stredná odborná škola polytechnická Andyho Warhola,Duchnovičova 506
-710280866,Medzilaborce,Spojená škola-Gymnázium,Duchnovičova 13
+710280866,Medzilaborce,Spojená škola-Gymnázium,Duchnovičova 506
 35568381,Spišská Nová Ves,Stredná odborná škola ekonomická,Stojan 1
 35565136,Spišská Nová Ves,Cirkevné gymnázium Štefana Mišíka,Radničné námestie 271/8
 42096642,Spišská Nová Ves,Stredná odborná škola drevárska,Filinského 7
@@ -493,7 +493,7 @@ St. šk.,Obec,Stredná škola,Ulica
 17050073,Nitra,Stredná priemyselná škola strojnícka a elektrotechnická,Fraňa Kráľa 20
 710175434,Nitra,Spojená škola-Stredná športová škola,Slančíkovej 2
 37857134,Nitra,Súkromné konzervatórium,Krčméryho 2
-37854950,Nitra,Súkromná stredná odborná škola ANIMUS,Levická cesta 40
+37854950,Nitra,Súkromná stredná odborná škola ANIMUS,Akademická 4
 596868,Nitra,Stredná odborná škola techniky a služieb,Cintorínska 4
 596876,Nitra,Stredná odborná škola gastronómie a cestovného ruchu,Levická 40
 893293,Nitra,Stredná odborná škola stavebná,Nábrežie mládeže 1
@@ -522,7 +522,7 @@ St. šk.,Obec,Stredná škola,Ulica
 161721,Snina,Stredná priemyselná škola,Partizánska 1059
 37878247,Snina,Stredná odborná škola,Sládkovičova 2723/120
 161179,Snina,Gymnázium,Študentská 4
-710266898,Kežmarok,Spojená škola súkromná-Súkromná stredná odborná škola,Biela voda 2
+710266898,Kežmarok,"Spojená škola súkromná-Súkromná stredná odborná škola, Biela voda",Nad traťou 1342/28
 160962,Kežmarok,Gymnázium Pavla Országha Hviezdoslava,Hviezdoslavova 20
 159468,Kežmarok,Stredná odborná škola agropotravinárska a technická,Kušnierska brána 349/2
 36155667,Kežmarok,Škola umeleckého priemyslu,Slavkovská 19
@@ -570,7 +570,7 @@ St. šk.,Obec,Stredná škola,Ulica
 17050111,Šahy,Gymnázium Juraja Szondyho s vyučovacím jazykom maďarským,Mládežnícka 22
 47147,Šahy,Gymnázium,Mládežnícka 22
 399388,Šahy,Stredná odborná škola techniky a služieb,SNP 41
-52439534,Poprad,Stredná športová škola,Francisciho 910/8
+52439534,Poprad,Stredná športová škola,Dlhé hony 5766/16
 710273088,Poprad,Spojená škola-Súkromné gymnázium,Rovná 597/15
 710261306,Poprad,Spojená škola sv. Jána Pavla II.-Gymnázium sv. Jána Pavla II.,Dlhé hony 3522/2
 710261322,Poprad,Spojená škola-Gymnázium,Dominika Tatarku 4666/7
@@ -597,7 +597,7 @@ St. šk.,Obec,Stredná škola,Ulica
 42421560,Prešov,Súkromné konzervatórium Dezidera Kardoša,M. Benku 7
 893251,Prešov,Stredná odborná škola technická,Volgogradská 1
 710171773,Prešov,Spojená škola-Stredná odborná škola technická,Ľ. Podjavorinskej 22
-17078440,Prešov,Stredná odborná škola dopravná,Konštantínova 2
+17078440,Prešov,Stredná odborná škola dopravná,Volgogradská 3
 17078466,Prešov,Škola umeleckého priemyslu,Vodárenská 3
 17078482,Prešov,Stredná odborná škola gastronómie a služieb,Sídlisko duklianskych hrdinov 3
 686514,Prešov,Súkromná stredná odborná škola hotelierstva a gastronómie Mladosť,Pod Kalváriou 36
