@@ -192,10 +192,11 @@ def save_application_form(ctx,
             app.d.c31Button.click()
 
         if session['country_of_birth'] == '703':
-            app.d.sklonovanieNarTextField.write(session['place_of_birth'])
-
-            with app.collect_operations() as ops:
-                app.d.vyberMiestoNarodeniabutton.click()
+            place_of_birth_psc = lists['city_psc'][session['place_of_birth']]
+            select_city_by_psc_ciselnik_code(app,
+                                             place_of_birth_psc,
+                                             session['place_of_birth'],
+                                             app.d.sklonovanieNarTextField, app.d.vyberMiestoNarodeniabutton)
         else:
             app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']]) # noqa
             with app.collect_operations() as ops:
@@ -496,36 +497,10 @@ def fill_in_address(field, app, session, lists):
         with app.collect_operations() as ops:
             fields['country_button'].click()
 
-
-        # Write PSC instead of city name (TODO: hack to work with current AIS)
-        fields['city'].write(city_psc)
-        with app.collect_operations() as ops:
-            fields['city_button'].click()
-
-        if len(ops) == 1 and ops[-1].method == 'openDialog':
-            # Open selection dialogue
-            select_dlg = app.awaited_open_dialog(ops)
-
-            rows = app.d.table.all_rows()
-
-            # Let's try to find the correct row by checking the PSC
-            row_index = None
-            for idx, row in enumerate(rows):
-                print('city_psc: {}, row_value: {}'.format(city_psc, row.cells[2].value), file=sys.stderr)
-                if row.cells[2].value == city_psc:
-                    row_index = idx
-
-            # If we did find a row, let's select it
-            if row_index is not None:
-                app.d.table.select(row_index)
-            #else:
-            #    raise Exception('Could not find city_psc {}'.format(city_psc))
-
-            with app.collect_operations() as ops:
-                app.d.enterButton.click()
-
-            # Close selection dialogue
-            select_dlg = app.awaited_close_dialog(ops)
+        select_city_by_psc_ciselnik_code(app,
+                                         city_psc,
+                                         session[field]['city'],
+                                         fields['city'], fields['city_button'])
 
         # TODO: hack to work with current AIS
         # Write the actual city to "Post office" field
@@ -762,3 +737,40 @@ def choose_study_programme(app, ops, study_programme):
         app.awaited_close_dialog(ops)
     else:
         raise Exception('Unexpected ops: {}'.format(ops))
+
+
+def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, city_button):
+    # Write PSC instead of city name (TODO: hack to work with current AIS)
+    city_field.write(city_psc)
+    with app.collect_operations() as ops:
+        city_button.click()
+
+    if len(ops) == 0:
+        return
+
+    if len(ops) == 1 and ops[-1].method == 'openDialog':
+        # Open selection dialogue
+        select_dlg = app.awaited_open_dialog(ops)
+
+        rows = app.d.table.all_rows()
+
+        # Let's try to find the correct row by checking the ciselnik_code
+        row_index = None
+        for idx, row in enumerate(rows):
+            print('ciselnik_code: {}, row_value: {}'.format(ciselnik_code, row.cells[0].value), file=sys.stderr)
+            if row.cells[0].value == ciselnik_code:
+                row_index = idx
+
+        # If we did find a row, let's select it
+        if row_index is not None:
+            app.d.table.select(row_index)
+        else:
+            raise Exception('Could not find ciselnik_code {}'.format(city_psc))
+
+        with app.collect_operations() as ops:
+            app.d.enterButton.click()
+
+        # Close selection dialogue
+        select_dlg = app.awaited_close_dialog(ops)
+    else:
+        raise Exception('Expected openDialog in select_city_by_psc_ciselnik_code')
