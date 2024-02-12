@@ -9,8 +9,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_session import Session
 
-from authlib.flask.client import OAuth
-from authlib.client.apps import google, facebook
+from authlib.integrations.flask_client import OAuth
 
 from flask_uploads import configure_uploads
 from .consts import MENU, receipts, uploaded_files
@@ -21,6 +20,7 @@ import locale
 import logging
 from logging.handlers import SMTPHandler
 from logging import Formatter
+
 
 
 nav = Nav()
@@ -38,7 +38,11 @@ nav.init_app(app)
 register_renderer(app, 'eprihlaska_nav_renderer', ePrihlaskaNavRenderer)
 
 csrf.init_app(app)
-babel = Babel(app)
+
+def get_locale():
+    return request.accept_languages.best_match(['sk_SK', 'en'])
+
+babel = Babel(app, locale_selector=get_locale)
 app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
 locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
 
@@ -68,10 +72,6 @@ if not app.debug:
     app.logger.addHandler(mail_handler)
 
 
-@babel.localeselector
-def get_locale():
-    return request.accept_languages.best_match(['sk_SK', 'en'])
-
 
 db = SQLAlchemy(app)
 
@@ -86,11 +86,16 @@ from .models import User, fetch_token # noqa
 def loader(user_id):
     return User.query.get(int(user_id))
 
-
-oauth = OAuth(fetch_token=fetch_token)
-oauth.init_app(app)
-google.register_to(oauth)
-facebook.register_to(oauth)
+CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+oauth = OAuth(app)
+oauth.register(
+    name='google',
+    server_metadata_url=CONF_URL,
+    client_kwargs={
+        'scope': 'openid email profile'
+    },
+    fetch_token=fetch_token
+)
 
 mail = Mail(app)
 sess = Session(app)
