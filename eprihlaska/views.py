@@ -1241,3 +1241,15 @@ def admin_impersonate_user(id):
     session.clear()
     login_user(user)
     return redirect(url_for('index'))
+
+
+@app.template_filter('get_user')
+def get_user_filter(user_id):
+    return User.query.get(user_id)
+
+
+@app.route('/admin/tokens/list')
+@require_remote_user
+def admin_tokens_list():
+    tokens = ForgottenPasswordToken.query.all()
+    return render_template('admin_tokens_list.html', tokens=tokens)

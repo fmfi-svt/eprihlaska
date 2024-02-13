@@ -1,0 +1,45 @@
+
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as util %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="section-title">
+    {% block title %}User tokens{% endblock title %}
+  </h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <a href="https://login.uniba.sk/logout.cgi"><strong>Odhlásiť sa</strong></a>
+      </div>
+    </div>
+
+    <div class="row">
+      <table class="table table-hover">
+        <tbody>
+          <tr>
+            <th>Email</th>
+            <th>Token</th>
+            <th>Link</th>
+            <th>Valid Until</th>
+          </tr>
+          {% for token in tokens %}
+            {% with user=token.user_id|get_user %}
+            <tr>
+              <td>{{ user.email }}</td>
+              <td>{{ token.hash }}</td>
+              <td>{{ url_for('forgotten_password_hash', hash=token.hash, _external=True) }}</td>
+              <td>{{ token.valid_until }}</td>
+            </tr>
+            {% endwith %}
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+
+
+
+{% endblock %}
