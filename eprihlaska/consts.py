@@ -6,8 +6,9 @@ import enum
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
-SELECT_STUDY_PROGRAMME = _('Vyberte si, prosím, aspoň prvý študijný program')
-NO_ACCESS_MSG = _('Nemáte oprávnenie pre prístup k danému prístupovému bodu')
+SELECT_STUDY_PROGRAMME = _('Vyberte si, prosím, aspoň prvý študijný program') # noqa
+SELECT_STUDY_PROGRAMME_ONCE = _('Vyberte si, prosím, študijný program najviac jeden krát') # noqa
+NO_ACCESS_MSG = _('Nemáte oprávnenie pre prístup k danému prístupovému bodu') # noqa
 DEAN_LIST_MSG = _('Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole.')  # noqa
 LOGIN_CONGRATS_MSG = _('Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!')  # noqa
 PASSWD_CHANGED_MSG = _('Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie.')  # noqa
