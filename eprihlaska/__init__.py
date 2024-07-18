@@ -40,7 +40,14 @@ register_renderer(app, 'eprihlaska_nav_renderer', ePrihlaskaNavRenderer)
 csrf.init_app(app)
 babel = Babel(app)
 app.config['BABEL_DEFAULT_LOCALE'] = 'sk_SK'
-locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
+try:
+   locale.setlocale(locale.LC_ALL, 'sk_SK.utf8')
+except Exception:
+   try:
+      locale.setlocale(locale.LC_ALL, 'sk_SK.UTF-8')
+   except Exception as e:
+      pass
+#        message.error(request, 'An error occurred: {0}'.format(e))
 
 configure_uploads(app, receipts)
 configure_uploads(app, uploaded_files)
