@@ -78,7 +78,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/85/89/1a6385420cd69bf2d
 
 [[package]]
 name = "cairosvg"
-version = "2.5.1"
+version = "2.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cairocffi" },
@@ -87,18 +87,18 @@ dependencies = [
     { name = "pillow" },
     { name = "tinycss2" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bb/1d/3b7ee8dfd1e536d35b0eee522bcfb565b9c07cddfb185d4e748b38051d6c/CairoSVG-2.5.1.tar.gz", hash = "sha256:bfa0deea7fa0b9b2f29e41b747a915c249dbca731a4667c2917e47ff96e773e0", size = 8397716 }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/e1/a69d14425d125fcac173c68b445816d3a539bb95a09edd620108bdc9348e/CairoSVG-2.7.0.tar.gz", hash = "sha256:ac4dc7c1d38b3a15717db2633a3a383012e0be664c727c911637e6af6a49293c", size = 8398722 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5c/a0/9900cf4556f5d55f09bd8c6c28454349235e77ac56f648a463fc0df0045b/CairoSVG-2.5.1-py3-none-any.whl", hash = "sha256:f1ff02625520493eafb5695d987f69544555524bb0f95695b9ddd3f9dc7d29d5", size = 45786 },
+    { url = "https://files.pythonhosted.org/packages/05/f8/18f8e430efc019255fbeda6599395c10b805920b622dcca9ab964fe03202/CairoSVG-2.7.0-py3-none-any.whl", hash = "sha256:17cb96423a896258848322a95c80160e714a58f1af3dd73b8e1750994519b9f9", size = 43184 },
 ]
 
 [[package]]
 name = "certifi"
-version = "2022.12.7"
+version = "2023.7.22"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/37/f7/2b1b0ec44fdc30a3d31dfebe52226be9ddc40cd6c0f34ffc8923ba423b69/certifi-2022.12.7.tar.gz", hash = "sha256:35824b4c3a97115964b408844d64aa14db1cc518f6562e8d7261699d1350a9e3", size = 156897 }
+sdist = { url = "https://files.pythonhosted.org/packages/98/98/c2ff18671db109c9f10ed27f5ef610ae05b73bd876664139cf95bd1429aa/certifi-2023.7.22.tar.gz", hash = "sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082", size = 159517 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/4c/3db2b8021bd6f2f0ceb0e088d6b2d49147671f25832fb17970e9b583d742/certifi-2022.12.7-py3-none-any.whl", hash = "sha256:4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18", size = 155255 },
+    { url = "https://files.pythonhosted.org/packages/4c/dd/2234eab22353ffc7d94e8d13177aaa050113286e93e7b40eae01fbf7c3d9/certifi-2023.7.22-py3-none-any.whl", hash = "sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9", size = 158334 },
 ]
 
 [[package]]
@@ -201,20 +201,25 @@ wheels = [
 
 [[package]]
 name = "cryptography"
-version = "3.3.2"
+version = "39.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cffi" },
-    { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d4/85/38715448253404186029c575d559879912eb8a1c5d16ad9f25d35f7c4f4c/cryptography-3.3.2.tar.gz", hash = "sha256:5a60d3780149e13b7a6ff7ad6526b38846354d11a15e21068e57073e29e19bed", size = 539883 }
+sdist = { url = "https://files.pythonhosted.org/packages/6a/f5/a729774d087e50fffd1438b3877a91e9281294f985bda0fd15bf99016c78/cryptography-39.0.1.tar.gz", hash = "sha256:d1f6198ee6d9148405e49887803907fe8962a23e6c6f83ea7d98f1c0de375695", size = 603634 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/ea/6169c15d2f031fd8e950736fcba58a1e78e30f94dcd4e13de3acad9682d7/cryptography-3.3.2-cp36-abi3-macosx_10_10_x86_64.whl", hash = "sha256:0d7b69674b738068fa6ffade5c962ecd14969690585aaca0a1b1fc9058938a72", size = 1806119 },
-    { url = "https://files.pythonhosted.org/packages/32/48/ec2a3e98d8b61d2c65e4c6905aad370049c4bd4a6b1b1d78f8983d38effe/cryptography-3.3.2-cp36-abi3-manylinux1_x86_64.whl", hash = "sha256:922f9602d67c15ade470c11d616f2b2364950602e370c76f0c94c94ae672742e", size = 2655339 },
-    { url = "https://files.pythonhosted.org/packages/c6/d1/800ec785c9e66cc6d0ac587bd666eb22f7b2ff6c150e053d35881acd2f57/cryptography-3.3.2-cp36-abi3-manylinux2010_x86_64.whl", hash = "sha256:a0f0b96c572fc9f25c3f4ddbf4688b9b38c69836713fb255f4a2715d93cbaf44", size = 2617074 },
-    { url = "https://files.pythonhosted.org/packages/b6/e2/23313cd9d15c93c26d000c8917c3400ce1e4f0ae91a7bc7132578c2a69e3/cryptography-3.3.2-cp36-abi3-manylinux2014_aarch64.whl", hash = "sha256:a777c096a49d80f9d2979695b835b0f9c9edab73b59e4ceb51f19724dda887ed", size = 2596498 },
-    { url = "https://files.pythonhosted.org/packages/8d/d1/3167f1890afe03f8a6345351fb55cb7daa231f43ad2e0ca4b0d0bad85e23/cryptography-3.3.2-cp36-abi3-win32.whl", hash = "sha256:3c284fc1e504e88e51c428db9c9274f2da9f73fdf5d7e13a36b8ecb039af6e6c", size = 1274098 },
-    { url = "https://files.pythonhosted.org/packages/49/f1/6f03c4bdb33de207fe97fe771b0c671dfe30b55842f7d193205a1303d9e5/cryptography-3.3.2-cp36-abi3-win_amd64.whl", hash = "sha256:7951a966613c4211b6612b0352f5bf29989955ee592c4a885d8c7d0f830d0433", size = 1513103 },
+    { url = "https://files.pythonhosted.org/packages/d6/af/14bcaf14195de7855612dd79d5e04a6d0b88bebc2cb3a6544110065ea8d4/cryptography-39.0.1-cp36-abi3-macosx_10_12_universal2.whl", hash = "sha256:6687ef6d0a6497e2b58e7c5b852b53f62142cfa7cd1555795758934da363a965", size = 5444159 },
+    { url = "https://files.pythonhosted.org/packages/cd/e0/f531855bda1e5c4d782518ab9b03b2e26370a5996d5b81aea2130a6582f7/cryptography-39.0.1-cp36-abi3-macosx_10_12_x86_64.whl", hash = "sha256:706843b48f9a3f9b9911979761c91541e3d90db1ca905fd63fee540a217698bc", size = 2870607 },
+    { url = "https://files.pythonhosted.org/packages/98/51/1c0cedac9ac405adc5da60f5c9884c0ff6af8ccb8caa8173b807baa5bd4a/cryptography-39.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl", hash = "sha256:5d2d8b87a490bfcd407ed9d49093793d0f75198a35e6eb1a923ce1ee86c62b41", size = 3680247 },
+    { url = "https://files.pythonhosted.org/packages/3f/e9/78f7ca03dff233ca976ed3d40d0376a57f37033be2a90f18dfe090943c97/cryptography-39.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:83e17b26de248c33f3acffb922748151d71827d6021d98c70e6c1a25ddd78505", size = 4001722 },
+    { url = "https://files.pythonhosted.org/packages/bb/03/20b85e10571c919fd4862465c53ae40b6494fa7f82fd74131f401ce504f6/cryptography-39.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e124352fd3db36a9d4a21c1aa27fd5d051e621845cb87fb851c08f4f75ce8be6", size = 4183626 },
+    { url = "https://files.pythonhosted.org/packages/2f/c7/06087b04cd870f5acfdc10f8ba252f7985b32c82d4ff96cba05e5f034bf3/cryptography-39.0.1-cp36-abi3-manylinux_2_24_x86_64.whl", hash = "sha256:5aa67414fcdfa22cf052e640cb5ddc461924a045cacf325cd164e65312d99502", size = 4087166 },
+    { url = "https://files.pythonhosted.org/packages/14/61/c64c064ffaf1a52c7ee4a29caf3ed88755b016cb0523d841e63eb33a4976/cryptography-39.0.1-cp36-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:35f7c7d015d474f4011e859e93e789c87d21f6f4880ebdc29896a60403328f1f", size = 3996021 },
+    { url = "https://files.pythonhosted.org/packages/1b/90/3c06f3f7a74dad0955536088c3b743a74e8c57c265f2c7a4b61cebb369c1/cryptography-39.0.1-cp36-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:f24077a3b5298a5a06a8e0536e3ea9ec60e4c7ac486755e5fb6e6ea9b3500106", size = 4198728 },
+    { url = "https://files.pythonhosted.org/packages/67/db/8bf23a46eb3d428514ce83a8047bab4304338548bbd891fded615551b032/cryptography-39.0.1-cp36-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:f0c64d1bd842ca2633e74a1a28033d139368ad959872533b1bab8c80e8240a0c", size = 4099241 },
+    { url = "https://files.pythonhosted.org/packages/ce/cf/678181421aa1506c7669c1ccbe8737203fb628406b2cd7e24b6eb0e12429/cryptography-39.0.1-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:0f8da300b5c8af9f98111ffd512910bc792b4c77392a9523624680f7956a99d4", size = 4266997 },
+    { url = "https://files.pythonhosted.org/packages/7c/b9/df69ecb429db4888464c133bbfac0a47a590ed88339fde73101715d5a22d/cryptography-39.0.1-cp36-abi3-win32.whl", hash = "sha256:fe913f20024eb2cb2f323e42a64bdf2911bb9738a15dba7d3cce48151034e3a8", size = 2084743 },
+    { url = "https://files.pythonhosted.org/packages/b2/67/f55f33730676654d4ec91956293e681083ed858805904f080aadc707065d/cryptography-39.0.1-cp36-abi3-win_amd64.whl", hash = "sha256:ced4e447ae29ca194449a3f1ce132ded8fcab06971ef5f618605aacaa612beac", size = 2456498 },
 ]
 
 [[package]]
@@ -334,10 +339,10 @@ requires-dist = [
     { name = "blinker", specifier = "==1.9.0" },
     { name = "bs4", specifier = "==0.0.1" },
     { name = "cairocffi", specifier = "==0.8.0" },
-    { name = "cairosvg", specifier = "==2.5.1" },
-    { name = "certifi", specifier = "==2022.12.7" },
+    { name = "cairosvg", specifier = "==2.7.0" },
+    { name = "certifi", specifier = "==2023.7.22" },
     { name = "chardet", specifier = "==3.0.4" },
-    { name = "cryptography", specifier = "==3.3.2" },
+    { name = "cryptography", specifier = "==39.0.1" },
     { name = "cssselect2", specifier = "==0.2.1" },
     { name = "defusedxml", specifier = "==0.5.0" },
     { name = "dominate", specifier = "==2.9.1" },
@@ -364,8 +369,8 @@ requires-dist = [
     { name = "pyasn1", specifier = "==0.4.2" },
     { name = "pycparser", specifier = "==2.18" },
     { name = "pyjwt", specifier = "==2.4.0" },
-    { name = "pymysql", specifier = "==0.8.0" },
-    { name = "pypdf2", specifier = "==1.27.5" },
+    { name = "pymysql", specifier = "==1.1.1" },
+    { name = "pypdf2", specifier = "==1.27.9" },
     { name = "pyphen", specifier = "==0.9.4" },
     { name = "python-dateutil", specifier = "==2.6.1" },
     { name = "requests", specifier = "==2.32.3" },
@@ -771,20 +776,20 @@ wheels = [
 
 [[package]]
 name = "pymysql"
-version = "0.8.0"
+version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a8/b4/3544c8e6ed9b1c6a00e5b302e3d5a646e43a8a0ac5216f5ae8706688706e/PyMySQL-0.8.0.tar.gz", hash = "sha256:32da4a66397077d42908e449688f2ec71c2b18892a6cd04f03ab2aa828a70f40", size = 73094 }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/8f/ce59b5e5ed4ce8512f879ff1fa5ab699d211ae2495f1adaa5fbba2a1eada/pymysql-1.1.1.tar.gz", hash = "sha256:e127611aaf2b417403c60bf4dc570124aeb4a57f5f37b8e95ae399a42f904cd0", size = 47678 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/07/c0f249aa0b7b0517b5843eeab689b9ccc6a6bb0536fc9d95e65901e6f2ac/PyMySQL-0.8.0-py2.py3-none-any.whl", hash = "sha256:04fa19fad017fdb21394fad2878c1d6bd346959d4fbfd1b66050a09fc636a321", size = 83121 },
+    { url = "https://files.pythonhosted.org/packages/0c/94/e4181a1f6286f545507528c78016e00065ea913276888db2262507693ce5/PyMySQL-1.1.1-py3-none-any.whl", hash = "sha256:4de15da4c61dc132f4fb9ab763063e693d521a80fd0e87943b9a453dd4c19d6c", size = 44972 },
 ]
 
 [[package]]
 name = "pypdf2"
-version = "1.27.5"
+version = "1.27.9"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5c/c0/65bb6aac220b783b87df83031e65b29034aa689e6eb35f94362d1b0a9370/PyPDF2-1.27.5.tar.gz", hash = "sha256:7c18c1d48e56547b1c33f772dc15d6adbd1f4020b62e64bb4a0bc0ee2ab94511", size = 1337230 }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/f8/2a21acd3a73911cff2bed6fc5345e8196124d537609b998f20025eff3687/PyPDF2-1.27.9.tar.gz", hash = "sha256:5f7937fd94ba387a2a241db8858770e53091d8ffab9922512c0bf48e3f4cc615", size = 1430698 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/97/ee9a267699aa71a82744302f1ef9cea4418f3959430a99db3de7aec8025c/PyPDF2-1.27.5-py3-none-any.whl", hash = "sha256:9c81fc06be50fbf2e6199e8c2eac05f3eaafae4b3905ecca41200f5b02ac43d7", size = 64947 },
+    { url = "https://files.pythonhosted.org/packages/1a/09/7c598522e07057b28c7bd2afc1590d4b1cf5d4b18324143bc17119348d91/PyPDF2-1.27.9-py3-none-any.whl", hash = "sha256:5e29ffaf2efcfb77c25206e3b8df517a18af84e64ebe1b3a93abac8d01176374", size = 71142 },
 ]
 
 [[package]]
