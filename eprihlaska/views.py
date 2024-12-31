@@ -721,8 +721,7 @@ def forgotten_password_hash(hash):
         form = NewPasswordForm()
         if form.validate_on_submit():
             user = User.query.filter_by(id=token.user_id).first()
-            user.password = generate_password_hash(form.password.data,
-                                                   method='sha256')
+            user.password = generate_password_hash(form.password.data) 
 
             # Invalidate the token so that it cannot be used another time
             token.valid = False
