@@ -7,7 +7,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 OAUTH_CLIENT_CACHE_TYPE = 'simple'
 AUTHLIB_CACHE_TYPE = 'simple'
 
-GOOGLE_CLIENT_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+# As per https://docs.authlib.org/en/latest/client/flask.html#configuration
+GOOGLE_CLIENT_ID = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 GOOGLE_CLIENT_SECRET = 'xxxxxxxxxxxxxxxxxxx'
 
 FACEBOOK_CLIENT_KEY = 'xxxxxxxxxxxxxx'
