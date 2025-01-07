@@ -809,8 +809,8 @@ def google_authorize():
     profile = oauth.google.userinfo(token=token)
 
     create_or_get_user_and_login('google', token,
-                                 profile.data.get('given_name', ''),
-                                 profile.data.get('family_name', ''),
+                                 profile.get('given_name', ''),
+                                 profile.get('family_name', ''),
                                  profile.email)
 
     return redirect(url_for('study_programme'))
