@@ -229,22 +229,26 @@ class FurtherStudyInfoForm(FlaskForm):
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
     matura_inf_grade = IntegerField(label=c.MATURA_INF_GRADE,
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
     matura_bio_grade = IntegerField(label=c.MATURA_BIO_GRADE,
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
     matura_che_grade = IntegerField(label=c.MATURA_CHE_GRADE,
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
 
 
 class FurtherGradesInfoForm(FlaskForm):
@@ -254,17 +258,20 @@ class FurtherGradesInfoForm(FlaskForm):
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
     grade_second_year = IntegerField(c.GRADE_SECOND_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                      validators=[validators.Optional(),
                                                  validators.NumberRange(min=g_min,
                                                                         max=g_max,
-                                                                        message=c.GRADE_ERR)])
+                                                                        message=c.GRADE_ERR)],
+                                     description=c.GRADES_INFO)
     grade_third_year = IntegerField(c.GRADE_THIRD_YEAR[c.LENGTH_OF_STUDY_DEFAULT],
                                     validators=[validators.Optional(),
                                                 validators.NumberRange(min=g_min,
                                                                        max=g_max,
-                                                                       message=c.GRADE_ERR)])
+                                                                       message=c.GRADE_ERR)],
+                                    description=c.GRADES_INFO)
 
 class AdmissionWaiversForm(FlaskForm):
     further_study_info = FormField(FurtherStudyInfoForm,
