@@ -6,6 +6,7 @@ import enum
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 SELECT_STUDY_PROGRAMME = _("Vyberte si, prosím, aspoň prvý študijný program")
 NO_ACCESS_MSG = _("Nemáte oprávnenie pre prístup k danému prístupovému bodu")
 DEAN_LIST_MSG = _(

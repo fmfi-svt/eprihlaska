@@ -168,6 +168,14 @@ def study_programme():
 
             session['study_programme'] = study_programme
 
+            set_ssp = set([x for x in study_programme if x != '_'])
+            list_ssp = list([x for x in study_programme if x != '_'])
+
+            # Ensure there are no duplicates within the study_programme list
+            if len(set_ssp) != len(list_ssp):
+                flash(consts.SELECT_STUDY_PROGRAMME_ONCE, 'error')
+                return redirect(url_for('study_programme'))
+
             # Select at least one study programme
             if study_programme[0] == '_':
                 flash(consts.SELECT_STUDY_PROGRAMME, 'error')
