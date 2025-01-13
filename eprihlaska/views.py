@@ -3,7 +3,7 @@ from flask import (render_template, flash, redirect, session, request, url_for,
 import flask.json
 from flask_mail import Message
 from flask_uploads import UploadNotAllowed
-from eprihlaska import app, db, mail
+from eprihlaska import app, db, mail, oauth
 from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               AddressForm, PreviousStudiesForm,
                               AdmissionWaiversForm, FinalForm,
@@ -12,7 +12,6 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               AIS2CookieForm, AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-from authlib.client.apps import google, facebook
 import datetime
 import uuid
 import sys
@@ -253,7 +252,7 @@ def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
     constraint_profiles = {
-        'F': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY'],
+        'F': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY', 'upFYBI'],
         'I': ['INF', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
         'B': ['BIN', 'BIN/k', 'BMF'],
         'CH': ['BMF','BIN', 'BIN/k']
@@ -312,8 +311,8 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'INF', 'EFM', 'MMN', 'MAT', 'PMA'],
-        'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k'],
+        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'AIN', 'INF', 'EFM', 'MMN', 'MAT', 'PMA'],
+        'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k', 'AIN'],
         'grades_fyz': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
         'grades_bio': ['BMF', 'BIN', 'BIN/k'],
         'grades_che': ['BMF', 'BIN', 'BIN/k'],
@@ -329,8 +328,8 @@ def admissions_waivers():
 
     further_study_info_constraints = {
         'matura_mat_grade': ['AIN', 'upFYIN', 'upINAN', 'upINBI', 'upINGE',
-                             'upINCH', 'upMADG', 'upMAFY', 'upMAIN', 'upMATV'],
-        'matura_fyz_grade': ['upFYIN', 'upMAFY'],
+                             'upINCH', 'upMADG', 'upMAFY', 'upMAIN', 'upMATV', 'upFYBI'],
+        'matura_fyz_grade': ['upFYIN', 'upMAFY', 'upFYBI'],
         'matura_inf_grade': ['AIN', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN',
                              'upINGE', 'upINCH'],
         'matura_bio_grade': [],
@@ -730,8 +729,7 @@ def forgotten_password_hash(hash):
         form = NewPasswordForm()
         if form.validate_on_submit():
             user = User.query.filter_by(id=token.user_id).first()
-            user.password = generate_password_hash(form.password.data,
-                                                   method='sha256')
+            user.password = generate_password_hash(form.password.data) 
 
             # Invalidate the token so that it cannot be used another time
             token.valid = False
@@ -810,41 +808,17 @@ def create_or_get_user_and_login(site, token, name, surname, email):
 @app.route('/google/login', methods=['GET'])
 def google_login():
     callback_uri = url_for('google_authorize', _external=True)
-    return google.authorize_redirect(callback_uri)
+    return oauth.google.authorize_redirect(callback_uri)
 
 
 @app.route('/google/auth', methods=['GET'])
 def google_authorize():
-    token = google.authorize_access_token()
-    profile = google.parse_openid(token)
+    token = oauth.google.authorize_access_token()
+    profile = oauth.google.userinfo(token=token)
 
     create_or_get_user_and_login('google', token,
-                                 profile.data.get('given_name', ''),
-                                 profile.data.get('family_name', ''),
-                                 profile.email)
-
-    return redirect(url_for('study_programme'))
-
-
-@app.route('/facebook/login', methods=['GET'])
-def facebook_login():
-    callback_uri = url_for('facebook_authorize', _external=True)
-    return facebook.authorize_redirect(callback_uri)
-
-
-@app.route('/facebook/auth', methods=['GET'])
-def facebook_authorize():
-    token = facebook.authorize_access_token()
-    profile = facebook.fetch_user()
-
-    data = profile.data.get('name', '').split(' ')
-    name = '' if not len(data) else data[0]
-    surname = '' if len(data) <= 1 else data[-1]
-
-    create_or_get_user_and_login('facebook',
-                                 token,
-                                 name,
-                                 surname,
+                                 profile.get('given_name', ''),
+                                 profile.get('family_name', ''),
                                  profile.email)
 
     return redirect(url_for('study_programme'))

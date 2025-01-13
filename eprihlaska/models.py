@@ -7,51 +7,49 @@ from .consts import ApplicationStates
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'user'
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(80))
+    password = db.Column(db.String(180))
     registered_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
 
 def application_form_change_author():
-    remote_user = request.environ.get('REMOTE_USER')
+    remote_user = request.environ.get("REMOTE_USER")
     if remote_user is not None:
         return remote_user
     else:
-        return 'user'
+        return "user"
 
 
 class ApplicationForm(db.Model):
-    __tablename__ = 'application_form'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__ = "application_form"
+    __table_args__ = {"sqlite_autoincrement": True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref='user')
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", backref="user")
     application = db.Column(db.Text)
     last_updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now)
-    last_updated_by = db.Column(db.String(50), default='user',
-                                onupdate=application_form_change_author)
+    last_updated_by = db.Column(
+        db.String(50), default="user", onupdate=application_form_change_author
+    )
     submitted_at = db.Column(db.DateTime)
     processed_at = db.Column(db.DateTime)
     printed_at = db.Column(db.DateTime)
-    state = db.Column(db.Enum(ApplicationStates),
-                      default=ApplicationStates.in_progress)
+    state = db.Column(db.Enum(ApplicationStates), default=ApplicationStates.in_progress)
 
 
 class ForgottenPasswordToken(db.Model):
     hash = db.Column(db.String(36), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     valid = db.Column(db.Boolean, default=True)
     valid_until = db.Column(db.DateTime)
 
 
 class TokenModel(db.Model):
-    __tablename__ = 'connect'
-    __table_args__ = (
-        db.UniqueConstraint('user_id', 'name', name='uc_connect'),
-    )
-    OAUTH1_TOKEN_TYPE = 'oauth1.0'
+    __tablename__ = "connect"
+    __table_args__ = (db.UniqueConstraint("user_id", "name", name="uc_connect"),)
+    OAUTH1_TOKEN_TYPE = "oauth1.0"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
@@ -84,17 +82,17 @@ class TokenModel(db.Model):
         if not conn:
             conn = cls(user_id=user.id, name=name)
 
-        if 'oauth_token' in data:
+        if "oauth_token" in data:
             # save for OAuth 1
             conn.token_type = cls.OAUTH1_TOKEN_TYPE
-            conn.access_token = data.pop('oauth_token')
-            conn.alt_token = data.pop('oauth_token_secret')
+            conn.access_token = data.pop("oauth_token")
+            conn.alt_token = data.pop("oauth_token_secret")
             conn.extras = json.dumps(data)
         else:
-            conn.access_token = data.pop('access_token')
-            conn.token_type = data.pop('token_type', '')
-            conn.alt_token = data.pop('refresh_token', '')
-            expires_in = data.pop('expires_in', 0)
+            conn.access_token = data.pop("access_token")
+            conn.token_type = data.pop("token_type", "")
+            conn.alt_token = data.pop("refresh_token", "")
+            expires_in = data.pop("expires_in", 0)
             if expires_in:
                 conn.expires_at = int(time.time()) + expires_in
             conn.extras = json.dumps(data)
