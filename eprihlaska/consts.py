@@ -7,7 +7,8 @@ import enum
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-SELECT_STUDY_PROGRAMME = _("Vyberte si, prosím, aspoň prvý študijný program")
+SELECT_STUDY_PROGRAMME = _("Vyberte si, prosím, aspoň prvý študijný program") # noqa
+SELECT_STUDY_PROGRAMME_ONCE = _('Vyberte si, prosím, študijný program najviac jeden krát') # noqa
 NO_ACCESS_MSG = _("Nemáte oprávnenie pre prístup k danému prístupovému bodu")
 DEAN_LIST_MSG = _(
     "Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole."
