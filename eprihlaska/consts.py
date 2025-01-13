@@ -110,6 +110,7 @@ PRG_DAVk = _("Dátová veda (konverzný program)")
 PRG_upMAFY = _("Učiteľstvo matematiky a fyziky")
 PRG_upMAIN = _("Učiteľstvo matematiky a informatiky")
 PRG_upFYIN = _("Učiteľstvo fyziky a informatiky")
+PRG_upFYBI = _("Učiteľstvo fyziky a biológie")
 PRG_upMATV = _("Učiteľstvo matematiky a telesnej výchovy")
 PRG_upMADG = _("Učiteľstvo matematiky a deskriptívnej geometrie")
 PRG_upINBI = _("Učiteľstvo informatiky a biológie")
@@ -150,6 +151,7 @@ STUDY_PROGRAMME_CHOICES = [
     ("upMATV", PRG_upMATV),
     ("upMADG", PRG_upMADG),
     ("upFYIN", PRG_upFYIN),
+    ("upFYBI", PRG_upFYBI),
     ("upINBI", PRG_upINBI),
     ("upINGE", PRG_upINGE),
     ("upINCH", PRG_upINCH),
@@ -377,6 +379,8 @@ GRADES_FYZ = _("Známky z fyziky")
 GRADES_BIO = _("Známky z biológie")
 GRADES_CHE = _("Známky z chémie")
 
+GRADES_INFO = _("Uvádzajte iba známky získané počas štúdia na strednej škole so sídlom na území Európskej únie.")
+
 GRADE_ERR = _("Zle zadaná známka. Akceptované známky sú 1 až 5.")
 
 FINAL_NOTE = _("Poznámka")
@@ -519,5 +523,5 @@ DOCUMENTS_TO_UPLOAD_SHORT = ["PZ", "DI", "ZN", "KV"]
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
-CURRENT_MATURA_YEAR = 2024
-DEFAULT_MATURA_YEAR = 2024
+CURRENT_MATURA_YEAR = 2025
+DEFAULT_MATURA_YEAR = 2025
