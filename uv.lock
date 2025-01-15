@@ -325,6 +325,7 @@ dependencies = [
     { name = "pyjwt" },
     { name = "pymysql" },
     { name = "pypdf2" },
+    { name = "pypdftk" },
     { name = "pyphen" },
     { name = "python-dateutil" },
     { name = "requests" },
@@ -386,6 +387,7 @@ requires-dist = [
     { name = "pyjwt", specifier = "==2.4.0" },
     { name = "pymysql", specifier = "==1.1.1" },
     { name = "pypdf2", specifier = "==1.27.9" },
+    { name = "pypdftk", specifier = ">=0.5" },
     { name = "pyphen", specifier = "==0.9.4" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "requests", specifier = "==2.32.3" },
@@ -906,6 +908,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/ce/f8/2a21acd3a73911cff
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1a/09/7c598522e07057b28c7bd2afc1590d4b1cf5d4b18324143bc17119348d91/PyPDF2-1.27.9-py3-none-any.whl", hash = "sha256:5e29ffaf2efcfb77c25206e3b8df517a18af84e64ebe1b3a93abac8d01176374", size = 71142 },
 ]
+
+[[package]]
+name = "pypdftk"
+version = "0.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/90/cf9d07b633dfbfb26ea1032d22d20b7959394b706c943ff4caaa2a48957c/pypdftk-0.5.tar.gz", hash = "sha256:b6f7f000133480842b3bf9f8222cb6bd5e2b20cf50c5ec050f2e44d9f7dc3296", size = 5981 }
 
 [[package]]
 name = "pyphen"

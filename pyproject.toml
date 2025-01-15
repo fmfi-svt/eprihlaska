@@ -53,6 +53,7 @@ dependencies = [
   "flask-reuploaded>=1.4.0,<2",
   "munch>=4.0.0,<5",
   "urllib3==2.3.0",
+  "pypdftk>=0.5",
 ]
 
 [tool.uv]
