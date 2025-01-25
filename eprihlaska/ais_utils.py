@@ -140,7 +140,7 @@ def save_application_form(ctx,
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
-    if app.d.priezviskoTextField.value != '' and process_type is None:
+    if app.d.priezviskoTextField.value != '' and process_type == 'none':
         notes['person_exists'] = {
             'name': app.d.menoTextField.value,
             'surname': app.d.priezviskoTextField.value,

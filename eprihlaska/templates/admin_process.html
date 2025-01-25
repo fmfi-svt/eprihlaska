@@ -8,7 +8,7 @@
 <div class="container">
   <h1 class="section-title">
     {% block title %}
-     {% if beta %}
+     {% if ais_instance == 'beta' %}
      Preklopenie prihlášky #{{ id }} do AIS2 (beta)
      {% else %}
      Preklopenie prihlášky #{{ id }} do AIS2
@@ -128,21 +128,13 @@
             </a>
           </div>
           <div class="col-md-4">
-            {% if beta %}
-            <a class="btn" href="{{ url_for('admin_process_special', id=id, process_type='no_fill') }}">
-            {% else %}
-            <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='no_fill') }}">
-            {% endif %}
+            <a class="btn" href="{{ url_for('admin_ais2_process', ais_instance=ais_instance, process_type='no_fill', id=id) }}">
               Pokračovať s údajmi z AIS2
             </a>
           </div>
 
           <div class="col-md-4">
-            {% if beta %}
-            <a class="btn" href="{{ url_for('admin_process_special', id=id, process_type='fill') }}">
-            {% else %}
-            <a class="btn" href="{{ url_for('admin_ais2_process_special', id=id, process_type='fill') }}">
-            {% endif %}
+            <a class="btn" href="{{ url_for('admin_ais2_process', ais_instance=ais_instance, process_type='fill', id=id) }}">
               Pokračovať s údajmi z prihlášky
             </a>
           </div>
