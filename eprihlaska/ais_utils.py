@@ -1,19 +1,24 @@
-import os
 import sys
 import re
 import flask.json
 from flask import url_for
-DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, DIR + '/votr/')
-
-from aisikl.context import Context # noqa
 from aisikl.app import Application # noqa
 import aisikl.portal # noqa
+from fladgejt.login import create_client # noqa
 
 
-def create_context(cookies, origin='ais2-beta.uniba.sk'):
-    ctx = Context(cookies, ais_url='https://'+origin+'/')
-    return ctx
+def create_context(*, my_entity_id, andrvotr_api_key, andrvotr_authority_token, beta):
+    server = dict(
+        login_types=('saml_andrvotr',),
+        ais_url=('https://ais2-beta.uniba.sk/' if beta else 'https://ais2.uniba.sk/'),
+    )
+    params = dict(
+        type='saml_andrvotr',
+        my_entity_id=my_entity_id,
+        andrvotr_api_key=andrvotr_api_key,
+        andrvotr_authority_token=andrvotr_authority_token,
+    )
+    return create_client(server, params).context
 
 
 def test_ais(ctx):
@@ -135,7 +140,7 @@ def save_application_form(ctx,
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
-    if app.d.priezviskoTextField.value != '' and process_type is None:
+    if app.d.priezviskoTextField.value != '' and process_type == 'none':
         notes['person_exists'] = {
             'name': app.d.menoTextField.value,
             'surname': app.d.priezviskoTextField.value,
