@@ -968,29 +968,21 @@ def admin_file_download(id, uuid):
     return send_from_directory(receipt_dir, file, as_attachment=True)
 
 
-def get_cosign_cookies():
-    name = request.environ['COSIGN_SERVICE']
-    value = request.cookies[name]
-    filename = name + '=' + value.partition('/')[0]
-    result = {}
-    with open(os.path.join(app.config['COSIGN_PROXY_DIR'],
-                           filename)) as f:
-        for line in f:
-            # Remove starting "x" and everything after the space.
-            name, _, value = line[1:].split()[0].partition('=')
-            result[name] = value
-    return result
+def create_votr_context(*, beta):
+    from .ais_utils import create_context
+    return create_context(
+        my_entity_id=app.config['MY_ENTITY_ID'],
+        andrvotr_api_key=app.config['ANDRVOTR_API_KEY'],
+        andrvotr_authority_token=request.environ['ANDRVOTR_AUTHORITY_TOKEN'],
+        beta=beta,
+    )
 
 
 @app.route('/admin/ais_test')
 @require_remote_user
 def admin_ais_test():
-    from .ais_utils import (create_context, test_ais)
-    cosign_cookies = get_cosign_cookies()
-    ctx = create_context(cosign_cookies,
-                         origin='ais2.uniba.sk')
-    # Do log in
-    ctx.request_html('/ais/loginCosign.do', method='POST')
+    from .ais_utils import test_ais
+    ctx = create_votr_context(beta=False)
     test_ais(ctx)
     return redirect(url_for('admin_list'))
 
@@ -1140,17 +1132,9 @@ def admin_process_special(id, process_type):
 
 
 def send_application_to_ais2(id, application, form, process_type, beta=False):
-    from .ais_utils import (create_context, save_application_form)
+    from .ais_utils import save_application_form
     if form.validate_on_submit():
-        origin = 'ais2.uniba.sk'
-        if beta:
-            origin = 'ais2-beta.uniba.sk'
-
-        cosign_cookies = get_cosign_cookies()
-        ctx = create_context(cosign_cookies,
-                             origin=origin)
-        # Do log in
-        ctx.request_html('/ais/loginCosign.do', method='POST')
+        ctx = create_votr_context(beta=beta)
 
         ais2_output = None
         error_output = None
