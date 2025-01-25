@@ -31,7 +31,8 @@ ERROR_EMAIL_HEADER = 'ePrihlaska - error'
 
 UA_CODE = 'UA-23362538-7'
 
-COSIGN_PROXY_DIR = '/opt/cosign/proxy'
+MY_ENTITY_ID = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+ANDRVOTR_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 SUBMISSIONS_OPEN = True
 UPLOADS_ENABLED = True
