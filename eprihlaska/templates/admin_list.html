@@ -47,8 +47,8 @@
             {% endif %}
 
             {% if app.state.value == 2 %}
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť na BETU</a>
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', id=app.id) }}">Preklopiť</a>
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', ais_instance='beta', process_type='none', id=app.id) }}">Preklopiť na BETU</a>
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', ais_instance='prod', process_type='none', id=app.id) }}">Preklopiť</a>
             {% endif %}
           </div>
           <br />
