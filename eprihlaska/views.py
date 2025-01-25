@@ -712,12 +712,14 @@ def signup():
 @app.route('/logout', methods=['GET'])
 @login_required
 def logout():
-    # Clear out the session
-    keys = list(session.keys()).copy()
-    for k in keys:
-        session.pop(k)
-
     logout_user()
+    session.clear()
+
+    if request.environ.get('REMOTE_USER'):
+        # Admin logout: clear our session, mod_shib session, and IdP session.
+        # (return parameter doesn't matter, Shibboleth IdP ignores it.)
+        return redirect('/Shibboleth.sso/Logout?return=/')
+
     return redirect(url_for('index'))
 
 
