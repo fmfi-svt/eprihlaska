@@ -1001,20 +1001,33 @@ def admin_init_votr(ais_instance):
     return redirect(next)
 
 
+def _redirect_to_init_votr(ais_instance):
+    # First time we visited an admin page that requires votr_context?
+    # Or has AIS login expired?
+    # 1. Re-login with mod_shib to get a fresh andrvotr authority token.
+    # 2. Create a votr_context and store it in the flask session.
+    # 3. Redirect back here.
+    target = url_for('admin_init_votr', ais_instance=ais_instance, next=request.full_path)
+    return redirect(f'/Shibboleth.sso/Login?target={quote_plus(target)}')
+
+
 def require_votr_context(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         ais_instance = kwargs['ais_instance']
         session_key = f'_votr_context_{ais_instance}'
         if not session.get(session_key):
-            # First time we visited an admin page that requires votr_context?
-            # 1. Re-login with mod_shib to get a fresh andrvotr authority token.
-            # 2. Create a votr_context and store it in the flask session.
-            # 3. Redirect back here.
-            target = url_for('admin_init_votr', ais_instance=ais_instance, next=request.full_path)
-            return redirect(f'/Shibboleth.sso/Login?target={quote_plus(target)}')
+            return _redirect_to_init_votr(ais_instance)
 
         votr_context = pickle.loads(session[session_key])
+
+        from aisikl.app import check_connection
+        from aisikl.exceptions import LoggedOutError
+        try:
+            check_connection(votr_context)
+        except LoggedOutError:
+            return _redirect_to_init_votr(ais_instance)
+
         result = func(*args, **kwargs, votr_context=votr_context)
         session[session_key] = pickle.dumps(votr_context, pickle.HIGHEST_PROTOCOL)
         return result
