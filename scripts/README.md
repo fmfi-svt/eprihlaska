@@ -51,3 +51,14 @@
     python3 ciselnik_to_csv.py --file ciselniky-2024-01.xlsx --sheet 573 --filter-NaT='Platnosť do' convert --out-file staty.csv 'Id štát' 'Štát'  # premenuj v cvs Id štát na id
 
     python3 ciselnik_to_csv.py --file ciselniky-2024-01.xlsx --sheet 109 --filter-NaT='Do dátumu' convert --out-file='skoly.csv' 'St. šk.' 'Obec' 'Stredná škola' 'Ulica'
+
+## Ciselnik to CSV in 2026 - import 1
+
+    python3 ciselnik_obce_to_csv.py --file ciselniky-2025-12.xlsx --sheet 244  --filter-NaT='Do dátumu' convert --out-file obce.csv 'id' 'Názov obce' 'PSČ' 'Okres'
+
+    python3 ciselnik_to_csv.py --file ciselniky-2025-12.xlsx --sheet 109 --filter-NaT='Do dátumu' convert --out-file=skoly.csv 'St. šk.' 'Obec' 'Stredná škola' 'Ulica'
+
+    python3 ciselnik_to_csv.py --file ciselniky-2025-12.xlsx  --sheet 715 --filter-NaT='Do dátumu' convert --out-file odbory.csv  'Odbor - kod' 'Odbor stred. školy'
+
+    python3 ciselnik_to_csv.py --file ciselniky-2025-12.xlsx --sheet 714 convert --out-file ss-odbor-map.csv  'St. šk.' 'Odbor - kod'
+
