@@ -98,12 +98,13 @@ PRG_EFM = _("Ekonomická a finančná matematika")
 PRG_MMN = _("Manažérska matematika")
 PRG_FYZ = _("Fyzika")
 PRG_FYZk = _("Fyzika (konverzný program)")
-PRG_BMF = _("Biomedicínska fyzika")
+PRG_mBMF = _("Biomedicínska fyzika (5 ročný program)")
 PRG_OZE = _("Obnoviteľné zdroje energie a environmentálna fyzika")
 PRG_OZEk = _("Obnoviteľné zdroje energie a environmentálna fyzika (konverzný program)")
 PRG_TEF = _("Technická fyzika")
 PRG_TEFk = _("Technická fyzika (konverzný program)")
 PRG_INF = _("Informatika")
+PRG_INFk = _("Informatika (konverzný program)")
 PRG_AIN = _("Aplikovaná informatika")
 PRG_BIN = _("Bioinformatika")
 PRG_BINk = _("Bioinformatika (konverzný program)")
@@ -137,12 +138,13 @@ STUDY_PROGRAMME_CHOICES = [
     ("MMN", PRG_MMN),
     ("FYZ", PRG_FYZ),
     ("FYZ/k", PRG_FYZk),
-    ("BMF", PRG_BMF),
+    ("mBMF", PRG_mBMF),
     ("OZE", PRG_OZE),
     ("OZE/k", PRG_OZEk),
     ("TEF", PRG_TEF),
     ("TEF/k", PRG_TEFk),
     ("INF", PRG_INF),
+    ("INF/k", PRG_INFk),
     ("AIN", PRG_AIN),
     ("BIN", PRG_BIN),
     ("BIN/k", PRG_BINk),
@@ -525,5 +527,5 @@ DOCUMENTS_TO_UPLOAD_SHORT = ["PZ", "DI", "ZN", "KV"]
 # for the regular applications (before june) set to the same year
 # for the additional application (after june) set CURRENT_MATURA_YEAR to next year
 # this is soooo much fun!
-CURRENT_MATURA_YEAR = 2025
-DEFAULT_MATURA_YEAR = 2025
+CURRENT_MATURA_YEAR = 2026
+DEFAULT_MATURA_YEAR = 2026
