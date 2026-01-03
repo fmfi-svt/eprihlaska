@@ -55,9 +55,10 @@ class TokenModel(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(20), nullable=False)
     token_type = db.Column(db.String(20))
-    access_token = db.Column(db.String(255), nullable=False)
+    # Google OAuth access tokens can exceed 255 chars; use Text to avoid truncation.
+    access_token = db.Column(db.Text, nullable=False)
     # refresh_token or access_token_secret
-    alt_token = db.Column(db.String(255))
+    alt_token = db.Column(db.Text)
     extras = db.Column(db.Text)
     expires_at = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
