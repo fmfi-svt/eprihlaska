@@ -17,6 +17,7 @@ from .renderer import ePrihlaskaNavRenderer, ExtendedNavbar, UserGreeting, LogIn
 import locale
 
 import logging
+import os
 from logging.handlers import SMTPHandler
 from logging import Formatter
 
@@ -36,6 +37,31 @@ nav.init_app(app)
 register_renderer(app, "eprihlaska_nav_renderer", ePrihlaskaNavRenderer)
 
 csrf.init_app(app)
+
+def _get_revision_hash():
+    env_hash = (
+        os.environ.get("EPRIHLASKA_REVISION")
+        or os.environ.get("REVISION_HASH")
+        or os.environ.get("GIT_COMMIT")
+    )
+    if env_hash:
+        return env_hash[:12]
+    try:
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        git_dir = os.path.join(repo_root, ".git")
+        head_path = os.path.join(git_dir, "HEAD")
+        with open(head_path, "r", encoding="ascii") as head_file:
+            head = head_file.read().strip()
+        if head.startswith("ref:"):
+            ref_path = head.split(" ", 1)[1].strip()
+            ref_file = os.path.join(git_dir, ref_path)
+            with open(ref_file, "r", encoding="ascii") as ref:
+                return ref.read().strip()[:12]
+        return head[:12]
+    except Exception:
+        return "unknown"
+
+app.config["REVISION_HASH"] = _get_revision_hash()
 
 
 def get_locale():
