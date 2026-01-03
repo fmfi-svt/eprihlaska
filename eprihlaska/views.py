@@ -252,10 +252,10 @@ def filter_competitions(competition_list, study_programme_list):
     result_list = []
 
     constraint_profiles = {
-        'F': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY', 'upFYBI'],
-        'I': ['INF', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
-        'B': ['BIN', 'BIN/k', 'BMF'],
-        'CH': ['BMF','BIN', 'BIN/k']
+        'F': ['mBMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY', 'upFYBI'],
+        'I': ['INF', 'INF/k', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
+        'B': ['BIN', 'BIN/k', 'mBMF'],
+        'CH': ['mBMF','BIN', 'BIN/k']
     }
 
     constraints = {
@@ -311,11 +311,11 @@ def admissions_waivers():
             subform.competition.choices = new_choices
 
     grade_constraints = {
-        'grades_mat': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'AIN', 'INF', 'EFM', 'MMN', 'MAT', 'PMA'],
-        'grades_inf': ['BIN', 'BIN/k', 'INF', 'DAV', 'DAV/k', 'AIN'],
-        'grades_fyz': ['BMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
-        'grades_bio': ['BMF', 'BIN', 'BIN/k'],
-        'grades_che': ['BMF', 'BIN', 'BIN/k'],
+        'grades_mat': ['mBMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'AIN', 'INF', 'EFM', 'MMN', 'MAT', 'PMA'],
+        'grades_inf': ['BIN', 'BIN/k', 'INF', 'INF/k', 'DAV', 'DAV/k', 'AIN'],
+        'grades_fyz': ['mBMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k'],
+        'grades_bio': ['mBMF', 'BIN', 'BIN/k'],
+        'grades_che': ['mBMF', 'BIN', 'BIN/k'],
     }
 
     # Set labels for grades of respective study years based on
