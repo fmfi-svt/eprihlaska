@@ -54,6 +54,7 @@ dependencies = [
   "munch>=4.0.0,<5",
   "urllib3==2.6.0",
   "pypdftk>=0.5",
+  "votr",
 ]
 
 [tool.uv]
@@ -63,6 +64,9 @@ dev-dependencies = [
   "openpyxl>=3.1.5",
   "xlrd>=2.0.1",
 ]
+
+[tool.uv.sources]
+votr = { git = "https://github.com/fmfi-svt/votr.git" }
 
 [build-system]
 requires = ["hatchling"]

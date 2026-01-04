@@ -345,11 +345,5 @@ class SignupForm(FlaskForm):
     submit = SubmitField(label=c.SIGNUP)
 
 
-class AIS2CookieForm(FlaskForm):
-    jsessionid = StringField(label='JSESSIONID',
-                             validators=[validators.DataRequired()])
-    submit = SubmitField(label=c.SUBMIT)
-
-
 class AIS2SubmitForm(FlaskForm):
     submit = SubmitField(label=c.CONTINUE)
