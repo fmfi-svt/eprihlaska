@@ -724,6 +724,10 @@ def logout():
 @app.route('/new_password/<hash>', methods=['GET', 'POST'])
 def forgotten_password_hash(hash):
     token = ForgottenPasswordToken.query.filter_by(hash=hash).first()
+    if not token:
+        flash(consts.INVALID_TOKEN_MSG, 'error')
+        return redirect(url_for('forgotten_password'))
+
     valid_time = (token.valid_until - datetime.datetime.now()).total_seconds()
     if token and token.valid and valid_time > 0:
         form = NewPasswordForm()
