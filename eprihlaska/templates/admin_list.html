@@ -47,8 +47,8 @@
             {% endif %}
 
             {% if app.state.value == 2 %}
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_process', id=app.id) }}">Preklopiť na BETU</a>
-            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', id=app.id) }}">Preklopiť</a>
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', ais_instance='beta', process_type='none', id=app.id) }}">Preklopiť na BETU</a>
+            <a class="btn btn-xs btn-default" href="{{ url_for('admin_ais2_process', ais_instance='prod', process_type='none', id=app.id) }}">Preklopiť</a>
             {% endif %}
           </div>
           <br />
@@ -106,7 +106,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12 text-right">
-        <a href="https://login.uniba.sk/logout.cgi"><strong>Odhlásiť sa</strong></a>
+        <a href="{{ url_for('logout') }}"><strong>Odhlásiť sa</strong></a>
       </div>
     </div>
     <div class="row">

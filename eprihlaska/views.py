@@ -1,3 +1,5 @@
+import pickle
+from urllib.parse import quote_plus
 from flask import (render_template, flash, redirect, session, request, url_for,
                    make_response, send_from_directory)
 import flask.json
@@ -9,7 +11,7 @@ from eprihlaska.forms import (StudyProgrammeForm, PersonalDataForm,
                               AdmissionWaiversForm, FinalForm,
                               ReceiptUploadForm, LoginForm, SignupForm,
                               ForgottenPasswordForm, NewPasswordForm,
-                              AIS2CookieForm, AIS2SubmitForm)
+                              AIS2SubmitForm)
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 import datetime
@@ -98,9 +100,17 @@ def save_form(form):
     save_current_session_to_DB()
 
 
+def current_session_to_json():
+    # Don't store internal keys used by flask (e.g. "_flashes"), flask-login
+    # (e.g. "_user_id", "_fresh", "_id") and our admin ("_votr_context_*") in
+    # the SQL database.
+    filtered = { k: v for k, v in session.items() if not k.startswith('_') }
+    return flask.json.dumps(filtered)
+
+
 def save_current_session_to_DB():
     app = ApplicationForm.query.filter_by(user_id=current_user.id).first()
-    app.application = flask.json.dumps(dict(session))
+    app.application = current_session_to_json()
     db.session.commit()
 
 
@@ -126,7 +136,7 @@ def load_session():
             if 'application_submitted' in session:
                 del session['application_submitted']
 
-            app.application = flask.json.dumps(dict(session))
+            app.application = current_session_to_json()
             db.session.commit()
 
         session.modified = True
@@ -469,7 +479,7 @@ def final():
             save_form(form)
 
             session['application_submitted'] = True
-            app_form.application = flask.json.dumps(dict(session))
+            app_form.application = current_session_to_json()
             app_form.state = ApplicationStates.submitted
             app_form.submitted_at = datetime.datetime.now()
             db.session.commit()
@@ -692,7 +702,7 @@ def signup():
         new_application_form = ApplicationForm(user_id=new_user.id)
         # FIXME: band-aid for last_updated_at
         new_application_form.last_updated_at = datetime.datetime.now()
-        new_application_form.application = flask.json.dumps(dict(session))
+        new_application_form.application = current_session_to_json()
         db.session.add(new_application_form)
         db.session.commit()
 
@@ -712,12 +722,14 @@ def signup():
 @app.route('/logout', methods=['GET'])
 @login_required
 def logout():
-    # Clear out the session
-    keys = list(session.keys()).copy()
-    for k in keys:
-        session.pop(k)
-
     logout_user()
+    session.clear()
+
+    if request.environ.get('REMOTE_USER'):
+        # Admin logout: clear our session, mod_shib session, and IdP session.
+        # (return parameter doesn't matter, Shibboleth IdP ignores it.)
+        return redirect('/Shibboleth.sso/Logout?return=/')
+
     return redirect(url_for('index'))
 
 
@@ -792,7 +804,7 @@ def create_or_get_user_and_login(site, token, name, surname, email):
         new_application_form = ApplicationForm(user_id=user.id)
         # FIXME: band-aid for last_updated_at
         new_application_form.last_updated_at = datetime.datetime.now()
-        new_application_form.application = flask.json.dumps(dict(session))
+        new_application_form.application = current_session_to_json()
         db.session.add(new_application_form)
         db.session.commit()
 
@@ -968,30 +980,66 @@ def admin_file_download(id, uuid):
     return send_from_directory(receipt_dir, file, as_attachment=True)
 
 
-def get_cosign_cookies():
-    name = request.environ['COSIGN_SERVICE']
-    value = request.cookies[name]
-    filename = name + '=' + value.partition('/')[0]
-    result = {}
-    with open(os.path.join(app.config['COSIGN_PROXY_DIR'],
-                           filename)) as f:
-        for line in f:
-            # Remove starting "x" and everything after the space.
-            name, _, value = line[1:].split()[0].partition('=')
-            result[name] = value
-    return result
-
-
-@app.route('/admin/ais_test')
+@app.route('/admin/init_votr/<any(prod,beta):ais_instance>')
 @require_remote_user
-def admin_ais_test():
-    from .ais_utils import (create_context, test_ais)
-    cosign_cookies = get_cosign_cookies()
-    ctx = create_context(cosign_cookies,
-                         origin='ais2.uniba.sk')
-    # Do log in
-    ctx.request_html('/ais/loginCosign.do', method='POST')
-    test_ais(ctx)
+def admin_init_votr(ais_instance):
+    next = request.args['next']
+    if not next.startswith('/admin/'):
+        return 'Bad next', 400
+
+    from .ais_utils import create_context
+    votr_context = create_context(
+        my_entity_id=app.config['MY_ENTITY_ID'],
+        andrvotr_api_key=app.config['ANDRVOTR_API_KEY'],
+        andrvotr_authority_token=request.environ['ANDRVOTR_AUTHORITY_TOKEN'],
+        beta=(ais_instance == 'beta'),
+    )
+    # flask-session docs say it'll stop using pickle in the future.
+    # Wrap the votr_context in our own pickle.
+    session[f'_votr_context_{ais_instance}'] = pickle.dumps(votr_context, pickle.HIGHEST_PROTOCOL)
+
+    return redirect(next)
+
+
+def _redirect_to_init_votr(ais_instance):
+    # First time we visited an admin page that requires votr_context?
+    # Or has AIS login expired?
+    # 1. Re-login with mod_shib to get a fresh andrvotr authority token.
+    # 2. Create a votr_context and store it in the flask session.
+    # 3. Redirect back here.
+    target = url_for('admin_init_votr', ais_instance=ais_instance, next=request.full_path)
+    return redirect(f'/Shibboleth.sso/Login?target={quote_plus(target)}')
+
+
+def require_votr_context(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        ais_instance = kwargs['ais_instance']
+        session_key = f'_votr_context_{ais_instance}'
+        if not session.get(session_key):
+            return _redirect_to_init_votr(ais_instance)
+
+        votr_context = pickle.loads(session[session_key])
+
+        from aisikl.app import check_connection
+        from aisikl.exceptions import LoggedOutError
+        try:
+            check_connection(votr_context)
+        except LoggedOutError:
+            return _redirect_to_init_votr(ais_instance)
+
+        result = func(*args, **kwargs, votr_context=votr_context)
+        session[session_key] = pickle.dumps(votr_context, pickle.HIGHEST_PROTOCOL)
+        return result
+    return wrapper
+
+
+@app.route('/admin/ais_test/<any(prod,beta):ais_instance>')
+@require_remote_user
+@require_votr_context
+def admin_ais_test(ais_instance, votr_context):
+    from .ais_utils import test_ais
+    test_ais(votr_context)
     return redirect(url_for('admin_list'))
 
 
@@ -1102,69 +1150,29 @@ def admin_scio_stats():
                     mimetype='text/tsv', headers=headers)
 
 
-@app.route('/admin/ais2_process/<id>', methods=['GET', 'POST'])
+@app.route('/admin/ais2_process/<any(prod,beta):ais_instance>/<any(none,fill,no_fill):process_type>/<id>', methods=['GET', 'POST'])
 @require_remote_user
-def admin_ais2_process(id):
+@require_votr_context
+def admin_ais2_process(ais_instance, process_type, id, votr_context):
     application = ApplicationForm.query.get(id)
 
     form = AIS2SubmitForm()
-    return send_application_to_ais2(id, application, form,
-                                    process_type=None, beta=False)
 
-
-@app.route('/admin/ais2_process/<id>/<process_type>', methods=['GET', 'POST'])
-def admin_ais2_process_special(id, process_type):
-    application = ApplicationForm.query.get(id)
-
-    form = AIS2SubmitForm()
-    return send_application_to_ais2(id, application, form,
-                                    process_type=process_type, beta=False)
-
-
-@app.route('/admin/process/<id>', methods=['GET', 'POST'])
-@require_remote_user
-def admin_process(id):
-    application = ApplicationForm.query.get(id)
-
-    form = AIS2SubmitForm()
-    return send_application_to_ais2(id, application, form, None, beta=True)
-
-
-@app.route('/admin/process/<id>/<process_type>', methods=['GET', 'POST'])
-def admin_process_special(id, process_type):
-    application = ApplicationForm.query.get(id)
-
-    form = AIS2CookieForm()
-    return send_application_to_ais2(id, application, form, process_type,
-                                    beta=True)
-
-
-def send_application_to_ais2(id, application, form, process_type, beta=False):
-    from .ais_utils import (create_context, save_application_form)
+    from .ais_utils import save_application_form
     if form.validate_on_submit():
-        origin = 'ais2.uniba.sk'
-        if beta:
-            origin = 'ais2-beta.uniba.sk'
-
-        cosign_cookies = get_cosign_cookies()
-        ctx = create_context(cosign_cookies,
-                             origin=origin)
-        # Do log in
-        ctx.request_html('/ais/loginCosign.do', method='POST')
-
         ais2_output = None
         error_output = None
         notes = {}
 
         logfile = None
         try:
-            if beta:
+            if ais_instance == 'beta':
                 import gzip
                 import random
                 logfile = gzip.open('/tmp/log_%s_%s' % (id, random.randrange(10000)), 'wt', encoding='utf8')
-                ctx.logger.log_file = logfile
+                votr_context.logger.log_file = logfile
 
-            ais2_output, notes = save_application_form(ctx,
+            ais2_output, notes = save_application_form(votr_context,
                                                        application,
                                                        LISTS,
                                                        id,
@@ -1190,7 +1198,7 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
 
         # Only update the application state of it is not sent to beta and the
         # 'person_exists' note is not added
-        if not beta and error_output is None and 'person_exists' not in notes:
+        if ais_instance != 'beta' and error_output is None and 'person_exists' not in notes:
             application.state = ApplicationStates.processed
             db.session.commit()
 
@@ -1199,13 +1207,14 @@ def send_application_to_ais2(id, application, form, process_type, beta=False):
                                ais2_output=ais2_output,
                                notes=notes, id=id,
                                error_output=error_output,
-                               beta=beta, process_type=process_type,
+                               ais_instance=ais_instance,
+                               process_type=process_type,
                                session=sess,
                                lists=LISTS)
 
     return render_template('admin_process.html',
                            form=form, id=id,
-                           beta=beta)
+                           ais_instance=ais_instance)
 
 
 @app.route('/admin/impersonate/list')
