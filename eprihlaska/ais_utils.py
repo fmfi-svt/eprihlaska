@@ -198,7 +198,8 @@ def _save_application_form(
     # Opyta sa nas to na stupen studia
     selected_stupen = None
     for idx, option in enumerate(app.d.stupenComboBox.options):
-        if option.title == PRIHLASKA_DEGREE[study_programme_type]:
+        # a0 is NBSP, which is sometimes there :(
+        if option.title.replace("\xa0", " ") == PRIHLASKA_DEGREE[study_programme_type]:
             selected_stupen = idx
             break
 
