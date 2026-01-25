@@ -66,7 +66,7 @@ def test_ais(ctx):
 
 
 def check_application_exists(ctx, application_id, application_type) -> bool:
-    note_url = url_for("admin_view", id=application_id, _external=True)
+    expected_note = f"EP#{application_id}{application_type}"
 
     app, prev_ops = Application.open(ctx, VSPK014)
 
@@ -78,8 +78,7 @@ def check_application_exists(ctx, application_id, application_type) -> bool:
     app.d.akademickyRokComboBox.select(0)
     app.d.potvrditRokButton.click()
 
-    # Do tohto pola nevieme napisat celu adresu, dame vyhladavat len podla casti.
-    app.d.poznamkaTextField.write(f"/view/{application_id}")
+    app.d.poznamkaTextField.write(expected_note)
 
     with app.collect_operations() as ops:
         app.d.enterButton.click()
@@ -94,10 +93,7 @@ def check_application_exists(ctx, application_id, application_type) -> bool:
     for row in rows:
         note = row["poznamka"].split("\n")
 
-        if note_url not in note:
-            continue
-
-        if f"typ:{application_type}" not in note:
+        if expected_note not in note:
             continue
 
         return True
@@ -525,8 +521,7 @@ def _save_application_form(
         poznamka_items.append("ExternaMaturitaMat")
 
     poznamka_items.append("vsetky programy: " + (", ".join(session["study_programme"])))
-    poznamka_items.append(url_for("admin_view", id=application_id, _external=True))
-    poznamka_items.append(f"typ:{study_programme_type}")
+    poznamka_items.append(f"EP#{application_id}{study_programme_type}")
     poznamka_text = "\n".join(poznamka_items)
 
     app.d.poznamkaTextArea.write(poznamka_text)
