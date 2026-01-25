@@ -112,10 +112,14 @@ class NoValidProgramme(Exception):
 def save_application_form(
     ctx, application, lists, application_id, process_type
 ) -> tuple[str | None, dict]:
+    session = flask.json.loads(application.application)
+
     types = [STUDY_PROGRAMME_BACHELORS, STUDY_PROGRAMME_MASTERS]
     ais2_output = None
     notes = {}
     created_some = False
+
+    has_birth_no = len(session["birth_no"].strip()) != 0
 
     for type_ in types:
         try:
@@ -125,8 +129,8 @@ def save_application_form(
                 lists,
                 application_id,
                 process_type
-                if not created_some
-                else "no_fill",  # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili.
+                if not created_some or not has_birth_no
+                else "no_fill",  # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili. Okrem ludi bez RC, tych vzdy vyrabame rovnako.
                 type_,
             )
             created_some = True
