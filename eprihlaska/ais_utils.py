@@ -171,7 +171,7 @@ def _save_application_form(
         raise NoValidProgramme()
 
     if check_application_exists(ctx, application_id, study_programme_type):
-        return None, {}
+        return None, {"application_exists": True}
 
     app, prev_ops = Application.open(ctx, VSPK014)
 
