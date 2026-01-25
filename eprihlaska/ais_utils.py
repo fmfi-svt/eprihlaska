@@ -520,6 +520,7 @@ def _save_application_form(
     if "ExtMat" in checkboxes:
         poznamka_items.append("ExternaMaturitaMat")
 
+    poznamka_items.append("vsetky programy: " + (", ".join(session["study_programme"])))
     poznamka_items.append(url_for("admin_view", id=application_id, _external=True))
     poznamka_items.append(f"typ:{study_programme_type}")
     poznamka_text = "\n".join(poznamka_items)
