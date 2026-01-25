@@ -202,7 +202,7 @@ def _save_application_form(
             selected_stupen = idx
             break
 
-    if not selected_stupen:
+    if selected_stupen is None:
         raise Exception(
             f"Expected option {PRIHLASKA_DEGREE[study_programme_type]} in VSPK064 dialog, but not found."
         )
