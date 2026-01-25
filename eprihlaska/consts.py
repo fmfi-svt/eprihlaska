@@ -169,8 +169,8 @@ STUDY_PROGRAMME_TYPES = defaultdict(
 )
 
 PRIHLASKA_DEGREE = {
-    STUDY_PROGRAMME_BACHELORS: "I. - bakalársky stupeň",
-    STUDY_PROGRAMME_MASTERS: "I.II. - úplný vysokoškolský stupeň",
+    STUDY_PROGRAMME_BACHELORS: "I.",
+    STUDY_PROGRAMME_MASTERS: "I.II.",
 }
 
 ADDRESS_COUNTRY = _("Štát")
