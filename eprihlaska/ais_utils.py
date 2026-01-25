@@ -281,7 +281,10 @@ def _save_application_form(
 
     # Turn off automatic generation of ID numbers for applications.
     app.d.ecAutomatickyCheckBox.set_to(False)
-    app.d.evidCisloNumberControl.write(str(application.id))
+    if study_programme_type == STUDY_PROGRAMME_BACHELORS:
+        app.d.evidCisloNumberControl.write(str(application.id))
+    else:
+        app.d.evidCisloNumberControl.write(str(application.id + 2000))
 
     # If we are in the 'no_fill' process_type, the personal data and address
     # should be taken from whatever AIS2 provides
