@@ -78,7 +78,8 @@ def check_application_exists(ctx, application_id, application_type) -> bool:
     app.d.akademickyRokComboBox.select(0)
     app.d.potvrditRokButton.click()
 
-    app.d.poznamkaTextField.write(note_url)
+    # Do tohto pola nevieme napisat celu adresu, dame vyhladavat len podla casti.
+    app.d.poznamkaTextField.write(f"/view/{application_id}")
 
     with app.collect_operations() as ops:
         app.d.enterButton.click()
