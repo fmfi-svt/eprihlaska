@@ -2,9 +2,16 @@ import sys
 import re
 import flask.json
 from flask import url_for
-from aisikl.app import Application  # noqa
-import aisikl.portal  # noqa
-from fladgejt.login import create_client  # noqa
+from aisikl.app import Application
+import aisikl.portal
+from fladgejt.login import create_client
+
+from eprihlaska.consts import (
+    PRIHLASKA_DEGREE,
+    STUDY_PROGRAMME_BACHELORS,
+    STUDY_PROGRAMME_MASTERS,
+    STUDY_PROGRAMME_TYPES,
+)
 
 
 VSPK014 = "/ais/servlets/WebUIServlet?appClassName=ais.gui.vs.pk.VSPK014App&kodAplikacie=VSPK014&uiLang=SK"
@@ -58,19 +65,126 @@ def test_ais(ctx):
         app.d.enterButton.click()
 
 
-def save_application_form(ctx, application, lists, application_id, process_type):
-    session = flask.json.loads(application.application)
+def check_application_exists(ctx, application_id, application_type) -> bool:
+    note_url = url_for("admin_view", id=application_id, _external=True)
 
+    app, prev_ops = Application.open(ctx, VSPK014)
+
+    # Ocakavame, ze sa otvoria dve okna
+    app.awaited_open_main_dialog([prev_ops[0]])
+    app.awaited_open_dialog([prev_ops[1]])
+
+    # Vyberieme prvy akademicky rok (ocakavane nasledujuci)
+    app.d.akademickyRokComboBox.select(0)
+    app.d.potvrditRokButton.click()
+
+    app.d.poznamkaTextField.write(note_url)
+
+    with app.collect_operations() as ops:
+        app.d.enterButton.click()
+    app.awaited_close_dialog(ops)
+
+    # Nacital sa zoznam prihlasok.
+    rows = app.d.ZoznamPodanychPrihlasokTable.all_rows()
+    if not rows:
+        return False
+
+    for row in rows:
+        note = row["poznamka"].split("\n")
+
+        if note_url not in note:
+            continue
+
+        if f"typ:{application_type}" not in note:
+            continue
+
+        return True
+
+    return False
+
+
+class NoValidProgramme(Exception):
+    pass
+
+
+def save_application_form(
+    ctx, application, lists, application_id, process_type
+) -> tuple[str | None, dict]:
+    types = [STUDY_PROGRAMME_BACHELORS, STUDY_PROGRAMME_MASTERS]
+    ais2_output = None
+    notes = {}
+    created_some = False
+
+    for type_ in types:
+        try:
+            this_process_type = process_type
+            if process_type == "none" and created_some:
+                # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili.
+                process_type = "no_fill"
+
+            this_ais2_output, this_notes = _save_application_form(
+                ctx,
+                application,
+                lists,
+                application_id,
+                this_process_type,
+                type_,
+            )
+            created_some = True
+        except NoValidProgramme:
+            continue
+
+        if "person_exists" in this_notes:
+            return this_ais2_output, this_notes
+
+        notes.update(this_notes)
+        if this_ais2_output:
+            if ais2_output:
+                ais2_output += (
+                    "\n------------------------------------\n" + this_ais2_output
+                )
+            else:
+                ais2_output = this_ais2_output
+
+    return ais2_output, notes
+
+
+def _save_application_form(
+    ctx,
+    application,
+    lists,
+    application_id,
+    process_type,
+    study_programme_type,
+) -> tuple[str | None, dict]:
+    session = flask.json.loads(application.application)
     notes = {}
 
-    apps = aisikl.portal.get_apps(ctx)
-    app, prev_ops = Application.open(ctx, apps["VSPK014"].url)
+    study_programmes = []
+    for prog in session["study_programme"]:
+        if prog == "_":
+            continue
+        if STUDY_PROGRAMME_TYPES[prog] != study_programme_type:
+            continue
+        study_programmes.append(prog)
+
+    if not study_programmes:
+        raise NoValidProgramme()
+
+    if check_application_exists(ctx, application_id, study_programme_type):
+        return None, {}
+
+    app, prev_ops = Application.open(ctx, VSPK014)
 
     # Otvori sa dialog a v nom dalsi dialog
     dlg = app.awaited_open_main_dialog([prev_ops[0]])
     dlg = app.awaited_open_dialog([prev_ops[1]])
 
-    # Zavrieme ten dalsi dialog
+    # Vyberieme prvy akademicky rok (ocakavane nasledujuci)
+    app.d.akademickyRokComboBox.select(0)
+    app.d.potvrditRokButton.click()
+
+    # Zavrieme filter
     with app.collect_operations() as ops:
         app.d.enterButton.click()
     dlg = app.awaited_close_dialog(ops)
@@ -82,7 +196,18 @@ def save_application_form(ctx, application, lists, application_id, process_type)
     dlg = app.awaited_open_dialog(ops)
 
     # Opyta sa nas to na stupen studia
-    app.d.stupenComboBox.select(0)
+    selected_stupen = None
+    for idx, option in enumerate(app.d.stupenComboBox.options):
+        if option.title == PRIHLASKA_DEGREE[study_programme_type]:
+            selected_stupen = idx
+            break
+
+    if not selected_stupen:
+        raise Exception(
+            f"Expected option {PRIHLASKA_DEGREE[study_programme_type]} in VSPK064 dialog, but not found."
+        )
+
+    app.d.stupenComboBox.select(selected_stupen)
 
     with app.collect_operations() as ops:
         app.d.enterButton.click()
@@ -232,67 +357,31 @@ def save_application_form(ctx, application, lists, application_id, process_type)
             app.d.pouzitPSAdresuCheckBox.toggle()
             fill_in_address("correspondence_address", app, session, lists)
 
-    # Vyplnime prvy odbor
-    app.d.program1TextField.write(session["study_programme"][0])
+    programme_controls = [
+        ("program1TextField", "button12", "c11Button"),
+        ("program2TextField", "button13", "c12Button"),
+        ("program3TextField", "button14", "c13Button"),
+    ]
 
-    # Nechame doplnit cely nazov odboru
-    with app.collect_operations() as ops:
-        app.d.button12.click()
+    for i, prog in enumerate(study_programmes):
+        field, expand, confirm = programme_controls[i]
 
-    print("After filling in study programme: {}".format(ops), file=sys.stderr)
-
-    # Deal with the dialog that opens up when a prefix of a programme
-    # matches various options, e.g. FYZ and FYZ/k
-    choose_study_programme(app, ops, session["study_programme"][0])
-
-    # Nechame doplit povinne predmety
-    with app.collect_operations() as ops:
-        app.d.c11Button.click()
-
-    second_study_programme = None
-    third_study_programme = None
-
-    if session["study_programme"][2] != "_":
-        third_study_programme = session["study_programme"][2]
-
-    if session["study_programme"][1] == "_" and session["study_programme"][2] != "_":
-        second_study_programme = session["study_programme"][2]
-        third_study_programme = "_"
-
-    if session["study_programme"][1] != "_":
-        second_study_programme = session["study_programme"][1]
-
-    # Second study programme
-    if second_study_programme is not None:
-        app.d.program2TextField.write(second_study_programme)
+        # Vyplnime odbor
+        getattr(app.d, field).write(prog)
 
         # Nechame doplnit cely nazov odboru
         with app.collect_operations() as ops:
-            app.d.button13.click()
+            getattr(app.d, expand).click()
+
+        print("After filling in study programme: {}".format(ops), file=sys.stderr)
 
         # Deal with the dialog that opens up when a prefix of a programme
         # matches various options, e.g. FYZ and FYZ/k
-        choose_study_programme(app, ops, second_study_programme)
+        choose_study_programme(app, ops, prog)
 
         # Nechame doplit povinne predmety
         with app.collect_operations() as ops:
-            app.d.c12Button.click()
-
-    # Third study programme
-    if third_study_programme not in [None, "_"]:
-        app.d.program3TextField.write(third_study_programme)
-
-        # Nechame doplnit cely nazov odboru
-        with app.collect_operations() as ops:
-            app.d.button14.click()
-
-        # Deal with the dialog that opens up when a prefix of a programme
-        # matches various options, e.g. FYZ and FYZ/k
-        choose_study_programme(app, ops, third_study_programme)
-
-        # Nechame doplit povinne predmety
-        with app.collect_operations() as ops:
-            app.d.c13Button.click()
+            getattr(app.d, confirm).click()
 
     app.d.rokZaverSkuskyNumberControl.write(
         str(session["basic_personal_data"]["matura_year"])
@@ -427,6 +516,7 @@ def save_application_form(ctx, application, lists, application_id, process_type)
         poznamka_items.append("ExternaMaturitaMat")
 
     poznamka_items.append(url_for("admin_view", id=application_id, _external=True))
+    poznamka_items.append(f"typ:{study_programme_type}")
     poznamka_text = "\n".join(poznamka_items)
 
     app.d.poznamkaTextArea.write(poznamka_text)

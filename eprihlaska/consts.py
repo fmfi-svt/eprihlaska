@@ -1,3 +1,4 @@
+from collections import defaultdict
 from flask_babel import gettext as _
 from flask_uploads import UploadSet
 from .utils import choices_from_csv, city_formatter, okres_fixer
@@ -7,15 +8,15 @@ import enum
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-SELECT_STUDY_PROGRAMME = _("Vyberte si, prosím, aspoň prvý študijný program") # noqa
-SELECT_STUDY_PROGRAMME_ONCE = _('Vyberte si, prosím, študijný program najviac jeden krát') # noqa
+SELECT_STUDY_PROGRAMME = _("Vyberte si, prosím, aspoň prvý študijný program")  # noqa
+SELECT_STUDY_PROGRAMME_ONCE = _(
+    "Vyberte si, prosím, študijný program najviac jeden krát"
+)  # noqa
 NO_ACCESS_MSG = _("Nemáte oprávnenie pre prístup k danému prístupovému bodu")
 DEAN_LIST_MSG = _(
     "Na základe listu dekana nie je potrebné zadávať údaje o prospechu na strednej škole."
 )  # noqa
-LOGIN_CONGRATS_MSG = _(
-    "Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!"
-)  # noqa
+LOGIN_CONGRATS_MSG = _("Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!")  # noqa
 PASSWD_CHANGED_MSG = _(
     "Gratulujeme, Vaše heslo bolo nastavené! Prihláste sa ním, prosím, nižšie."
 )  # noqa
@@ -33,12 +34,8 @@ FLASH_MSG_DATA_NOT_SAVED = _(
 FLASH_MSG_FILL_FORM = _("Najprv, prosím, vyplňte formulár uvedený nižšie")
 FLASH_MSG_APP_SUBMITTED = _("Gratulujeme, Vaša prihláška bola podaná!")
 FLASH_MSG_WRONG_LOGIN = _("Nesprávne prihlasovacie údaje.")
-FLASH_MSG_AFTER_LOGIN = _(
-    "Gratulujeme, boli ste prihlásení do prostredia " "ePrihlaska!"
-)
-FLASH_MSG_RECEIPT_SUBMITTED = _(
-    "Priložený súbor s potvrdením o zaplatení bol " "uložený."
-)
+FLASH_MSG_AFTER_LOGIN = _("Gratulujeme, boli ste prihlásení do prostredia ePrihlaska!")
+FLASH_MSG_RECEIPT_SUBMITTED = _("Priložený súbor s potvrdením o zaplatení bol uložený.")
 FLASH_MSG_FILE_SUBMITTED = _("Priložený súbor bol úspešne uložený.")
 FLASH_MSG_FILE_REMOVED = _("Priložený súbor bol úspešne odstránený.")
 
@@ -88,9 +85,7 @@ PERSONAL_INFO_CHECK = _(
 
 DEAN_INV_LIST_YN = _("Dostal(a) som list od dekana")
 DEAN_INV_LIST_NO = _("Číslo listu od dekana")
-DEAN_INV_LIST_NO_DESC = _(
-    "Prosím, vyplňte číslo listu od dekana, ktorý ste dostali"
-)  # noqa
+DEAN_INV_LIST_NO_DESC = _("Prosím, vyplňte číslo listu od dekana, ktorý ste dostali")  # noqa
 
 PRG_MAT = _("Matematika")
 PRG_PMA = _("Poistná matematika")
@@ -163,6 +158,20 @@ STUDY_PROGRAMME_CHOICES = [
 ]
 
 STUDY_PROGRAMME_CHOICES_ACTIVE = STUDY_PROGRAMME_CHOICES
+
+STUDY_PROGRAMME_BACHELORS = "B"
+STUDY_PROGRAMME_MASTERS = "M"
+STUDY_PROGRAMME_TYPES = defaultdict(
+    lambda: STUDY_PROGRAMME_BACHELORS,
+    {
+        "mBMF": STUDY_PROGRAMME_MASTERS,
+    },
+)
+
+PRIHLASKA_DEGREE = {
+    STUDY_PROGRAMME_BACHELORS: "I. - bakalársky stupeň",
+    STUDY_PROGRAMME_MASTERS: "I.II. - úplný vysokoškolský stupeň",
+}
 
 ADDRESS_COUNTRY = _("Štát")
 ADDRESS_STREET = _("Ulica")
@@ -383,7 +392,9 @@ GRADES_FYZ = _("Známky z fyziky")
 GRADES_BIO = _("Známky z biológie")
 GRADES_CHE = _("Známky z chémie")
 
-GRADES_INFO = _("Uvádzajte iba známky získané počas štúdia na strednej škole so sídlom na území Európskej únie.")
+GRADES_INFO = _(
+    "Uvádzajte iba známky získané počas štúdia na strednej škole so sídlom na území Európskej únie."
+)
 
 GRADE_ERR = _("Zle zadaná známka. Akceptované známky sú 1 až 5.")
 
