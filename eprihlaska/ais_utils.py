@@ -260,6 +260,7 @@ def _save_application_form(
                     app.confirm_box(-1)
 
             elif len(ops) == 1:
+                app.force_close()
                 raise Exception("Unexpected ops {}".format(ops))
 
     # If the priezviskoTextField is not empty, it most probably means the
