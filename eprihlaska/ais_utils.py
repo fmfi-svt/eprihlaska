@@ -86,6 +86,7 @@ def check_application_exists(ctx, application_id, application_type) -> bool:
 
     # Nacital sa zoznam prihlasok.
     rows = app.d.ZoznamPodanychPrihlasokTable.all_rows()
+    app.force_close()
     if not rows:
         return False
 
@@ -117,17 +118,14 @@ def save_application_form(
 
     for type_ in types:
         try:
-            this_process_type = process_type
-            if process_type == "none" and created_some:
-                # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili.
-                process_type = "no_fill"
-
             this_ais2_output, this_notes = _save_application_form(
                 ctx,
                 application,
                 lists,
                 application_id,
-                this_process_type,
+                process_type
+                if not created_some
+                else "no_fill",  # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili.
                 type_,
             )
             created_some = True
@@ -203,6 +201,7 @@ def _save_application_form(
             break
 
     if selected_stupen is None:
+        app.force_close()
         raise Exception(
             f"Expected option {PRIHLASKA_DEGREE[study_programme_type]} in VSPK064 dialog, but not found."
         )
@@ -275,6 +274,7 @@ def _save_application_form(
             "email": app.d.emailPrivateTextField.value,
         }
         # end the process here by returning
+        app.force_close()
         return None, notes
 
     # Turn off automatic generation of ID numbers for applications.
@@ -554,6 +554,7 @@ def _save_application_form(
     print("errors: {}".format(errors), file=sys.stderr)
 
     app.awaited_close_dialog(ops)
+    app.force_close()
     return errors, notes
 
 
