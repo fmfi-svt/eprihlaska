@@ -43,7 +43,7 @@
       <strong>AIS2 výstup:</strong> <br /><br />
       {{ ais2_output|safe }}
 
-      {% if notes['email_exists'] or notes['app_id_exists'] or notes['person_exists'] %}
+      {% if notes %}
       <br /><br />
       <strong>Poznámky zo spracovania prihlášky:</strong>
       <ul>
@@ -65,6 +65,11 @@
         </li>
         {% endif  %}
 
+        {% if notes['application_exists'] %}
+        <li>
+          V systéme AIS2 už existovala preklopená prihláška, systém ju pri preklápaní preskočil.
+        </li>
+        {% endif  %}
       </ul>
 
         {% if notes['person_exists'] %}
