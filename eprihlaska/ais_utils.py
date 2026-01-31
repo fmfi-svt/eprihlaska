@@ -7,6 +7,7 @@ import aisikl.portal
 from fladgejt.login import create_client
 
 from eprihlaska.consts import (
+    MASTERS_ID_OFFSET,
     PRIHLASKA_DEGREE,
     STUDY_PROGRAMME_BACHELORS,
     STUDY_PROGRAMME_MASTERS,
@@ -91,7 +92,7 @@ def check_application_exists(ctx, application_id, application_type) -> bool:
         return False
 
     for row in rows:
-        note = row["poznamka"].split("\n")
+        note = row["poznamka"].split()
 
         if expected_note not in note:
             continue
@@ -284,7 +285,7 @@ def _save_application_form(
     if study_programme_type == STUDY_PROGRAMME_BACHELORS:
         app.d.evidCisloNumberControl.write(str(application.id))
     else:
-        app.d.evidCisloNumberControl.write(str(application.id + 2000))
+        app.d.evidCisloNumberControl.write(str(application.id + MASTERS_ID_OFFSET))
 
     # If we are in the 'no_fill' process_type, the personal data and address
     # should be taken from whatever AIS2 provides
