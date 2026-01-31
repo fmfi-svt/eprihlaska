@@ -2,18 +2,29 @@ import sys
 import re
 import flask.json
 from flask import url_for
-from aisikl.app import Application # noqa
-import aisikl.portal # noqa
-from fladgejt.login import create_client # noqa
+from aisikl.app import Application
+import aisikl.portal
+from fladgejt.login import create_client
+
+from eprihlaska.consts import (
+    MASTERS_ID_OFFSET,
+    PRIHLASKA_DEGREE,
+    STUDY_PROGRAMME_BACHELORS,
+    STUDY_PROGRAMME_MASTERS,
+    STUDY_PROGRAMME_TYPES,
+)
+
+
+VSPK014 = "/ais/servlets/WebUIServlet?appClassName=ais.gui.vs.pk.VSPK014App&kodAplikacie=VSPK014&uiLang=SK"
 
 
 def create_context(*, my_entity_id, andrvotr_api_key, andrvotr_authority_token, beta):
     server = dict(
-        login_types=('saml_andrvotr',),
-        ais_url=('https://ais2-beta.uniba.sk/' if beta else 'https://ais2.uniba.sk/'),
+        login_types=("saml_andrvotr",),
+        ais_url=("https://ais2-beta.uniba.sk/" if beta else "https://ais2.uniba.sk/"),
     )
     params = dict(
-        type='saml_andrvotr',
+        type="saml_andrvotr",
         my_entity_id=my_entity_id,
         andrvotr_api_key=andrvotr_api_key,
         andrvotr_authority_token=andrvotr_authority_token,
@@ -24,7 +35,7 @@ def create_context(*, my_entity_id, andrvotr_api_key, andrvotr_authority_token, 
 def test_ais(ctx):
     # Open 'cierna skrynka'
     apps = aisikl.portal.get_apps(ctx)
-    app, prev_ops = Application.open(ctx, apps['AS042'].url)
+    app, prev_ops = Application.open(ctx, apps["AS042"].url)
 
     # Open main dialog
     dlg = app.awaited_open_main_dialog([prev_ops[0]])
@@ -46,31 +57,134 @@ def test_ais(ctx):
     # Opens a dialog
     dlg = app.awaited_open_dialog(ops)
     # Write a short message
-    app.d.textTextArea.write('Dobry den pani prodekanka, toto prosim ignorujte, len testujem ten nestastny AIS.')
+    app.d.textTextArea.write(
+        "Dobry den pani prodekanka, toto prosim ignorujte, len testujem ten nestastny AIS."
+    )
 
     # Confirm the message
     with app.collect_operations() as ops:
         app.d.enterButton.click()
 
 
-def save_application_form(ctx,
-                          application,
-                          lists,
-                          application_id,
-                          process_type):
+def check_application_exists(ctx, application_id, application_type) -> bool:
+    expected_note = f"EP#{application_id}{application_type}"
 
+    app, prev_ops = Application.open(ctx, VSPK014)
+
+    # Ocakavame, ze sa otvoria dve okna
+    app.awaited_open_main_dialog([prev_ops[0]])
+    app.awaited_open_dialog([prev_ops[1]])
+
+    # Vyberieme prvy akademicky rok (ocakavane nasledujuci)
+    app.d.akademickyRokComboBox.select(0)
+    app.d.potvrditRokButton.click()
+
+    app.d.poznamkaTextField.write(expected_note)
+
+    with app.collect_operations() as ops:
+        app.d.enterButton.click()
+    app.awaited_close_dialog(ops)
+
+    # Nacital sa zoznam prihlasok.
+    rows = app.d.ZoznamPodanychPrihlasokTable.all_rows()
+    app.force_close()
+    if not rows:
+        return False
+
+    for row in rows:
+        note = row["poznamka"].split()
+
+        if expected_note not in note:
+            continue
+
+        return True
+
+    return False
+
+
+class NoValidProgramme(Exception):
+    pass
+
+
+def save_application_form(
+    ctx, application, lists, application_id, process_type
+) -> tuple[str | None, dict]:
     session = flask.json.loads(application.application)
 
+    types = [STUDY_PROGRAMME_BACHELORS, STUDY_PROGRAMME_MASTERS]
+    ais2_output = None
+    notes = {}
+    created_some = False
+
+    has_birth_no = len(session["birth_no"].strip()) != 0
+
+    for type_ in types:
+        try:
+            this_ais2_output, this_notes = _save_application_form(
+                ctx,
+                application,
+                lists,
+                application_id,
+                process_type
+                if not created_some or not has_birth_no
+                else "no_fill",  # Ocakavame, ze pri druhej prihlaske bude clovek uz v AISe existovat, kedze sme ho vyrobili. Okrem ludi bez RC, tych vzdy vyrabame rovnako.
+                type_,
+            )
+            created_some = True
+        except NoValidProgramme:
+            continue
+
+        if "person_exists" in this_notes:
+            return this_ais2_output, this_notes
+
+        notes.update(this_notes)
+        if this_ais2_output:
+            if ais2_output:
+                ais2_output += (
+                    "\n------------------------------------\n" + this_ais2_output
+                )
+            else:
+                ais2_output = this_ais2_output
+
+    return ais2_output, notes
+
+
+def _save_application_form(
+    ctx,
+    application,
+    lists,
+    application_id,
+    process_type,
+    study_programme_type,
+) -> tuple[str | None, dict]:
+    session = flask.json.loads(application.application)
     notes = {}
 
-    apps = aisikl.portal.get_apps(ctx)
-    app, prev_ops = Application.open(ctx, apps['VSPK014'].url)
+    study_programmes = []
+    for prog in session["study_programme"]:
+        if prog == "_":
+            continue
+        if STUDY_PROGRAMME_TYPES[prog] != study_programme_type:
+            continue
+        study_programmes.append(prog)
+
+    if not study_programmes:
+        raise NoValidProgramme()
+
+    if check_application_exists(ctx, application_id, study_programme_type):
+        return None, {"application_exists": True}
+
+    app, prev_ops = Application.open(ctx, VSPK014)
 
     # Otvori sa dialog a v nom dalsi dialog
     dlg = app.awaited_open_main_dialog([prev_ops[0]])
     dlg = app.awaited_open_dialog([prev_ops[1]])
 
-    # Zavrieme ten dalsi dialog
+    # Vyberieme prvy akademicky rok (ocakavane nasledujuci)
+    app.d.akademickyRokComboBox.select(0)
+    app.d.potvrditRokButton.click()
+
+    # Zavrieme filter
     with app.collect_operations() as ops:
         app.d.enterButton.click()
     dlg = app.awaited_close_dialog(ops)
@@ -82,7 +196,19 @@ def save_application_form(ctx,
     dlg = app.awaited_open_dialog(ops)
 
     # Opyta sa nas to na stupen studia
-    app.d.stupenComboBox.select(0)
+    selected_stupen = None
+    for idx, option in enumerate(app.d.stupenComboBox.options):
+        if option.id == PRIHLASKA_DEGREE[study_programme_type]:
+            selected_stupen = idx
+            break
+
+    if selected_stupen is None:
+        app.force_close()
+        raise Exception(
+            f"Expected option {PRIHLASKA_DEGREE[study_programme_type]} in VSPK064 dialog, but not found."
+        )
+
+    app.d.stupenComboBox.select(selected_stupen)
 
     with app.collect_operations() as ops:
         app.d.enterButton.click()
@@ -99,15 +225,15 @@ def save_application_form(ctx,
     with app.collect_operations() as ops:
         app.d.button16.click()
 
-    app.d.kodStatTextField.write(session['nationality'])
+    app.d.kodStatTextField.write(session["nationality"])
 
     with app.collect_operations() as ops:
         app.d.button3.click()
 
     # If the birth number is not filled in, just skip the whole "guess the
     # person by their birth number" part
-    if len(session['birth_no'].strip()) != 0:
-        app.d.rodneCisloTextField.write(session['birth_no'])
+    if len(session["birth_no"].strip()) != 0:
+        app.d.rodneCisloTextField.write(session["birth_no"])
 
         # Click on relevant rodneCisloButton
         with app.collect_operations() as ops:
@@ -118,7 +244,7 @@ def save_application_form(ctx,
         # try openDialog and confirmBox and throw an exception otherwise
         while len(ops) != 0:
             # Close the dialog if some shows up
-            if len(ops) == 1 and ops[0].method == 'openDialog':
+            if len(ops) == 1 and ops[0].method == "openDialog":
                 app.awaited_open_dialog(ops)
 
                 with app.collect_operations() as ops:
@@ -131,177 +257,161 @@ def save_application_form(ctx,
 
             # It may happen that a confirmBox gets shown (for whatever reason).
             # Should that happen, the confirmBox should be just closed.
-            elif len(ops) == 1 and ops[0].method == 'confirmBox':
+            elif len(ops) == 1 and ops[0].method == "confirmBox":
                 with app.collect_operations() as ops:
                     app.confirm_box(-1)
 
             elif len(ops) == 1:
-                raise Exception('Unexpected ops {}'.format(ops))
+                app.force_close()
+                raise Exception("Unexpected ops {}".format(ops))
 
     # If the priezviskoTextField is not empty, it most probably means the
     # person is already registered in
-    if app.d.priezviskoTextField.value != '' and process_type == 'none':
-        notes['person_exists'] = {
-            'name': app.d.menoTextField.value,
-            'surname': app.d.priezviskoTextField.value,
-            'date_of_birth': app.d.datumNarodeniaDateControl.value,
-            'place_of_birth': app.d.sklonovanieNarTextField.value,
-            'phone': app.d.telefonTextField.value,
-            'email': app.d.emailPrivateTextField.value
+    if app.d.priezviskoTextField.value != "" and process_type == "none":
+        notes["person_exists"] = {
+            "name": app.d.menoTextField.value,
+            "surname": app.d.priezviskoTextField.value,
+            "date_of_birth": app.d.datumNarodeniaDateControl.value,
+            "place_of_birth": app.d.sklonovanieNarTextField.value,
+            "phone": app.d.telefonTextField.value,
+            "email": app.d.emailPrivateTextField.value,
         }
         # end the process here by returning
+        app.force_close()
         return None, notes
 
     # Turn off automatic generation of ID numbers for applications.
     app.d.ecAutomatickyCheckBox.set_to(False)
-    app.d.evidCisloNumberControl.write(str(application.id))
+    if study_programme_type == STUDY_PROGRAMME_BACHELORS:
+        app.d.evidCisloNumberControl.write(str(application.id))
+    else:
+        app.d.evidCisloNumberControl.write(str(application.id + MASTERS_ID_OFFSET))
 
     # If we are in the 'no_fill' process_type, the personal data and address
     # should be taken from whatever AIS2 provides
-    if process_type != 'no_fill':
-        app.d.menoTextField.write(session['basic_personal_data']['name'])
-        app.d.priezviskoTextField.write(session['basic_personal_data']['surname'])
-        if session['basic_personal_data']['surname'] != session['basic_personal_data']['born_with_surname']:
-            app.d.povPriezviskoTextField.write(session['basic_personal_data']['born_with_surname'])
+    if process_type != "no_fill":
+        app.d.menoTextField.write(session["basic_personal_data"]["name"])
+        app.d.priezviskoTextField.write(session["basic_personal_data"]["surname"])
+        if (
+            session["basic_personal_data"]["surname"]
+            != session["basic_personal_data"]["born_with_surname"]
+        ):
+            app.d.povPriezviskoTextField.write(
+                session["basic_personal_data"]["born_with_surname"]
+            )
 
         # This should basically never happen in production, but when testing,
         # it would be nice not to fail in case the application does not have
         # the submitted_at date filled in yet.
         if application.submitted_at is not None:
-            app.d.datumOdoslaniaDateControl.write(application.submitted_at.strftime('%d.%m.%Y'))
-        app.d.datumNarodeniaDateControl.write(session['date_of_birth'])
+            app.d.datumOdoslaniaDateControl.write(
+                application.submitted_at.strftime("%d.%m.%Y")
+            )
+        app.d.datumNarodeniaDateControl.write(session["date_of_birth"])
 
         # Sex selection
-        if session['sex'] == 'male':
+        if session["sex"] == "male":
             app.d.kodPohlavieRadioBox.select(0)
         else:
             app.d.kodPohlavieRadioBox.select(1)
 
-       #rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
-       ## FIXME: AIS2 hack
-       #if rodinny_stav_text == 'nezistený':
-       #    rodinny_stav_text = 'neurčené'
+        # rodinny_stav_text = lists['marital_status'][session['marital_status']].split(' - ')[0]
+        ## FIXME: AIS2 hack
+        # if rodinny_stav_text == 'nezistený':
+        #    rodinny_stav_text = 'neurčené'
 
-       #rodinny_stav_index = None
-       #for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
-       #    option_text = option.title.split('/')[0].lower()
-       #    if option_text == rodinny_stav_text:
-       #        rodinny_stav_index = idx
+        # rodinny_stav_index = None
+        # for idx, option in enumerate(app.d.kodRodinnyStavComboBox.options):
+        #    option_text = option.title.split('/')[0].lower()
+        #    if option_text == rodinny_stav_text:
+        #        rodinny_stav_index = idx
 
-       #if rodinny_stav_index is not None:
-       #    app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
+        # if rodinny_stav_index is not None:
+        #    app.d.kodRodinnyStavComboBox.select(rodinny_stav_index)
 
         # Clean up place of birth and state of birth
         with app.collect_operations() as ops:
             app.d.c30Button.click()
             app.d.c31Button.click()
 
-        if session['country_of_birth'] == '703':
-            place_of_birth_psc = lists['city_psc'][session['place_of_birth']]
-            select_city_by_psc_ciselnik_code(app,
-                                             place_of_birth_psc,
-                                             session['place_of_birth'],
-                                             app.d.sklonovanieNarTextField, app.d.vyberMiestoNarodeniabutton)
+        if session["country_of_birth"] == "703":
+            place_of_birth_psc = lists["city_psc"][session["place_of_birth"]]
+            select_city_by_psc_ciselnik_code(
+                app,
+                place_of_birth_psc,
+                session["place_of_birth"],
+                app.d.sklonovanieNarTextField,
+                app.d.vyberMiestoNarodeniabutton,
+            )
         else:
-            app.d.statNarodeniaTextField.write(lists['country'][session['country_of_birth']]) # noqa
+            app.d.statNarodeniaTextField.write(
+                lists["country"][session["country_of_birth"]]
+            )  # noqa
             with app.collect_operations() as ops:
                 app.d.button22.click()
 
-            app.d.sklonovanieNarTextField.write(session['place_of_birth_foreign']) # noqa
+            app.d.sklonovanieNarTextField.write(session["place_of_birth_foreign"])  # noqa
 
-        app.d.telefonTextField.write(session['phone'])
-        app.d.emailPrivateTextField.write(session['email'])
+        app.d.telefonTextField.write(session["phone"])
+        app.d.emailPrivateTextField.write(session["email"])
 
         # Address
-        fill_in_address('address_form', app, session, lists)
+        fill_in_address("address_form", app, session, lists)
 
         # Correspondence address
-        if session['has_correspondence_address']:
+        if session["has_correspondence_address"]:
             app.d.pouzitPSAdresuCheckBox.toggle()
-            fill_in_address('correspondence_address', app, session, lists)
+            fill_in_address("correspondence_address", app, session, lists)
 
-    # Vyplnime prvy odbor
-    app.d.program1TextField.write(session['study_programme'][0])
+    programme_controls = [
+        ("program1TextField", "button12", "c11Button"),
+        ("program2TextField", "button13", "c12Button"),
+        ("program3TextField", "button14", "c13Button"),
+    ]
 
-    # Nechame doplnit cely nazov odboru
-    with app.collect_operations() as ops:
-        app.d.button12.click()
+    for i, prog in enumerate(study_programmes):
+        field, expand, confirm = programme_controls[i]
 
-    print('After filling in study programme: {}'.format(ops), file=sys.stderr)
-
-    # Deal with the dialog that opens up when a prefix of a programme
-    # matches various options, e.g. FYZ and FYZ/k
-    choose_study_programme(app, ops, session['study_programme'][0])
-
-    # Nechame doplit povinne predmety
-    with app.collect_operations() as ops:
-        app.d.c11Button.click()
-
-    second_study_programme = None
-    third_study_programme = None
-
-    if session['study_programme'][2] != '_':
-        third_study_programme = session['study_programme'][2]
-
-    if session['study_programme'][1] == '_' and \
-       session['study_programme'][2] != '_':
-        second_study_programme = session['study_programme'][2]
-        third_study_programme = '_'
-
-    if session['study_programme'][1] != '_':
-        second_study_programme = session['study_programme'][1]
-
-    # Second study programme
-    if second_study_programme is not None:
-        app.d.program2TextField.write(second_study_programme)
+        # Vyplnime odbor
+        getattr(app.d, field).write(prog)
 
         # Nechame doplnit cely nazov odboru
         with app.collect_operations() as ops:
-            app.d.button13.click()
+            getattr(app.d, expand).click()
+
+        print("After filling in study programme: {}".format(ops), file=sys.stderr)
 
         # Deal with the dialog that opens up when a prefix of a programme
         # matches various options, e.g. FYZ and FYZ/k
-        choose_study_programme(app, ops, second_study_programme)
+        choose_study_programme(app, ops, prog)
 
         # Nechame doplit povinne predmety
         with app.collect_operations() as ops:
-            app.d.c12Button.click()
+            getattr(app.d, confirm).click()
 
-    # Third study programme
-    if third_study_programme not in [None, '_']:
-        app.d.program3TextField.write(third_study_programme)
+    app.d.rokZaverSkuskyNumberControl.write(
+        str(session["basic_personal_data"]["matura_year"])
+    )
 
-        # Nechame doplnit cely nazov odboru
-        with app.collect_operations() as ops:
-            app.d.button14.click()
-
-        # Deal with the dialog that opens up when a prefix of a programme
-        # matches various options, e.g. FYZ and FYZ/k
-        choose_study_programme(app, ops, third_study_programme)
-
-        # Nechame doplit povinne predmety
-        with app.collect_operations() as ops:
-            app.d.c13Button.click()
-
-    app.d.rokZaverSkuskyNumberControl.write(str(session['basic_personal_data']['matura_year']))
-
-    if session['finished_highschool_check'] == 'SK':
+    if session["finished_highschool_check"] == "SK":
         # 'XXXXXXX' signifies "highschool not found"
-        if session['studies_in_sr']['highschool'] != 'XXXXXXX':
-            app.d.sSKodTextField.write(session['studies_in_sr']['highschool'])
+        if session["studies_in_sr"]["highschool"] != "XXXXXXX":
+            app.d.sSKodTextField.write(session["studies_in_sr"]["highschool"])
             app.d.button10.click()
 
         app.d.odborySkolyCheckBox.toggle()
 
         # 'XXXXXX' signifies 'study programme not found'
-        if session['studies_in_sr']['study_programme_code'] != 'XXXXXX':
-            app.d.kodOdborTextField.write(session['studies_in_sr']['study_programme_code'])
+        if session["studies_in_sr"]["study_programme_code"] != "XXXXXX":
+            app.d.kodOdborTextField.write(
+                session["studies_in_sr"]["study_programme_code"]
+            )
             app.d.c1Button.click()
 
         # Select correct option index based on education_level
         typ_vzdelania_index = None
         for idx, option in enumerate(app.d.sSKodTypVzdelaniaComboBox.options):
-            if option.id == session['studies_in_sr']['education_level']:
+            if option.id == session["studies_in_sr"]["education_level"]:
                 typ_vzdelania_index = idx
 
         if typ_vzdelania_index is not None:
@@ -309,11 +419,11 @@ def save_application_form(ctx,
 
     else:
         # foreign high school
-        app.d.sSKodTextField.write('999999999')
+        app.d.sSKodTextField.write("999999999")
         app.d.button10.click()
 
         # študijný odbor na zahraničnej škole
-        app.d.kodOdborTextField.write('0000500')
+        app.d.kodOdborTextField.write("0000500")
 
     # Remove all rows in vysvedceniaTable
 
@@ -356,63 +466,64 @@ def save_application_form(ctx,
     checkboxes = generate_checkbox_abbrs(session)
 
     # Add dean's letter
-    if session['basic_personal_data']['dean_invitation_letter'] and\
-       session['basic_personal_data']['dean_invitation_letter_no']:
-        checkboxes.add('ListD')
+    if (
+        session["basic_personal_data"]["dean_invitation_letter"]
+        and session["basic_personal_data"]["dean_invitation_letter_no"]
+    ):
+        checkboxes.add("ListD")
 
     competition_checkboxes_map = {
-        'MAT': 'OlymM',
-        'FYZ': 'OlymF',
-        'INF': 'OlymI',
-        'BIO': 'OlymB',
-        'CHM': 'OlymCH',
-        'SOC_MAT': 'SočM',
-        'SOC_INF': 'SočI',
-        'SOC_BIO': 'SočB',
-        'SOC_CHM': 'SočCH',
-        'TMF': 'TMF',
-        'FVAT_MAT': 'FVAT_M',
-        'FVAT_FYZ': 'FVAT_F',
-        'FVAT_INF': 'FVAT_I',
-        'FVAT_BIO': 'FVAT_B',
-        'FVAT_CH': 'FVAT_Ch',
-        'ROBOCUP': 'RoboCup',
-        'IBOBOR': 'iBobor',
-        'ZENIT': 'ZENIT',
-        'TROJSTEN_KMS': 'KMS',
-        'TROJSTEN_FKS': 'FKS',
-        'TROJSTEN_KSP': 'KSP'
+        "MAT": "OlymM",
+        "FYZ": "OlymF",
+        "INF": "OlymI",
+        "BIO": "OlymB",
+        "CHM": "OlymCH",
+        "SOC_MAT": "SočM",
+        "SOC_INF": "SočI",
+        "SOC_BIO": "SočB",
+        "SOC_CHM": "SočCH",
+        "TMF": "TMF",
+        "FVAT_MAT": "FVAT_M",
+        "FVAT_FYZ": "FVAT_F",
+        "FVAT_INF": "FVAT_I",
+        "FVAT_BIO": "FVAT_B",
+        "FVAT_CH": "FVAT_Ch",
+        "ROBOCUP": "RoboCup",
+        "IBOBOR": "iBobor",
+        "ZENIT": "ZENIT",
+        "TROJSTEN_KMS": "KMS",
+        "TROJSTEN_FKS": "FKS",
+        "TROJSTEN_KSP": "KSP",
     }
 
     # Add checkboxes based on competitions
-    for s in ['competition_1', 'competition_2', 'competition_3']:
-        if s in session and session[s]['competition'] != '_':
-            comp = session[s]['competition']
+    for s in ["competition_1", "competition_2", "competition_3"]:
+        if s in session and session[s]["competition"] != "_":
+            comp = session[s]["competition"]
             checkboxes.add(competition_checkboxes_map[comp])
 
             # TODO: "SVOC_MAT" currently means both SocM and SocF
             # This line is a simple band-aid at best and should be
             # refactored
-            if comp == 'SVOC_MAT':
-                checkboxes.add('SočF')
+            if comp == "SVOC_MAT":
+                checkboxes.add("SočF")
 
     # Check those items in prilohyCheckList that have been generated from the
     # submitted application form (the code above)
     for idx, row in enumerate(app.d.prilohyTable.all_rows()):
         if row.cells[1].value in checkboxes:
-            app.d.prilohyTable.edit_cell('checkBox', idx, True)
+            app.d.prilohyTable.edit_cell("checkBox", idx, True)
 
     # Prepare poznamka_text
     poznamka_items = []
-    if 'SCIO' in checkboxes:
-        poznamka_items.append('SCIO')
-    if 'ExtMat' in checkboxes:
-        poznamka_items.append('ExternaMaturitaMat')
+    if "SCIO" in checkboxes:
+        poznamka_items.append("SCIO")
+    if "ExtMat" in checkboxes:
+        poznamka_items.append("ExternaMaturitaMat")
 
-    poznamka_items.append(url_for('admin_view',
-                                  id=application_id,
-                                  _external=True))
-    poznamka_text = '\n'.join(poznamka_items)
+    poznamka_items.append(" ".join(session["study_programme"]))
+    poznamka_items.append(f"EP#{application_id}{study_programme_type}")
+    poznamka_text = "\n".join(poznamka_items)
 
     app.d.poznamkaTextArea.write(poznamka_text)
 
@@ -430,11 +541,11 @@ def save_application_form(ctx,
 
     ops = deal_with_confirm_boxes(app, ops, notes)
 
-    if len(ops) == 1 and ops[-1].method == 'messageBox':
-        if 'existuje osoba s Vami zadaným emailom.' in errors:
+    if len(ops) == 1 and ops[-1].method == "messageBox":
+        if "existuje osoba s Vami zadaným emailom." in errors:
             email = app.d.emailPrivateTextField.value
-            notes['email_exists'] = email
-            app.d.emailPrivateTextField.write('')
+            notes["email_exists"] = email
+            app.d.emailPrivateTextField.write("")
 
         with app.collect_operations() as ops:
             app.d.enterButton.click()
@@ -449,20 +560,21 @@ def save_application_form(ctx,
     print("errors: {}".format(errors), file=sys.stderr)
 
     app.awaited_close_dialog(ops)
+    app.force_close()
     return errors, notes
 
 
 def deal_with_confirm_boxes(app, ops, notes):
-    while ops and ops[-1].method == 'confirmBox':
-        if 'evidenčným číslom' in ops[-1].args[0]:
+    while ops and ops[-1].method == "confirmBox":
+        if "evidenčným číslom" in ops[-1].args[0]:
             with app.collect_operations() as ops:
                 # Generate new id number for the app
                 app.confirm_box(-1)
 
                 num = app.d.evidCisloNumberControl.bdvalue
-                notes['app_id_exists'] = num
+                notes["app_id_exists"] = num
 
-                app.d.evidCisloNumberControl.write('')
+                app.d.evidCisloNumberControl.write("")
                 app.d.ecAutomatickyCheckBox.toggle()
 
                 app.d.enterButton.click()
@@ -474,67 +586,70 @@ def deal_with_confirm_boxes(app, ops, notes):
 
 def fill_in_address(field, app, session, lists):
     fields_map = {
-        'city': [app.d.trIdObecTextField, app.d.psIdObecTextField],
-        'city_button': [app.d.button4, app.d.button7],
-        'posta': [app.d.trPostaTextField, app.d.psPostaTextField],
-        'country_button': [app.d.button5, app.d.button8],
-        'country': [app.d.trKodStatTextField, app.d.psKodStatTextField],
-        'street': [app.d.trUlicaTextField, app.d.psUlicaTextField],
-        'street_no': [app.d.trOrientacneCisloTextField,
-                      app.d.psOrientacneCisloTextField],
-        'postal_no': [app.d.trPSCTextField, app.d.psPSCTextField]
+        "city": [app.d.trIdObecTextField, app.d.psIdObecTextField],
+        "city_button": [app.d.button4, app.d.button7],
+        "posta": [app.d.trPostaTextField, app.d.psPostaTextField],
+        "country_button": [app.d.button5, app.d.button8],
+        "country": [app.d.trKodStatTextField, app.d.psKodStatTextField],
+        "street": [app.d.trUlicaTextField, app.d.psUlicaTextField],
+        "street_no": [
+            app.d.trOrientacneCisloTextField,
+            app.d.psOrientacneCisloTextField,
+        ],
+        "postal_no": [app.d.trPSCTextField, app.d.psPSCTextField],
     }
 
-    if field == 'address_form':
+    if field == "address_form":
         fields = {k: v[0] for k, v in fields_map.items()}
     else:
         fields = {k: v[1] for k, v in fields_map.items()}
 
-    if session[field]['country'] == '703':
+    if session[field]["country"] == "703":
         # Local (SR) address
-        city = lists['city'][session[field]['city']]
-        city = re.sub(r',[^,]+$', '', city)
-        city_parts = city.split(' ')
-        city_psc = lists['city_psc'][session[field]['city']]
+        city = lists["city"][session[field]["city"]]
+        city = re.sub(r",[^,]+$", "", city)
+        city_parts = city.split(" ")
+        city_psc = lists["city_psc"][session[field]["city"]]
 
         # First write country to the country field (even in case of SK)
-        fields['country'].write(lists['country'][session[field]['country']])
+        fields["country"].write(lists["country"][session[field]["country"]])
         with app.collect_operations() as ops:
-            fields['country_button'].click()
+            fields["country_button"].click()
 
-        select_city_by_psc_ciselnik_code(app,
-                                         city_psc,
-                                         session[field]['city'],
-                                         fields['city'], fields['city_button'])
+        select_city_by_psc_ciselnik_code(
+            app, city_psc, session[field]["city"], fields["city"], fields["city_button"]
+        )
 
         # TODO: hack to work with current AIS
         # Write the actual city to "Post office" field
-        fields['posta'].write(city)
+        fields["posta"].write(city)
     else:
         # Foreign (non SR) address
-        fields['country'].write(lists['country'][session[field]['country']])
+        fields["country"].write(lists["country"][session[field]["country"]])
 
         with app.collect_operations() as ops:
-            fields['country_button'].click()
+            fields["country_button"].click()
 
-        fields['posta'].write(session[field]['city_foreign'])
+        fields["posta"].write(session[field]["city_foreign"])
 
-    fields['street'].write(session[field]['street'])
-    fields['street_no'].write(session[field]['street_no'])
+    fields["street"].write(session[field]["street"])
+    fields["street_no"].write(session[field]["street_no"])
 
-    fields['postal_no'].write(session[field]['postal_no'][:10])
+    fields["postal_no"].write(session[field]["postal_no"][:10])
 
 
 def add_to_set_on_grade_field(S, F, session, grade_field, abbr):
-    if grade_field in session and 'grade_first_year' in session[grade_field]:
+    if grade_field in session and "grade_first_year" in session[grade_field]:
         S.add(abbr)
         F.add(grade_field)
 
 
 def add_to_set_on_further_study_info(S, F, session, field, abbr):
-    if 'further_study_info' in session and \
-       field in session['further_study_info'] and \
-       session['further_study_info'][field]:
+    if (
+        "further_study_info" in session
+        and field in session["further_study_info"]
+        and session["further_study_info"][field]
+    ):
         S.add(abbr)
         F.add(field)
 
@@ -542,62 +657,61 @@ def add_to_set_on_further_study_info(S, F, session, field, abbr):
 def generate_subject_abbrevs(session):
     ABBRs = set()
     F = set()
-    add_to_set_on_grade_field(ABBRs, F, session, 'grades_mat', 'M')
-    add_to_set_on_grade_field(ABBRs, F, session, 'grades_inf', 'I')
-    add_to_set_on_grade_field(ABBRs, F, session, 'grades_fyz', 'F')
-    add_to_set_on_grade_field(ABBRs, F, session, 'grades_bio', 'B')
-    add_to_set_on_grade_field(ABBRs, F, session, 'grades_che', 'CH')
+    add_to_set_on_grade_field(ABBRs, F, session, "grades_mat", "M")
+    add_to_set_on_grade_field(ABBRs, F, session, "grades_inf", "I")
+    add_to_set_on_grade_field(ABBRs, F, session, "grades_fyz", "F")
+    add_to_set_on_grade_field(ABBRs, F, session, "grades_bio", "B")
+    add_to_set_on_grade_field(ABBRs, F, session, "grades_che", "CH")
 
     field_abbr_map = {
-        'external_matura_percentile': 'M',
-        'scio_percentile': 'IP',
-        'scio_date': 'IP',
-        'matura_mat_grade': 'M',
-        'matura_fyz_grade': 'F',
-        'matura_inf_grade': 'I',
-        'matura_bio_grade': 'B',
-        'matura_che_grade': 'CH',
-        'will_take_mat_matura': 'M',
-        'will_take_fyz_matura': 'F',
-        'will_take_inf_matura': 'I',
-        'will_take_bio_matura': 'B',
-        'will_take_che_matura': 'CH',
-        'will_take_external_mat_matura': 'M'
+        "external_matura_percentile": "M",
+        "scio_percentile": "IP",
+        "scio_date": "IP",
+        "matura_mat_grade": "M",
+        "matura_fyz_grade": "F",
+        "matura_inf_grade": "I",
+        "matura_bio_grade": "B",
+        "matura_che_grade": "CH",
+        "will_take_mat_matura": "M",
+        "will_take_fyz_matura": "F",
+        "will_take_inf_matura": "I",
+        "will_take_bio_matura": "B",
+        "will_take_che_matura": "CH",
+        "will_take_external_mat_matura": "M",
     }
 
     for field, abbr in field_abbr_map.items():
-        add_to_set_on_further_study_info(ABBRs, F, session,
-                                         field, abbr)
+        add_to_set_on_further_study_info(ABBRs, F, session, field, abbr)
     return ABBRs, F
 
 
 def generate_checkbox_abbrs(session):
     checkboxes = set()
     field_abbr_map = {
-        'matura_mat_grade': 'MatM',
-        'matura_fyz_grade': 'MatF',
-        'matura_inf_grade': 'MatI',
-        'matura_bio_grade': 'MatB',
-        'matura_che_grade': 'MatCh',
-        'will_take_mat_matura': 'MatM',
-        'will_take_fyz_matura': 'MatF',
-        'will_take_inf_matura': 'MatI',
-        'will_take_che_matura': 'MatCh',
-        'will_take_bio_matura': 'MatB',
-        'will_take_external_mat_matura': 'ExtMat',
-        'will_take_scio': 'SCIO'
+        "matura_mat_grade": "MatM",
+        "matura_fyz_grade": "MatF",
+        "matura_inf_grade": "MatI",
+        "matura_bio_grade": "MatB",
+        "matura_che_grade": "MatCh",
+        "will_take_mat_matura": "MatM",
+        "will_take_fyz_matura": "MatF",
+        "will_take_inf_matura": "MatI",
+        "will_take_che_matura": "MatCh",
+        "will_take_bio_matura": "MatB",
+        "will_take_external_mat_matura": "ExtMat",
+        "will_take_scio": "SCIO",
     }
     for field, abbr in field_abbr_map.items():
-        add_further_study_info_checkbox(checkboxes, session,
-                                        field, abbr)
+        add_further_study_info_checkbox(checkboxes, session, field, abbr)
     return checkboxes
 
 
-def add_further_study_info_checkbox(checkboxes, session,
-                                    field, chkb):
-    if 'further_study_info' in session and \
-       field in session['further_study_info'] and \
-       session['further_study_info'][field]:
+def add_further_study_info_checkbox(checkboxes, session, field, chkb):
+    if (
+        "further_study_info" in session
+        and field in session["further_study_info"]
+        and session["further_study_info"][field]
+    ):
         checkboxes.add(chkb)
 
 
@@ -626,80 +740,80 @@ def add_subject(app, abbr):
     # Add 'N' to subject level, if such a cell exists
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
     try:
-        app.d.vysvedceniaTable.edit_cell('kodUrovenMat', index, 'N')
+        app.d.vysvedceniaTable.edit_cell("kodUrovenMat", index, "N")
     except KeyError:
         pass
 
 
 def fill_in_table_cells(app, abbr, F, session):
-    if abbr == 'M':
-        if 'external_matura_percentile' in F:
-            p = session['further_study_info']['external_matura_percentile']
+    if abbr == "M":
+        if "external_matura_percentile" in F:
+            p = session["further_study_info"]["external_matura_percentile"]
             index = len(app.d.vysvedceniaTable.all_rows()) - 1
-            app.d.vysvedceniaTable.edit_cell('percentil', index, p)
+            app.d.vysvedceniaTable.edit_cell("percentil", index, p)
 
-        if 'matura_mat_grade' in F:
-            matura_grade_to_table_cell(app, session, 'matura_mat_grade')
+        if "matura_mat_grade" in F:
+            matura_grade_to_table_cell(app, session, "matura_mat_grade")
 
-        if 'grades_mat' in F:
-            grades_to_table_cells(app, session, 'grades_mat')
+        if "grades_mat" in F:
+            grades_to_table_cells(app, session, "grades_mat")
 
-    if abbr == 'F':
-        if 'matura_fyz_grade' in F:
-            matura_grade_to_table_cell(app, session, 'matura_fyz_grade')
+    if abbr == "F":
+        if "matura_fyz_grade" in F:
+            matura_grade_to_table_cell(app, session, "matura_fyz_grade")
 
-        if 'grades_fyz' in F:
-            grades_to_table_cells(app, session, 'grades_fyz')
+        if "grades_fyz" in F:
+            grades_to_table_cells(app, session, "grades_fyz")
 
-    if abbr == 'B':
-        if 'matura_bio_grade' in F:
-            matura_grade_to_table_cell(app, session, 'matura_bio_grade')
+    if abbr == "B":
+        if "matura_bio_grade" in F:
+            matura_grade_to_table_cell(app, session, "matura_bio_grade")
 
-        if 'grades_bio' in F:
-            grades_to_table_cells(app, session, 'grades_bio')
+        if "grades_bio" in F:
+            grades_to_table_cells(app, session, "grades_bio")
 
-    if abbr == 'CH':
-        if 'matura_che_grade' in F:
-            matura_grade_to_table_cell(app, session, 'matura_che_grade')
+    if abbr == "CH":
+        if "matura_che_grade" in F:
+            matura_grade_to_table_cell(app, session, "matura_che_grade")
 
-        if 'grades_che' in F:
-            grades_to_table_cells(app, session, 'grades_che')
+        if "grades_che" in F:
+            grades_to_table_cells(app, session, "grades_che")
 
-    if abbr == 'I':
-        if 'matura_inf_grade' in F:
-            matura_grade_to_table_cell(app, session, 'matura_inf_grade')
+    if abbr == "I":
+        if "matura_inf_grade" in F:
+            matura_grade_to_table_cell(app, session, "matura_inf_grade")
 
-        if 'grades_inf' in F:
-            grades_to_table_cells(app, session, 'grades_inf')
+        if "grades_inf" in F:
+            grades_to_table_cells(app, session, "grades_inf")
 
-    if abbr == 'IP':
-        if 'scio_percentile' in F or 'scio_date' in F:
-            p = session['further_study_info']['scio_percentile']
-            d = session['further_study_info']['scio_date']
-            desc = 'SCIO {}'.format(d)
+    if abbr == "IP":
+        if "scio_percentile" in F or "scio_date" in F:
+            p = session["further_study_info"]["scio_percentile"]
+            d = session["further_study_info"]["scio_date"]
+            desc = "SCIO {}".format(d)
             index = len(app.d.vysvedceniaTable.all_rows()) - 1
-            app.d.vysvedceniaTable.edit_cell('popis', index, desc)
-            app.d.vysvedceniaTable.edit_cell('percentil', index, p)
+            app.d.vysvedceniaTable.edit_cell("popis", index, desc)
+            app.d.vysvedceniaTable.edit_cell("percentil", index, p)
 
 
 def grades_to_table_cells(app, session, grades_field):
-    first = session[grades_field]['grade_first_year']
-    second = session[grades_field]['grade_second_year']
-    third = session[grades_field]['grade_third_year']
+    first = session[grades_field]["grade_first_year"]
+    second = session[grades_field]["grade_second_year"]
+    third = session[grades_field]["grade_third_year"]
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
 
     if first:
-        app.d.vysvedceniaTable.edit_cell('znamkaI', index, first)
+        app.d.vysvedceniaTable.edit_cell("znamkaI", index, first)
     if second:
-        app.d.vysvedceniaTable.edit_cell('znamkaII', index, second)
+        app.d.vysvedceniaTable.edit_cell("znamkaII", index, second)
     if third:
-        app.d.vysvedceniaTable.edit_cell('znamkaIII', index, third)
+        app.d.vysvedceniaTable.edit_cell("znamkaIII", index, third)
 
 
 def matura_grade_to_table_cell(app, session, grade_field):
-    g = session['further_study_info'][grade_field]
+    g = session["further_study_info"][grade_field]
     index = len(app.d.vysvedceniaTable.all_rows()) - 1
-    app.d.vysvedceniaTable.edit_cell('znamkaMaturitna', index, g)
+    app.d.vysvedceniaTable.edit_cell("znamkaMaturitna", index, g)
 
 
 def unselect_table(table):
@@ -707,7 +821,7 @@ def unselect_table(table):
     Unselect all first checkboxes in a table. Don't ask me why.
     """
     for idx, row in enumerate(table.all_rows()):
-        table.edit_cell('checkBox', idx, False)
+        table.edit_cell("checkBox", idx, False)
 
 
 def unselect_checklist(checklist):
@@ -721,7 +835,7 @@ def choose_study_programme(app, ops, study_programme):
     if len(ops) == 0:
         return
 
-    if len(ops) == 1 and ops[0].method == 'openDialog':
+    if len(ops) == 1 and ops[0].method == "openDialog":
         app.awaited_open_dialog(ops)
 
         rows = app.d.table.all_rows()
@@ -734,17 +848,19 @@ def choose_study_programme(app, ops, study_programme):
         if row_index is not None:
             app.d.table.select(row_index)
         else:
-            raise Exception('Could not find {}'.format(study_programme))
+            raise Exception("Could not find {}".format(study_programme))
 
         with app.collect_operations() as ops:
             app.d.enterButton.click()
 
         app.awaited_close_dialog(ops)
     else:
-        raise Exception('Unexpected ops: {}'.format(ops))
+        raise Exception("Unexpected ops: {}".format(ops))
 
 
-def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, city_button):
+def select_city_by_psc_ciselnik_code(
+    app, city_psc, ciselnik_code, city_field, city_button
+):
     # Write PSC instead of city name (TODO: hack to work with current AIS)
     city_field.write(city_psc)
     with app.collect_operations() as ops:
@@ -753,7 +869,7 @@ def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, c
     if len(ops) == 0:
         return
 
-    if len(ops) == 1 and ops[-1].method == 'openDialog':
+    if len(ops) == 1 and ops[-1].method == "openDialog":
         # Open selection dialogue
         select_dlg = app.awaited_open_dialog(ops)
 
@@ -762,7 +878,12 @@ def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, c
         # Let's try to find the correct row by checking the ciselnik_code
         row_index = None
         for idx, row in enumerate(rows):
-            print('ciselnik_code: {}, row_value: {}'.format(ciselnik_code, row.cells[0].value), file=sys.stderr)
+            print(
+                "ciselnik_code: {}, row_value: {}".format(
+                    ciselnik_code, row.cells[0].value
+                ),
+                file=sys.stderr,
+            )
             if row.cells[0].value == ciselnik_code:
                 row_index = idx
 
@@ -770,7 +891,7 @@ def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, c
         if row_index is not None:
             app.d.table.select(row_index)
         else:
-            raise Exception('Could not find ciselnik_code {}'.format(city_psc))
+            raise Exception("Could not find ciselnik_code {}".format(city_psc))
 
         with app.collect_operations() as ops:
             app.d.enterButton.click()
@@ -778,4 +899,4 @@ def select_city_by_psc_ciselnik_code(app, city_psc, ciselnik_code, city_field, c
         # Close selection dialogue
         select_dlg = app.awaited_close_dialog(ops)
     else:
-        raise Exception('Expected openDialog in select_city_by_psc_ciselnik_code')
+        raise Exception("Expected openDialog in select_city_by_psc_ciselnik_code")
