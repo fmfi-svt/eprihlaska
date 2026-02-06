@@ -15,6 +15,10 @@ as you see fit. Once that is done, the DB can be created by running
 
 - `uv run python init_db.py`
 
+To wipe the DB for a new season and re-create the schema, run
+
+- `uv run python scripts/reset_db.py`
+
 You can then start the local version of this app by running
 
 - `uv run python run.py`
