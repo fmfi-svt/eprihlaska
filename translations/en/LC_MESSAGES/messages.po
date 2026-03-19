@@ -464,6 +464,18 @@ msgstr ""
 msgid "úspešný riešiteľ - Turnaj mladých fyzikov - celoštátne kolo"
 msgstr ""
 
+#: eprihlaska/consts.py:321
+msgid "List prodekanky - Matematika"
+msgstr "Associate Dean's Letter - Mathematics"
+
+#: eprihlaska/consts.py:325
+msgid "List prodekanky - Fyzika"
+msgstr "Associate Dean's Letter - Physics"
+
+#: eprihlaska/consts.py:329
+msgid "List prodekanky - Informatika"
+msgstr "Associate Dean's Letter - Informatics"
+
 #: eprihlaska/consts.py:162
 msgid "Rok"
 msgstr ""

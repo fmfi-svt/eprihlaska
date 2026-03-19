@@ -494,6 +494,9 @@ def _save_application_form(
         "TROJSTEN_KMS": "KMS",
         "TROJSTEN_FKS": "FKS",
         "TROJSTEN_KSP": "KSP",
+        "LIST_PD_MAT": "ListPD",
+        "LIST_PD_FYZ": "ListPD",
+        "LIST_PD_INF": "ListPD",
     }
 
     # Add checkboxes based on competitions

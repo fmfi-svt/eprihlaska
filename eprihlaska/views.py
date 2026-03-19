@@ -265,7 +265,7 @@ def filter_competitions(competition_list, study_programme_list):
         'F': ['mBMF', 'FYZ', 'FYZ/k', 'OZE', 'OZE/k', 'TEF', 'TEF/k', 'upFYIN', 'upMAFY', 'upFYBI'],
         'I': ['INF', 'INF/k', 'AIN', 'BIN', 'BIN/k', 'DAV', 'DAV/k', 'upFYIN', 'upINBI', 'upMAIN', 'upINAN', 'upINGE', 'upINCH'],
         'B': ['BIN', 'BIN/k', 'mBMF'],
-        'CH': ['mBMF','BIN', 'BIN/k']
+        'CH': ['mBMF','BIN', 'BIN/k'],
     }
 
     constraints = {
@@ -284,7 +284,10 @@ def filter_competitions(competition_list, study_programme_list):
         'ZENIT': constraint_profiles['I'],
         'TROJSTEN_KSP': constraint_profiles['I'],
         'TROJSTEN_FKS': constraint_profiles['F'],
-        '_': STUDY_PROGRAMMES
+        'LIST_PD_MAT': STUDY_PROGRAMMES,
+        'LIST_PD_FYZ': constraint_profiles['F'],
+        'LIST_PD_INF': constraint_profiles['I'],
+        '_': STUDY_PROGRAMMES,
     }
 
     for comp, desc in competition_list:

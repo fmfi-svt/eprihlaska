@@ -323,6 +323,18 @@ COMPETITION_CHOICES = [
             "65% bodov v ľubovoľnej kategórii - KSP (TROJSTEN) - ktorýkoľvek ročník a časť"
         ),
     ),
+    (
+        "LIST_PD_MAT",
+        _("List prodekanky - Matematika"),
+    ),
+    (
+        "LIST_PD_FYZ",
+        _("List prodekanky - Fyzika"),
+    ),
+    (
+        "LIST_PD_INF",
+        _("List prodekanky - Informatika"),
+    ),
 ]
 
 COMPETITION_YEAR = _("Rok")
