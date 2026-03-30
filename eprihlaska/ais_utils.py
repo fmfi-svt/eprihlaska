@@ -397,7 +397,24 @@ def _save_application_form(
         # 'XXXXXXX' signifies "highschool not found"
         if session["studies_in_sr"]["highschool"] != "XXXXXXX":
             app.d.sSKodTextField.write(session["studies_in_sr"]["highschool"])
-            app.d.button10.click()
+            with app.collect_operations() as ops:
+                app.d.button10.click()
+
+            # AIS sa moze stazovat, ze skola nie je platna. Potvrdime a pokracujeme.
+            if ops:
+                if len(ops) > 1:
+                    raise Exception(f"Unexpected ops: {ops}")
+
+                if ops[0].method != "confirmBox":
+                    raise Exception(f"Unexpected ops: {ops}")
+
+                expected_dialog = (
+                    "Žiadna platná škola nenájdená. Rozšíriť výber aj na neplatné?"
+                )
+                if expected_dialog not in ops[0].args:
+                    raise Exception(f"AIS opened unexpected confirmBox: {ops}")
+
+                app.confirm_box(2)
 
         app.d.odborySkolyCheckBox.toggle()
 
