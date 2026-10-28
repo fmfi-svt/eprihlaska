@@ -1,3 +1,4 @@
+import asyncio
 import pickle
 from urllib.parse import quote_plus
 from flask import (render_template, flash, redirect, session, request, url_for,
@@ -995,12 +996,12 @@ def admin_init_votr(ais_instance):
         return 'Bad next', 400
 
     from .ais_utils import create_context
-    votr_context = create_context(
+    votr_context = asyncio.run(create_context(
         my_entity_id=app.config['MY_ENTITY_ID'],
         andrvotr_api_key=app.config['ANDRVOTR_API_KEY'],
         andrvotr_authority_token=request.environ['ANDRVOTR_AUTHORITY_TOKEN'],
         beta=(ais_instance == 'beta'),
-    )
+    ))
     # flask-session docs say it'll stop using pickle in the future.
     # Wrap the votr_context in our own pickle.
     session[f'_votr_context_{ais_instance}'] = pickle.dumps(votr_context, pickle.HIGHEST_PROTOCOL)
@@ -1031,7 +1032,7 @@ def require_votr_context(func):
         from aisikl.app import check_connection
         from aisikl.exceptions import LoggedOutError
         try:
-            check_connection(votr_context)
+            asyncio.run(check_connection(votr_context))
         except LoggedOutError:
             return _redirect_to_init_votr(ais_instance)
 
@@ -1046,7 +1047,7 @@ def require_votr_context(func):
 @require_votr_context
 def admin_ais_test(ais_instance, votr_context):
     from .ais_utils import test_ais
-    test_ais(votr_context)
+    asyncio.run(test_ais(votr_context))
     return redirect(url_for('admin_list'))
 
 
@@ -1179,11 +1180,7 @@ def admin_ais2_process(ais_instance, process_type, id, votr_context):
                 logfile = gzip.open('/tmp/log_%s_%s' % (id, random.randrange(10000)), 'wt', encoding='utf8')
                 votr_context.logger.log_file = logfile
 
-            ais2_output, notes = save_application_form(votr_context,
-                                                       application,
-                                                       LISTS,
-                                                       id,
-                                                       process_type)
+            ais2_output, notes = asyncio.run(save_application_form(votr_context, application, LISTS, id, process_type))
         except Exception:
             error_output = traceback.format_exception(*sys.exc_info())
             error_output = '\n'.join(error_output)
